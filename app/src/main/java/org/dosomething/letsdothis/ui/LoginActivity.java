@@ -1,8 +1,11 @@
 package org.dosomething.letsdothis.ui;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
+import android.widget.EditText;
 
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.tasks.LoginTask;
 import org.dosomething.letsdothis.ui.fragments.BaseFragment;
 
 /**
@@ -16,10 +19,26 @@ public class LoginActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        EditText phone = (EditText) findViewById(R.id.phone);
+        EditText email = (EditText) findViewById(R.id.email);
+        EditText password = (EditText) findViewById(R.id.password);
+
         if(savedInstanceState == null)
         {
-//            getSupportFragmentManager().beginTransaction()
-//                    .add(R.id.container, BaseFragment.newInstance()).commit();
         }
+
+        initPasswordListener(password);
+    }
+
+    private void initPasswordListener(EditText password)
+    {
+        password.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                new LoginTask().callLogin();
+            }
+        });
     }
 }
