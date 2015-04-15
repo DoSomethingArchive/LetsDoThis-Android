@@ -14,14 +14,14 @@ import retrofit.client.Response;
 /**
  * Created by toidiu on 4/15/15.
  */
-public class LoginTask extends Task
+public class SignupTask extends Task
 {
     private final String  email;
     private final String  phone;
     private final String  password;
     public        boolean success;
 
-    public LoginTask(String email, String phone, String password)
+    public SignupTask(String email, String phone, String password)
     {
         this.email = email.isEmpty()
                 ? null
@@ -38,16 +38,18 @@ public class LoginTask extends Task
         Response response = null;
         if(email != null)
         {
+//            String regInfo= "{email: test@touchlab.co, password: test}";
+            String regInfo= "{email: "+email+", password: "+password+"}";
             response = DataHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                    .loginWithEmail(email, password);
+                    .registerWithEmail(regInfo);
             DataHelper.debugOut(response);
         }
         else if(phone != null)
         {
+            String regInfo= "{mobile: "+phone+", password: "+password+"}";
             response = DataHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                    .loginWithMobile(phone, password);
+                    .registerWithMobile(regInfo);
         }
-
         if(response != null)
         {
             success = true;

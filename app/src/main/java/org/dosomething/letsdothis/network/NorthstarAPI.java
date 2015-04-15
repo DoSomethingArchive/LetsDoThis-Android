@@ -2,9 +2,11 @@ package org.dosomething.letsdothis.network;
 import java.util.Date;
 
 import retrofit.client.Response;
+import retrofit.http.Body;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.Header;
+import retrofit.http.Headers;
 import retrofit.http.POST;
 import retrofit.http.Query;
 
@@ -25,6 +27,16 @@ public interface NorthstarAPI
     @POST("/login")
     public Response loginWithEmail(@Field("email") String email, @Field(
             "password") String password);
+
+    @Headers("Content-Type: application/json")
+    @POST("/users")
+    public Response registerWithEmail(@Body String json);
+
+    @Headers("Content-Type: application/json")
+    @POST("/users")
+    public Response registerWithMobile(@Body String json);
+
+
 
     @POST("/logout")
     public Response logout(@Header("Session") String sessionToken);
