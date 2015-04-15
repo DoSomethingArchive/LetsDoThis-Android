@@ -5,6 +5,7 @@ import org.dosomething.letsdothis.network.DataHelper;
 import org.dosomething.letsdothis.network.NorthstarAPI;
 
 import co.touchlab.android.threading.tasks.Task;
+import retrofit.client.Response;
 
 /**
  * Created by toidiu on 4/15/15.
@@ -26,8 +27,16 @@ public class LoginTask extends Task
     @Override
     protected void run(Context context) throws Throwable
     {
-        DataHelper.makeRequestAdapter().create(NorthstarAPI.class).loginWithEmail()
-        DataHelper.makeRequestAdapter().create(NorthstarAPI.class).loginWithMobile()
+        if(email != null)
+        {
+            Response response = DataHelper.makeRequestAdapter().create(NorthstarAPI.class)
+                    .loginWithEmail(email, password);
+            DataHelper.debugOut(response);
+        }
+        else if(phone!=null)
+        {
+                DataHelper.makeRequestAdapter().create(NorthstarAPI.class).loginWithMobile(phone, password);
+        }
     }
 
     @Override

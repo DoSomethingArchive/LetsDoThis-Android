@@ -2,6 +2,8 @@ package org.dosomething.letsdothis.network;
 import java.util.Date;
 
 import retrofit.client.Response;
+import retrofit.http.Field;
+import retrofit.http.FormUrlEncoded;
 import retrofit.http.Header;
 import retrofit.http.POST;
 import retrofit.http.Query;
@@ -14,12 +16,14 @@ public interface NorthstarAPI
 
     public static final String BASE_URL = "https://api.dosomething.org/v1/";
 
+    @FormUrlEncoded
     @POST("/login")
-    public Response loginWithMobile(@Query("mobile") String mobile, @Query(
+    public Response loginWithMobile(@Field("mobile") String mobile, @Field(
             "password") String password);
 
+    @FormUrlEncoded
     @POST("/login")
-    public Response loginWithEmail(@Query("email") String email, @Query(
+    public Response loginWithEmail(@Field("email") String email, @Field(
             "password") String password);
 
     @POST("/logout")
