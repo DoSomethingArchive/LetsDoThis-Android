@@ -3,6 +3,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
@@ -55,11 +56,18 @@ public class LoginActivity extends ActionBarActivity
             }
         });
     }
-    
+
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(LoginTask task)
     {
-        
+        if(task.success)
+        {
+            Toast.makeText(this, "success login", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Toast.makeText(this, "failed login", Toast.LENGTH_SHORT).show();
+        }
     }
-    
+
 }
