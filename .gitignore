@@ -1,0 +1,44 @@
+.gradle
+/local.properties
+/.idea/workspace.xml
+.DS_Store
+com_crashlytics_export_strings.xml
+crashlytics-build.properties
+
+# built application files
+*.apk
+*.ap_
+*.hrpof
+*.hprof
+
+    # files for the dex VM
+*.dex
+
+    # Java class files
+*.class
+
+    # generated files
+bin/
+gen/
+
+
+    # Eclipse project files
+.classpath
+.project
+
+    # Android Studio
+.idea
+    #.idea/workspace.xml - uncomment this and comment/delete .idea if it better suit your needs
+/*/local.properties
+/*/out
+/*/*/build
+/*/*/production
+*.iml
+*.iws
+*.ipr
+*~
+*.swp
+
+/build
+
+secrets.xml
