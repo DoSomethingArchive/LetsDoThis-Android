@@ -37,7 +37,6 @@ public class SignupActivity extends ActionBarActivity
         EventBusExt.getDefault().register(this);
 
         initRegisterListener();
-        initLoginListener();
     }
 
     @Override
@@ -66,21 +65,6 @@ public class SignupActivity extends ActionBarActivity
             }
         });
     }
-
-    private void initLoginListener()
-    {
-        View login = findViewById(R.id.login);
-        login.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                finish();
-                LoginActivity.callMe(SignupActivity.this);
-            }
-        });
-    }
-
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(SignupTask task)

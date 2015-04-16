@@ -1,9 +1,11 @@
 package org.dosomething.letsdothis.network;
+import org.dosomething.letsdothis.network.models.LoginResponse;
 import org.dosomething.letsdothis.network.models.UserListResponse;
 import org.dosomething.letsdothis.network.models.UserResponse;
 
 import java.util.Date;
 
+import co.touchlab.android.threading.errorcontrol.NetworkException;
 import retrofit.client.Response;
 import retrofit.http.Body;
 import retrofit.http.Field;
@@ -25,13 +27,13 @@ public interface NorthstarAPI
 
     @FormUrlEncoded
     @POST("/login")
-    Response loginWithMobile(@Field("mobile") String mobile, @Field(
-            "password") String password);
+    LoginResponse loginWithMobile(@Field("mobile") String mobile, @Field(
+            "password") String password) throws NetworkException;
 
     @FormUrlEncoded
     @POST("/login")
-    Response loginWithEmail(@Field("email") String email, @Field(
-            "password") String password);
+    LoginResponse loginWithEmail(@Field("email") String email, @Field(
+            "password") String password) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @POST("/users")
