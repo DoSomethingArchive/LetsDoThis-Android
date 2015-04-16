@@ -1,5 +1,6 @@
 package org.dosomething.letsdothis.network;
 import org.dosomething.letsdothis.network.models.UserListResponse;
+import org.dosomething.letsdothis.network.models.UserResponse;
 
 import java.util.Date;
 
@@ -45,7 +46,7 @@ public interface NorthstarAPI
 
     //----------------Retrieve User
     @GET("/users/_id/{id}")
-    UserListResponse userProfile(@Path("id") String id);
+    UserResponse[] userProfile(@Path("id") String id);
 
 
     //-----------NOT DONE

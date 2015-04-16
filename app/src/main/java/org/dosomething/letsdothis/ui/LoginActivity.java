@@ -48,6 +48,13 @@ public class LoginActivity extends ActionBarActivity
         }
     }
 
+    @Override
+    protected void onDestroy()
+    {
+        EventBusExt.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
     private void initAppNavigation()
     {
         findViewById(R.id.allUsers).setOnClickListener(new View.OnClickListener()
@@ -65,7 +72,8 @@ public class LoginActivity extends ActionBarActivity
             @Override
             public void onClick(View view)
             {
-
+                finish();
+                UserProfileActivity.callMe(LoginActivity.this);
             }
         });
     }

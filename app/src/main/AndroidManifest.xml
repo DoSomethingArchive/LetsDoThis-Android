@@ -22,6 +22,8 @@
 
         <activity android:name=".ui.SignupActivity"/>
 
+        <activity android:name=".ui.UserProfileActivity"/>
+
         <activity android:name=".ui.UserListActivity"/>
 
         <activity android:name=".ui.MainActivity"/>
