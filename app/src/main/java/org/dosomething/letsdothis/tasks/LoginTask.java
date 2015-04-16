@@ -1,35 +1,21 @@
 package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
-import org.apache.http.HttpStatus;
 import org.dosomething.letsdothis.network.DataHelper;
 import org.dosomething.letsdothis.network.NorthstarAPI;
 
-import co.touchlab.android.threading.errorcontrol.NetworkException;
 import co.touchlab.android.threading.eventbus.EventBusExt;
-import co.touchlab.android.threading.tasks.Task;
-import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 /**
  * Created by toidiu on 4/15/15.
  */
-public class LoginTask extends Task
+public class LoginTask extends BaseRegistrationTask
 {
-    private final String  email;
-    private final String  phone;
-    private final String  password;
-    public        boolean success;
 
     public LoginTask(String email, String phone, String password)
     {
-        this.email = email.isEmpty()
-                ? null
-                : email;
-        this.phone = phone.isEmpty()
-                ? null
-                : phone;
-        this.password = password;
+        super(email, phone, password);
     }
 
     @Override
@@ -50,24 +36,11 @@ public class LoginTask extends Task
 
         if(response != null)
         {
+            //FIXME this is not solid and will be handled when we have response objects
             success = true;
         }
     }
 
-    @Override
-    protected boolean handleError(Context context, Throwable throwable)
-    {
-        if(((RetrofitError) throwable).getResponse().getStatus() == HttpStatus.SC_UNAUTHORIZED)
-        {
-            return true;
-        }
-        if(throwable
-                .getCause() instanceof NetworkException || throwable instanceof NetworkException)
-        {
-            return true;
-        }
-        return false;
-    }
 
     @Override
     protected void onComplete(Context context)
