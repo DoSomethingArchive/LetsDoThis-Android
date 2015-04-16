@@ -19,6 +19,8 @@ import co.touchlab.android.threading.tasks.TaskQueue;
  */
 public class LoginActivity extends ActionBarActivity
 {
+    private static final String TAG = LoginActivity.class.getSimpleName();
+
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private EditText phone;
     private EditText email;
@@ -95,4 +97,10 @@ public class LoginActivity extends ActionBarActivity
         }
     }
 
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        EventBusExt.getDefault().unregister(this);
+    }
 }
