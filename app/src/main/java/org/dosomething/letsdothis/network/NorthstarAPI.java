@@ -1,10 +1,13 @@
 package org.dosomething.letsdothis.network;
+import org.dosomething.letsdothis.network.models.UserResponse;
+
 import java.util.Date;
 
 import retrofit.client.Response;
 import retrofit.http.Body;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
+import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.Headers;
 import retrofit.http.POST;
@@ -20,24 +23,26 @@ public interface NorthstarAPI
 
     @FormUrlEncoded
     @POST("/login")
-    public Response loginWithMobile(@Field("mobile") String mobile, @Field(
+    Response loginWithMobile(@Field("mobile") String mobile, @Field(
             "password") String password);
 
     @FormUrlEncoded
     @POST("/login")
-    public Response loginWithEmail(@Field("email") String email, @Field(
+    Response loginWithEmail(@Field("email") String email, @Field(
             "password") String password);
 
     @Headers("Content-Type: application/json")
     @POST("/users")
-    public Response registerWithEmail(@Body String json);
+    Response registerWithEmail(@Body String json);
 
     @Headers("Content-Type: application/json")
     @POST("/users")
-    public Response registerWithMobile(@Body String json);
+    Response registerWithMobile(@Body String json);
 
+    @GET("/users")
+    UserResponse userList(@Query("page") int page, @Query("limit") int limit);
 
-
+    //-----------NOT DONE
     @POST("/logout")
     public Response logout(@Header("Session") String sessionToken);
 
