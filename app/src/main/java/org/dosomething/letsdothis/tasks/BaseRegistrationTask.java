@@ -15,7 +15,7 @@ public abstract class BaseRegistrationTask extends Task
     protected final String  email;
     protected final String  phone;
     protected final String  password;
-    protected        boolean success;
+    public        boolean success;
 
     protected BaseRegistrationTask(String email, String phone, String password)
     {
@@ -32,8 +32,15 @@ public abstract class BaseRegistrationTask extends Task
     @Override
     protected void run(Context context) throws Throwable
     {
+        if(email==null && phone==null)
+        {
+            return;
+        }
 
+        attemptRegistration(context);
     }
+
+    protected abstract void attemptRegistration(Context context) throws Throwable;
 
     @Override
     protected boolean handleError(Context context, Throwable throwable)

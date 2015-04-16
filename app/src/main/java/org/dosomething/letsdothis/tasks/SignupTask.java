@@ -19,7 +19,7 @@ public class SignupTask extends BaseRegistrationTask
     }
 
     @Override
-    protected void run(Context context) throws Throwable
+    protected void attemptRegistration(Context context) throws Throwable
     {
         Response response = null;
         if(email != null)
