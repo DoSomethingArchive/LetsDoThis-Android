@@ -25,13 +25,13 @@ public class LoginTask extends BaseRegistrationTask
         if(email != null)
         {
             response = DataHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                    .loginWithEmail(email, password);
+                                 .loginWithEmail(email, password);
             DataHelper.debugOut(response);
         }
         else if(phone != null)
         {
             response = DataHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                    .loginWithMobile(phone, password);
+                                 .loginWithMobile(phone, password);
         }
 
         if(response != null)
