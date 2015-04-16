@@ -39,6 +39,8 @@ public class LoginActivity extends ActionBarActivity
 
         initLoginListener();
         initSignupListener();
+        initAppNavigation();
+
         if(BuildConfig.DEBUG)
         {
             email.setText("touchlab-dev@example.com");
@@ -46,10 +48,31 @@ public class LoginActivity extends ActionBarActivity
         }
     }
 
+    private void initAppNavigation()
+    {
+        findViewById(R.id.allUsers).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                finish();
+                UserListActivity.callMe(LoginActivity.this);
+            }
+        });
+
+        findViewById(R.id.one_user).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+
+            }
+        });
+    }
+
     private void initSignupListener()
     {
-        View signup = findViewById(R.id.signup);
-        signup.setOnClickListener(new View.OnClickListener()
+        findViewById(R.id.signup).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
@@ -65,8 +88,7 @@ public class LoginActivity extends ActionBarActivity
         phone = (EditText) findViewById(R.id.phone);
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
-        View login = findViewById(R.id.login);
-        login.setOnClickListener(new View.OnClickListener()
+        findViewById(R.id.login).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)

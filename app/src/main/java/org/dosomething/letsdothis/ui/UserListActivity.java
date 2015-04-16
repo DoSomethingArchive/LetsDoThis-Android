@@ -1,0 +1,51 @@
+package org.dosomething.letsdothis.ui;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.widget.TextView;
+
+import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.data.User;
+import org.dosomething.letsdothis.tasks.GetUserListTask;
+
+import java.util.List;
+
+import co.touchlab.android.threading.eventbus.EventBusExt;
+import co.touchlab.android.threading.tasks.TaskQueue;
+
+/**
+ * Created by toidiu on 4/16/15.
+ */
+public class UserListActivity extends ActionBarActivity
+{
+    public static void callMe(Context context)
+    {
+        Intent intent = new Intent(context, UserListActivity.class);
+        context.startActivity(intent);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_user_list);
+        EventBusExt.getDefault().register(this);
+
+        TaskQueue.loadQueueDefault(this).execute(new GetUserListTask());
+    }
+
+    private void updateUsersList(List<User> userList)
+    {
+        TextView num = (TextView) findViewById(R.id.user_num);
+        num.setText("" + userList.size());
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(GetUserListTask task)
+    {
+        updateUsersList(task.userList);
+    }
+
+
+}
