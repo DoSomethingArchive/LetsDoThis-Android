@@ -1,8 +1,12 @@
 package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
+import com.google.gson.Gson;
+
+import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.DataHelper;
 import org.dosomething.letsdothis.network.NorthstarAPI;
+import org.dosomething.letsdothis.network.models.SignupResponse;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import retrofit.client.Response;
@@ -21,14 +25,12 @@ public class SignupTask extends BaseRegistrationTask
     @Override
     protected void attemptRegistration(Context context) throws Throwable
     {
-        Response response = null;
+        SignupResponse response = null;
         if(email != null)
         {
-            //            String regInfo= "{email: test@touchlab.co, password: test}";
-            String regInfo = "{email: " + email + ", password: " + password + "}";
+            User user = new User(email, phone, password);
             response = DataHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                    .registerWithEmail(regInfo);
-            DataHelper.debugOut(response);
+                    .registerWithEmail(User.getJso(user));
         }
         else if(phone != null)
         {
@@ -36,10 +38,13 @@ public class SignupTask extends BaseRegistrationTask
             response = DataHelper.makeRequestAdapter().create(NorthstarAPI.class)
                     .registerWithMobile(regInfo);
         }
+
         if(response != null)
         {
-            //FIXME this is not solid and will be handled when we have response objects
-            success = true;
+            if(response._id != null)
+            {
+                success = true;
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 package org.dosomething.letsdothis.network;
 import org.dosomething.letsdothis.network.models.LoginResponse;
+import org.dosomething.letsdothis.network.models.SignupResponse;
 import org.dosomething.letsdothis.network.models.UserListResponse;
 import org.dosomething.letsdothis.network.models.UserResponse;
 
@@ -37,18 +38,18 @@ public interface NorthstarAPI
 
     @Headers("Content-Type: application/json")
     @POST("/users")
-    Response registerWithEmail(@Body String json);
+    SignupResponse registerWithEmail(@Body String json) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @POST("/users")
-    Response registerWithMobile(@Body String json);
+    SignupResponse registerWithMobile(@Body String json) throws NetworkException;
 
     @GET("/users")
-    UserListResponse userList(@Query("page") int page, @Query("limit") int limit);
+    UserListResponse userList(@Query("page") int page, @Query(
+            "limit") int limit) throws NetworkException;
 
-    //----------------Retrieve User
     @GET("/users/_id/{id}")
-    UserResponse[] userProfile(@Path("id") String id);
+    UserResponse[] userProfile(@Path("id") String id) throws NetworkException;
 
 
     //-----------NOT DONE
@@ -57,7 +58,7 @@ public interface NorthstarAPI
     //-----------NOT DONE
     //-----------NOT DONE
     @POST("/logout")
-    public Response logout(@Header("Session") String sessionToken);
+    public Response logout(@Header("Session") String sessionToken) throws NetworkException;
 
     @POST("/users")
     public Response registerWithEmail(@Query("email") String email, @Query(
@@ -72,7 +73,7 @@ public interface NorthstarAPI
             "degree_type") String degreeType, @Query("major_name") String majorName, @Query(
             "hs_gradyear") String hsGradYear, @Query("hs_name") String hsName, @Query(
             "sat_math") int satMath, @Query("sat_verbal") int satVerbal, @Query(
-            "sat_writing") int satWriting);
+            "sat_writing") int satWriting) throws NetworkException;
 
     @POST("/users")
     public Response registerWithMobile(@Query("mobile") String mobile, @Query(
@@ -87,6 +88,6 @@ public interface NorthstarAPI
             "degree_type") String degreeType, @Query("major_name") String majorName, @Query(
             "hs_gradyear") String hsGradYear, @Query("hs_name") String hsName, @Query(
             "sat_math") int satMath, @Query("sat_verbal") int satVerbal, @Query(
-            "sat_writing") int satWriting);
+            "sat_writing") int satWriting) throws NetworkException;
 
 }
