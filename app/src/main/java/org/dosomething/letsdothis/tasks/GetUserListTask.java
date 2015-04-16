@@ -4,18 +4,17 @@ import android.content.Context;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.DataHelper;
 import org.dosomething.letsdothis.network.NorthstarAPI;
-import org.dosomething.letsdothis.network.models.UserResponse;
+import org.dosomething.letsdothis.network.models.UserListResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
-import co.touchlab.android.threading.tasks.Task;
 
 /**
  * Created by toidiu on 4/16/15.
  */
-public class GetUserListTask extends Task
+public class GetUserListTask extends BaseNetworkErrorHandlerTask
 {
     private static final int        RESULT_LIMIT = 100;
     public               List<User> userList     = new ArrayList<>();
@@ -26,7 +25,7 @@ public class GetUserListTask extends Task
         boolean done = false;
         for(int page = 0; ! done; page++)
         {
-            UserResponse response = DataHelper.makeRequestAdapter().create(NorthstarAPI.class)
+            UserListResponse response = DataHelper.makeRequestAdapter().create(NorthstarAPI.class)
                     .userList(page, RESULT_LIMIT);
 
             for(User user : response.data)
@@ -43,12 +42,6 @@ public class GetUserListTask extends Task
                 done = true;
             }
         }
-    }
-
-    @Override
-    protected boolean handleError(Context context, Throwable throwable)
-    {
-        return false;
     }
 
     @Override

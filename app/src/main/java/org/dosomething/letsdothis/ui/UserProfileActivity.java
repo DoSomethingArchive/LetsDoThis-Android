@@ -7,9 +7,7 @@ import android.widget.TextView;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.User;
-import org.dosomething.letsdothis.tasks.GetUserListTask;
-
-import java.util.List;
+import org.dosomething.letsdothis.tasks.GetUserTask;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
@@ -17,11 +15,11 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 /**
  * Created by toidiu on 4/16/15.
  */
-public class UserListActivity extends ActionBarActivity
+public class UserProfileActivity extends ActionBarActivity
 {
     public static void callMe(Context context)
     {
-        Intent intent = new Intent(context, UserListActivity.class);
+        Intent intent = new Intent(context, UserProfileActivity.class);
         context.startActivity(intent);
     }
 
@@ -29,22 +27,24 @@ public class UserListActivity extends ActionBarActivity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_list);
+        setContentView(R.layout.activity_user_profile);
         EventBusExt.getDefault().register(this);
 
-        TaskQueue.loadQueueDefault(this).execute(new GetUserListTask());
+        TaskQueue.loadQueueDefault(this).execute(new GetUserTask());
     }
 
-    private void updateUI(List<User> userList)
+    private void updateUI(User user)
     {
-        TextView num = (TextView) findViewById(R.id.user_num);
-        num.setText("" + userList.size());
+        TextView email = (TextView) findViewById(R.id.email);
+        TextView phone = (TextView) findViewById(R.id.phone);
+        TextView first = (TextView) findViewById(R.id.first_name);
+        TextView last = (TextView) findViewById(R.id.last_name);
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(GetUserListTask task)
+    public void onEventMainThread(GetUserTask task)
     {
-        updateUI(task.userList);
+        updateUI(task.user);
     }
 
 

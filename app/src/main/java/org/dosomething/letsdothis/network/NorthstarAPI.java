@@ -1,5 +1,5 @@
 package org.dosomething.letsdothis.network;
-import org.dosomething.letsdothis.network.models.UserResponse;
+import org.dosomething.letsdothis.network.models.UserListResponse;
 
 import java.util.Date;
 
@@ -11,6 +11,7 @@ import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.Headers;
 import retrofit.http.POST;
+import retrofit.http.Path;
 import retrofit.http.Query;
 
 /**
@@ -40,8 +41,17 @@ public interface NorthstarAPI
     Response registerWithMobile(@Body String json);
 
     @GET("/users")
-    UserResponse userList(@Query("page") int page, @Query("limit") int limit);
+    UserListResponse userList(@Query("page") int page, @Query("limit") int limit);
 
+    //----------------Retrieve User
+    @GET("/users/_id/{id}")
+    UserListResponse userProfile(@Path("id") String id);
+
+
+    //-----------NOT DONE
+    //-----------NOT DONE
+    //-----------NOT DONE
+    //-----------NOT DONE
     //-----------NOT DONE
     @POST("/logout")
     public Response logout(@Header("Session") String sessionToken);

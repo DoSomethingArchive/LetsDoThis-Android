@@ -1,33 +1,32 @@
 package org.dosomething.letsdothis.network.models;
-import org.dosomething.letsdothis.data.User;
-
 /**
  * Created by toidiu on 4/16/15.
  */
 public class UserResponse
 {
 
-   public Integer total;
-   public Integer current_page;
-   public Integer last_page;
-   public User[]  data;
+    String   email;
+    String   first_name;
+    String   last_name;
+    String   _id;
+    Object[] campaign;
 
     //    {
-    //        "total": 23,
-    //        "per_page": 5,
-    //        "current_page": 1,
-    //        "last_page": 5,
-    //        "from": 1,
-    //        "to": 5,
-    //        "data": [
+    //        email: "test@dosomething.org",
+    //        first_name: First,
+    //        last_name: Last,
+    //        drupal_id: 123456,
+    //        _id: some sort of hash value,
+    //        campaigns: [
     //            {
-    //                "_id": "5480c950bffebc651c8b456f",
-    //                    "email": "test@dosomething.org",
-    //                ... the rest of this user data...
+    //                nid: 123,
+    //                        rbid: 100,
+    //                    sid: 100
     //            },
     //            {
-    //                ...
+    //                nid: 456,
+    //                        sid: 101
     //            }
-    //        ]
+    //            ]
     //    }
 }
