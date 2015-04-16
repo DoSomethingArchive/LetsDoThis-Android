@@ -3,7 +3,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
 import org.dosomething.letsdothis.R;
-import org.dosomething.letsdothis.ui.fragments.BaseFragment;
 
 /**
  * Created by toidiu on 4/15/15.

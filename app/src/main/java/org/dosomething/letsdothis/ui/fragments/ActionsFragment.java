@@ -49,7 +49,7 @@ public class ActionsFragment extends Fragment
             @Override
             public Fragment getItem(int position)
             {
-                return BaseFragment.newInstance();
+                return PlaceHolderFragment.newInstance();
             }
 
             @Override

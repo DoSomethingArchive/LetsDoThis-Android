@@ -1,7 +1,10 @@
 package org.dosomething.letsdothis.ui;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.text.TextUtils;
 import android.view.View;
 
 import org.dosomething.letsdothis.R;
@@ -11,7 +14,7 @@ import org.dosomething.letsdothis.ui.fragments.InvitesFragment;
 import org.dosomething.letsdothis.ui.fragments.NotificationsFragment;
 
 
-public class MainActivity extends ActionBarActivity
+public class MainActivity extends ActionBarActivity implements FragmentManager.OnBackStackChangedListener
 {
 
     private View actions;
@@ -31,6 +34,12 @@ public class MainActivity extends ActionBarActivity
                                             ActionsFragment.TAG).commit();
         }
 
+        getSupportFragmentManager().addOnBackStackChangedListener(this);
+        initBottomBarNav();
+    }
+
+    private void initBottomBarNav()
+    {
         actions = findViewById(R.id.actions);
         actions.setSelected(true);
         actions.setOnClickListener(new View.OnClickListener()
@@ -38,72 +47,106 @@ public class MainActivity extends ActionBarActivity
             @Override
             public void onClick(View v)
             {
-                if(!actions.isSelected())
+                if(! actions.isSelected())
                 {
-                    ActionsFragment fragment = (ActionsFragment) getSupportFragmentManager().findFragmentByTag(ActionsFragment.TAG);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment == null ? ActionsFragment.newInstance() : fragment, ActionsFragment.TAG).commit();
-                    actions.setSelected(true);
-                    hub.setSelected(false);
-                    invites.setSelected(false);
-                    notifications.setSelected(false);
+                    ActionsFragment fragment = (ActionsFragment) getSupportFragmentManager()
+                            .findFragmentByTag(ActionsFragment.TAG);
+                    if(fragment == null)//should never happen
+                    {
+                        fragment = ActionsFragment.newInstance();
+                    }
+
+                    replaceCurrentFragment(fragment, ActionsFragment.TAG);
                 }
             }
         });
-        
+
         hub = findViewById(R.id.hub);
         hub.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                if(!hub.isSelected())
+                if(! hub.isSelected())
                 {
-                    HubFragment fragment = (HubFragment) getSupportFragmentManager().findFragmentByTag(HubFragment.TAG);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment == null ? HubFragment.newInstance() : fragment, HubFragment.TAG).commit();
-                    actions.setSelected(false);
-                    hub.setSelected(true);
-                    invites.setSelected(false);
-                    notifications.setSelected(false);
+                    HubFragment fragment = (HubFragment) getSupportFragmentManager()
+                            .findFragmentByTag(HubFragment.TAG);
+                    if(fragment == null)
+                    {
+                        fragment = HubFragment.newInstance();
+                    }
+
+                    replaceCurrentFragment(fragment, HubFragment.TAG);
                 }
             }
         });
-        
+
         invites = findViewById(R.id.invites);
         invites.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                if(!invites.isSelected())
+                if(! invites.isSelected())
                 {
-                    InvitesFragment fragment = (InvitesFragment) getSupportFragmentManager().findFragmentByTag(
-                            InvitesFragment.TAG);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment == null ? InvitesFragment.newInstance() : fragment, InvitesFragment.TAG).commit();
-                    actions.setSelected(false);
-                    hub.setSelected(false);
-                    invites.setSelected(true);
-                    notifications.setSelected(false);
+                    InvitesFragment fragment = (InvitesFragment) getSupportFragmentManager()
+                            .findFragmentByTag(InvitesFragment.TAG);
+                    if(fragment == null)
+                    {
+                        fragment = InvitesFragment.newInstance();
+                    }
+
+                    replaceCurrentFragment(fragment, InvitesFragment.TAG);
                 }
             }
         });
-        
+
         notifications = findViewById(R.id.notifications);
         notifications.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                if(!notifications.isSelected())
+                if(! notifications.isSelected())
                 {
-                    NotificationsFragment fragment = (NotificationsFragment) getSupportFragmentManager().findFragmentByTag(NotificationsFragment.TAG);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment == null ? NotificationsFragment.newInstance() : fragment, NotificationsFragment.TAG).commit();
-                    actions.setSelected(false);
-                    hub.setSelected(false);
-                    invites.setSelected(false);
-                    notifications.setSelected(true);
+                    NotificationsFragment fragment = (NotificationsFragment) getSupportFragmentManager()
+                            .findFragmentByTag(NotificationsFragment.TAG);
+                    if(fragment == null)
+                    {
+                        fragment = NotificationsFragment.newInstance();
+                    }
+
+                    replaceCurrentFragment(fragment, NotificationsFragment.TAG);
                 }
             }
         });
     }
 
+    private void replaceCurrentFragment(Fragment fragment, String tag)
+    {
+        if(! getSupportFragmentManager().popBackStackImmediate(tag, 0))
+        {
+            getSupportFragmentManager().beginTransaction().addToBackStack(tag)
+                                       .replace(R.id.container, fragment, tag).commit();
+            updateNavBar();
+        }
+    }
+
+    @Override
+    public void onBackStackChanged()
+    {
+        updateNavBar();
+    }
+
+    private void updateNavBar()
+    {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
+        String currentFragTag = currentFragment.getTag();
+
+        actions.setSelected(TextUtils.equals(ActionsFragment.TAG, currentFragTag));
+        notifications.setSelected(TextUtils.equals(NotificationsFragment.TAG, currentFragTag));
+        hub.setSelected(TextUtils.equals(HubFragment.TAG, currentFragTag));
+        invites.setSelected(TextUtils.equals(InvitesFragment.TAG, currentFragTag));
+
+    }
 }
