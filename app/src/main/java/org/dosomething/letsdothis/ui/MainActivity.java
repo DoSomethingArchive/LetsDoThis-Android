@@ -1,5 +1,7 @@
 package org.dosomething.letsdothis.ui;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -148,5 +150,10 @@ public class MainActivity extends ActionBarActivity implements FragmentManager.O
         hub.setSelected(TextUtils.equals(HubFragment.TAG, currentFragTag));
         invites.setSelected(TextUtils.equals(InvitesFragment.TAG, currentFragTag));
 
+    }
+
+    public static Intent getLaunchIntent(Context context)
+    {
+        return new Intent(context, MainActivity.class);
     }
 }
