@@ -1,4 +1,6 @@
 package org.dosomething.letsdothis.data;
+import com.google.gson.Gson;
+
 /**
  * Created by toidiu on 4/16/15.
  */
@@ -10,6 +12,23 @@ public class User
     public String password;
     public String first_name;
     public String last_name;
+
+    public User()
+    {
+    }
+
+    public User(String email, String phone, String password)
+    {
+        this.email = email;
+        this.mobile = phone;
+        this.password = password;
+    }
+
+    public static String getJso(User user)
+    {
+        return new Gson().toJson(user, User.class);
+    }
+
 
   /* Optional */
     //    birthdate: Date,
