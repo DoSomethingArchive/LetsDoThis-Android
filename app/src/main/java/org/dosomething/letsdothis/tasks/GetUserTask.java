@@ -4,7 +4,7 @@ import android.content.Context;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.DataHelper;
 import org.dosomething.letsdothis.network.NorthstarAPI;
-import org.dosomething.letsdothis.network.models.UserListResponse;
+import org.dosomething.letsdothis.network.models.UserResponse;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
@@ -13,12 +13,21 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
  */
 public class GetUserTask extends BaseNetworkErrorHandlerTask
 {
-    public User user;
+    private final String id;
+    public        User   user;
+
+    public GetUserTask(String id)
+    {
+        this.id = id;
+    }
 
     @Override
     protected void run(Context context) throws Throwable
     {
-        UserListResponse response = DataHelper.makeRequestAdapter().create(NorthstarAPI.class).userProfile();
+
+        UserResponse[] response = DataHelper.makeRequestAdapter().create(NorthstarAPI.class)
+                .userProfile(id);
+        user = UserResponse.getUser(response[0]);
     }
 
     @Override

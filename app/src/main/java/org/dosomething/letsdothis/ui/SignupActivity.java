@@ -40,6 +40,13 @@ public class SignupActivity extends ActionBarActivity
         initLoginListener();
     }
 
+    @Override
+    protected void onDestroy()
+    {
+        EventBusExt.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
     private void initRegisterListener()
     {
         phone = (EditText) findViewById(R.id.phone);

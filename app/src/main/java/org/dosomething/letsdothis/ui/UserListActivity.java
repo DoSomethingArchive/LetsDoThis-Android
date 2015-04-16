@@ -35,6 +35,13 @@ public class UserListActivity extends ActionBarActivity
         TaskQueue.loadQueueDefault(this).execute(new GetUserListTask());
     }
 
+    @Override
+    protected void onDestroy()
+    {
+        EventBusExt.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
     private void updateUI(List<User> userList)
     {
         TextView num = (TextView) findViewById(R.id.user_num);

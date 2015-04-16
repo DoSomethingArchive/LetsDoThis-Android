@@ -1,4 +1,6 @@
 package org.dosomething.letsdothis.network.models;
+import org.dosomething.letsdothis.data.User;
+
 /**
  * Created by toidiu on 4/16/15.
  */
@@ -9,8 +11,16 @@ public class UserResponse
     String   first_name;
     String   last_name;
     String   _id;
-    Object[] campaign;
 
+    public static User getUser(UserResponse response)
+    {
+        User user = new User();
+        user.email=response.email;
+        user.first_name=response.first_name;
+        user.last_name=response.last_name;
+        user.id=response._id;
+        return user;
+    }
     //    {
     //        email: "test@dosomething.org",
     //        first_name: First,
