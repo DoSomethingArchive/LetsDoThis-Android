@@ -24,7 +24,7 @@ public class User
         this.password = password;
     }
 
-    public static String getJso(User user)
+    public static String getJson(User user)
     {
         return new Gson().toJson(user, User.class);
     }

@@ -70,6 +70,16 @@ public class LoginActivity extends ActionBarActivity
                 startActivity(UserProfileActivity.getLaunchIntent(LoginActivity.this));
             }
         });
+
+        findViewById(R.id.update_user).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                finish();
+                startActivity(UserUpdateActivity.getLaunchIntent(LoginActivity.this));
+            }
+        });
     }
 
     private void initSignupListener()
