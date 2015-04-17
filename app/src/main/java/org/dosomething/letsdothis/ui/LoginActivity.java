@@ -118,11 +118,4 @@ public class LoginActivity extends ActionBarActivity
             Toast.makeText(this, "failed login", Toast.LENGTH_SHORT).show();
         }
     }
-
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
-        EventBusExt.getDefault().unregister(this);
-    }
 }
