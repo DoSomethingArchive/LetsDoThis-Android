@@ -1,6 +1,4 @@
 package org.dosomething.letsdothis.ui;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -26,12 +24,6 @@ public class LoginActivity extends ActionBarActivity
     private EditText email;
     private EditText password;
 
-    public static void callMe(Context context)
-    {
-        Intent intent = new Intent(context, LoginActivity.class);
-        context.startActivity(intent);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -41,6 +33,8 @@ public class LoginActivity extends ActionBarActivity
 
         initLoginListener();
         initSignupListener();
+        initAppNavigation();
+
         if(BuildConfig.DEBUG)
         {
             email.setText("touchlab-dev@example.com");
@@ -48,16 +42,45 @@ public class LoginActivity extends ActionBarActivity
         }
     }
 
-    private void initSignupListener()
+    @Override
+    protected void onDestroy()
     {
-        View signup = findViewById(R.id.signup);
-        signup.setOnClickListener(new View.OnClickListener()
+        EventBusExt.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    private void initAppNavigation()
+    {
+        findViewById(R.id.allUsers).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
                 finish();
-                SignupActivity.callMe(LoginActivity.this);
+                startActivity(UserListActivity.getLaunchIntent(LoginActivity.this));
+            }
+        });
+
+        findViewById(R.id.one_user).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                finish();
+                startActivity(UserProfileActivity.getLaunchIntent(LoginActivity.this));
+            }
+        });
+    }
+
+    private void initSignupListener()
+    {
+        findViewById(R.id.signup).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                finish();
+                startActivity(SignupActivity.getLaunchIntent(LoginActivity.this));
             }
         });
     }
@@ -67,8 +90,7 @@ public class LoginActivity extends ActionBarActivity
         phone = (EditText) findViewById(R.id.phone);
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
-        View login = findViewById(R.id.login);
-        login.setOnClickListener(new View.OnClickListener()
+        findViewById(R.id.login).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
@@ -95,12 +117,5 @@ public class LoginActivity extends ActionBarActivity
         {
             Toast.makeText(this, "failed login", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
-        EventBusExt.getDefault().unregister(this);
     }
 }

@@ -1,13 +1,21 @@
 package org.dosomething.letsdothis.network;
+import org.dosomething.letsdothis.network.models.LoginResponse;
+import org.dosomething.letsdothis.network.models.SignupResponse;
+import org.dosomething.letsdothis.network.models.UserListResponse;
+import org.dosomething.letsdothis.network.models.UserResponse;
+
 import java.util.Date;
 
+import co.touchlab.android.threading.errorcontrol.NetworkException;
 import retrofit.client.Response;
 import retrofit.http.Body;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
+import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.Headers;
 import retrofit.http.POST;
+import retrofit.http.Path;
 import retrofit.http.Query;
 
 /**
@@ -20,26 +28,37 @@ public interface NorthstarAPI
 
     @FormUrlEncoded
     @POST("/login")
-    public Response loginWithMobile(@Field("mobile") String mobile, @Field(
-            "password") String password);
+    LoginResponse loginWithMobile(@Field("mobile") String mobile, @Field(
+            "password") String password) throws NetworkException;
 
     @FormUrlEncoded
     @POST("/login")
-    public Response loginWithEmail(@Field("email") String email, @Field(
-            "password") String password);
+    LoginResponse loginWithEmail(@Field("email") String email, @Field(
+            "password") String password) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @POST("/users")
-    public Response registerWithEmail(@Body String json);
+    SignupResponse registerWithEmail(@Body String json) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @POST("/users")
-    public Response registerWithMobile(@Body String json);
+    SignupResponse registerWithMobile(@Body String json) throws NetworkException;
+
+    @GET("/users")
+    UserListResponse userList(@Query("page") int page, @Query(
+            "limit") int limit) throws NetworkException;
+
+    @GET("/users/_id/{id}")
+    UserResponse[] userProfile(@Path("id") String id) throws NetworkException;
 
 
-
+    //-----------NOT DONE
+    //-----------NOT DONE
+    //-----------NOT DONE
+    //-----------NOT DONE
+    //-----------NOT DONE
     @POST("/logout")
-    public Response logout(@Header("Session") String sessionToken);
+    public Response logout(@Header("Session") String sessionToken) throws NetworkException;
 
     @POST("/users")
     public Response registerWithEmail(@Query("email") String email, @Query(
@@ -54,7 +73,7 @@ public interface NorthstarAPI
             "degree_type") String degreeType, @Query("major_name") String majorName, @Query(
             "hs_gradyear") String hsGradYear, @Query("hs_name") String hsName, @Query(
             "sat_math") int satMath, @Query("sat_verbal") int satVerbal, @Query(
-            "sat_writing") int satWriting);
+            "sat_writing") int satWriting) throws NetworkException;
 
     @POST("/users")
     public Response registerWithMobile(@Query("mobile") String mobile, @Query(
@@ -69,6 +88,6 @@ public interface NorthstarAPI
             "degree_type") String degreeType, @Query("major_name") String majorName, @Query(
             "hs_gradyear") String hsGradYear, @Query("hs_name") String hsName, @Query(
             "sat_math") int satMath, @Query("sat_verbal") int satVerbal, @Query(
-            "sat_writing") int satWriting);
+            "sat_writing") int satWriting) throws NetworkException;
 
 }
