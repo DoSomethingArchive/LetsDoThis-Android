@@ -17,6 +17,8 @@ import co.touchlab.android.threading.tasks.TaskQueue;
  */
 public class LoginActivity extends ActionBarActivity
 {
+    private static final String TAG = LoginActivity.class.getSimpleName();
+
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private EditText phone;
     private EditText email;
@@ -108,6 +110,8 @@ public class LoginActivity extends ActionBarActivity
         if(task.success)
         {
             Toast.makeText(this, "success login", Toast.LENGTH_SHORT).show();
+            startActivity(MainActivity.getLaunchIntent(this));
+            finish();
         }
         else
         {
@@ -115,4 +119,10 @@ public class LoginActivity extends ActionBarActivity
         }
     }
 
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        EventBusExt.getDefault().unregister(this);
+    }
 }

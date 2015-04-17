@@ -2,7 +2,24 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+        <item name="vpiTabPageIndicatorStyle">@style/CustomTabPageIndicator</item>
+    </style>
+    <style name="NavButton" parent="AppTheme">
+        <item name="android:gravity">center</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textColor">@color/bg_text_selectable_black</item>
+        <item name="android:background">@drawable/bg_selectable_black</item>
+    </style>
+
+    <style name="CustomTabPageIndicator" >
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/bg_text_selectable_black</item>
+        <item name="android:background">@drawable/bg_selectable_black</item>
+
     </style>
 
 </resources>
