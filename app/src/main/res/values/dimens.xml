@@ -34,4 +34,5 @@
     <dimen name="text_xxxxlarge">36sp</dimen>
     <dimen name="text_huge">48sp</dimen>
     <dimen name="text_xhuge">64sp</dimen>
+    <dimen name="height_nav_bar">@dimen/height_large</dimen>
 </resources>
