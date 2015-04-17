@@ -2,7 +2,7 @@ package org.dosomething.letsdothis.network.models;
 /**
  * Created by toidiu on 4/16/15.
  */
-public class SignupResponse
+public class ResponseSignup
 {
     public String created_at;
     public String _id;

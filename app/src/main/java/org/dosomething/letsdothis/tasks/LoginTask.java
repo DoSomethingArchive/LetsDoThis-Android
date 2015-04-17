@@ -4,7 +4,7 @@ import android.content.Context;
 import org.apache.http.HttpStatus;
 import org.dosomething.letsdothis.network.DataHelper;
 import org.dosomething.letsdothis.network.NorthstarAPI;
-import org.dosomething.letsdothis.network.models.LoginResponse;
+import org.dosomething.letsdothis.network.models.ResponseLogin;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import retrofit.RetrofitError;
@@ -23,7 +23,7 @@ public class LoginTask extends BaseRegistrationTask
     @Override
     protected void attemptRegistration(Context context) throws Throwable
     {
-        LoginResponse response = null;
+        ResponseLogin response = null;
         if(email != null)
         {
             response = DataHelper.makeRequestAdapter().create(NorthstarAPI.class)
