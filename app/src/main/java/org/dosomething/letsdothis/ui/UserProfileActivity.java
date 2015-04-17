@@ -18,10 +18,9 @@ import co.touchlab.android.threading.tasks.TaskQueue;
  */
 public class UserProfileActivity extends ActionBarActivity
 {
-    public static void callMe(Context context)
+    public static Intent getLaunchIntent(Context context)
     {
-        Intent intent = new Intent(context, UserProfileActivity.class);
-        context.startActivity(intent);
+        return new Intent(context, UserProfileActivity.class);
     }
 
     @Override
