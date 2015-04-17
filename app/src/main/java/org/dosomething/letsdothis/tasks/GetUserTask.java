@@ -2,7 +2,7 @@ package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
 import org.dosomething.letsdothis.data.User;
-import org.dosomething.letsdothis.network.DataHelper;
+import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.ResponseUser;
 
@@ -25,7 +25,7 @@ public class GetUserTask extends BaseNetworkErrorHandlerTask
     protected void run(Context context) throws Throwable
     {
 
-        ResponseUser[] response = DataHelper.makeRequestAdapter().create(NorthstarAPI.class)
+        ResponseUser[] response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
                 .userProfile(id);
         user = ResponseUser.getUser(response[0]);
     }

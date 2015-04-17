@@ -2,7 +2,7 @@ package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
 import org.dosomething.letsdothis.data.User;
-import org.dosomething.letsdothis.network.DataHelper;
+import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.RequestUserUpdate;
 
@@ -26,9 +26,9 @@ public class UpdateUserTask extends BaseNetworkErrorHandlerTask
     protected void run(Context context) throws Throwable
     {
         String s = RequestUserUpdate.toJson(user);
-        Response response = DataHelper.makeRequestAdapter().create(NorthstarAPI.class)
+        Response response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
                 .updateUser(user.id, s);
-        DataHelper.debugOut(response);
+        NetworkHelper.debugOut(response);
     }
 
     @Override
