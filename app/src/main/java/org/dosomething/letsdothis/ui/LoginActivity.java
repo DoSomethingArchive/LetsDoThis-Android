@@ -57,7 +57,6 @@ public class LoginActivity extends ActionBarActivity
             @Override
             public void onClick(View view)
             {
-                finish();
                 startActivity(UserListActivity.getLaunchIntent(LoginActivity.this));
             }
         });
@@ -67,7 +66,6 @@ public class LoginActivity extends ActionBarActivity
             @Override
             public void onClick(View view)
             {
-                finish();
                 startActivity(UserProfileActivity.getLaunchIntent(LoginActivity.this));
             }
         });
@@ -77,7 +75,6 @@ public class LoginActivity extends ActionBarActivity
             @Override
             public void onClick(View view)
             {
-                finish();
                 startActivity(UserUpdateActivity.getLaunchIntent(LoginActivity.this));
             }
         });
@@ -90,7 +87,6 @@ public class LoginActivity extends ActionBarActivity
             @Override
             public void onClick(View view)
             {
-                finish();
                 startActivity(SignupActivity.getLaunchIntent(LoginActivity.this));
             }
         });
@@ -124,7 +120,6 @@ public class LoginActivity extends ActionBarActivity
         {
             Toast.makeText(this, "success login", Toast.LENGTH_SHORT).show();
             startActivity(MainActivity.getLaunchIntent(this));
-            finish();
         }
         else
         {
