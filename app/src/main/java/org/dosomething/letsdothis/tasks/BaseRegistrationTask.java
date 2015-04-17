@@ -15,7 +15,6 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
     protected final String  email;
     protected final String  phone;
     protected final String  password;
-    public        boolean success;
 
     protected BaseRegistrationTask(String email, String phone, String password)
     {

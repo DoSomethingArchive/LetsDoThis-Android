@@ -1,17 +1,27 @@
 package org.dosomething.letsdothis.data;
 import com.google.gson.Gson;
+import com.j256.ormlite.field.DatabaseField;
 
 /**
  * Created by toidiu on 4/16/15.
  */
 public class User
 {
+    @DatabaseField(id = true)
     public String id;
+    @DatabaseField
     public String email;
+    @DatabaseField
     public String mobile;
-    public String password;
+    @DatabaseField
     public String first_name;
+    @DatabaseField
     public String last_name;
+
+
+
+
+    public String password;
 
     public User()
     {

@@ -8,6 +8,7 @@ import android.widget.Toast;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.LoginTask;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
@@ -114,10 +115,12 @@ public class LoginActivity extends ActionBarActivity
         });
     }
 
+
+
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(LoginTask task)
     {
-        if(task.success)
+        if(AppPrefs.getInstance(this).isLoggedIn())
         {
             Toast.makeText(this, "success login", Toast.LENGTH_SHORT).show();
             startActivity(MainActivity.getLaunchIntent(this));

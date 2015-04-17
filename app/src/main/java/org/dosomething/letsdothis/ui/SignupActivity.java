@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.SignupTask;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
@@ -68,7 +69,7 @@ public class SignupActivity extends ActionBarActivity
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(SignupTask task)
     {
-        if(task.success)
+        if(AppPrefs.getInstance(this).isLoggedIn())
         {
             Toast.makeText(this, "success register", Toast.LENGTH_SHORT).show();
         }
