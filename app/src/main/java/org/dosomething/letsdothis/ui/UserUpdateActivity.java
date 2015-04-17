@@ -12,7 +12,7 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.DbGetUser;
 import org.dosomething.letsdothis.tasks.UpdateUserTask;
-import org.w3c.dom.Text;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
@@ -43,14 +43,10 @@ public class UserUpdateActivity extends ActionBarActivity
         EventBusExt.getDefault().register(this);
 
         initSubmitListener();
-        TaskQueue.loadQueueDefault(this).execute(new DbGetUser());
 
-        if(BuildConfig.DEBUG)
-        {
-            firstName.setText("joe");
-            lastName.setText("brown");
-            email.setText("touchlab-dev@example.com\n");
-        }
+        String id = AppPrefs.getInstance(this)
+                .getCurrentUserId(); //FIXME this is for testing. eventually pass in the id to the activity
+        TaskQueue.loadQueueDefault(this).execute(new DbGetUser(id));
     }
 
     @Override
@@ -82,7 +78,8 @@ public class UserUpdateActivity extends ActionBarActivity
                 user.last_name = lastName.getText().toString();
                 user.id = id.getText().toString();
 
-                TaskQueue.loadQueueDefault(UserUpdateActivity.this).execute(new UpdateUserTask(user));
+                TaskQueue.loadQueueDefault(UserUpdateActivity.this)
+                        .execute(new UpdateUserTask(user));
             }
         });
     }
@@ -100,7 +97,10 @@ public class UserUpdateActivity extends ActionBarActivity
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(DbGetUser task)
     {
-        updateUI(task.user);
+        if(task.user != null)
+        {
+            updateUI(task.user);
+        }
     }
 
 }

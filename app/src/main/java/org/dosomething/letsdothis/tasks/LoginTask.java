@@ -2,6 +2,7 @@ package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
 import org.apache.http.HttpStatus;
+import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
@@ -40,7 +41,9 @@ public class LoginTask extends BaseRegistrationTask
         {
             if(response._id != null)
             {
-                AppPrefs.getInstance(context).setCurrentUserId(response._id);
+                User user = new User(email, phone, null);
+                user.id = response._id;
+                loginUser(context, user);
             }
         }
     }

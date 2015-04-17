@@ -41,7 +41,9 @@ public class SignupTask extends BaseRegistrationTask
         {
             if(response._id != null)
             {
-                AppPrefs.getInstance(context).setCurrentUserId(response._id);
+                User user = new User(email, phone, null);
+                user.id = response._id;
+                loginUser(context, user);
             }
         }
     }
