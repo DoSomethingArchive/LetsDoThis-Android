@@ -53,7 +53,7 @@ public interface NorthstarAPI
     ResponseUser[] userProfile(@Path("id") String id) throws NetworkException;
 
     @Headers("Content-Type: application/json")
-    @PUT("/users/{id}")
+    @PUT("/users/_id/{id}")
     Response updateUser(@Path("id") String id, @Body String json) throws NetworkException;
 
     //-----------NOT DONE
