@@ -10,7 +10,7 @@ import retrofit.RetrofitError;
 /**
  * Created by toidiu on 4/16/15.
  */
-public abstract class BaseRegistrationTask extends Task
+public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
 {
     protected final String  email;
     protected final String  phone;
@@ -41,20 +41,5 @@ public abstract class BaseRegistrationTask extends Task
     }
 
     protected abstract void attemptRegistration(Context context) throws Throwable;
-
-    @Override
-    protected boolean handleError(Context context, Throwable throwable)
-    {
-        if(((RetrofitError) throwable).getResponse().getStatus() == HttpStatus.SC_UNAUTHORIZED)
-        {
-            return true;
-        }
-        if(throwable
-                .getCause() instanceof NetworkException || throwable instanceof NetworkException)
-        {
-            return true;
-        }
-        return false;
-    }
 
 }

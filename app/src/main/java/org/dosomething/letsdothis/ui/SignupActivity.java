@@ -23,10 +23,9 @@ public class SignupActivity extends ActionBarActivity
     private EditText email;
     private EditText password;
 
-    public static void callMe(Context context)
+    public static Intent getLaunchIntent(Context context)
     {
-        Intent intent = new Intent(context, SignupActivity.class);
-        context.startActivity(intent);
+        return new Intent(context, SignupActivity.class);
     }
 
     @Override
@@ -37,7 +36,13 @@ public class SignupActivity extends ActionBarActivity
         EventBusExt.getDefault().register(this);
 
         initRegisterListener();
-        initLoginListener();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        EventBusExt.getDefault().unregister(this);
+        super.onDestroy();
     }
 
     private void initRegisterListener()
@@ -59,21 +64,6 @@ public class SignupActivity extends ActionBarActivity
             }
         });
     }
-
-    private void initLoginListener()
-    {
-        View login = findViewById(R.id.login);
-        login.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                finish();
-                LoginActivity.callMe(SignupActivity.this);
-            }
-        });
-    }
-
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(SignupTask task)
