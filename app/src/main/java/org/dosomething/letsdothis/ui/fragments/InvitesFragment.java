@@ -8,18 +8,20 @@ import android.view.ViewGroup;
 import org.dosomething.letsdothis.R;
 
 /**
- * Created by izzyoji :) on 4/14/15.
+ * Created by izzyoji :) on 4/15/15.
  */
-public class BaseFragment extends Fragment
+public class InvitesFragment extends Fragment
 {
-    public static BaseFragment newInstance()
+    public static final String TAG = InvitesFragment.class.getSimpleName();
+
+    public static InvitesFragment newInstance()
     {
-        return new BaseFragment();
+        return new InvitesFragment();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        return inflater.inflate(R.layout.fragment_invites, container, false);
     }
 }
