@@ -1,6 +1,4 @@
 package org.dosomething.letsdothis.ui;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -23,12 +21,6 @@ public class LoginActivity extends ActionBarActivity
     private EditText phone;
     private EditText email;
     private EditText password;
-
-    public static void callMe(Context context)
-    {
-        Intent intent = new Intent(context, LoginActivity.class);
-        context.startActivity(intent);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -63,7 +55,7 @@ public class LoginActivity extends ActionBarActivity
             public void onClick(View view)
             {
                 finish();
-                UserListActivity.callMe(LoginActivity.this);
+                startActivity(UserListActivity.getLaunchIntent(LoginActivity.this));
             }
         });
 
@@ -73,7 +65,7 @@ public class LoginActivity extends ActionBarActivity
             public void onClick(View view)
             {
                 finish();
-                UserProfileActivity.callMe(LoginActivity.this);
+                startActivity(UserProfileActivity.getLaunchIntent(LoginActivity.this));
             }
         });
     }
@@ -86,7 +78,7 @@ public class LoginActivity extends ActionBarActivity
             public void onClick(View view)
             {
                 finish();
-                SignupActivity.callMe(LoginActivity.this);
+                startActivity(SignupActivity.getLaunchIntent(LoginActivity.this));
             }
         });
     }

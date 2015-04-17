@@ -23,10 +23,9 @@ public class SignupActivity extends ActionBarActivity
     private EditText email;
     private EditText password;
 
-    public static void callMe(Context context)
+    public static Intent getLaunchIntent(Context context)
     {
-        Intent intent = new Intent(context, SignupActivity.class);
-        context.startActivity(intent);
+        return new Intent(context, SignupActivity.class);
     }
 
     @Override
