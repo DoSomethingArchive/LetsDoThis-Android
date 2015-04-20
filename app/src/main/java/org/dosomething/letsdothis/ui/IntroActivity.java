@@ -45,12 +45,4 @@ public class IntroActivity extends ActionBarActivity
         });
     }
 
-
-    //    @Override
-//    protected void onDestroy()
-//    {
-//        EventBusExt.getDefault().unregister(this);
-//        super.onDestroy();
-//    }
-
 }
