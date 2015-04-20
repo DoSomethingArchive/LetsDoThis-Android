@@ -7,11 +7,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.DbGetUser;
-import org.dosomething.letsdothis.tasks.UpdateUserTask;
+import org.dosomething.letsdothis.tasks.UpdateAndMergeUserTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
@@ -44,8 +43,7 @@ public class UserUpdateActivity extends ActionBarActivity
 
         initSubmitListener();
 
-        String id = AppPrefs.getInstance(this)
-                .getCurrentUserId(); //FIXME this is for testing. eventually pass in the id to the activity
+        String id = AppPrefs.getInstance(this).getCurrentUserId();
         TaskQueue.loadQueueDefault(this).execute(new DbGetUser(id));
     }
 
@@ -79,7 +77,7 @@ public class UserUpdateActivity extends ActionBarActivity
                 user.id = id.getText().toString();
 
                 TaskQueue.loadQueueDefault(UserUpdateActivity.this)
-                        .execute(new UpdateUserTask(user));
+                        .execute(new UpdateAndMergeUserTask(user));
             }
         });
     }
@@ -102,5 +100,15 @@ public class UserUpdateActivity extends ActionBarActivity
             updateUI(task.user);
         }
     }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(UpdateAndMergeUserTask task)
+    {
+        if(task.updatedUser != null)
+        {
+            updateUI(task.updatedUser);
+        }
+    }
+
 
 }

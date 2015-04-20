@@ -37,32 +37,4 @@
         android:layout_marginTop="20dp"
         android:text="login"/>
 
-    <Button
-        android:id="@+id/signup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="register"/>
-
-    <Button
-        android:id="@+id/allUsers"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="All Users"/>
-
-    <Button
-        android:id="@+id/one_user"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="One User"/>
-
-    <Button
-        android:id="@+id/update_user"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Update User"/>
-
 </LinearLayout>
