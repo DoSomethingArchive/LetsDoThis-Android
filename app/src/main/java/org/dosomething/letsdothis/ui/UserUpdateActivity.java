@@ -10,7 +10,7 @@ import android.widget.TextView;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.DbGetUser;
-import org.dosomething.letsdothis.tasks.UpdateAndMergeUserTask;
+import org.dosomething.letsdothis.tasks.UpdateUserTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
@@ -77,7 +77,7 @@ public class UserUpdateActivity extends ActionBarActivity
                 user.id = id.getText().toString();
 
                 TaskQueue.loadQueueDefault(UserUpdateActivity.this)
-                        .execute(new UpdateAndMergeUserTask(user));
+                        .execute(new UpdateUserTask(user));
             }
         });
     }
@@ -102,7 +102,7 @@ public class UserUpdateActivity extends ActionBarActivity
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(UpdateAndMergeUserTask task)
+    public void onEventMainThread(UpdateUserTask task)
     {
         if(task.updatedUser != null)
         {

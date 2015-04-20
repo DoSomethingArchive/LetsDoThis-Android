@@ -20,6 +20,7 @@ import retrofit.http.POST;
 import retrofit.http.PUT;
 import retrofit.http.Path;
 import retrofit.http.Query;
+import retrofit.mime.TypedInput;
 
 /**
  * Created by izzyoji :) on 4/14/15.
@@ -56,7 +57,7 @@ public interface NorthstarAPI
 
     @Headers("Content-Type: application/json")
     @PUT("/users/{id}")
-    ResponseUserUpdate updateUser(@Path("id") String id, @Body User user) throws NetworkException;
+    ResponseUserUpdate updateUser(@Path("id") String id, @Body TypedInput user) throws NetworkException;
 
     //-----------NOT DONE
     //-----------NOT DONE

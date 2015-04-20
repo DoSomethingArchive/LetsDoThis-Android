@@ -8,6 +8,8 @@ import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
+import co.touchlab.android.threading.tasks.Task;
+import co.touchlab.android.threading.tasks.TaskQueue;
 import retrofit.RetrofitError;
 
 /**
@@ -43,6 +45,8 @@ public class LoginTask extends BaseRegistrationTask
                 User user = new User(email, phone, null);
                 user.id = response._id;
                 loginUser(context, user);
+
+                TaskQueue.loadQueueDefault(context).execute(new GetUserTask(user.id));
             }
         }
     }

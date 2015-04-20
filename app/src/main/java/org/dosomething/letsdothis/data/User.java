@@ -1,6 +1,13 @@
 package org.dosomething.letsdothis.data;
-import com.google.gson.Gson;
 import com.j256.ormlite.field.DatabaseField;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+
+import retrofit.mime.TypedByteArray;
+import retrofit.mime.TypedInput;
 
 /**
  * Created by toidiu on 4/16/15.
@@ -32,9 +39,28 @@ public class User
         this.password = password;
     }
 
-    public static String getJson(User user)
+    public static TypedInput getJsonTypedInput(User user) throws Throwable
     {
-        return new Gson().toJson(user, User.class);
+        JSONObject jsonObject = new JSONObject();
+        if(!user.first_name.isEmpty())
+        {
+            jsonObject.put("first_name", user.first_name);
+        }
+        if(!user.last_name.isEmpty())
+        {
+            jsonObject.put("last_name", user.last_name);
+        }
+        if(!user.email.isEmpty())
+        {
+            jsonObject.put("email", user.email);
+        }
+        if(!user.password.isEmpty())
+        {
+            jsonObject.put("password", user.password);
+        }
+
+        String json = jsonObject.toString();
+        return new TypedByteArray("application/json", json.getBytes("UTF-8"));
     }
 
 
