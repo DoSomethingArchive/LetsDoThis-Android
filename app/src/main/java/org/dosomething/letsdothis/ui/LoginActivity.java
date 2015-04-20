@@ -84,6 +84,7 @@ public class LoginActivity extends ActionBarActivity
         {
             Toast.makeText(this, "success login", Toast.LENGTH_SHORT).show();
             startActivity(MainActivity.getLaunchIntent(this));
+            finish();
         }
         else
         {
