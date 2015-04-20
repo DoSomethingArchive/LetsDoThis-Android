@@ -1,4 +1,6 @@
 package org.dosomething.letsdothis.ui;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -25,6 +27,12 @@ public class LoginActivity extends ActionBarActivity
     private EditText email;
     private EditText password;
 
+
+    public static Intent getLaunchIntent(Context context)
+    {
+        return new Intent(context, LoginActivity.class);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -33,8 +41,6 @@ public class LoginActivity extends ActionBarActivity
         EventBusExt.getDefault().register(this);
 
         initLoginListener();
-        initSignupListener();
-        initAppNavigation();
 
         if(BuildConfig.DEBUG)
         {
@@ -48,48 +54,6 @@ public class LoginActivity extends ActionBarActivity
     {
         EventBusExt.getDefault().unregister(this);
         super.onDestroy();
-    }
-
-    private void initAppNavigation()
-    {
-        findViewById(R.id.allUsers).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                startActivity(UserListActivity.getLaunchIntent(LoginActivity.this));
-            }
-        });
-
-        findViewById(R.id.one_user).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                startActivity(UserProfileActivity.getLaunchIntent(LoginActivity.this));
-            }
-        });
-
-        findViewById(R.id.update_user).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                startActivity(UserUpdateActivity.getLaunchIntent(LoginActivity.this));
-            }
-        });
-    }
-
-    private void initSignupListener()
-    {
-        findViewById(R.id.signup).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                startActivity(SignupActivity.getLaunchIntent(LoginActivity.this));
-            }
-        });
     }
 
     private void initLoginListener()
@@ -126,4 +90,5 @@ public class LoginActivity extends ActionBarActivity
             Toast.makeText(this, "failed login", Toast.LENGTH_SHORT).show();
         }
     }
+
 }

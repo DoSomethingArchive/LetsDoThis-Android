@@ -4,6 +4,7 @@ import org.dosomething.letsdothis.network.models.ResponseLogin;
 import org.dosomething.letsdothis.network.models.ResponseSignup;
 import org.dosomething.letsdothis.network.models.ResponseUser;
 import org.dosomething.letsdothis.network.models.ResponseUserList;
+import org.dosomething.letsdothis.network.models.ResponseUserUpdate;
 
 import java.util.Date;
 
@@ -55,7 +56,7 @@ public interface NorthstarAPI
 
     @Headers("Content-Type: application/json")
     @PUT("/users/{id}")
-    Response updateUser(@Path("id") String id, @Body User user) throws NetworkException;
+    ResponseUserUpdate updateUser(@Path("id") String id, @Body User user) throws NetworkException;
 
     //-----------NOT DONE
     //-----------NOT DONE

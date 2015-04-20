@@ -7,9 +7,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.tasks.BaseRegistrationTask;
 import org.dosomething.letsdothis.ui.fragments.ActionsFragment;
 import org.dosomething.letsdothis.ui.fragments.HubFragment;
 import org.dosomething.letsdothis.ui.fragments.InvitesFragment;
@@ -32,12 +36,42 @@ public class MainActivity extends ActionBarActivity implements FragmentManager.O
         if(savedInstanceState == null)
         {
             getSupportFragmentManager().beginTransaction()
-                                       .add(R.id.container, ActionsFragment.newInstance(),
-                                            ActionsFragment.TAG).commit();
+                    .add(R.id.container, ActionsFragment.newInstance(), ActionsFragment.TAG)
+                    .commit();
         }
 
         getSupportFragmentManager().addOnBackStackChangedListener(this);
         initBottomBarNav();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch(item.getItemId())
+        {
+            case R.id.logout:
+                BaseRegistrationTask.logout(this);
+                finish();
+                break;
+            case R.id.user_list:
+                startActivity(UserListActivity.getLaunchIntent(this));
+                break;
+            case R.id.edit_user:
+                startActivity(UserUpdateActivity.getLaunchIntent(this));
+                break;
+            case R.id.one_user:
+                startActivity(UserProfileActivity.getLaunchIntent(this));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initBottomBarNav()
@@ -129,7 +163,7 @@ public class MainActivity extends ActionBarActivity implements FragmentManager.O
         if(! getSupportFragmentManager().popBackStackImmediate(tag, 0))
         {
             getSupportFragmentManager().beginTransaction().addToBackStack(tag)
-                                       .replace(R.id.container, fragment, tag).commit();
+                    .replace(R.id.container, fragment, tag).commit();
             updateNavBar();
         }
     }
