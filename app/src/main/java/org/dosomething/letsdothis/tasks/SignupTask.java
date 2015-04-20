@@ -1,15 +1,12 @@
 package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
-import com.google.gson.Gson;
-
 import org.dosomething.letsdothis.data.User;
-import org.dosomething.letsdothis.network.DataHelper;
+import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.NorthstarAPI;
-import org.dosomething.letsdothis.network.models.SignupResponse;
+import org.dosomething.letsdothis.network.models.ResponseSignup;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
-import retrofit.client.Response;
 
 /**
  * Created by toidiu on 4/15/15.
@@ -25,25 +22,26 @@ public class SignupTask extends BaseRegistrationTask
     @Override
     protected void attemptRegistration(Context context) throws Throwable
     {
-        SignupResponse response = null;
+        ResponseSignup response = null;
+        User user = new User(email, phone, password);
         if(email != null)
         {
-            User user = new User(email, phone, password);
-            response = DataHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                    .registerWithEmail(User.getJso(user));
+            response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
+                    .registerWithEmail(user);
         }
         else if(phone != null)
         {
-            String regInfo = "{mobile: " + phone + ", password: " + password + "}";
-            response = DataHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                    .registerWithMobile(regInfo);
+            response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
+                    .registerWithMobile(user);
         }
 
         if(response != null)
         {
             if(response._id != null)
             {
-                success = true;
+                user = new User(email, phone, null);
+                user.id = response._id;
+                loginUser(context, user);
             }
         }
     }
