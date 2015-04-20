@@ -25,7 +25,7 @@ import retrofit.converter.GsonConverter;
 /**
  * Created by kgalligan on 10/8/14.
  */
-public class Helper
+public class NetworkHelper
 {
     public static final String JSON_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     public static final int    CONNECT_TIMEOUT  = 45;
