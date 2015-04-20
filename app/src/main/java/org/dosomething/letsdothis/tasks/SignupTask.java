@@ -27,7 +27,7 @@ public class SignupTask extends BaseRegistrationTask
         {
             User user = new User(email, phone, password);
             response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                    .registerWithEmail(User.getJson(user));
+                    .registerWithEmail(user);
         }
         else if(phone != null)
         {

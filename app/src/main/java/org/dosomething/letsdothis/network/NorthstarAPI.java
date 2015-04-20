@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.network;
+import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 import org.dosomething.letsdothis.network.models.ResponseSignup;
 import org.dosomething.letsdothis.network.models.ResponseUser;
@@ -39,11 +40,11 @@ public interface NorthstarAPI
 
     @Headers("Content-Type: application/json")
     @POST("/users")
-    ResponseSignup registerWithEmail(@Body String json) throws NetworkException;
+    ResponseSignup registerWithEmail(@Body User user) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @POST("/users")
-    ResponseSignup registerWithMobile(@Body String json) throws NetworkException;
+    ResponseSignup registerWithMobile(@Body User json) throws NetworkException;
 
     @GET("/users")
     ResponseUserList userList(@Query("page") int page, @Query(
@@ -53,8 +54,8 @@ public interface NorthstarAPI
     ResponseUser[] userProfile(@Path("id") String id) throws NetworkException;
 
     @Headers("Content-Type: application/json")
-    @PUT("/users/_id/{id}")
-    Response updateUser(@Path("id") String id, @Body String json) throws NetworkException;
+    @PUT("/users/{id}")
+    Response updateUser(@Path("id") String id, @Body User user) throws NetworkException;
 
     //-----------NOT DONE
     //-----------NOT DONE

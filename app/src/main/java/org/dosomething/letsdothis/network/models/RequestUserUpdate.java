@@ -21,14 +21,6 @@ public class RequestUserUpdate
         this.last_name = user.last_name;
     }
 
-
-    public static String toJson(User user)
-    {
-        RequestUserUpdate requestUserUpdate = new RequestUserUpdate(user);
-        return new Gson().toJson(requestUserUpdate, RequestUserUpdate.class);
-    }
-
-
     //    {
 //  /* Email address - forced to lowercase */
 //        email: String,
