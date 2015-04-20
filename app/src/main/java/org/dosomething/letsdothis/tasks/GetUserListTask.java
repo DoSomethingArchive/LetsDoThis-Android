@@ -3,7 +3,6 @@ import android.content.Context;
 
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.DataHelper;
-import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.UserListResponse;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class GetUserListTask extends BaseNetworkErrorHandlerTask
         boolean done = false;
         for(int page = 0; ! done; page++)
         {
-            UserListResponse response = DataHelper.makeRequestAdapter().create(NorthstarAPI.class)
+            UserListResponse response = DataHelper.getNorthstarAPIService()
                     .userList(page, RESULT_LIMIT);
 
             for(User user : response.data)

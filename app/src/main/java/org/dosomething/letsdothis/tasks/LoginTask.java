@@ -2,7 +2,6 @@ package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
 import org.dosomething.letsdothis.network.DataHelper;
-import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.LoginResponse;
 
 import java.net.HttpURLConnection;
@@ -27,12 +26,12 @@ public class LoginTask extends BaseRegistrationTask
         LoginResponse response = null;
         if(email != null)
         {
-            response = DataHelper.makeRequestAdapter().create(NorthstarAPI.class)
+            response = DataHelper.getNorthstarAPIService()
                     .loginWithEmail(email, password);
         }
         else if(phone != null)
         {
-            response = DataHelper.makeRequestAdapter().create(NorthstarAPI.class)
+            response = DataHelper.getNorthstarAPIService()
                     .loginWithMobile(phone, password);
         }
 
