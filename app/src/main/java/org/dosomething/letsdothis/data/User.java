@@ -18,9 +18,7 @@ public class User
     @DatabaseField
     public String last_name;
 
-
-
-
+    //DON'T STORE PASSWORD IN DATABASE
     public String password;
 
     public User()

@@ -23,24 +23,23 @@ public class SignupTask extends BaseRegistrationTask
     protected void attemptRegistration(Context context) throws Throwable
     {
         ResponseSignup response = null;
+        User user = new User(email, phone, password);
         if(email != null)
         {
-            User user = new User(email, phone, password);
             response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
                     .registerWithEmail(user);
         }
         else if(phone != null)
         {
-            String regInfo = "{mobile: " + phone + ", password: " + password + "}";
             response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                    .registerWithMobile(regInfo);
+                    .registerWithMobile(user);
         }
 
         if(response != null)
         {
             if(response._id != null)
             {
-                User user = new User(email, phone, null);
+                user = new User(email, phone, null);
                 user.id = response._id;
                 loginUser(context, user);
             }
