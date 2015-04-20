@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.network;
+import org.dosomething.letsdothis.network.models.ResponseCampaign;
 import org.dosomething.letsdothis.network.models.LoginResponse;
 import org.dosomething.letsdothis.network.models.SignupResponse;
 import org.dosomething.letsdothis.network.models.UserListResponse;
@@ -50,6 +51,12 @@ public interface NorthstarAPI
 
     @GET("/users/_id/{id}")
     UserResponse[] userProfile(@Path("id") String id) throws NetworkException;
+
+    //NOTE THIS DOESN'T WORK because the base URL is different, still in progress
+    @GET("/content/{id}")
+    ResponseCampaign campaign(@Path("id") int id) throws NetworkException;
+
+
 
 
     //-----------NOT DONE
