@@ -4,7 +4,6 @@ import android.content.Context;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.NorthstarAPI;
-import org.dosomething.letsdothis.network.models.RequestUserUpdate;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import retrofit.client.Response;
@@ -25,9 +24,8 @@ public class UpdateUserTask extends BaseNetworkErrorHandlerTask
     @Override
     protected void run(Context context) throws Throwable
     {
-        String s = RequestUserUpdate.toJson(user);
         Response response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                .updateUser(user.id, s);
+                .updateUser(user.id, user);
         NetworkHelper.debugOut(response);
     }
 
