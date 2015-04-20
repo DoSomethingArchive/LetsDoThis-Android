@@ -4,4 +4,7 @@ package org.dosomething.letsdothis.data;
  */
 public class Campaign
 {
+    public String title;
+
+    public boolean staffPick;
 }

@@ -6,8 +6,15 @@ import org.dosomething.letsdothis.data.Campaign;
  */
 public class ResponseCampaign
 {
+    public String title;
+    public boolean is_staff_pick;
+
     public static Campaign getCampaign(ResponseCampaign response)
     {
-        return null;
+        Campaign campaign = new Campaign();
+        campaign.title = response.title;
+        campaign.staffPick = response.is_staff_pick;
+
+        return campaign;
     }
 }
