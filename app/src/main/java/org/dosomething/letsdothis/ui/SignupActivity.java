@@ -72,6 +72,7 @@ public class SignupActivity extends ActionBarActivity
         if(AppPrefs.getInstance(this).isLoggedIn())
         {
             Toast.makeText(this, "success register", Toast.LENGTH_SHORT).show();
+            startActivity(MainActivity.getLaunchIntent(this));
         }
         else
         {
