@@ -44,8 +44,8 @@ public class LoginActivity extends ActionBarActivity
 
         if(BuildConfig.DEBUG)
         {
-            email.setText("touchlab-dev@example.com");
-            password.setText("touchlab");
+            email.setText("touch@lab.co");
+            password.setText("test");
         }
     }
 
