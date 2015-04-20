@@ -1,22 +1,21 @@
 package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
+import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.User;
-import org.dosomething.letsdothis.network.NetworkHelper;
-import org.dosomething.letsdothis.network.NorthstarAPI;
-import org.dosomething.letsdothis.network.models.ResponseUser;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
+import co.touchlab.android.threading.tasks.Task;
 
 /**
- * Created by toidiu on 4/16/15.
+ * Created by toidiu on 4/17/15.
  */
-public class GetUserTask extends BaseNetworkErrorHandlerTask
+public class DbGetUser extends Task
 {
     private final String id;
     public        User   user;
 
-    public GetUserTask(String id)
+    public DbGetUser(String id)
     {
         this.id = id;
     }
@@ -24,10 +23,13 @@ public class GetUserTask extends BaseNetworkErrorHandlerTask
     @Override
     protected void run(Context context) throws Throwable
     {
+        user = DatabaseHelper.getInstance(context).getUserDao().queryForId(id);
+    }
 
-        ResponseUser[] response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                .userProfile(id);
-        user = ResponseUser.getUser(response[0]);
+    @Override
+    protected boolean handleError(Context context, Throwable throwable)
+    {
+        return false;
     }
 
     @Override

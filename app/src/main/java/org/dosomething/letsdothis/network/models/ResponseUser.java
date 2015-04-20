@@ -4,7 +4,7 @@ import org.dosomething.letsdothis.data.User;
 /**
  * Created by toidiu on 4/16/15.
  */
-public class UserResponse
+public class ResponseUser
 {
 
     String   email;
@@ -12,7 +12,7 @@ public class UserResponse
     String   last_name;
     String   _id;
 
-    public static User getUser(UserResponse response)
+    public static User getUser(ResponseUser response)
     {
         User user = new User();
         user.email=response.email;

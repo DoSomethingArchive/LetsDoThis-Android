@@ -2,6 +2,9 @@ package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
 import org.apache.http.HttpStatus;
+import org.dosomething.letsdothis.data.DatabaseHelper;
+import org.dosomething.letsdothis.data.User;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 import co.touchlab.android.threading.errorcontrol.NetworkException;
 import co.touchlab.android.threading.tasks.Task;
@@ -15,7 +18,6 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
     protected final String  email;
     protected final String  phone;
     protected final String  password;
-    public        boolean success;
 
     protected BaseRegistrationTask(String email, String phone, String password)
     {
@@ -28,6 +30,16 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
         this.password = password;
     }
 
+    protected void loginUser(Context context, User user) throws Throwable
+    {
+        DatabaseHelper.getInstance(context).getUserDao().createOrUpdate(user);
+        AppPrefs.getInstance(context).setCurrentUserId(user.id);
+    }
+
+    public  static void logout(Context context)
+    {
+        AppPrefs.getInstance(context).logout();
+    }
 
     @Override
     protected void run(Context context) throws Throwable

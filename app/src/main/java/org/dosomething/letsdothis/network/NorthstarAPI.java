@@ -1,8 +1,10 @@
 package org.dosomething.letsdothis.network;
-import org.dosomething.letsdothis.network.models.LoginResponse;
-import org.dosomething.letsdothis.network.models.SignupResponse;
-import org.dosomething.letsdothis.network.models.UserListResponse;
-import org.dosomething.letsdothis.network.models.UserResponse;
+import org.dosomething.letsdothis.data.User;
+import org.dosomething.letsdothis.network.models.ResponseLogin;
+import org.dosomething.letsdothis.network.models.ResponseSignup;
+import org.dosomething.letsdothis.network.models.ResponseUser;
+import org.dosomething.letsdothis.network.models.ResponseUserList;
+import org.dosomething.letsdothis.network.models.ResponseUserUpdate;
 
 import java.util.Date;
 
@@ -15,6 +17,7 @@ import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.Headers;
 import retrofit.http.POST;
+import retrofit.http.PUT;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
@@ -28,29 +31,32 @@ public interface NorthstarAPI
 
     @FormUrlEncoded
     @POST("/login")
-    LoginResponse loginWithMobile(@Field("mobile") String mobile, @Field(
+    ResponseLogin loginWithMobile(@Field("mobile") String mobile, @Field(
             "password") String password) throws NetworkException;
 
     @FormUrlEncoded
     @POST("/login")
-    LoginResponse loginWithEmail(@Field("email") String email, @Field(
+    ResponseLogin loginWithEmail(@Field("email") String email, @Field(
             "password") String password) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @POST("/users")
-    SignupResponse registerWithEmail(@Body String json) throws NetworkException;
+    ResponseSignup registerWithEmail(@Body User user) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @POST("/users")
-    SignupResponse registerWithMobile(@Body String json) throws NetworkException;
+    ResponseSignup registerWithMobile(@Body User json) throws NetworkException;
 
     @GET("/users")
-    UserListResponse userList(@Query("page") int page, @Query(
+    ResponseUserList userList(@Query("page") int page, @Query(
             "limit") int limit) throws NetworkException;
 
     @GET("/users/_id/{id}")
-    UserResponse[] userProfile(@Path("id") String id) throws NetworkException;
+    ResponseUser[] userProfile(@Path("id") String id) throws NetworkException;
 
+    @Headers("Content-Type: application/json")
+    @PUT("/users/{id}")
+    ResponseUserUpdate updateUser(@Path("id") String id, @Body User user) throws NetworkException;
 
     //-----------NOT DONE
     //-----------NOT DONE
