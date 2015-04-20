@@ -3,7 +3,7 @@ import android.content.Context;
 
 import org.apache.http.HttpStatus;
 import org.dosomething.letsdothis.data.User;
-import org.dosomething.letsdothis.network.Helper;
+import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 
@@ -27,12 +27,12 @@ public class LoginTask extends BaseRegistrationTask
         ResponseLogin response = null;
         if(email != null)
         {
-            response = Helper.makeRequestAdapter().create(NorthstarAPI.class)
+            response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
                     .loginWithEmail(email, password);
         }
         else if(phone != null)
         {
-            response = Helper.makeRequestAdapter().create(NorthstarAPI.class)
+            response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
                     .loginWithMobile(phone, password);
         }
 
