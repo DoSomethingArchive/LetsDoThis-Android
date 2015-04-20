@@ -2,10 +2,9 @@ package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
 import org.dosomething.letsdothis.data.User;
-import org.dosomething.letsdothis.network.NetworkHelper;
+import org.dosomething.letsdothis.network.Helper;
 import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.ResponseSignup;
-import org.dosomething.letsdothis.utils.AppPrefs;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
@@ -27,13 +26,13 @@ public class SignupTask extends BaseRegistrationTask
         if(email != null)
         {
             User user = new User(email, phone, password);
-            response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
+            response = Helper.makeRequestAdapter().create(NorthstarAPI.class)
                     .registerWithEmail(User.getJson(user));
         }
         else if(phone != null)
         {
             String regInfo = "{mobile: " + phone + ", password: " + password + "}";
-            response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
+            response = Helper.makeRequestAdapter().create(NorthstarAPI.class)
                     .registerWithMobile(regInfo);
         }
 
