@@ -73,6 +73,7 @@ public class SignupActivity extends ActionBarActivity
         {
             Toast.makeText(this, "success register", Toast.LENGTH_SHORT).show();
             startActivity(MainActivity.getLaunchIntent(this));
+            finish();
         }
         else
         {
