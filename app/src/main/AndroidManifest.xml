@@ -28,6 +28,8 @@
 
         <activity android:name=".ui.MainActivity"/>
 
+        <activity android:name=".ui.CampaignDetailsActivity"/>
+
     </application>
 
 </manifest>

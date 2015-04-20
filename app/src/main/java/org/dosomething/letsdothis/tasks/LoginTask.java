@@ -1,10 +1,11 @@
 package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
-import org.apache.http.HttpStatus;
 import org.dosomething.letsdothis.network.DataHelper;
 import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.LoginResponse;
+
+import java.net.HttpURLConnection;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import retrofit.RetrofitError;
@@ -48,7 +49,7 @@ public class LoginTask extends BaseRegistrationTask
     protected boolean handleError(Context context, Throwable throwable)
     {
         if(((RetrofitError) throwable).getResponse()
-                .getStatus() == HttpStatus.SC_PRECONDITION_FAILED)
+                .getStatus() == HttpURLConnection.HTTP_PRECON_FAILED)
         {
             return true;
         }
