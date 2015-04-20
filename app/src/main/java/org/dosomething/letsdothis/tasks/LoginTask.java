@@ -35,7 +35,7 @@ public class LoginTask extends BaseRegistrationTask
         else if(phone != null)
         {
             response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                    .loginWithMobile(phone, password);Intro
+                    .loginWithMobile(phone, password);
         }
 
         if(response != null)
