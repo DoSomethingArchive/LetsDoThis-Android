@@ -42,20 +42,9 @@ public class UpdateUserTask extends BaseNetworkErrorHandlerTask
                 .userProfile(user.id);
 
         updatedUser = ResponseUser.getUser(responseUsers[0]);
-        updatedUser = mergeDbUser(context, updatedUser);
-
         Dao<User, String> userDao = DatabaseHelper.getInstance(context).getUserDao();
         userDao.createOrUpdate(updatedUser);
     }
-
-    public static User mergeDbUser(Context context, User updatedUser) throws SQLException
-    {
-        Dao<User, String> userDao = DatabaseHelper.getInstance(context).getUserDao();
-        User dbUser = userDao.queryForId(updatedUser.id);
-        //FIXME merge users
-        return updatedUser;
-    }
-
 
     @Override
     protected void onComplete(Context context)

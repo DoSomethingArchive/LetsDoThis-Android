@@ -7,18 +7,20 @@ import org.dosomething.letsdothis.data.User;
 public class ResponseUser
 {
 
-    String   email;
-    String   first_name;
-    String   last_name;
-    String   _id;
+    String email;
+    String first_name;
+    String last_name;
+    String _id;
+    String birthdate;
 
     public static User getUser(ResponseUser response)
     {
         User user = new User();
-        user.email=response.email;
-        user.first_name=response.first_name;
-        user.last_name=response.last_name;
-        user.id=response._id;
+        user.email = response.email;
+        user.first_name = response.first_name;
+        user.last_name = response.last_name;
+        user.id = response._id;
+        user.birthdate = response.birthdate;
         return user;
     }
     //    {

@@ -67,9 +67,14 @@ public class User
         {
             jsonObject.put("password", user.password);
         }
+        if(! user.birthdate.isEmpty())
+        {
+            jsonObject.put("birthdate", user.birthdate);
+        }
 
         String json = jsonObject.toString();
-        return new TypedByteArray("application/json", json.getBytes("UTF-8"));
+        String finalJson = json.replace("\\", "");
+        return new TypedByteArray("application/json", finalJson.getBytes("UTF-8"));
     }
 
 
