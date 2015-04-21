@@ -4,7 +4,11 @@ package org.dosomething.letsdothis.data;
  */
 public class Campaign
 {
+    public int    id;
     public String title;
-
-    public boolean staffPick;
+    public String callToAction;
+    public String imagePath;
+    public long   startTime;
+    public String solutionCopy;
+    public String solutionSupport;
 }
