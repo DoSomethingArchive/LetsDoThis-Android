@@ -23,8 +23,7 @@ public class LoginActivity extends ActionBarActivity
     private static final String TAG = LoginActivity.class.getSimpleName();
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
-    private EditText phone;
-    private EditText email;
+    private EditText phoneEmail;
     private EditText password;
 
 
@@ -44,7 +43,7 @@ public class LoginActivity extends ActionBarActivity
 
         if(BuildConfig.DEBUG)
         {
-            email.setText("touch@lab.co");
+            phoneEmail.setText("touch@lab.co");
             password.setText("test");
         }
     }
@@ -58,19 +57,17 @@ public class LoginActivity extends ActionBarActivity
 
     private void initLoginListener()
     {
-        phone = (EditText) findViewById(R.id.phone);
-        email = (EditText) findViewById(R.id.email);
+        phoneEmail = (EditText) findViewById(R.id.phone_email);
         password = (EditText) findViewById(R.id.password);
         findViewById(R.id.login).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                String phonetext = phone.getText().toString();
-                String emailtext = email.getText().toString();
+                String usertext = phoneEmail.getText().toString();
                 String passtext = password.getText().toString();
                 TaskQueue.loadQueueDefault(LoginActivity.this)
-                        .execute(new LoginTask(emailtext, phonetext, passtext));
+                        .execute(new LoginTask(usertext, passtext));
             }
         });
     }
@@ -84,6 +81,7 @@ public class LoginActivity extends ActionBarActivity
         {
             Toast.makeText(this, "success login", Toast.LENGTH_SHORT).show();
             startActivity(MainActivity.getLaunchIntent(this));
+            finish();
         }
         else
         {

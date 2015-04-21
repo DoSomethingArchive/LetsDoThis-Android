@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.SignupTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
@@ -20,9 +21,11 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 public class SignupActivity extends ActionBarActivity
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
-    private EditText phone;
-    private EditText email;
+    private EditText phoneEmail;
     private EditText password;
+    private EditText firstName;
+    private EditText lastName;
+    private EditText birthday;
 
     public static Intent getLaunchIntent(Context context)
     {
@@ -48,20 +51,25 @@ public class SignupActivity extends ActionBarActivity
 
     private void initRegisterListener()
     {
-        phone = (EditText) findViewById(R.id.phone);
-        email = (EditText) findViewById(R.id.email);
+        phoneEmail = (EditText) findViewById(R.id.phone_email);
         password = (EditText) findViewById(R.id.password);
-        View register = findViewById(R.id.register);
-        register.setOnClickListener(new View.OnClickListener()
+        firstName = (EditText) findViewById(R.id.first_name);
+        lastName = (EditText) findViewById(R.id.last_name);
+        birthday = (EditText) findViewById(R.id.birthday);
+
+        findViewById(R.id.register).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                String phonetext = phone.getText().toString();
-                String emailtext = email.getText().toString();
+                String phoneEmailtext = phoneEmail.getText().toString();
                 String passtext = password.getText().toString();
-                TaskQueue.loadQueueDefault(SignupActivity.this)
-                        .execute(new SignupTask(emailtext, phonetext, passtext));
+                String firsttext = firstName.getText().toString();
+                String lasttext = lastName.getText().toString();
+                String birthtext = birthday.getText().toString();
+
+                TaskQueue.loadQueueDefault(SignupActivity.this).execute(
+                        new SignupTask(phoneEmailtext, passtext, firsttext, lasttext, birthtext));
             }
         });
     }
@@ -73,6 +81,7 @@ public class SignupActivity extends ActionBarActivity
         {
             Toast.makeText(this, "success register", Toast.LENGTH_SHORT).show();
             startActivity(MainActivity.getLaunchIntent(this));
+            finish();
         }
         else
         {
