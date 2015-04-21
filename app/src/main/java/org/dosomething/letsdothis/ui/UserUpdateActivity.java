@@ -10,7 +10,7 @@ import android.widget.TextView;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.DbGetUser;
-import org.dosomething.letsdothis.tasks.UpdateAndMergeUserTask;
+import org.dosomething.letsdothis.tasks.UpdateUserTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
@@ -28,6 +28,7 @@ public class UserUpdateActivity extends ActionBarActivity
     private EditText phone;
     private EditText password;
     private TextView id;
+    private EditText birthdate;
 
     public static Intent getLaunchIntent(Context context)
     {
@@ -62,6 +63,7 @@ public class UserUpdateActivity extends ActionBarActivity
         email = (EditText) findViewById(R.id.email);
         phone = (EditText) findViewById(R.id.phone);
         password = (EditText) findViewById(R.id.password);
+        birthdate = (EditText) findViewById(R.id.birthday);
 
         findViewById(R.id.submit).setOnClickListener(new View.OnClickListener()
         {
@@ -72,12 +74,14 @@ public class UserUpdateActivity extends ActionBarActivity
                 String ph = phone.getText().toString();
                 String pass = password.getText().toString();
                 User user = new User(em, ph, pass);
+
                 user.first_name = firstName.getText().toString();
                 user.last_name = lastName.getText().toString();
                 user.id = id.getText().toString();
+                user.birthdate = birthdate.getText().toString();
 
                 TaskQueue.loadQueueDefault(UserUpdateActivity.this)
-                        .execute(new UpdateAndMergeUserTask(user));
+                        .execute(new UpdateUserTask(user));
             }
         });
     }
@@ -102,7 +106,7 @@ public class UserUpdateActivity extends ActionBarActivity
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(UpdateAndMergeUserTask task)
+    public void onEventMainThread(UpdateUserTask task)
     {
         if(task.updatedUser != null)
         {

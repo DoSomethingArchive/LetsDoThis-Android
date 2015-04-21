@@ -4,6 +4,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 /**
  * Created by toidiu on 4/15/15.
@@ -19,10 +20,22 @@ public class IntroActivity extends ActionBarActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
-//        EventBusExt.getDefault().register(this);
+        //        EventBusExt.getDefault().register(this);
 
-        initAppNavigation();
+        if(AppPrefs.getInstance(this).isLoggedIn())
+        {
+            goToMain();
+        }
+        else
+        {
+            initAppNavigation();
+        }
+    }
 
+    private void goToMain()
+    {
+        startActivity(MainActivity.getLaunchIntent(this));
+        finish();
     }
 
     private void initAppNavigation()
@@ -33,6 +46,7 @@ public class IntroActivity extends ActionBarActivity
             public void onClick(View view)
             {
                 startActivity(LoginActivity.getLaunchIntent(IntroActivity.this));
+                finish();
             }
         });
         findViewById(R.id.register).setOnClickListener(new View.OnClickListener()
@@ -41,16 +55,9 @@ public class IntroActivity extends ActionBarActivity
             public void onClick(View view)
             {
                 startActivity(SignupActivity.getLaunchIntent(IntroActivity.this));
+                finish();
             }
         });
     }
-
-
-    //    @Override
-//    protected void onDestroy()
-//    {
-//        EventBusExt.getDefault().unregister(this);
-//        super.onDestroy();
-//    }
 
 }

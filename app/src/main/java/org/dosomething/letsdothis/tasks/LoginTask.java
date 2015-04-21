@@ -8,6 +8,7 @@ import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
+import co.touchlab.android.threading.tasks.TaskQueue;
 import retrofit.RetrofitError;
 
 /**
@@ -16,33 +17,45 @@ import retrofit.RetrofitError;
 public class LoginTask extends BaseRegistrationTask
 {
 
-    public LoginTask(String email, String phone, String password)
+    public LoginTask(String phoneEmail, String password)
     {
-        super(email, phone, password);
+        super(phoneEmail, password);
     }
 
     @Override
     protected void attemptRegistration(Context context) throws Throwable
     {
         ResponseLogin response = null;
-        if(email != null)
+
+        if(matchesEmail(phoneEmail))
         {
             response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                    .loginWithEmail(email, password);
+                    .loginWithEmail(phoneEmail, password);
+
+            User user = new User(phoneEmail, null, null);
+            validateResponse(context, response, user);
         }
-        else if(phone != null)
+        else
         {
             response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                    .loginWithMobile(phone, password);
+                    .loginWithMobile(phoneEmail, password);
+
+            User user = new User(null, phoneEmail, null);
+            validateResponse(context, response, user);
         }
 
+    }
+
+    private void validateResponse(Context context, ResponseLogin response, User user) throws Throwable
+    {
         if(response != null)
         {
             if(response._id != null)
             {
-                User user = new User(email, phone, null);
                 user.id = response._id;
                 loginUser(context, user);
+
+                TaskQueue.loadQueueDefault(context).execute(new GetUserTask(user.id));
             }
         }
     }

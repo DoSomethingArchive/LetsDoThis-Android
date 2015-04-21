@@ -1,32 +1,27 @@
 package org.dosomething.letsdothis.tasks;
 import android.content.Context;
+import android.util.Patterns;
 
-import org.apache.http.HttpStatus;
 import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
-import co.touchlab.android.threading.errorcontrol.NetworkException;
-import co.touchlab.android.threading.tasks.Task;
-import retrofit.RetrofitError;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by toidiu on 4/16/15.
  */
 public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
 {
-    protected final String  email;
-    protected final String  phone;
-    protected final String  password;
+    protected final String phoneEmail;
+    protected final String password;
 
-    protected BaseRegistrationTask(String email, String phone, String password)
+    protected BaseRegistrationTask(String phoneEmail, String password)
     {
-        this.email = email.isEmpty()
+        this.phoneEmail = phoneEmail.isEmpty()
                 ? null
-                : email;
-        this.phone = phone.isEmpty()
-                ? null
-                : phone;
+                : phoneEmail;
         this.password = password;
     }
 
@@ -36,7 +31,7 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
         AppPrefs.getInstance(context).setCurrentUserId(user.id);
     }
 
-    public  static void logout(Context context)
+    public static void logout(Context context)
     {
         AppPrefs.getInstance(context).logout();
     }
@@ -44,7 +39,7 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
     @Override
     protected void run(Context context) throws Throwable
     {
-        if(email==null && phone==null)
+        if(phoneEmail == null)
         {
             return;
         }
@@ -53,5 +48,10 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
     }
 
     protected abstract void attemptRegistration(Context context) throws Throwable;
+
+    protected boolean matchesEmail(String phoneEmail)
+    {
+        return Patterns.EMAIL_ADDRESS.matcher(phoneEmail).matches();
+    }
 
 }
