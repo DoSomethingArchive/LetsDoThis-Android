@@ -24,7 +24,7 @@ public class User
     @DatabaseField
     public  String last_name;
     @DatabaseField
-    private String   birthdate;
+    public String   birthdate;
 
     //DON'T STORE PASSWORD IN DATABASE
     public String password;
