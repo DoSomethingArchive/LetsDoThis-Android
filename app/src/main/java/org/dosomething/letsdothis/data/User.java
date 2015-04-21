@@ -63,6 +63,10 @@ public class User
         {
             jsonObject.put("email", user.email);
         }
+        if(! user.mobile.isEmpty())
+        {
+            jsonObject.put("mobile", user.mobile);
+        }
         if(! user.password.isEmpty())
         {
             jsonObject.put("password", user.password);
