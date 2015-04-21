@@ -1,10 +1,7 @@
 package org.dosomething.letsdothis.data;
 import com.j256.ormlite.field.DatabaseField;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
 
 import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedInput;
@@ -24,9 +21,11 @@ public class User
     public String first_name;
     @DatabaseField
     public String last_name;
+    @DatabaseField
+    private String birthday;
 
     //DON'T STORE PASSWORD IN DATABASE
-    public String password;
+    public  String password;
 
     public User()
     {
@@ -39,22 +38,30 @@ public class User
         this.password = password;
     }
 
+    public User(String password, String firstName, String lastName, String birthday)
+    {
+        this.password = password;
+        this.first_name = firstName;
+        this.last_name = lastName;
+        this.birthday = birthday;
+    }
+
     public static TypedInput getJsonTypedInput(User user) throws Throwable
     {
         JSONObject jsonObject = new JSONObject();
-        if(!user.first_name.isEmpty())
+        if(! user.first_name.isEmpty())
         {
             jsonObject.put("first_name", user.first_name);
         }
-        if(!user.last_name.isEmpty())
+        if(! user.last_name.isEmpty())
         {
             jsonObject.put("last_name", user.last_name);
         }
-        if(!user.email.isEmpty())
+        if(! user.email.isEmpty())
         {
             jsonObject.put("email", user.email);
         }
-        if(!user.password.isEmpty())
+        if(! user.password.isEmpty())
         {
             jsonObject.put("password", user.password);
         }

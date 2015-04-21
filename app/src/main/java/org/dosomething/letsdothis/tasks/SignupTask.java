@@ -14,38 +14,56 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
 public class SignupTask extends BaseRegistrationTask
 {
 
-    public SignupTask(String email, String phone, String password)
+    private final String firstName;
+    private final String lastName;
+    private final String birthday;
+
+    public SignupTask(String phoneEmail, String password, String firsttext, String lastText, String birthText)
     {
-        super(email, phone, password);
+        super(phoneEmail, password);
+        firstName = firsttext;
+        lastName = lastText;
+        birthday = birthText;
     }
 
     @Override
     protected void attemptRegistration(Context context) throws Throwable
     {
-        ResponseSignup response = null;
-        User user = new User(email, phone, password);
-        if(email != null)
+        ResponseSignup response;
+        User user = new User(password, firstName, lastName, birthday);
+
+
+        if(matchesPhone(phoneEmail))
         {
-            response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                    .registerWithEmail(user);
-        }
-        else if(phone != null)
-        {
+            user.mobile = phoneEmail;
             response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
                     .registerWithMobile(user);
+
+            user = new User(null, phoneEmail, null);
+            validateResponse(context, response, user);
+        }
+        else
+        {
+            user.email = phoneEmail;
+            response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
+                    .registerWithEmail(user);
+            user = new User(phoneEmail, null, null);
+            validateResponse(context, response, user);
         }
 
+    }
+
+    private void validateResponse(Context context, ResponseSignup response, User user) throws Throwable
+    {
         if(response != null)
         {
             if(response._id != null)
             {
-                user = new User(email, phone, null);
                 user.id = response._id;
                 loginUser(context, user);
             }
         }
     }
-
 
     @Override
     protected void onComplete(Context context)
