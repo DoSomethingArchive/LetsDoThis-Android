@@ -28,6 +28,7 @@ public class UserUpdateActivity extends ActionBarActivity
     private EditText phone;
     private EditText password;
     private TextView id;
+    private EditText birthdate;
 
     public static Intent getLaunchIntent(Context context)
     {
@@ -62,6 +63,7 @@ public class UserUpdateActivity extends ActionBarActivity
         email = (EditText) findViewById(R.id.email);
         phone = (EditText) findViewById(R.id.phone);
         password = (EditText) findViewById(R.id.password);
+        birthdate = (EditText) findViewById(R.id.birthday);
 
         findViewById(R.id.submit).setOnClickListener(new View.OnClickListener()
         {
@@ -75,6 +77,7 @@ public class UserUpdateActivity extends ActionBarActivity
                 user.first_name = firstName.getText().toString();
                 user.last_name = lastName.getText().toString();
                 user.id = id.getText().toString();
+                user.birthdate = birthdate.getText().toString();
 
                 TaskQueue.loadQueueDefault(UserUpdateActivity.this)
                         .execute(new UpdateUserTask(user));
