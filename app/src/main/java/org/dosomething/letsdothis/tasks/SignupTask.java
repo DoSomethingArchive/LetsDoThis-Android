@@ -6,6 +6,8 @@ import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.ResponseSignup;
 
+import java.util.Date;
+
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
 /**
@@ -16,7 +18,7 @@ public class SignupTask extends BaseRegistrationTask
 
     private final String firstName;
     private final String lastName;
-    private final String birthday;
+    private final String   birthday;
 
     public SignupTask(String phoneEmail, String password, String firsttext, String lastText, String birthText)
     {

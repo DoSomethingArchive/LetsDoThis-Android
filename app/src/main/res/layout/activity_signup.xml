@@ -36,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="date"
-        android:hint="birthday"/>
+        android:hint="birthday (mm/dd/yyyy)"/>
 
     <TextView
         android:layout_width="match_parent"
