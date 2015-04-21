@@ -48,11 +48,13 @@ public class UserProfileActivity extends ActionBarActivity
         TextView phone = (TextView) findViewById(R.id.phone);
         TextView first = (TextView) findViewById(R.id.first_name);
         TextView last = (TextView) findViewById(R.id.last_name);
+        TextView birthday = (TextView) findViewById(R.id.birthday);
         id.setText(user.id);
         email.setText(user.email);
         phone.setText(user.mobile);
         first.setText(user.first_name);
         last.setText(user.last_name);
+        birthday.setText(user.birthdate);
     }
 
     @SuppressWarnings("UnusedDeclaration")
