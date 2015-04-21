@@ -3,14 +3,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.tasks.CampaignDetailsTask;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
-import de.greenrobot.event.EventBus;
 
 /**
  * Created by izzyoji :) on 4/17/15.
@@ -19,6 +21,9 @@ public class CampaignDetailsActivity extends ActionBarActivity
 {
 
     public static final String EXTRA_CAMPAIGN_ID = "campaign_id";
+    private TextView  title;
+    private TextView  staffPick;
+    private TextView callToAction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -26,10 +31,14 @@ public class CampaignDetailsActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_campaign_details);
 
-        EventBus.getDefault().register(this);
+        title = (TextView) findViewById(R.id.title);
+        staffPick = (TextView) findViewById(R.id.staffPick);
+        callToAction = (TextView) findViewById(R.id.callToAction);
+
+        EventBusExt.getDefault().register(this);
 
         TaskQueue.loadQueueDefault(this)
-                 .execute(new CampaignDetailsTask(getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, -1)));
+                 .execute(new CampaignDetailsTask(getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1)));
     }
 
     @Override
@@ -49,7 +58,10 @@ public class CampaignDetailsActivity extends ActionBarActivity
     {
         if(task.campaign != null)
         {
-            Toast.makeText(this, "campaign data success", Toast.LENGTH_SHORT).show();
+            Campaign campaign = task.campaign;
+            title.setText(campaign.title);
+            staffPick.setVisibility(campaign.staffPick ? View.VISIBLE : View.GONE);
+            callToAction.setText(campaign.callToAction);
         }
         else
         {

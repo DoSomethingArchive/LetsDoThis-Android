@@ -23,14 +23,13 @@ import retrofit.converter.GsonConverter;
  */
 public class DataHelper
 {
-    public static final String JSON_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-    public static final int    CONNECT_TIMEOUT  = 45;
-    public static final int    READ_TIMEOUT     = 30;
+    public static final String JSON_DATE_FORMAT_NORTHSTAR = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    public static final String JSON_DATE_FORMAT_DO_SOMETHING = "yyyy-MM-dd HH:mm:ss";
+    public static final int    CONNECT_TIMEOUT            = 45;
+    public static final int    READ_TIMEOUT               = 30;
 
     public static RestAdapter.Builder getRequestAdapterBuilder()
     {
-        Gson gson = new GsonBuilder().setDateFormat(JSON_DATE_FORMAT).create();
-        GsonConverter gsonConverter = new GsonConverter(gson);
 
         RequestInterceptor requestInterceptor = new RequestInterceptor()
         {
@@ -44,7 +43,6 @@ public class DataHelper
         };
 
         return new RestAdapter.Builder().setLogLevel(RestAdapter.LogLevel.FULL)
-                                        .setConverter(gsonConverter)
                                         .setErrorHandler(new RetrofitErrorHandler()).setClient(
                         new OkClient(makeTimeoutClient(READ_TIMEOUT, CONNECT_TIMEOUT)))
                                         .setRequestInterceptor(requestInterceptor)
@@ -77,13 +75,19 @@ public class DataHelper
 
     public static DoSomethingAPI getDoSomethingAPIService()
     {
-        return getRequestAdapterBuilder().setEndpoint(DoSomethingAPI.BASE_URL).build()
+        Gson gson = new GsonBuilder().setDateFormat(JSON_DATE_FORMAT_DO_SOMETHING).create();
+        GsonConverter gsonConverter = new GsonConverter(gson);
+        return getRequestAdapterBuilder().setConverter(gsonConverter)
+                                         .setEndpoint(DoSomethingAPI.BASE_URL).build()
                                          .create(DoSomethingAPI.class);
     }
 
     public static NorthstarAPI getNorthstarAPIService()
     {
-        return getRequestAdapterBuilder().setEndpoint(NorthstarAPI.BASE_URL).build()
+        Gson gson = new GsonBuilder().setDateFormat(JSON_DATE_FORMAT_NORTHSTAR).create();
+        GsonConverter gsonConverter = new GsonConverter(gson);
+        return getRequestAdapterBuilder().setConverter(gsonConverter)
+                                         .setEndpoint(NorthstarAPI.BASE_URL).build()
                                          .create(NorthstarAPI.class);
     }
 }
