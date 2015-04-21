@@ -8,6 +8,7 @@ public class ResponseUser
 {
 
     String email;
+    String mobile;
     String first_name;
     String last_name;
     String _id;
@@ -17,28 +18,12 @@ public class ResponseUser
     {
         User user = new User();
         user.email = response.email;
+        user.mobile = response.mobile;
         user.first_name = response.first_name;
         user.last_name = response.last_name;
         user.id = response._id;
         user.birthdate = response.birthdate;
         return user;
     }
-    //    {
-    //        email: "test@dosomething.org",
-    //        first_name: First,
-    //        last_name: Last,
-    //        drupal_id: 123456,
-    //        _id: some sort of hash value,
-    //        campaigns: [
-    //            {
-    //                nid: 123,
-    //                        rbid: 100,
-    //                    sid: 100
-    //            },
-    //            {
-    //                nid: 456,
-    //                        sid: 101
-    //            }
-    //            ]
-    //    }
+
 }

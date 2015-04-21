@@ -74,6 +74,7 @@ public class UserUpdateActivity extends ActionBarActivity
                 String ph = phone.getText().toString();
                 String pass = password.getText().toString();
                 User user = new User(em, ph, pass);
+
                 user.first_name = firstName.getText().toString();
                 user.last_name = lastName.getText().toString();
                 user.id = id.getText().toString();
