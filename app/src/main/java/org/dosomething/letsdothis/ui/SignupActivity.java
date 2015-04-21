@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.SignupTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
@@ -63,15 +64,12 @@ public class SignupActivity extends ActionBarActivity
             {
                 String phoneEmailtext = phoneEmail.getText().toString();
                 String passtext = password.getText().toString();
-
                 String firsttext = firstName.getText().toString();
                 String lasttext = lastName.getText().toString();
                 String birthtext = birthday.getText().toString();
 
-
-
-                TaskQueue.loadQueueDefault(SignupActivity.this)
-                        .execute(new SignupTask(phoneEmailtext, passtext, firsttext, lasttext, birthtext));
+                TaskQueue.loadQueueDefault(SignupActivity.this).execute(
+                        new SignupTask(phoneEmailtext, passtext, firsttext, lasttext, birthtext));
             }
         });
     }

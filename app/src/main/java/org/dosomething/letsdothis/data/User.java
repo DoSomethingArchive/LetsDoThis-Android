@@ -3,6 +3,8 @@ import com.j256.ormlite.field.DatabaseField;
 
 import org.json.JSONObject;
 
+import java.util.Date;
+
 import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedInput;
 
@@ -12,20 +14,20 @@ import retrofit.mime.TypedInput;
 public class User
 {
     @DatabaseField(id = true)
-    public String id;
+    public  String id;
     @DatabaseField
-    public String email;
+    public  String email;
     @DatabaseField
-    public String mobile;
+    public  String mobile;
     @DatabaseField
-    public String first_name;
+    public  String first_name;
     @DatabaseField
-    public String last_name;
+    public  String last_name;
     @DatabaseField
-    private String birthday;
+    private String   birthdate;
 
     //DON'T STORE PASSWORD IN DATABASE
-    public  String password;
+    public String password;
 
     public User()
     {
@@ -43,7 +45,7 @@ public class User
         this.password = password;
         this.first_name = firstName;
         this.last_name = lastName;
-        this.birthday = birthday;
+        this.birthdate = birthday;
     }
 
     public static TypedInput getJsonTypedInput(User user) throws Throwable
