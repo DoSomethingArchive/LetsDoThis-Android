@@ -6,8 +6,6 @@ import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.ResponseSignup;
 
-import java.util.Date;
-
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
 /**
@@ -18,7 +16,7 @@ public class SignupTask extends BaseRegistrationTask
 
     private final String firstName;
     private final String lastName;
-    private final String   birthday;
+    private final String birthday;
 
     public SignupTask(String phoneEmail, String password, String firsttext, String lastText, String birthText)
     {
@@ -34,22 +32,21 @@ public class SignupTask extends BaseRegistrationTask
         ResponseSignup response;
         User user = new User(password, firstName, lastName, birthday);
 
-
-        if(matchesPhone(phoneEmail))
+        if(matchesEmail(phoneEmail))
+        {
+            user.email = phoneEmail;
+            response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
+                    .registerWithEmail(user);
+            user = new User(phoneEmail, null, null);
+            validateResponse(context, response, user);
+        }
+        else
         {
             user.mobile = phoneEmail;
             response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
                     .registerWithMobile(user);
 
             user = new User(null, phoneEmail, null);
-            validateResponse(context, response, user);
-        }
-        else
-        {
-            user.email = phoneEmail;
-            response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                    .registerWithEmail(user);
-            user = new User(phoneEmail, null, null);
             validateResponse(context, response, user);
         }
 

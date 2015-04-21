@@ -7,9 +7,6 @@ import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
 import retrofit.RetrofitError;
@@ -30,15 +27,7 @@ public class LoginTask extends BaseRegistrationTask
     {
         ResponseLogin response = null;
 
-        if(matchesPhone(phoneEmail))
-        {
-            response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                    .loginWithMobile(phoneEmail, password);
-
-            User user = new User(null, phoneEmail, null);
-            validateResponse(context, response, user);
-        }
-        else
+        if(matchesEmail(phoneEmail))
         {
             response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
                     .loginWithEmail(phoneEmail, password);
@@ -46,6 +35,15 @@ public class LoginTask extends BaseRegistrationTask
             User user = new User(phoneEmail, null, null);
             validateResponse(context, response, user);
         }
+        else
+        {
+            response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
+                    .loginWithMobile(phoneEmail, password);
+
+            User user = new User(null, phoneEmail, null);
+            validateResponse(context, response, user);
+        }
+
     }
 
     private void validateResponse(Context context, ResponseLogin response, User user) throws Throwable
