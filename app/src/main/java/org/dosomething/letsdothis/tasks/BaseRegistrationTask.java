@@ -1,5 +1,6 @@
 package org.dosomething.letsdothis.tasks;
 import android.content.Context;
+import android.util.Patterns;
 
 import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.User;
@@ -48,11 +49,9 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
 
     protected abstract void attemptRegistration(Context context) throws Throwable;
 
-    protected boolean matchesPhone(String phoneEmail)
+    protected boolean matchesEmail(String phoneEmail)
     {
-        Pattern p = Pattern.compile("\n");
-        Matcher m = p.matcher(phoneEmail.substring(0, 1));
-        return m.matches();
+        return Patterns.EMAIL_ADDRESS.matcher(phoneEmail).matches();
     }
 
 }
