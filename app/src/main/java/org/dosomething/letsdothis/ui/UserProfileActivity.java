@@ -30,7 +30,7 @@ public class UserProfileActivity extends ActionBarActivity
         setContentView(R.layout.activity_user_profile);
         EventBusExt.getDefault().register(this);
 
-        String id = "54fa272b469c64d8068b4567"; //FIXME this is for testing
+        String id = AppPrefs.getInstance(this).getCurrentUserId();
         TaskQueue.loadQueueDefault(this).execute(new GetUserTask(id));
     }
 
@@ -43,14 +43,18 @@ public class UserProfileActivity extends ActionBarActivity
 
     private void updateUI(User user)
     {
+        TextView id = (TextView) findViewById(R.id.id);
         TextView email = (TextView) findViewById(R.id.email);
         TextView phone = (TextView) findViewById(R.id.phone);
         TextView first = (TextView) findViewById(R.id.first_name);
         TextView last = (TextView) findViewById(R.id.last_name);
+        TextView birthday = (TextView) findViewById(R.id.birthday);
+        id.setText(user.id);
         email.setText(user.email);
         phone.setText(user.mobile);
         first.setText(user.first_name);
         last.setText(user.last_name);
+        birthday.setText(user.birthdate);
     }
 
     @SuppressWarnings("UnusedDeclaration")

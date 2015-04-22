@@ -2,7 +2,7 @@ package org.dosomething.letsdothis.network.models;
 /**
  * Created by toidiu on 4/16/15.
  */
-public class LoginResponse
+public class ResponseLogin
 {
     public String email;
     public String phone;

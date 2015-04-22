@@ -1,4 +1,6 @@
 package org.dosomething.letsdothis.ui;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.widget.Toast;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.LoginTask;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
@@ -20,9 +23,14 @@ public class LoginActivity extends ActionBarActivity
     private static final String TAG = LoginActivity.class.getSimpleName();
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
-    private EditText phone;
-    private EditText email;
+    private EditText phoneEmail;
     private EditText password;
+
+
+    public static Intent getLaunchIntent(Context context)
+    {
+        return new Intent(context, LoginActivity.class);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -32,12 +40,10 @@ public class LoginActivity extends ActionBarActivity
         EventBusExt.getDefault().register(this);
 
         initLoginListener();
-        initSignupListener();
-        initAppNavigation();
 
         if(BuildConfig.DEBUG)
         {
-            email.setText("touch@lab.co");
+            phoneEmail.setText("touch@lab.co");
             password.setText("test");
         }
     }
@@ -49,65 +55,29 @@ public class LoginActivity extends ActionBarActivity
         super.onDestroy();
     }
 
-    private void initAppNavigation()
-    {
-        findViewById(R.id.allUsers).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                finish();
-                startActivity(UserListActivity.getLaunchIntent(LoginActivity.this));
-            }
-        });
-
-        findViewById(R.id.one_user).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                finish();
-                startActivity(UserProfileActivity.getLaunchIntent(LoginActivity.this));
-            }
-        });
-    }
-
-    private void initSignupListener()
-    {
-        findViewById(R.id.signup).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                finish();
-                startActivity(SignupActivity.getLaunchIntent(LoginActivity.this));
-            }
-        });
-    }
-
     private void initLoginListener()
     {
-        phone = (EditText) findViewById(R.id.phone);
-        email = (EditText) findViewById(R.id.email);
+        phoneEmail = (EditText) findViewById(R.id.phone_email);
         password = (EditText) findViewById(R.id.password);
         findViewById(R.id.login).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                String phonetext = phone.getText().toString();
-                String emailtext = email.getText().toString();
+                String usertext = phoneEmail.getText().toString();
                 String passtext = password.getText().toString();
                 TaskQueue.loadQueueDefault(LoginActivity.this)
-                        .execute(new LoginTask(emailtext, phonetext, passtext));
+                        .execute(new LoginTask(usertext, passtext));
             }
         });
     }
 
+
+
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(LoginTask task)
     {
-        if(task.success)
+        if(AppPrefs.getInstance(this).isLoggedIn())
         {
             Toast.makeText(this, "success login", Toast.LENGTH_SHORT).show();
             startActivity(MainActivity.getLaunchIntent(this));
@@ -118,4 +88,5 @@ public class LoginActivity extends ActionBarActivity
             Toast.makeText(this, "failed login", Toast.LENGTH_SHORT).show();
         }
     }
+
 }

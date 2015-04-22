@@ -1,17 +1,33 @@
 package org.dosomething.letsdothis.data;
-import com.google.gson.Gson;
+import com.j256.ormlite.field.DatabaseField;
+
+import org.json.JSONObject;
+
+import java.util.Date;
+
+import retrofit.mime.TypedByteArray;
+import retrofit.mime.TypedInput;
 
 /**
  * Created by toidiu on 4/16/15.
  */
 public class User
 {
-    public String id;
-    public String email;
-    public String mobile;
+    @DatabaseField(id = true)
+    public  String id;
+    @DatabaseField
+    public  String email;
+    @DatabaseField
+    public  String mobile;
+    @DatabaseField
+    public  String first_name;
+    @DatabaseField
+    public  String last_name;
+    @DatabaseField
+    public String   birthdate;
+
+    //DON'T STORE PASSWORD IN DATABASE
     public String password;
-    public String first_name;
-    public String last_name;
 
     public User()
     {
@@ -24,9 +40,45 @@ public class User
         this.password = password;
     }
 
-    public static String getJso(User user)
+    public User(String password, String firstName, String lastName, String birthday)
     {
-        return new Gson().toJson(user, User.class);
+        this.password = password;
+        this.first_name = firstName;
+        this.last_name = lastName;
+        this.birthdate = birthday;
+    }
+
+    public static TypedInput getJsonTypedInput(User user) throws Throwable
+    {
+        JSONObject jsonObject = new JSONObject();
+        if(! user.first_name.isEmpty())
+        {
+            jsonObject.put("first_name", user.first_name);
+        }
+        if(! user.last_name.isEmpty())
+        {
+            jsonObject.put("last_name", user.last_name);
+        }
+        if(! user.email.isEmpty())
+        {
+            jsonObject.put("email", user.email);
+        }
+        if(! user.mobile.isEmpty())
+        {
+            jsonObject.put("mobile", user.mobile);
+        }
+        if(! user.password.isEmpty())
+        {
+            jsonObject.put("password", user.password);
+        }
+        if(! user.birthdate.isEmpty())
+        {
+            jsonObject.put("birthdate", user.birthdate);
+        }
+
+        String json = jsonObject.toString();
+        String finalJson = json.replace("\\", "");
+        return new TypedByteArray("application/json", finalJson.getBytes("UTF-8"));
     }
 
 

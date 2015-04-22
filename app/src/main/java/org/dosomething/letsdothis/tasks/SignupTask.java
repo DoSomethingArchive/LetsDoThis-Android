@@ -2,8 +2,9 @@ package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
 import org.dosomething.letsdothis.data.User;
-import org.dosomething.letsdothis.network.DataHelper;
-import org.dosomething.letsdothis.network.models.SignupResponse;
+import org.dosomething.letsdothis.network.NetworkHelper;
+import org.dosomething.letsdothis.network.NorthstarAPI;
+import org.dosomething.letsdothis.network.models.ResponseSignup;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
@@ -13,37 +14,55 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
 public class SignupTask extends BaseRegistrationTask
 {
 
-    public SignupTask(String email, String phone, String password)
+    private final String firstName;
+    private final String lastName;
+    private final String birthday;
+
+    public SignupTask(String phoneEmail, String password, String firsttext, String lastText, String birthText)
     {
-        super(email, phone, password);
+        super(phoneEmail, password);
+        firstName = firsttext;
+        lastName = lastText;
+        birthday = birthText;
     }
 
     @Override
     protected void attemptRegistration(Context context) throws Throwable
     {
-        SignupResponse response = null;
-        if(email != null)
+        ResponseSignup response;
+        User user = new User(password, firstName, lastName, birthday);
+
+        if(matchesEmail(phoneEmail))
         {
-            User user = new User(email, phone, password);
-            response = DataHelper.getNorthstarAPIService()
-                    .registerWithEmail(User.getJso(user));
+            user.email = phoneEmail;
+            response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
+                    .registerWithEmail(user);
+            user = new User(phoneEmail, null, null);
+            validateResponse(context, response, user);
         }
-        else if(phone != null)
+        else
         {
-            String regInfo = "{mobile: " + phone + ", password: " + password + "}";
-            response = DataHelper.getNorthstarAPIService()
-                    .registerWithMobile(regInfo);
+            user.mobile = phoneEmail;
+            response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
+                    .registerWithMobile(user);
+
+            user = new User(null, phoneEmail, null);
+            validateResponse(context, response, user);
         }
 
+    }
+
+    private void validateResponse(Context context, ResponseSignup response, User user) throws Throwable
+    {
         if(response != null)
         {
             if(response._id != null)
             {
-                success = true;
+                user.id = response._id;
+                loginUser(context, user);
             }
         }
     }
-
 
     @Override
     protected void onComplete(Context context)
