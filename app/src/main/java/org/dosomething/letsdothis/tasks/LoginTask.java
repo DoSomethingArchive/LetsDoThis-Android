@@ -1,12 +1,14 @@
 package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
-import org.dosomething.letsdothis.network.DataHelper;
-import org.dosomething.letsdothis.network.models.LoginResponse;
-
-import java.net.HttpURLConnection;
+import org.apache.http.HttpStatus;
+import org.dosomething.letsdothis.data.User;
+import org.dosomething.letsdothis.network.NetworkHelper;
+import org.dosomething.letsdothis.network.NorthstarAPI;
+import org.dosomething.letsdothis.network.models.ResponseLogin;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
+import co.touchlab.android.threading.tasks.TaskQueue;
 import retrofit.RetrofitError;
 
 /**
@@ -15,31 +17,45 @@ import retrofit.RetrofitError;
 public class LoginTask extends BaseRegistrationTask
 {
 
-    public LoginTask(String email, String phone, String password)
+    public LoginTask(String phoneEmail, String password)
     {
-        super(email, phone, password);
+        super(phoneEmail, password);
     }
 
     @Override
     protected void attemptRegistration(Context context) throws Throwable
     {
-        LoginResponse response = null;
-        if(email != null)
+        ResponseLogin response = null;
+
+        if(matchesEmail(phoneEmail))
         {
-            response = DataHelper.getNorthstarAPIService()
-                    .loginWithEmail(email, password);
+            response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
+                    .loginWithEmail(phoneEmail, password);
+
+            User user = new User(phoneEmail, null, null);
+            validateResponse(context, response, user);
         }
-        else if(phone != null)
+        else
         {
-            response = DataHelper.getNorthstarAPIService()
-                    .loginWithMobile(phone, password);
+            response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
+                    .loginWithMobile(phoneEmail, password);
+
+            User user = new User(null, phoneEmail, null);
+            validateResponse(context, response, user);
         }
 
+    }
+
+    private void validateResponse(Context context, ResponseLogin response, User user) throws Throwable
+    {
         if(response != null)
         {
             if(response._id != null)
             {
-                success = true;
+                user.id = response._id;
+                loginUser(context, user);
+
+                TaskQueue.loadQueueDefault(context).execute(new GetUserTask(user.id));
             }
         }
     }
@@ -48,7 +64,7 @@ public class LoginTask extends BaseRegistrationTask
     protected boolean handleError(Context context, Throwable throwable)
     {
         if(((RetrofitError) throwable).getResponse()
-                .getStatus() == HttpURLConnection.HTTP_PRECON_FAILED)
+                .getStatus() == HttpStatus.SC_PRECONDITION_FAILED)
         {
             return true;
         }

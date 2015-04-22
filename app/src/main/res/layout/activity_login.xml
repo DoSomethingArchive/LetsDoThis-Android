@@ -5,22 +5,10 @@
               android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/phone"
+        android:id="@+id/phone_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="phone"
-        android:hint="phone number"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="or"/>
-    <EditText
-        android:id="@+id/email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:hint="email"/>
+        android:hint="Phone Number or Email"/>
 
     <EditText
         android:id="@+id/password"
@@ -30,33 +18,23 @@
         android:layout_marginTop="10dp"
         android:hint="password"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="If you received a code from a friend, put it here to join their group right away."/>
+
+    <EditText
+        android:id="@+id/invite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="Invite Code (optional)"/>
+
     <Button
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="login"/>
-
-    <Button
-        android:id="@+id/signup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="register"/>
-
-    <Button
-        android:id="@+id/allUsers"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="All Users"/>
-
-    <Button
-        android:id="@+id/one_user"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="One Users"/>
-
+        android:text="sign in"/>
 
 </LinearLayout>

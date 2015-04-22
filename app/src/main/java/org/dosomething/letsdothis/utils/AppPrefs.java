@@ -29,6 +29,16 @@ public class AppPrefs
         return instance;
     }
 
+    public boolean isLoggedIn()
+    {
+        return (prefs.getString(CURRENT_USER_ID, null) != null);
+    }
+
+    public void logout()
+    {
+        prefs.edit().putString(CURRENT_USER_ID, null).apply();
+    }
+
     public void setCurrentUserId(String id)
     {
         prefs.edit().putString(CURRENT_USER_ID, id).apply();

@@ -21,7 +21,7 @@ import retrofit.converter.GsonConverter;
 /**
  * Created by kgalligan on 10/8/14.
  */
-public class DataHelper
+public class NetworkHelper
 {
     public static final String JSON_DATE_FORMAT_NORTHSTAR = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     public static final String JSON_DATE_FORMAT_DO_SOMETHING = "yyyy-MM-dd HH:mm:ss";
@@ -90,4 +90,5 @@ public class DataHelper
                                          .setEndpoint(NorthstarAPI.BASE_URL).build()
                                          .create(NorthstarAPI.class);
     }
+
 }
