@@ -3,7 +3,6 @@ import android.content.Context;
 
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.NetworkHelper;
-import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.ResponseSignup;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
@@ -35,16 +34,14 @@ public class SignupTask extends BaseRegistrationTask
         if(matchesEmail(phoneEmail))
         {
             user.email = phoneEmail;
-            response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                    .registerWithEmail(user);
+            response = NetworkHelper.getNorthstarAPIService().registerWithEmail(user);
             user = new User(phoneEmail, null, null);
             validateResponse(context, response, user);
         }
         else
         {
             user.mobile = phoneEmail;
-            response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                    .registerWithMobile(user);
+            response = NetworkHelper.getNorthstarAPIService().registerWithMobile(user);
 
             user = new User(null, phoneEmail, null);
             validateResponse(context, response, user);

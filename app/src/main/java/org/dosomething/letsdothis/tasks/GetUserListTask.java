@@ -2,8 +2,8 @@ package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
 import org.dosomething.letsdothis.data.User;
-import org.dosomething.letsdothis.network.DataHelper;
-import org.dosomething.letsdothis.network.models.UserListResponse;
+import org.dosomething.letsdothis.network.NetworkHelper;
+import org.dosomething.letsdothis.network.models.ResponseUserList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class GetUserListTask extends BaseNetworkErrorHandlerTask
         boolean done = false;
         for(int page = 0; ! done; page++)
         {
-            UserListResponse response = DataHelper.getNorthstarAPIService()
+            ResponseUserList response = NetworkHelper.getNorthstarAPIService()
                     .userList(page, RESULT_LIMIT);
 
             for(User user : response.data)

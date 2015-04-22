@@ -2,7 +2,7 @@ package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
 import org.dosomething.letsdothis.data.Campaign;
-import org.dosomething.letsdothis.network.DataHelper;
+import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.ResponseCampaign;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
@@ -24,7 +24,7 @@ public class CampaignDetailsTask extends Task
     @Override
     protected void run(Context context) throws Throwable
     {
-        ResponseCampaign response = DataHelper.getDoSomethingAPIService()
+        ResponseCampaign response = NetworkHelper.getDoSomethingAPIService()
                                             .campaign(campaignId);
         campaign = ResponseCampaign.getCampaign(response);
     }
