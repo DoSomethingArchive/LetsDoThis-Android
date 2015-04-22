@@ -15,6 +15,7 @@ public class ResponseCampaign
     public ResponseImage image_cover;
     public String solution_support;
     public String solution_copy;
+    public ResponseFactProblem fact_problem;
 
     public static Campaign getCampaign(ResponseCampaign response)
     {
@@ -26,8 +27,14 @@ public class ResponseCampaign
         campaign.imagePath = response.getImageCover().getUrl().getLandscape().getRaw();
         campaign.solutionCopy = response.solution_copy;
         campaign.solutionSupport = response.solution_support;
+        campaign.problemFact = response.getFactProblem().getFact();
 
         return campaign;
+    }
+
+    private ResponseFactProblem getFactProblem()
+    {
+        return fact_problem == null ? new ResponseFactProblem() : fact_problem;
     }
 
     private long getHighSeasonStart()
@@ -38,5 +45,52 @@ public class ResponseCampaign
     public ResponseImage getImageCover()
     {
         return image_cover == null ? new ResponseImage() : image_cover;
+    }
+
+    public static class ResponseImage
+    {
+        public ResponseImageUrl url;
+
+        public ResponseImageUrl getUrl()
+        {
+            return url == null
+                    ? new ResponseImageUrl()
+                    : url;
+        }
+
+        public static class ResponseImageUrl
+        {
+            public ResponseImageUrlShape landscape;
+
+            public ResponseImageUrlShape getLandscape()
+            {
+                return landscape == null
+                        ? new ResponseImageUrlShape()
+                        : landscape;
+            }
+
+        }
+
+        public static class ResponseImageUrlShape
+        {
+            public String raw;
+
+            public String getRaw()
+            {
+                return raw == null
+                        ? ""
+                        : raw;
+            }
+        }
+    }
+
+    public static class ResponseFactProblem
+    {
+        public String fact;
+
+        public String getFact()
+        {
+            return fact == null ? "" : fact;
+        }
     }
 }

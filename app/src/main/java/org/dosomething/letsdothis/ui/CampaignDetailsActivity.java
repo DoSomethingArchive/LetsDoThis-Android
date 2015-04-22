@@ -3,9 +3,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.view.View;
+import android.text.Html;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
@@ -21,9 +24,12 @@ public class CampaignDetailsActivity extends ActionBarActivity
 {
 
     public static final String EXTRA_CAMPAIGN_ID = "campaign_id";
+    private ImageView image;
     private TextView  title;
-    private TextView  staffPick;
-    private TextView callToAction;
+    private TextView  callToAction;
+    private TextView  problemFact;
+    private TextView  solutionCopy;
+    private TextView  solutionSupport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -31,9 +37,12 @@ public class CampaignDetailsActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_campaign_details);
 
+        image = (ImageView)findViewById(R.id.image);
         title = (TextView) findViewById(R.id.title);
-        staffPick = (TextView) findViewById(R.id.staffPick);
-        callToAction = (TextView) findViewById(R.id.callToAction);
+        callToAction = (TextView) findViewById(R.id.call_to_action);
+        problemFact = (TextView) findViewById(R.id.problemFact);
+        solutionCopy = (TextView) findViewById(R.id.solutionCopy);
+        solutionSupport = (TextView) findViewById(R.id.solutionSupport);
 
         EventBusExt.getDefault().register(this);
 
@@ -59,9 +68,13 @@ public class CampaignDetailsActivity extends ActionBarActivity
         if(task.campaign != null)
         {
             Campaign campaign = task.campaign;
+
+            Picasso.with(this).load(campaign.imagePath).resize(image.getWidth(), 0).into(image);
             title.setText(campaign.title);
-            staffPick.setVisibility(campaign.staffPick ? View.VISIBLE : View.GONE);
             callToAction.setText(campaign.callToAction);
+            problemFact.setText(campaign.problemFact);
+            solutionCopy.setText(Html.fromHtml(campaign.solutionCopy));
+            solutionSupport.setText(Html.fromHtml(campaign.solutionSupport));
         }
         else
         {
