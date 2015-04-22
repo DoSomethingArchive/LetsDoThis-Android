@@ -28,6 +28,11 @@ public class MainActivity extends ActionBarActivity implements FragmentManager.O
     private View invites;
     private View notifications;
 
+    public static Intent getLaunchIntent(Context context)
+    {
+        return new Intent(context, MainActivity.class);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -186,8 +191,5 @@ public class MainActivity extends ActionBarActivity implements FragmentManager.O
 
     }
 
-    public static Intent getLaunchIntent(Context context)
-    {
-        return new Intent(context, MainActivity.class);
-    }
+
 }
