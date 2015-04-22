@@ -1,11 +1,11 @@
 package org.dosomething.letsdothis.ui;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 
 import org.dosomething.letsdothis.R;
-import org.dosomething.letsdothis.ui.fragments.ActionsFragment;
-import org.dosomething.letsdothis.ui.fragments.Intro0Fragment;
 import org.dosomething.letsdothis.ui.fragments.Intro1Fragment;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
@@ -18,12 +18,16 @@ public class IntroActivity extends ActionBarActivity
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
 
+    public static Intent getLaunchIntent(Context context)
+    {
+        return new Intent(context, IntroActivity.class);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
-        //        EventBusExt.getDefault().register(this);
 
         if(AppPrefs.getInstance(this).isLoggedIn())
         {
@@ -38,7 +42,7 @@ public class IntroActivity extends ActionBarActivity
     private void initIntroFragment()
     {
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, Intro0Fragment.newInstance(), null).commit();
+                .add(R.id.container, Intro1Fragment.newInstance(), null).commit();
 
     }
 
@@ -53,6 +57,5 @@ public class IntroActivity extends ActionBarActivity
         getSupportFragmentManager().beginTransaction().addToBackStack(tag)
                 .replace(R.id.container, fragment, tag).commit();
     }
-
 
 }

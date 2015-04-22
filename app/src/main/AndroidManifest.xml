@@ -12,13 +12,17 @@
         android:name=".LDTApplication"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.IntroActivity">
+        <activity android:name=".ui.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity android:name=".ui.IntroActivity"/>
+
+        <activity android:name=".ui.RegisterLoginActivity"/>
 
         <activity android:name=".ui.LoginActivity"/>
 
