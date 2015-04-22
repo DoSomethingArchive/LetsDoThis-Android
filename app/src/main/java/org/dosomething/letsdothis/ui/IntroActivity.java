@@ -23,11 +23,14 @@ import java.util.List;
  */
 public class IntroActivity extends ActionBarActivity implements BaseIntroFragment.PagerChangeListener
 {
+    //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     private static final String TAG = IntroActivity.class.getSimpleName();
-    private ViewPager      pager;
-    private List<Fragment> fragmentList;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
+    private ViewPager pager;
+
+    //~=~=~=~=~=~=~=~=~=~=~=~=Fields
+    private List<Fragment> fragmentList;
 
     public static Intent getLaunchIntent(Context context)
     {
