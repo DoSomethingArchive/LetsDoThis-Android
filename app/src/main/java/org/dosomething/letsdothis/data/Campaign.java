@@ -11,4 +11,5 @@ public class Campaign
     public long   startTime;
     public String solutionCopy;
     public String solutionSupport;
+    public String problemFact;
 }

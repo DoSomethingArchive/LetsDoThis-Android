@@ -1,41 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="wrap_content"
+    android:layout_height="160dp">
 
-    <RelativeLayout
+    <ImageView
+        android:layout_width="match_parent"
+        android:id="@+id/image"
+        android:scaleType="centerCrop"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:id="@+id/title"
+        tools:text="Title"
+        android:textColor="@android:color/white"
+        android:layout_centerInParent="true"
         android:layout_width="wrap_content"
-        android:id="@+id/smallLayout"
-        android:orientation="vertical"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"/>
 
-        <TextView
-            android:id="@+id/title_small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-    </RelativeLayout>
-
-    <RelativeLayout
+    <TextView
+        android:layout_below="@+id/title"
+        tools:text="Call to action"
+        android:layout_centerInParent="true"
+        android:textColor="@android:color/white"
+        android:id="@+id/call_to_action"
         android:layout_width="wrap_content"
-        android:id="@+id/largeLayout"
-        android:visibility="gone"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:textAppearance="?android:textAppearanceLarge"
-            android:id="@+id/title_large"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <Button
-            android:layout_below="@id/title_large"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/view_details"
-            android:text="View details"/>
-
-    </RelativeLayout>
-
-</LinearLayout>
+        android:layout_height="wrap_content"/>
+</RelativeLayout>

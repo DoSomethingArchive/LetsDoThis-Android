@@ -2,7 +2,7 @@ package org.dosomething.letsdothis.ui.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +38,8 @@ public class ActionsFragment extends Fragment
         TabPageIndicator indicator = (TabPageIndicator) view.findViewById(R.id.indicator);
 
         ViewPager pager = (ViewPager) view.findViewById(R.id.pager);
-        pager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager())
+        pager.setOffscreenPageLimit(3);
+        pager.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager())
         {
             @Override
             public int getCount()
