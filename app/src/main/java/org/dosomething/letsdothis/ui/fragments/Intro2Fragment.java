@@ -30,7 +30,7 @@ public class Intro2Fragment extends BaseIntroFragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        initIntroNavigation(view, Intro3Fragment.newInstance());
+        initIntroNavigation(view);
     }
 
 

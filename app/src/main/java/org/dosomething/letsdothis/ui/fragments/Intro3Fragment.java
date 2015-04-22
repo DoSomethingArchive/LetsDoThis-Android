@@ -31,24 +31,7 @@ public class Intro3Fragment extends BaseIntroFragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-
-        view.findViewById(R.id.prev).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                getActivity().getSupportFragmentManager().popBackStackImmediate();
-            }
-        });
-        view.findViewById(R.id.next).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                startActivity(RegisterLoginActivity.getLaunchIntent(getActivity()));
-                getActivity().finish();
-            }
-        });
+        initIntroNavigation(view);
     }
 
 
