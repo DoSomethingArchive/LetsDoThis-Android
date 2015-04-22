@@ -4,7 +4,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 
 import org.dosomething.letsdothis.R;
-import org.dosomething.letsdothis.ui.views.SlantedBackgroundDrawable;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 /**
@@ -41,8 +40,6 @@ public class StartActivity extends ActionBarActivity
                 }
             });
 
-            findViewById(R.id.slanted_bg).setBackground(new SlantedBackgroundDrawable());
-            findViewById(R.id.slanted_bg).setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
     }
 

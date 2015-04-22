@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.dosomething.letsdothis.R;
-import org.dosomething.letsdothis.ui.RegisterLoginActivity;
+import org.dosomething.letsdothis.ui.views.SlantedBackgroundDrawable;
 
 /**
  * Created by toidiu on 4/21/15.
@@ -32,6 +32,9 @@ public class Intro3Fragment extends BaseIntroFragment
     {
         super.onViewCreated(view, savedInstanceState);
         initIntroNavigation(view);
+
+        view.findViewById(R.id.slanted_bg).setBackground(new SlantedBackgroundDrawable());
+        view.findViewById(R.id.slanted_bg).setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
 
 
