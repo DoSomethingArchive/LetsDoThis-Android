@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 
-import com.viewpagerindicator.TabPageIndicator;
+import com.viewpagerindicator.CirclePageIndicator;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.fragments.BaseIntroFragment;
@@ -75,7 +75,7 @@ public class IntroActivity extends ActionBarActivity implements BaseIntroFragmen
             }
         });
 
-        TabPageIndicator indicator = (TabPageIndicator) findViewById(R.id.indicator);
+        CirclePageIndicator indicator = (CirclePageIndicator) findViewById(R.id.indicator);
         indicator.setViewPager(pager);
     }
 
