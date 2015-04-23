@@ -4,7 +4,6 @@ import android.content.Context;
 import org.apache.http.HttpStatus;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.NetworkHelper;
-import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
@@ -29,16 +28,14 @@ public class LoginTask extends BaseRegistrationTask
 
         if(matchesEmail(phoneEmail))
         {
-            response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                    .loginWithEmail(phoneEmail, password);
+            response = NetworkHelper.getNorthstarAPIService().loginWithEmail(phoneEmail, password);
 
             User user = new User(phoneEmail, null, null);
             validateResponse(context, response, user);
         }
         else
         {
-            response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                    .loginWithMobile(phoneEmail, password);
+            response = NetworkHelper.getNorthstarAPIService().loginWithMobile(phoneEmail, password);
 
             User user = new User(null, phoneEmail, null);
             validateResponse(context, response, user);

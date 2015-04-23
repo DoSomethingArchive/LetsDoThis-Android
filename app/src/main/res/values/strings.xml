@@ -6,4 +6,6 @@
     <string name="hub">Hub</string>
     <string name="notifications">Notifications</string>
     <string name="invites">Invites</string>
+    <string name="staff_pick">Staff pick</string>
+    <string name="stop_being_bored">Stop being bored</string>
 </resources>
