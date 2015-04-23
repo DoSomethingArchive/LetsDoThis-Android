@@ -6,12 +6,11 @@ import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.ResponseCampaign;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
-import co.touchlab.android.threading.tasks.Task;
 
 /**
  * Created by izzyoji :) on 4/17/15.
  */
-public class CampaignDetailsTask extends Task
+public class CampaignDetailsTask extends BaseNetworkErrorHandlerTask
 {
     private final int      campaignId;
     public        Campaign campaign;
@@ -27,12 +26,6 @@ public class CampaignDetailsTask extends Task
         ResponseCampaign response = NetworkHelper.getDoSomethingAPIService()
                                             .campaign(campaignId);
         campaign = ResponseCampaign.getCampaign(response);
-    }
-
-    @Override
-    protected boolean handleError(Context context, Throwable throwable)
-    {
-        return false;
     }
 
     @Override

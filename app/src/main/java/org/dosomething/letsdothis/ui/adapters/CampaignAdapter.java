@@ -20,11 +20,14 @@ import java.util.List;
 public class CampaignAdapter extends RecyclerView.Adapter<CampaignAdapter.CampaignViewHolder>
 {
 
-    public static final int               VIEW_TYPE_CAMPAIGN          = 0;
-    public static final int               VIEW_TYPE_CAMPAIGN_EXPANDED = 1;
-    private             ArrayList<Object> campaigns                   = new ArrayList<>();
+    //~=~=~=~=~=~=~=~=~=~=~=~=Constants
+    public static final int VIEW_TYPE_CAMPAIGN          = 0;
+    public static final int VIEW_TYPE_CAMPAIGN_EXPANDED = 1;
+
+    //~=~=~=~=~=~=~=~=~=~=~=~=Fields
+    private ArrayList<Object> campaigns = new ArrayList<>();
     private CampaignClickListener campaignClickListener;
-    private int                   selectedPosition = -1;
+    private int selectedPosition = - 1;
 
     public interface CampaignClickListener
     {

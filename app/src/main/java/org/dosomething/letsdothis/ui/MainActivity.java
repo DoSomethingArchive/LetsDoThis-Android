@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,7 +20,7 @@ import org.dosomething.letsdothis.ui.fragments.InvitesFragment;
 import org.dosomething.letsdothis.ui.fragments.NotificationsFragment;
 
 
-public class MainActivity extends ActionBarActivity implements FragmentManager.OnBackStackChangedListener
+public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener
 {
 
     private View actions;

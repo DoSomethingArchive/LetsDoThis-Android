@@ -2,7 +2,7 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,7 +19,7 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 /**
  * Created by toidiu on 4/17/15.
  */
-public class UserUpdateActivity extends ActionBarActivity
+public class UserUpdateActivity extends AppCompatActivity
 {
 
     private EditText firstName;
