@@ -2,7 +2,7 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import org.dosomething.letsdothis.R;
@@ -17,7 +17,7 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 /**
  * Created by toidiu on 4/16/15.
  */
-public class UserListActivity extends ActionBarActivity
+public class UserListActivity extends AppCompatActivity
 {
     public static Intent getLaunchIntent(Context context)
     {
