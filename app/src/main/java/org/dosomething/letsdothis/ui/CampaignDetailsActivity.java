@@ -2,7 +2,7 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,10 +20,13 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 /**
  * Created by izzyoji :) on 4/17/15.
  */
-public class CampaignDetailsActivity extends ActionBarActivity
+public class CampaignDetailsActivity extends AppCompatActivity
 {
 
+    //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String EXTRA_CAMPAIGN_ID = "campaign_id";
+
+    //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private ImageView image;
     private TextView  title;
     private TextView  callToAction;

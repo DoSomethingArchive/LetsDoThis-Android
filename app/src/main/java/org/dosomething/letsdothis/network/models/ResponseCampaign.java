@@ -47,7 +47,7 @@ public class ResponseCampaign
         return image_cover == null ? new ResponseImage() : image_cover;
     }
 
-    public static class ResponseImage
+    private static class ResponseImage
     {
         public ResponseImageUrl url;
 
@@ -58,7 +58,7 @@ public class ResponseCampaign
                     : url;
         }
 
-        public static class ResponseImageUrl
+        private static class ResponseImageUrl
         {
             public ResponseImageUrlShape landscape;
 
@@ -71,7 +71,7 @@ public class ResponseCampaign
 
         }
 
-        public static class ResponseImageUrlShape
+        private static class ResponseImageUrlShape
         {
             public String raw;
 
@@ -84,7 +84,7 @@ public class ResponseCampaign
         }
     }
 
-    public static class ResponseFactProblem
+    private static class ResponseFactProblem
     {
         public String fact;
 

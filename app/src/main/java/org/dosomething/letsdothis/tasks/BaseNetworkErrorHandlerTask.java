@@ -17,6 +17,10 @@ public abstract class BaseNetworkErrorHandlerTask extends Task
     {
         return ((RetrofitError) throwable).getResponse()
                                           .getStatus() == HttpURLConnection.HTTP_UNAUTHORIZED || throwable
-                .getCause() instanceof NetworkException || throwable instanceof NetworkException;
+                .getCause() instanceof NetworkException;
+//        I don't think we need the last line, as it says it's always false
+//        return ((RetrofitError) throwable).getResponse()
+//                                          .getStatus() == HttpURLConnection.HTTP_UNAUTHORIZED || throwable
+//                .getCause() instanceof NetworkException || throwable instanceof NetworkException;
     }
 }

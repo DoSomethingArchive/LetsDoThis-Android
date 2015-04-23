@@ -2,11 +2,10 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.SignupTask;
@@ -18,7 +17,7 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 /**
  * Created by toidiu on 4/15/15.
  */
-public class SignupActivity extends ActionBarActivity
+public class SignupActivity extends AppCompatActivity
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private EditText phoneEmail;
