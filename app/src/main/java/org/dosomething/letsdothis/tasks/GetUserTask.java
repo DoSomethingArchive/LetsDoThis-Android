@@ -4,7 +4,6 @@ import android.content.Context;
 import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.NetworkHelper;
-import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.ResponseUser;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
@@ -26,8 +25,7 @@ public class GetUserTask extends BaseNetworkErrorHandlerTask
     protected void run(Context context) throws Throwable
     {
 
-        ResponseUser[] response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                .userProfile(id);
+        ResponseUser[] response = NetworkHelper.getNorthstarAPIService().userProfile(id);
         user = ResponseUser.getUser(response[0]);
 
         DatabaseHelper.getInstance(context).getUserDao().createOrUpdate(user);

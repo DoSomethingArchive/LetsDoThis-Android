@@ -8,10 +8,6 @@ import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.ResponseUser;
-import org.dosomething.letsdothis.network.models.ResponseUserUpdate;
-import org.json.JSONObject;
-
-import java.sql.SQLException;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import retrofit.mime.TypedInput;
@@ -35,10 +31,10 @@ public class UpdateUserTask extends BaseNetworkErrorHandlerTask
     {
 
         TypedInput jsonTypedInput = User.getJsonTypedInput(user);
-        ResponseUserUpdate response = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
-                .updateUser(user.id, jsonTypedInput);
+        NorthstarAPI northstarAPIService = NetworkHelper.getNorthstarAPIService();
+        northstarAPIService.updateUser(user.id, jsonTypedInput);
 
-        ResponseUser[] responseUsers = NetworkHelper.makeRequestAdapter().create(NorthstarAPI.class)
+        ResponseUser[] responseUsers = northstarAPIService
                 .userProfile(user.id);
 
         updatedUser = ResponseUser.getUser(responseUsers[0]);

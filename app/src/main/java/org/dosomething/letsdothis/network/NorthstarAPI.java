@@ -59,6 +59,8 @@ public interface NorthstarAPI
     @PUT("/users/{id}")
     ResponseUserUpdate updateUser(@Path("id") String id, @Body TypedInput user) throws NetworkException;
 
+
+
     //-----------NOT DONE
     //-----------NOT DONE
     //-----------NOT DONE
