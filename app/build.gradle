@@ -34,8 +34,8 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:22.0.0'
-    compile 'com.android.support:support-v4:22.0.0'
+    compile 'com.android.support:appcompat-v7:22.1.0'
+    compile 'com.android.support:support-v4:22.1.0'
 
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.okhttp:okhttp:2.3.0'
@@ -49,4 +49,7 @@ dependencies {
     compile 'commons-io:commons-io:2.4'
     compile 'org.apache.commons:commons-lang3:3.3.2'
     provided 'com.intellij:annotations:9.0.4'
+    
+    compile 'com.android.support:recyclerview-v7:21.0.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }

@@ -3,12 +3,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
 
-import org.apache.commons.io.IOUtils;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
-import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import co.touchlab.android.threading.errorcontrol.NetworkException;
@@ -18,7 +15,6 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.android.AndroidLog;
 import retrofit.client.OkClient;
-import retrofit.client.Response;
 import retrofit.converter.GsonConverter;
 
 
@@ -27,18 +23,14 @@ import retrofit.converter.GsonConverter;
  */
 public class NetworkHelper
 {
-    public static final String JSON_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-    public static final int    CONNECT_TIMEOUT  = 45;
-    public static final int    READ_TIMEOUT     = 30;
+    public static final String JSON_DATE_FORMAT_NORTHSTAR = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    public static final String JSON_DATE_FORMAT_DO_SOMETHING = "yyyy-MM-dd HH:mm:ss";
+    public static final int    CONNECT_TIMEOUT            = 45;
+    public static final int    READ_TIMEOUT               = 30;
 
-    public static RestAdapter makeRequestAdapter()
+    public static RestAdapter.Builder getRequestAdapterBuilder()
     {
-        return makeRequestAdapterBuilder(new RetrofitErrorHandler(), JSON_DATE_FORMAT).build();
-    }
 
-    @NotNull
-    public static RestAdapter.Builder makeRequestAdapterBuilder(ErrorHandler errorHandler, String dateTimeFormat)
-    {
         RequestInterceptor requestInterceptor = new RequestInterceptor()
         {
             @Override
@@ -50,23 +42,12 @@ public class NetworkHelper
             }
         };
 
-        Gson gson = new GsonBuilder().setDateFormat(dateTimeFormat).create();
-
-        GsonConverter gsonConverter = new GsonConverter(gson);
-
-        RestAdapter.Builder builder = new RestAdapter.Builder()
-                .setRequestInterceptor(requestInterceptor).setConverter(gsonConverter)
-                .setLogLevel(RestAdapter.LogLevel.FULL).setLog(new AndroidLog("LDTHttp"))
-                .setEndpoint(NorthstarAPI.BASE_URL);
-
-        if(errorHandler != null)
-        {
-            builder.setErrorHandler(errorHandler);
-        }
-
-        builder.setClient(new OkClient(makeTimeoutClient(READ_TIMEOUT, CONNECT_TIMEOUT)));
-
-        return builder;
+        return new RestAdapter.Builder().setLogLevel(RestAdapter.LogLevel.FULL)
+                                        .setErrorHandler(new RetrofitErrorHandler()).setClient(
+                        new OkClient(makeTimeoutClient(READ_TIMEOUT, CONNECT_TIMEOUT)))
+                                        .setRequestInterceptor(requestInterceptor)
+                                        .setLogLevel(RestAdapter.LogLevel.FULL)
+                                        .setLog(new AndroidLog("LDTHttp"));
     }
 
     public static class RetrofitErrorHandler implements ErrorHandler
@@ -74,7 +55,7 @@ public class NetworkHelper
         @Override
         public Throwable handleError(RetrofitError cause)
         {
-            if(cause.isNetworkError())
+            if(cause.getKind() == RetrofitError.Kind.NETWORK)
             {
                 return new NetworkException(cause.getCause());
             }
@@ -92,9 +73,22 @@ public class NetworkHelper
         return okHttpClient;
     }
 
-    public static String debugOut(Response response) throws IOException
+    public static DoSomethingAPI getDoSomethingAPIService()
     {
-        return IOUtils.toString(response.getBody().in());
+        Gson gson = new GsonBuilder().setDateFormat(JSON_DATE_FORMAT_DO_SOMETHING).create();
+        GsonConverter gsonConverter = new GsonConverter(gson);
+        return getRequestAdapterBuilder().setConverter(gsonConverter)
+                                         .setEndpoint(DoSomethingAPI.BASE_URL).build()
+                                         .create(DoSomethingAPI.class);
+    }
+
+    public static NorthstarAPI getNorthstarAPIService()
+    {
+        Gson gson = new GsonBuilder().setDateFormat(JSON_DATE_FORMAT_NORTHSTAR).create();
+        GsonConverter gsonConverter = new GsonConverter(gson);
+        return getRequestAdapterBuilder().setConverter(gsonConverter)
+                                         .setEndpoint(NorthstarAPI.BASE_URL).build()
+                                         .create(NorthstarAPI.class);
     }
 
 }

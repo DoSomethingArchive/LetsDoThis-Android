@@ -36,6 +36,8 @@
 
         <activity android:name=".ui.UserUpdateActivity"/>
 
+        <activity android:name=".ui.CampaignDetailsActivity"/>
+
     </application>
 
 </manifest>
