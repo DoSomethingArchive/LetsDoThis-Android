@@ -28,14 +28,15 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 public class CategoryFragment extends Fragment implements CampaignAdapter.CampaignClickListener
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    private static final Integer[] SAMPLE_DATA_IDS = {5236, 2544, 362, 28};
-    public static final String KEY_POSITION = "position";
+    private static final Integer[] SAMPLE_DATA_IDS = {15, 48, 50, 362, 955, 1261, 1334, 1273, 1293, 1427, 1429, 1467};
+    public static final  String    KEY_POSITION    = "position";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
-    private RecyclerView    recyclerView;
+    private RecyclerView recyclerView;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private CampaignAdapter adapter;
+    private int             position;
 
     public static CategoryFragment newInstance(int position)
     {
@@ -58,7 +59,7 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
         super.onStart();
 
         EventBusExt.getDefault().register(this);
-        TaskQueue.loadQueueDefault(getActivity()).execute(new ReportBackListTask(getArguments().getInt(KEY_POSITION)));
+        TaskQueue.loadQueueDefault(getActivity()).execute(new ReportBackListTask(position));
     }
 
     @Override
@@ -72,6 +73,7 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
+        position = getArguments().getInt(KEY_POSITION);
         recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
         adapter = new CampaignAdapter(generateSampleData(), this);
         adapter.addItem("campaign footer");
@@ -84,7 +86,8 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
             @Override
             public int getSpanSize(int position)
             {
-                switch(adapter.getItemViewType(position)){
+                switch(adapter.getItemViewType(position))
+                {
                     case CampaignAdapter.VIEW_TYPE_REPORT_BACK:
                         return 1;
                     default:
@@ -99,15 +102,20 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
     private List<Campaign> generateSampleData()
     {
         List<Campaign> campaigns = new ArrayList<>();
-        for(int id : SAMPLE_DATA_IDS)
+        for(int i = 0, sample_data_idsLength = SAMPLE_DATA_IDS.length; i < sample_data_idsLength; i++)
         {
-            Campaign campaign = new Campaign();
-            campaign.id = id;
-            campaign.imagePath = "https://dosomething-a.akamaihd.net/sites/default/files/images/SocialMediaMakeover_hero_lanscape2.jpg";
-            campaign.title = String.format("Sample Campaign %d", id);
-            campaign.callToAction = "Call to action.";
-            campaign.problemFact = "Problem fact";
-            campaigns.add(campaign);
+            if(i % 4 == position)
+            {
+                int id = SAMPLE_DATA_IDS[i];
+                Campaign campaign = new Campaign();
+                campaign.id = id;
+                campaign.imagePath = "https://dosomething-a.akamaihd.net/sites/default/files/images/SocialMediaMakeover_hero_lanscape2.jpg";
+                campaign.title = String.format("Sample Campaign %d", id);
+                campaign.callToAction = "Call to action.";
+                campaign.problemFact = "Problem fact";
+                campaigns.add(campaign);
+            }
+
         }
 
         return campaigns;
@@ -128,10 +136,10 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(ReportBackListTask task)
     {
-        if(task.position == getArguments().getInt(KEY_POSITION))
+        if(task.position == position)
         {
             List<ReportBack> reportBacks = task.reportBacks;
-            if(reportBacks != null && !reportBacks.isEmpty())
+            if(reportBacks != null && ! reportBacks.isEmpty())
             {
                 adapter.addAll(reportBacks);
             }
