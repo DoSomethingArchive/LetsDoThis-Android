@@ -1,6 +1,4 @@
 package org.dosomething.letsdothis.network.models;
-import com.google.gson.Gson;
-
 import org.dosomething.letsdothis.data.User;
 
 /**
