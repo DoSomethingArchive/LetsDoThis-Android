@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         {
             case R.id.logout:
                 BaseRegistrationTask.logout(this);
+                startActivity(RegisterLoginActivity.getLaunchIntent(this));
                 finish();
                 break;
             case R.id.user_list:
