@@ -2,32 +2,48 @@ package org.dosomething.letsdothis.ui.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.data.ReportBack;
+import org.dosomething.letsdothis.tasks.ReportBackListTask;
 import org.dosomething.letsdothis.ui.CampaignDetailsActivity;
 import org.dosomething.letsdothis.ui.adapters.CampaignAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import co.touchlab.android.threading.eventbus.EventBusExt;
+import co.touchlab.android.threading.tasks.TaskQueue;
+
 /**
  * Created by izzyoji :) on 4/14/15.
  */
 public class CategoryFragment extends Fragment implements CampaignAdapter.CampaignClickListener
 {
+    //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     private static final Integer[] SAMPLE_DATA_IDS = {5236, 2544, 362, 28};
+    public static final String KEY_POSITION = "position";
 
+    //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private RecyclerView    recyclerView;
 
-    public static CategoryFragment newInstance()
+    //~=~=~=~=~=~=~=~=~=~=~=~=Fields
+    private CampaignAdapter adapter;
+
+    public static CategoryFragment newInstance(int position)
     {
-        return new CategoryFragment();
+        Bundle args = new Bundle();
+        args.putInt(KEY_POSITION, position);
+        CategoryFragment categoryFragment = new CategoryFragment();
+        categoryFragment.setArguments(args);
+        return categoryFragment;
     }
 
     @Override
@@ -37,15 +53,46 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
     }
 
     @Override
+    public void onStart()
+    {
+        super.onStart();
+
+        EventBusExt.getDefault().register(this);
+        TaskQueue.loadQueueDefault(getActivity()).execute(new ReportBackListTask(getArguments().getInt(KEY_POSITION)));
+    }
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        EventBusExt.getDefault().unregister(this);
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-
         recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
-        CampaignAdapter adapter = new CampaignAdapter(generateSampleData(), this);
+        adapter = new CampaignAdapter(generateSampleData(), this);
+        adapter.addItem("campaign footer");
 
         recyclerView.setAdapter(adapter);
+
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup()
+        {
+            @Override
+            public int getSpanSize(int position)
+            {
+                switch(adapter.getItemViewType(position)){
+                    case CampaignAdapter.VIEW_TYPE_REPORT_BACK:
+                        return 1;
+                    default:
+                        return 2;
+                }
+            }
+        });
+
         recyclerView.setLayoutManager(layoutManager);
     }
 
@@ -76,6 +123,24 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
     public void onCampaignExpanded(int position)
     {
         recyclerView.smoothScrollToPosition(position);
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(ReportBackListTask task)
+    {
+        if(task.position == getArguments().getInt(KEY_POSITION))
+        {
+            List<ReportBack> reportBacks = task.reportBacks;
+            if(reportBacks != null && !reportBacks.isEmpty())
+            {
+                adapter.addAll(reportBacks);
+            }
+            else
+            {
+                Toast.makeText(getActivity(), "report back data failed", Toast.LENGTH_SHORT).show();
+            }
+        }
+
     }
 
 }
