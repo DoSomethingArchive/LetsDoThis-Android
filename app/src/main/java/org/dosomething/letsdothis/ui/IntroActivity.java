@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import org.dosomething.letsdothis.R;
-import org.dosomething.letsdothis.ui.fragments.BaseIntroFragment;
 import org.dosomething.letsdothis.ui.fragments.IntroFragment;
 
 import java.util.ArrayList;
