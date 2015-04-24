@@ -28,6 +28,11 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     private View invites;
     private View notifications;
 
+    public static Intent getLaunchIntent(Context context)
+    {
+        return new Intent(context, MainActivity.class);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -59,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         {
             case R.id.logout:
                 BaseRegistrationTask.logout(this);
+                startActivity(RegisterLoginActivity.getLaunchIntent(this));
                 finish();
                 break;
             case R.id.user_list:
@@ -186,8 +192,5 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
 
     }
 
-    public static Intent getLaunchIntent(Context context)
-    {
-        return new Intent(context, MainActivity.class);
-    }
+
 }
