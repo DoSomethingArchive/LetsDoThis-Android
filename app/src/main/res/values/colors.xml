@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="gallery">#EEEEEE</color>
+    <color name="porcelain">#F6F7F8</color>
+    <color name="white">#FFFFFF</color>
+    <color name="fantasy">#EBFAF9</color>
+    <color name="torch_red">#FB1D52</color>
+    <color name="torch_red_1">#FB0052</color>
+    <color name="coral_red">#FF463E</color>
+    <color name="carrot_orange">#EF8523</color>
+    <color name="sunglow">#FACF33</color>
+    <color name="web_orange">#FFA600</color>
+    <color name="purple_heart">#632BB3</color>
+    <color name="medium_purple">#7663DB</color>
+    <color name="science_blue">#0068D1</color>
+    <color name="st_tropaz">#274492</color>
+    <color name="persian_blue">#341DAC</color>
+    <color name="governor_bay">#352FB0</color>
+    <color name="governor_bay_1">#3B34CA</color>
+    <color name="cerulean_1">#00AEEE</color>
+    <color name="cerulean">#0C9CD9</color>
+    <color name="bright_turquoise">#12E1E3</color>
+    <color name="pastel_green">#44D4C7</color>
+    <color name="pastel_green_1">#4FD5C7</color>
+    <color name="olive_drab">#22C385</color>
+    <color name="rock">#2A4D4A</color>
+    <color name="blue_zodiac">#122C4A</color>
+    <color name="mine_shaft">#252B28</color>
+</resources>
