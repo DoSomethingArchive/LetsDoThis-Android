@@ -28,7 +28,7 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 public class CategoryFragment extends Fragment implements CampaignAdapter.CampaignClickListener
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    private static final Integer[] SAMPLE_DATA_IDS = {15, 48, 50, 362, 955, 1261, 1334, 1273, 1293, 1427, 1429, 1467};
+    private static final Integer[] SAMPLE_DATA_IDS = {15, 48, 50, 362, 955, 1261, 1334, 1273, 1293, 1427, 1429, 1467}; //FIXME this is dev only
     public static final  String    KEY_POSITION    = "position";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
