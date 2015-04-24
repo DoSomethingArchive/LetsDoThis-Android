@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by toidiu on 4/15/15.
  */
-public class IntroActivity extends AppCompatActivity implements BaseIntroFragment.PagerChangeListener
+public class IntroActivity extends AppCompatActivity implements IntroFragment.PagerChangeListener
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     private static final String TAG = IntroActivity.class.getSimpleName();

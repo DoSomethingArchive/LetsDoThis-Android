@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 
 import java.util.ArrayList;
@@ -55,27 +56,27 @@ public class SlantedBackgroundDrawable extends ColorDrawable
 
     private Path getSlantedPath(boolean slantedLeft, int height, int width)
     {
-        List<PathCoordinates> coord = new ArrayList<>();
+        List<Point> coord = new ArrayList<>();
         if(slantedLeft)
         {
-            coord.add(new PathCoordinates(- WIDTH_OVERSHOOT, 100 + HEIGHT_SHADOW_HEIGHT));
-            coord.add(new PathCoordinates(width + WIDTH_OVERSHOOT, 0 + HEIGHT_SHADOW_HEIGHT));
-            coord.add(new PathCoordinates(width + WIDTH_OVERSHOOT, height));
-            coord.add(new PathCoordinates(- WIDTH_OVERSHOOT, height));
+            coord.add(new Point(- WIDTH_OVERSHOOT, 100 + HEIGHT_SHADOW_HEIGHT));
+            coord.add(new Point(width + WIDTH_OVERSHOOT, 0 + HEIGHT_SHADOW_HEIGHT));
+            coord.add(new Point(width + WIDTH_OVERSHOOT, height));
+            coord.add(new Point(- WIDTH_OVERSHOOT, height));
         }
         else
         {
-            coord.add(new PathCoordinates(- WIDTH_OVERSHOOT, 0 + HEIGHT_SHADOW_HEIGHT));
-            coord.add(new PathCoordinates(width+ WIDTH_OVERSHOOT, 100 + HEIGHT_SHADOW_HEIGHT));
-            coord.add(new PathCoordinates(width + WIDTH_OVERSHOOT, height));
-            coord.add(new PathCoordinates(- WIDTH_OVERSHOOT, height));
+            coord.add(new Point(- WIDTH_OVERSHOOT, 0 + HEIGHT_SHADOW_HEIGHT));
+            coord.add(new Point(width+ WIDTH_OVERSHOOT, 100 + HEIGHT_SHADOW_HEIGHT));
+            coord.add(new Point(width + WIDTH_OVERSHOOT, height));
+            coord.add(new Point(- WIDTH_OVERSHOOT, height));
         }
 
         Path slantedPath = new Path();
         slantedPath.reset(); // only needed when reusing this path for a new build
         for(int i = 0; i < coord.size(); i++)
         {
-            PathCoordinates c = coord.get(i);
+            Point c = coord.get(i);
             if(i == 0)
             {
                 slantedPath.moveTo(c.x, c.y); // used for first point
@@ -88,16 +89,5 @@ public class SlantedBackgroundDrawable extends ColorDrawable
         return slantedPath;
     }
 
-    private static class PathCoordinates
-    {
-        Integer x;
-        Integer y;
-
-        private PathCoordinates(Integer x, Integer y)
-        {
-            this.x = x;
-            this.y = y;
-        }
-    }
 
 }
