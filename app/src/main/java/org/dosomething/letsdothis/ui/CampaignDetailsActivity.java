@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
-import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -77,7 +76,7 @@ public class CampaignDetailsActivity extends AppCompatActivity
             title.setText(campaign.title);
             callToAction.setText(campaign.callToAction);
             problemFact.setText(campaign.problemFact);
-            solutionCopy.setText(TextUtils.isEmpty(campaign.solutionCopy) ? null : Html.fromHtml(campaign.solutionCopy));
+            solutionCopy.setText(Html.fromHtml(campaign.solutionCopy));
             solutionSupport.setText(Html.fromHtml(campaign.solutionSupport));
         }
         else
