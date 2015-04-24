@@ -3,8 +3,6 @@ import com.j256.ormlite.field.DatabaseField;
 
 import org.json.JSONObject;
 
-import java.util.Date;
-
 import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedInput;
 

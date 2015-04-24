@@ -3,6 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="vpiTabPageIndicatorStyle">@style/CustomTabPageIndicator</item>
+        <item name="vpiCirclePageIndicatorStyle">@style/CustomTabPageIndicator</item>
     </style>
     <style name="NavButton" parent="AppTheme">
         <item name="android:gravity">center</item>
@@ -14,12 +15,22 @@
         <item name="android:background">@drawable/bg_selectable_black</item>
     </style>
 
-    <style name="CustomTabPageIndicator" >
+    <style name="CustomTabPageIndicator">
         <item name="android:gravity">center</item>
         <item name="android:maxLines">1</item>
         <item name="android:textColor">@color/bg_text_selectable_black</item>
         <item name="android:background">@drawable/bg_selectable_black</item>
-
     </style>
+
+    <style name="CustomCirclePageIndicator">
+        <item name="fillColor">#117ca4</item>
+        <item name="strokeColor">#117ca4</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="radius">3dp</item>
+        <item name="centered">true</item>
+    </style>
+    <style name="IntroArrowStyle">
+    </style>
+
 
 </resources>
