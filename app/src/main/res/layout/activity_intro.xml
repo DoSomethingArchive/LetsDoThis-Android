@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-
-    <Button
-        android:id="@+id/login"
+    <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="login"/>
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:id="@+id/pager"/>
 
-    <Button
-        android:id="@+id/register"
-        android:layout_width="match_parent"
+    <com.viewpagerindicator.CirclePageIndicator
+        android:id="@+id/indicator"
+        style="@style/CustomCirclePageIndicator"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="register"/>
+        android:padding="5dp"
+        android:layout_width="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"/>
 
-</LinearLayout>
+</RelativeLayout>
