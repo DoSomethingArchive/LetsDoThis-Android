@@ -14,14 +14,19 @@ import java.util.List;
  */
 public class SlantedBackgroundDrawable extends ColorDrawable
 {
+    //~=~=~=~=~=~=~=~=~=~=~=~=Constants
+    public static final int WIDTH_OVERSHOOT      = 50;
+    public static final int HEIGHT_SHADOW_HEIGHT = 30;
 
-    public static final int WIDTH_OVERSHOOT   = 50;
-    public static final int HEIGHT_UNDERSHOOT = 30;
-    private final Paint wallpaint;
-    private final Paint shadowPaint;
+    //~=~=~=~=~=~=~=~=~=~=~=~=Fields
+    private final Paint   wallpaint;
+    private final Paint   shadowPaint;
+    private final boolean slantedLeft;
 
-    public SlantedBackgroundDrawable()
+    public SlantedBackgroundDrawable(boolean slatedLeft)
     {
+        slantedLeft = slatedLeft;
+
         wallpaint = new Paint();
         wallpaint.setColor(Color.WHITE);
         wallpaint.setStyle(Paint.Style.FILL);
@@ -31,7 +36,7 @@ public class SlantedBackgroundDrawable extends ColorDrawable
         shadowPaint.setColor(0x22000000);
         shadowPaint.setAntiAlias(true);
         shadowPaint.setStyle(Paint.Style.FILL);
-        shadowPaint.setMaskFilter(new BlurMaskFilter(HEIGHT_UNDERSHOOT, BlurMaskFilter.Blur.OUTER));
+        shadowPaint.setMaskFilter(new BlurMaskFilter(HEIGHT_SHADOW_HEIGHT, BlurMaskFilter.Blur.OUTER));
 
     }
 
@@ -41,31 +46,46 @@ public class SlantedBackgroundDrawable extends ColorDrawable
         int height = getBounds().height();
         int width = getBounds().width();
 
+        Path slantedPath = getSlantedPath(slantedLeft, height, width);
 
+        canvas.drawPath(slantedPath, shadowPaint);
+        canvas.drawPath(slantedPath, wallpaint);
+
+    }
+
+    private Path getSlantedPath(boolean slantedLeft, int height, int width)
+    {
         List<PathCoordinates> coord = new ArrayList<>();
-        coord.add(new PathCoordinates(- WIDTH_OVERSHOOT, 100 + HEIGHT_UNDERSHOOT));
-        coord.add(new PathCoordinates(width + WIDTH_OVERSHOOT, 0 + HEIGHT_UNDERSHOOT));
-        coord.add(new PathCoordinates(width + WIDTH_OVERSHOOT, height));
-        coord.add(new PathCoordinates(- WIDTH_OVERSHOOT, height));
+        if(slantedLeft)
+        {
+            coord.add(new PathCoordinates(- WIDTH_OVERSHOOT, 100 + HEIGHT_SHADOW_HEIGHT));
+            coord.add(new PathCoordinates(width + WIDTH_OVERSHOOT, 0 + HEIGHT_SHADOW_HEIGHT));
+            coord.add(new PathCoordinates(width + WIDTH_OVERSHOOT, height));
+            coord.add(new PathCoordinates(- WIDTH_OVERSHOOT, height));
+        }
+        else
+        {
+            coord.add(new PathCoordinates(- WIDTH_OVERSHOOT, 0 + HEIGHT_SHADOW_HEIGHT));
+            coord.add(new PathCoordinates(width+ WIDTH_OVERSHOOT, 100 + HEIGHT_SHADOW_HEIGHT));
+            coord.add(new PathCoordinates(width + WIDTH_OVERSHOOT, height));
+            coord.add(new PathCoordinates(- WIDTH_OVERSHOOT, height));
+        }
 
-        Path wallpath = new Path();
-        wallpath.reset(); // only needed when reusing this path for a new build
+        Path slantedPath = new Path();
+        slantedPath.reset(); // only needed when reusing this path for a new build
         for(int i = 0; i < coord.size(); i++)
         {
             PathCoordinates c = coord.get(i);
             if(i == 0)
             {
-                wallpath.moveTo(c.x, c.y); // used for first point
+                slantedPath.moveTo(c.x, c.y); // used for first point
             }
             else
             {
-                wallpath.lineTo(c.x, c.y);
+                slantedPath.lineTo(c.x, c.y);
             }
         }
-
-        canvas.drawPath(wallpath, shadowPaint);
-        canvas.drawPath(wallpath, wallpaint);
-
+        return slantedPath;
     }
 
     private static class PathCoordinates
