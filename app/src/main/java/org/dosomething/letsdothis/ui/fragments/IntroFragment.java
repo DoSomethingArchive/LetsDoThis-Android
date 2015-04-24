@@ -1,6 +1,7 @@
 package org.dosomething.letsdothis.ui.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,7 @@ import org.dosomething.letsdothis.ui.views.SlantedBackgroundDrawable;
 /**
  * Created by toidiu on 4/21/15.
  */
-public class IntroFragment extends BaseIntroFragment
+public class IntroFragment extends Fragment
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String TAG          = IntroFragment.class.getSimpleName();
