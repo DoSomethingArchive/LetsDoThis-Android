@@ -50,7 +50,7 @@ public class ActionsFragment extends Fragment
             @Override
             public Fragment getItem(int position)
             {
-                return CategoryFragment.newInstance();
+                return CategoryFragment.newInstance(position);
             }
 
             @Override
