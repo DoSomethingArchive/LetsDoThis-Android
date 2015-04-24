@@ -25,8 +25,8 @@ public class IntroActivity extends AppCompatActivity implements BaseIntroFragmen
     private static final String TAG = IntroActivity.class.getSimpleName();
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
-    private ViewPager                      pager;
-    private List<IntroFragmentExtraHolder> extraList;
+    private ViewPager                               pager;
+    private List<IntroFragment.FragmentExtraHolder> extraList;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
 
@@ -48,9 +48,9 @@ public class IntroActivity extends AppCompatActivity implements BaseIntroFragmen
     {
 
         extraList = new ArrayList<>();
-        extraList.add(new IntroFragmentExtraHolder(true, "intro 1 text", null));
-        extraList.add(new IntroFragmentExtraHolder(false, "intro 2 text", null));
-        extraList.add(new IntroFragmentExtraHolder(true, "intro 3 text", null));
+        extraList.add(new IntroFragment.FragmentExtraHolder(true, "intro 1 text", null));
+        extraList.add(new IntroFragment.FragmentExtraHolder(false, "intro 2 text", null));
+        extraList.add(new IntroFragment.FragmentExtraHolder(true, "intro 3 text", null));
 
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager())
@@ -69,6 +69,7 @@ public class IntroActivity extends AppCompatActivity implements BaseIntroFragmen
                 {
                     showPrev = false;
                 }
+
                 return IntroFragment.newInstance(showPrev, extraList.get(position));
             }
 
@@ -105,22 +106,6 @@ public class IntroActivity extends AppCompatActivity implements BaseIntroFragmen
         else
         {
             pager.setCurrentItem(currentItem + 1);
-        }
-    }
-
-    public static class IntroFragmentExtraHolder
-    {
-        public boolean slantedLeft;
-        public String  text;
-        public String  imageResource;
-
-        IntroFragmentExtraHolder(boolean slanted, String text, String imageResource)
-        {
-            this.slantedLeft = slanted;
-            this.text = text;
-
-            //FIXME eventually pass in a image from assets
-            this.imageResource = imageResource;
         }
     }
 

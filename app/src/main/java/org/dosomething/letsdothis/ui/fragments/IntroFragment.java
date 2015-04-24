@@ -22,7 +22,7 @@ public class IntroFragment extends BaseIntroFragment
     public static final String IMAGE_RES    = "IMAGE_RES";
     public static final String SHOW_PREV    = "SHOW_PREV";
 
-    public static IntroFragment newInstance(boolean showPrev, IntroActivity.IntroFragmentExtraHolder introFragmentExtraHolder)
+    public static IntroFragment newInstance(boolean showPrev, FragmentExtraHolder introFragmentExtraHolder)
     {
         Bundle bundle = new Bundle();
         bundle.putBoolean(SHOW_PREV, showPrev);
@@ -64,6 +64,23 @@ public class IntroFragment extends BaseIntroFragment
         View slantedBg = view.findViewById(R.id.slanted_bg);
         slantedBg.setBackground(new SlantedBackgroundDrawable(slatedLeft));
         slantedBg.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+    }
+
+
+    public static class FragmentExtraHolder
+    {
+        public boolean slantedLeft;
+        public String  text;
+        public String  imageResource;
+
+        public FragmentExtraHolder(boolean slanted, String text, String imageResource)
+        {
+            this.slantedLeft = slanted;
+            this.text = text;
+
+            //FIXME eventually pass in a image from assets
+            this.imageResource = imageResource;
+        }
     }
 
 }
