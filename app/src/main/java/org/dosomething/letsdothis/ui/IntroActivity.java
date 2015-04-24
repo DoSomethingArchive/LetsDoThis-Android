@@ -11,9 +11,7 @@ import com.viewpagerindicator.CirclePageIndicator;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.fragments.BaseIntroFragment;
-import org.dosomething.letsdothis.ui.fragments.Intro1Fragment;
-import org.dosomething.letsdothis.ui.fragments.Intro2Fragment;
-import org.dosomething.letsdothis.ui.fragments.Intro3Fragment;
+import org.dosomething.letsdothis.ui.fragments.IntroFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +25,10 @@ public class IntroActivity extends ActionBarActivity implements BaseIntroFragmen
     private static final String TAG = IntroActivity.class.getSimpleName();
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
-    private ViewPager pager;
+    private ViewPager                      pager;
+    private List<IntroFragmentExtraHolder> extraList;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
-    private List<Fragment> fragmentList;
 
     public static Intent getLaunchIntent(Context context)
     {
@@ -48,10 +46,11 @@ public class IntroActivity extends ActionBarActivity implements BaseIntroFragmen
 
     private void initPager()
     {
-        fragmentList = new ArrayList<>();
-        fragmentList.add(Intro1Fragment.newInstance());
-        fragmentList.add(Intro2Fragment.newInstance());
-        fragmentList.add(Intro3Fragment.newInstance());
+
+        extraList = new ArrayList<>();
+        extraList.add(new IntroFragmentExtraHolder(true, "intro 1 text", null));
+        extraList.add(new IntroFragmentExtraHolder(false, "intro 2 text", null));
+        extraList.add(new IntroFragmentExtraHolder(true, "intro 3 text", null));
 
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager())
@@ -59,13 +58,18 @@ public class IntroActivity extends ActionBarActivity implements BaseIntroFragmen
             @Override
             public int getCount()
             {
-                return fragmentList.size();
+                return extraList.size();
             }
 
             @Override
             public Fragment getItem(int position)
             {
-                return fragmentList.get(position);
+                boolean showPrev = true;
+                if(position == 0)
+                {
+                    showPrev = false;
+                }
+                return IntroFragment.newInstance(showPrev, extraList.get(position));
             }
 
             @Override
@@ -93,7 +97,7 @@ public class IntroActivity extends ActionBarActivity implements BaseIntroFragmen
     public void navigateNext()
     {
         int currentItem = pager.getCurrentItem();
-        if(currentItem == (fragmentList.size() - 1))
+        if(currentItem == (extraList.size() - 1))
         {
             startActivity(RegisterLoginActivity.getLaunchIntent(this));
             finish();
@@ -103,4 +107,21 @@ public class IntroActivity extends ActionBarActivity implements BaseIntroFragmen
             pager.setCurrentItem(currentItem + 1);
         }
     }
+
+    public static class IntroFragmentExtraHolder
+    {
+        public boolean slantedLeft;
+        public String  text;
+        public String  imageResource;
+
+        IntroFragmentExtraHolder(boolean slanted, String text, String imageResource)
+        {
+            this.slantedLeft = slanted;
+            this.text = text;
+
+            //FIXME eventually pass in a image from assets
+            this.imageResource = imageResource;
+        }
+    }
+
 }

@@ -26,7 +26,7 @@ public class RegisterLoginActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_intro4);
+        setContentView(R.layout.activity_register);
 
         initAppNavigation();
     }
