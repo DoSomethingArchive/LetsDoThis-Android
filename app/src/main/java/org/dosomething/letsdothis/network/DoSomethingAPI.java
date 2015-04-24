@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.network;
+import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.network.models.ResponseCampaign;
 import org.dosomething.letsdothis.network.models.ResponseReportBackList;
 
@@ -14,7 +15,9 @@ import retrofit.http.Query;
 public interface DoSomethingAPI
 {
 
-    public static final String BASE_URL = "https://www.dosomething.org/api/v1/";
+    public static final String BASE_URL = BuildConfig.DEBUG
+            ? "http://staging.beta.dosomething.org/api/v1/"
+            : "https://www.dosomething.org/api/v1/";
 
     @Headers("Content-Type: application/json")
     @GET("/content/{id}")
