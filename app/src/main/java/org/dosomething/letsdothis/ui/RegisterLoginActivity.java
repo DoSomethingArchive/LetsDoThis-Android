@@ -2,7 +2,7 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import org.dosomething.letsdothis.R;
@@ -10,7 +10,7 @@ import org.dosomething.letsdothis.R;
 /**
  * Created by toidiu on 4/15/15.
  */
-public class RegisterLoginActivity extends ActionBarActivity
+public class RegisterLoginActivity extends AppCompatActivity
 {
     private static final String TAG = RegisterLoginActivity.class.getSimpleName();
 

@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by toidiu on 4/15/15.
  */
-public class IntroActivity extends ActionBarActivity implements BaseIntroFragment.PagerChangeListener
+public class IntroActivity extends AppCompatActivity implements BaseIntroFragment.PagerChangeListener
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     private static final String TAG = IntroActivity.class.getSimpleName();
