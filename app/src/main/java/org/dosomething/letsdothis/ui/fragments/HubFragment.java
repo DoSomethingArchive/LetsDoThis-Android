@@ -51,13 +51,6 @@ public class HubFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
-        EventBusExt.getDefault().register(this);
-        String currentUserId = AppPrefs.getInstance(getActivity()).getCurrentUserId();
-        TaskQueue.loadQueueDefault(getActivity())
-                .execute(new GetCurrentUserCampaignTask(currentUserId));
-        TaskQueue.loadQueueDefault(getActivity())
-                .execute(new GetPastUserCampaignTask(currentUserId));
     }
 
     @Override
@@ -67,9 +60,21 @@ public class HubFragment extends Fragment
     }
 
     @Override
-    public void onDestroy()
+    public void onStart()
     {
-        super.onDestroy();
+        super.onStart();
+        EventBusExt.getDefault().register(this);
+        String currentUserId = AppPrefs.getInstance(getActivity()).getCurrentUserId();
+        TaskQueue.loadQueueDefault(getActivity())
+                .execute(new GetCurrentUserCampaignTask(currentUserId));
+        TaskQueue.loadQueueDefault(getActivity())
+                .execute(new GetPastUserCampaignTask(currentUserId));
+    }
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
         EventBusExt.getDefault().unregister(this);
     }
 
