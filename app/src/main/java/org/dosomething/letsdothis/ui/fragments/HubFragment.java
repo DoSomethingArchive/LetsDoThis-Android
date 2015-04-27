@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.BaseRegistrationTask;
 import org.dosomething.letsdothis.ui.UserListActivity;
 import org.dosomething.letsdothis.ui.UserProfileActivity;
@@ -60,10 +61,12 @@ public class HubFragment extends Fragment
 
 
         List<Object> hubList = new ArrayList<>();
-        hubList.add("bla");
+        User user = new User(null, "firstName", "lastName", "birthday");
+        hubList.add(user);
+        hubList.add("currently doing");
+        hubList.add("been there, done good");
 
         adapter = new HubAdapter(hubList);
-        adapter.addItem("campaign footer");
         recyclerView.setAdapter(adapter);
 
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
