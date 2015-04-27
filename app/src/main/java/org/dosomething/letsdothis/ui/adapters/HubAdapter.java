@@ -7,14 +7,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.dosomething.letsdothis.R;
-import org.dosomething.letsdothis.data.ReportBack;
+import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by izzyoji :) on 4/17/15.
+ * Created by toidiu on 4/17/15.
  */
 public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
@@ -24,6 +24,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public static final int VIEW_TYPE_SECTION_TITLE    = 1;
     public static final int VIEW_TYPE_CURRENT_CAMPAIGN = 2;
     public static final int VIEW_TYPE_PAST_CAMPAIGN    = 3;
+    public static final int CURRENT_POSITION           = 2;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private ArrayList<Object> hubList          = new ArrayList<>();
@@ -48,10 +49,16 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 View profileLayout = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_hub_profile, parent, false);
                 return new ProfileViewHolder(profileLayout);
+            case VIEW_TYPE_CURRENT_CAMPAIGN:
+                View currentLayout = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_hub_current_campaign, parent, false);
+                return new CurrentCampaignViewHolder(currentLayout);
+            case VIEW_TYPE_PAST_CAMPAIGN:
+                View pastLayout = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_hub_past_campaign, parent, false);
+                return new PastCampaignViewHolder(pastLayout);
             default:
-                View smallLayout = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_campaign, parent, false);
-                return new ProfileViewHolder(smallLayout);
+                return null;
         }
     }
 
@@ -71,6 +78,19 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             profileViewHolder.fName.setText(user.first_name);
             profileViewHolder.lName.setText(user.last_name);
         }
+        else if(getItemViewType(position) == VIEW_TYPE_CURRENT_CAMPAIGN)
+        {
+            Campaign campaign = (Campaign) hubList.get(position);
+            CurrentCampaignViewHolder currentCampaignViewHolder = (CurrentCampaignViewHolder) holder;
+            currentCampaignViewHolder.title.setText(campaign.title);
+            currentCampaignViewHolder.callToAction.setText(campaign.callToAction);
+        }
+        else if(getItemViewType(position) == VIEW_TYPE_PAST_CAMPAIGN)
+        {
+            Campaign campaign = (Campaign) hubList.get(position);
+            PastCampaignViewHolder pastCampaignViewHolder = (PastCampaignViewHolder) holder;
+            //FIXME add image
+        }
     }
 
     @Override
@@ -85,18 +105,26 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             return VIEW_TYPE_PROFILE;
         }
-
-        return VIEW_TYPE_SECTION_TITLE;
+        else if(currentObject instanceof Campaign)
+        {
+            return VIEW_TYPE_CURRENT_CAMPAIGN;
+        }
+        else
+        {
+            return VIEW_TYPE_PAST_CAMPAIGN;
+        }
     }
 
-    public void addItem(Object o)
+    public void addCurrentCampaign(List<Campaign> objects)
     {
-        hubList.add(o);
-        notifyItemInserted(hubList.size() - 1);
+        hubList.add(1, "currently doing");
+        hubList.addAll(2, objects);
+        notifyItemRangeInserted(hubList.size() - objects.size(), hubList.size() - 1);
     }
 
-    public void addAll(List<ReportBack> objects)
+    public void addPastCampaign(List<Campaign> objects)
     {
+        hubList.add("been there, done good");
         hubList.addAll(objects);
         notifyItemRangeInserted(hubList.size() - objects.size(), hubList.size() - 1);
     }
@@ -135,20 +163,25 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public static class CurrentCampaignViewHolder extends RecyclerView.ViewHolder
     {
-        protected ImageView root;
+        protected final TextView title;
+        protected final TextView callToAction;
 
-        public CurrentCampaignViewHolder(ImageView itemView)
+        public CurrentCampaignViewHolder(View itemView)
         {
             super(itemView);
-            this.root = itemView;
+            title = (TextView) itemView.findViewById(R.id.title);
+            callToAction = (TextView) itemView.findViewById(R.id.call_to_action);
         }
     }
 
     public static class PastCampaignViewHolder extends RecyclerView.ViewHolder
     {
-        public PastCampaignViewHolder(TextView itemView)
+        protected final ImageView campImage;
+
+        public PastCampaignViewHolder(View itemView)
         {
             super(itemView);
+            campImage = (ImageView) itemView.findViewById(R.id.user_image);
         }
     }
 
