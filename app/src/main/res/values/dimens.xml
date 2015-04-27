@@ -35,4 +35,5 @@
     <dimen name="text_huge">48sp</dimen>
     <dimen name="text_xhuge">64sp</dimen>
     <dimen name="height_nav_bar">@dimen/height_large</dimen>
+    <dimen name="campaign_height">160dp</dimen>
 </resources>
