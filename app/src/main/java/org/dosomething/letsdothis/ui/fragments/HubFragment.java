@@ -14,14 +14,20 @@ import android.view.ViewGroup;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.BaseRegistrationTask;
+import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignTask;
+import org.dosomething.letsdothis.tasks.GetPastUserCampaignTask;
 import org.dosomething.letsdothis.ui.UserListActivity;
 import org.dosomething.letsdothis.ui.UserProfileActivity;
 import org.dosomething.letsdothis.ui.UserUpdateActivity;
 import org.dosomething.letsdothis.ui.adapters.CampaignAdapter;
 import org.dosomething.letsdothis.ui.adapters.HubAdapter;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import co.touchlab.android.threading.eventbus.EventBusExt;
+import co.touchlab.android.threading.tasks.TaskQueue;
 
 /**
  * Created by izzyoji :) on 4/15/15.
@@ -45,12 +51,26 @@ public class HubFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        EventBusExt.getDefault().register(this);
+        String currentUserId = AppPrefs.getInstance(getActivity()).getCurrentUserId();
+        TaskQueue.loadQueueDefault(getActivity())
+                .execute(new GetCurrentUserCampaignTask(currentUserId));
+        TaskQueue.loadQueueDefault(getActivity())
+                .execute(new GetPastUserCampaignTask(currentUserId));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         return inflater.inflate(R.layout.fragment_hub, container, false);
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        EventBusExt.getDefault().unregister(this);
     }
 
     @Override
@@ -63,8 +83,7 @@ public class HubFragment extends Fragment
         List<Object> hubList = new ArrayList<>();
         User user = new User(null, "firstName", "lastName", "birthday");
         hubList.add(user);
-        hubList.add("currently doing");
-        hubList.add("been there, done good");
+
 
         adapter = new HubAdapter(hubList);
         recyclerView.setAdapter(adapter);
@@ -116,4 +135,23 @@ public class HubFragment extends Fragment
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(GetCurrentUserCampaignTask task)
+    {
+        if(! task.campaignList.isEmpty())
+        {
+            adapter.addCurrentCampaign(task.campaignList);
+        }
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(GetPastUserCampaignTask task)
+    {
+        if(! task.campaignList.isEmpty())
+        {
+            adapter.addPastCampaign(task.campaignList);
+        }
+    }
+
 }
