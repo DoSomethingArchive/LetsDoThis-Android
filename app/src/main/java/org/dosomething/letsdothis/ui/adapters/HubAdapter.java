@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.ReportBack;
+import org.dosomething.letsdothis.data.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +41,13 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         switch(viewType)
         {
             case VIEW_TYPE_SECTION_TITLE:
-                View footerLayout = LayoutInflater.from(parent.getContext())
+                View sectionLayout = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_campaign_footer, parent, false);
-                return new SectionTitleViewHolder((TextView) footerLayout);
+                return new SectionTitleViewHolder((TextView) sectionLayout);
+            case VIEW_TYPE_PROFILE:
+                View profileLayout = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_hub_profile, parent, false);
+                return new ProfileViewHolder(profileLayout);
             default:
                 View smallLayout = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_campaign, parent, false);
@@ -59,6 +64,13 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             SectionTitleViewHolder sectionTitleViewHolder = (SectionTitleViewHolder) holder;
             sectionTitleViewHolder.textView.setText(s);
         }
+        else if(getItemViewType(position) == VIEW_TYPE_PROFILE)
+        {
+            User user = (User) hubList.get(position);
+            ProfileViewHolder profileViewHolder = (ProfileViewHolder) holder;
+            profileViewHolder.fName.setText(user.first_name);
+            profileViewHolder.lName.setText(user.last_name);
+        }
     }
 
     @Override
@@ -68,6 +80,10 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if(currentObject instanceof String)
         {
             return VIEW_TYPE_SECTION_TITLE;
+        }
+        else if(currentObject instanceof User)
+        {
+            return VIEW_TYPE_PROFILE;
         }
 
         return VIEW_TYPE_SECTION_TITLE;
@@ -93,18 +109,16 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public static class ProfileViewHolder extends RecyclerView.ViewHolder
     {
-        protected View      root;
-        protected ImageView imageView;
-        protected TextView  title;
-        protected TextView  callToAction;
+        protected ImageView userImage;
+        protected TextView  fName;
+        protected TextView  lName;
 
         public ProfileViewHolder(View itemView)
         {
             super(itemView);
-            this.root = itemView;
-            this.imageView = (ImageView) itemView.findViewById(R.id.image);
-            this.title = (TextView) itemView.findViewById(R.id.title);
-            this.callToAction = (TextView) itemView.findViewById(R.id.call_to_action);
+            this.userImage = (ImageView) itemView.findViewById(R.id.user_image);
+            this.fName = (TextView) itemView.findViewById(R.id.user_fname);
+            this.lName = (TextView) itemView.findViewById(R.id.user_lname);
         }
     }
 
@@ -115,7 +129,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public SectionTitleViewHolder(TextView itemView)
         {
             super(itemView);
-            textView = (TextView) itemView.findViewById(R.id.text_view);
+            textView = itemView;
         }
     }
 
