@@ -20,7 +20,7 @@ public class ResponseReportBackList
         return new ArrayList<>(Arrays.asList(response.data));
     }
 
-    private static class Pagination
+    public static class Pagination
     {
         public int total;
         public int per_page;

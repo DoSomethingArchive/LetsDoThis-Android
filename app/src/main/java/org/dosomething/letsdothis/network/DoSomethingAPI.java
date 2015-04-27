@@ -1,6 +1,7 @@
 package org.dosomething.letsdothis.network;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.network.models.ResponseCampaign;
+import org.dosomething.letsdothis.network.models.ResponseReportBack;
 import org.dosomething.letsdothis.network.models.ResponseReportBackList;
 
 import co.touchlab.android.threading.errorcontrol.NetworkException;
@@ -24,8 +25,12 @@ public interface DoSomethingAPI
     ResponseCampaign campaign(@Path("id") int id) throws NetworkException;
 
     @Headers("Content-Type: application/json")
-    @GET("/reportback-items")
+    @GET("/reportback-items?status=approved")
     ResponseReportBackList reportBackList(@Query("campaigns") String campaignIds, @Query(
             "count") int count, @Query("random") boolean random, @Query(
             "page") int page) throws NetworkException;
+
+    @Headers("Content-Type: application/json")
+    @GET("/reportback-items/{id}")
+    ResponseReportBack reportBack(@Path("id") int id) throws NetworkException;
 }

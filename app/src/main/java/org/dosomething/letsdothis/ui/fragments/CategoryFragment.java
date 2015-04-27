@@ -9,11 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import org.apache.commons.lang3.StringUtils;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.tasks.ReportBackListTask;
 import org.dosomething.letsdothis.ui.CampaignDetailsActivity;
+import org.dosomething.letsdothis.ui.ReportBackDetailsActivity;
 import org.dosomething.letsdothis.ui.adapters.CampaignAdapter;
 
 import java.util.ArrayList;
@@ -25,7 +27,7 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 /**
  * Created by izzyoji :) on 4/14/15.
  */
-public class CategoryFragment extends Fragment implements CampaignAdapter.CampaignClickListener
+public class CategoryFragment extends Fragment implements CampaignAdapter.CampaignAdapterClickListener
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     private static final Integer[] SAMPLE_DATA_IDS = {15, 48, 50, 362, 955, 1261, 1334, 1273, 1293, 1427, 1429, 1467}; //FIXME this is dev only
@@ -35,8 +37,11 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
     private RecyclerView recyclerView;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
-    private CampaignAdapter adapter;
-    private int             position;
+    private CampaignAdapter    adapter;
+    private int                position;
+    private ArrayList<Integer> sampleIdsSubset;
+    private int                currentPage;
+    private int                totalPages;
 
     public static CategoryFragment newInstance(int position)
     {
@@ -58,8 +63,7 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
     {
         super.onStart();
 
-        EventBusExt.getDefault().register(this);
-        TaskQueue.loadQueueDefault(getActivity()).execute(new ReportBackListTask(position));
+        EventBusExt.getDefault().registerSticky(this);
     }
 
     @Override
@@ -97,16 +101,22 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
         });
 
         recyclerView.setLayoutManager(layoutManager);
+
+        ReportBackListTask task = new ReportBackListTask(position,
+                                                         StringUtils.join(sampleIdsSubset, ","), 1);
+        TaskQueue.loadQueueDefault(getActivity()).execute(task);
     }
 
     private List<Campaign> generateSampleData()
     {
         List<Campaign> campaigns = new ArrayList<>();
+        sampleIdsSubset = new ArrayList<>();
         for(int i = 0, sample_data_idsLength = SAMPLE_DATA_IDS.length; i < sample_data_idsLength; i++)
         {
             if(i % 4 == position)
             {
                 int id = SAMPLE_DATA_IDS[i];
+                sampleIdsSubset.add(id);
                 Campaign campaign = new Campaign();
                 campaign.id = id;
                 campaign.imagePath = "https://dosomething-a.akamaihd.net/sites/default/files/images/SocialMediaMakeover_hero_lanscape2.jpg";
@@ -133,13 +143,34 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
         recyclerView.smoothScrollToPosition(position);
     }
 
+    @Override
+    public void onReportBackClicked(int reportBackId)
+    {
+        startActivity(ReportBackDetailsActivity.getLaunchIntent(getActivity(), reportBackId));
+    }
+
+    @Override
+    public void onScrolledToBottom()
+    {
+        if(currentPage < totalPages)
+        {
+            Toast.makeText(getActivity(), "get more data", Toast.LENGTH_SHORT).show();
+            ReportBackListTask task = new ReportBackListTask(position,
+                                                             StringUtils.join(sampleIdsSubset, ","),
+                                                             currentPage + 1);
+            TaskQueue.loadQueueDefault(getActivity()).execute(task);
+        }
+    }
+
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(ReportBackListTask task)
     {
         if(task.position == position)
         {
+            totalPages = task.totalPages;
+            currentPage = task.page;
             List<ReportBack> reportBacks = task.reportBacks;
-            if(reportBacks != null && ! reportBacks.isEmpty())
+            if(reportBacks != null)
             {
                 adapter.addAll(reportBacks);
             }
