@@ -12,7 +12,7 @@ public class ReportBack
     public long     createdAt;
     public String   caption;
     public Media      media;
-    public String   imagePath;
+    public User      user;
 
     public String getImagePath()
     {
