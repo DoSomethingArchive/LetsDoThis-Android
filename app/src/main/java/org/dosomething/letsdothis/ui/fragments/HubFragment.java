@@ -3,6 +3,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -89,27 +90,9 @@ public class HubFragment extends Fragment
         User user = new User(null, "firstName", "lastName", "birthday");
         hubList.add(user);
 
-
         adapter = new HubAdapter(hubList);
         recyclerView.setAdapter(adapter);
-
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
-        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup()
-        {
-            @Override
-            public int getSpanSize(int position)
-            {
-                switch(adapter.getItemViewType(position))
-                {
-                    case CampaignAdapter.VIEW_TYPE_REPORT_BACK:
-                        return 1;
-                    default:
-                        return 2;
-                }
-            }
-        });
-
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
 

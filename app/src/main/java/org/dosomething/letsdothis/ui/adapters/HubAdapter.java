@@ -90,6 +90,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             Campaign campaign = (Campaign) hubList.get(position);
             PastCampaignViewHolder pastCampaignViewHolder = (PastCampaignViewHolder) holder;
             //FIXME add image
+            pastCampaignViewHolder.title.setText(campaign.title);
         }
     }
 
@@ -109,10 +110,11 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             return VIEW_TYPE_CURRENT_CAMPAIGN;
         }
-        else
+        else if(currentObject instanceof Object)//FIXME detect the past campaign
         {
             return VIEW_TYPE_PAST_CAMPAIGN;
         }
+        return 0;
     }
 
     public void addCurrentCampaign(List<Campaign> objects)
@@ -177,11 +179,13 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public static class PastCampaignViewHolder extends RecyclerView.ViewHolder
     {
         protected final ImageView campImage;
+        protected final TextView title;
 
         public PastCampaignViewHolder(View itemView)
         {
             super(itemView);
             campImage = (ImageView) itemView.findViewById(R.id.user_image);
+            title = (TextView) itemView.findViewById(R.id.title);
         }
     }
 
