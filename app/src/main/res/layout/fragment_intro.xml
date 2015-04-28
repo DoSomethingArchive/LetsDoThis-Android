@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#ffa600">
+                android:background="@color/web_orange">
 
     <RelativeLayout
         android:id="@+id/slanted_bg"
