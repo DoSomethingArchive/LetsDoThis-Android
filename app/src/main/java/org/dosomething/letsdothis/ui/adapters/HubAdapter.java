@@ -20,20 +20,22 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final int VIEW_TYPE_PROFILE          = 0;
-    public static final int VIEW_TYPE_SECTION_TITLE    = 1;
-    public static final int VIEW_TYPE_CURRENT_CAMPAIGN = 2;
-    public static final int VIEW_TYPE_PAST_CAMPAIGN    = 3;
-    public static final int CURRENT_POSITION           = 2;
+    public static final int    VIEW_TYPE_PROFILE          = 0;
+    public static final int    VIEW_TYPE_SECTION_TITLE    = 1;
+    public static final int    VIEW_TYPE_CURRENT_CAMPAIGN = 2;
+    public static final int    VIEW_TYPE_PAST_CAMPAIGN    = 3;
+    public static final String CURRENTLY_DOING            = "currently doing";
+    public static final String BEEN_THERE_DONE_GOOD       = "been there, done good";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
-    private ArrayList<Object> hubList          = new ArrayList<>();
-    private int               selectedPosition = - 1;
+    private ArrayList<Object> hubList = new ArrayList<>();
 
-    public HubAdapter(List<Object> campaigns)
+    public HubAdapter(User user)
     {
         super();
-        this.hubList.addAll(campaigns);
+        this.hubList.add(user);
+        hubList.add(CURRENTLY_DOING);
+        hubList.add(BEEN_THERE_DONE_GOOD);
     }
 
     @Override
@@ -119,14 +121,13 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public void addCurrentCampaign(List<Campaign> objects)
     {
-        hubList.add(1, "currently doing");
-        hubList.addAll(2, objects);
+        int i = hubList.indexOf(BEEN_THERE_DONE_GOOD);
+        hubList.addAll(i, objects);
         notifyItemRangeInserted(hubList.size() - objects.size(), hubList.size() - 1);
     }
 
     public void addPastCampaign(List<Campaign> objects)
     {
-        hubList.add("been there, done good");
         hubList.addAll(objects);
         notifyItemRangeInserted(hubList.size() - objects.size(), hubList.size() - 1);
     }
@@ -179,7 +180,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public static class PastCampaignViewHolder extends RecyclerView.ViewHolder
     {
         protected final ImageView campImage;
-        protected final TextView title;
+        protected final TextView  title;
 
         public PastCampaignViewHolder(View itemView)
         {
