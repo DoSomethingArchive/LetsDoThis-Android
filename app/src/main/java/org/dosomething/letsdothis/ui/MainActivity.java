@@ -49,37 +49,6 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         initBottomBarNav();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch(item.getItemId())
-        {
-            case R.id.logout:
-                BaseRegistrationTask.logout(this);
-                startActivity(RegisterLoginActivity.getLaunchIntent(this));
-                finish();
-                break;
-            case R.id.user_list:
-                startActivity(UserListActivity.getLaunchIntent(this));
-                break;
-            case R.id.edit_user:
-                startActivity(UserUpdateActivity.getLaunchIntent(this));
-                break;
-            case R.id.one_user:
-                startActivity(UserProfileActivity.getLaunchIntent(this));
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     private void initBottomBarNav()
     {
         actions = findViewById(R.id.actions);
@@ -191,6 +160,5 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         invites.setSelected(TextUtils.equals(InvitesFragment.TAG, currentFragTag));
 
     }
-
 
 }
