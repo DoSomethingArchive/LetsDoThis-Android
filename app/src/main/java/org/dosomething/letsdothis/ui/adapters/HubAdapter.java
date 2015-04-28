@@ -110,11 +110,15 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
         else if(currentObject instanceof Campaign)
         {
-            return VIEW_TYPE_CURRENT_CAMPAIGN;
-        }
-        else if(currentObject instanceof Object)//FIXME detect the past campaign
-        {
-            return VIEW_TYPE_PAST_CAMPAIGN;
+            Campaign cam = (Campaign) currentObject;
+            if(true)//FIXME detect the past campaign
+            {
+                return VIEW_TYPE_CURRENT_CAMPAIGN;
+            }
+            else
+            {
+                return VIEW_TYPE_PAST_CAMPAIGN;
+            }
         }
         return 0;
     }
