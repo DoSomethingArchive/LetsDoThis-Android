@@ -15,12 +15,16 @@ public abstract class BaseNetworkErrorHandlerTask extends Task
     @Override
     protected boolean handleError(Context context, Throwable throwable)
     {
-        return ((RetrofitError) throwable).getResponse()
-                                          .getStatus() == HttpURLConnection.HTTP_UNAUTHORIZED || throwable
-                .getCause() instanceof NetworkException;
-//        I don't think we need the last line, as it says it's always false
-//        return ((RetrofitError) throwable).getResponse()
-//                                          .getStatus() == HttpURLConnection.HTTP_UNAUTHORIZED || throwable
-//                .getCause() instanceof NetworkException || throwable instanceof NetworkException;
+        if(throwable instanceof RetrofitError)
+        {
+            RetrofitError retrofitError = (RetrofitError) throwable;
+            int status = retrofitError.getResponse().getStatus();
+            if(status == HttpURLConnection.HTTP_UNAUTHORIZED || status == HttpURLConnection.HTTP_NOT_FOUND)
+            {
+                return true;
+            }
+        }
+
+        return throwable.getCause() instanceof NetworkException;
     }
 }

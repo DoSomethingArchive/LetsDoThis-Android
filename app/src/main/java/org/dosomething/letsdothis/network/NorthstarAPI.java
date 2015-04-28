@@ -55,6 +55,9 @@ public interface NorthstarAPI
     @GET("/users/_id/{id}")
     ResponseUser[] userProfile(@Path("id") String id) throws NetworkException;
 
+    @GET("/users/drupal_id/{id}")
+    ResponseUser[] userProfileWithDrupalId(@Path("id") String id) throws NetworkException;
+
     @Headers("Content-Type: application/json")
     @PUT("/users/{id}")
     ResponseUserUpdate updateUser(@Path("id") String id, @Body TypedInput user) throws NetworkException;
@@ -98,5 +101,6 @@ public interface NorthstarAPI
             "hs_gradyear") String hsGradYear, @Query("hs_name") String hsName, @Query(
             "sat_math") int satMath, @Query("sat_verbal") int satVerbal, @Query(
             "sat_writing") int satWriting) throws NetworkException;
+
 
 }

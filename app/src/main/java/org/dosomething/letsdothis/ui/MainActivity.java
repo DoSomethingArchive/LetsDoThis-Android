@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -20,7 +19,7 @@ import org.dosomething.letsdothis.ui.fragments.InvitesFragment;
 import org.dosomething.letsdothis.ui.fragments.NotificationsFragment;
 
 
-public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener
+public class MainActivity extends AppCompatActivity
 {
 
     private View actions;
@@ -45,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
                     .commit();
         }
 
-        getSupportFragmentManager().addOnBackStackChangedListener(this);
         initBottomBarNav();
     }
 
@@ -60,14 +58,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
             {
                 if(! actions.isSelected())
                 {
-                    ActionsFragment fragment = (ActionsFragment) getSupportFragmentManager()
-                            .findFragmentByTag(ActionsFragment.TAG);
-                    if(fragment == null)//should never happen
-                    {
-                        fragment = ActionsFragment.newInstance();
-                    }
-
-                    replaceCurrentFragment(fragment, ActionsFragment.TAG);
+                    replaceCurrentFragment(ActionsFragment.newInstance(), ActionsFragment.TAG);
                 }
             }
         });
@@ -80,14 +71,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
             {
                 if(! hub.isSelected())
                 {
-                    HubFragment fragment = (HubFragment) getSupportFragmentManager()
-                            .findFragmentByTag(HubFragment.TAG);
-                    if(fragment == null)
-                    {
-                        fragment = HubFragment.newInstance();
-                    }
-
-                    replaceCurrentFragment(fragment, HubFragment.TAG);
+                    replaceCurrentFragment(HubFragment.newInstance(), HubFragment.TAG);
                 }
             }
         });
@@ -100,14 +84,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
             {
                 if(! invites.isSelected())
                 {
-                    InvitesFragment fragment = (InvitesFragment) getSupportFragmentManager()
-                            .findFragmentByTag(InvitesFragment.TAG);
-                    if(fragment == null)
-                    {
-                        fragment = InvitesFragment.newInstance();
-                    }
-
-                    replaceCurrentFragment(fragment, InvitesFragment.TAG);
+                    replaceCurrentFragment(InvitesFragment.newInstance(), InvitesFragment.TAG);
                 }
             }
         });
@@ -120,14 +97,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
             {
                 if(! notifications.isSelected())
                 {
-                    NotificationsFragment fragment = (NotificationsFragment) getSupportFragmentManager()
-                            .findFragmentByTag(NotificationsFragment.TAG);
-                    if(fragment == null)
-                    {
-                        fragment = NotificationsFragment.newInstance();
-                    }
-
-                    replaceCurrentFragment(fragment, NotificationsFragment.TAG);
+                    replaceCurrentFragment(NotificationsFragment.newInstance(), NotificationsFragment.TAG);
                 }
             }
         });
@@ -135,17 +105,9 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
 
     private void replaceCurrentFragment(Fragment fragment, String tag)
     {
-        if(! getSupportFragmentManager().popBackStackImmediate(tag, 0))
-        {
-            getSupportFragmentManager().beginTransaction().addToBackStack(tag)
-                    .replace(R.id.container, fragment, tag).commit();
-            updateNavBar();
-        }
-    }
-
-    @Override
-    public void onBackStackChanged()
-    {
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, tag)
+                                   .commit();
+        getSupportFragmentManager().executePendingTransactions();
         updateNavBar();
     }
 
