@@ -174,14 +174,8 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
             totalPages = task.totalPages;
             currentPage = task.page;
             List<ReportBack> reportBacks = task.reportBacks;
-            if(reportBacks != null)
-            {
-                adapter.addAll(reportBacks);
-            }
-            else
-            {
-                Toast.makeText(getActivity(), "report back data failed", Toast.LENGTH_SHORT).show();
-            }
+            adapter.addAll(reportBacks);
+
         }
 
     }
