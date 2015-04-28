@@ -7,17 +7,12 @@ import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.ResponseReportBack;
 import org.dosomething.letsdothis.network.models.ResponseUser;
 
-import java.net.HttpURLConnection;
-
-import co.touchlab.android.threading.errorcontrol.NetworkException;
 import co.touchlab.android.threading.eventbus.EventBusExt;
-import co.touchlab.android.threading.tasks.Task;
-import retrofit.RetrofitError;
 
 /**
  * Created by izzyoji :) on 4/27/15.
  */
-public class ReportBackDetailsTask extends Task
+public class ReportBackDetailsTask extends BaseNetworkErrorHandlerTask
 {
     private final int        reportBackId;
     public        ReportBack reportBack;
@@ -46,13 +41,5 @@ public class ReportBackDetailsTask extends Task
     {
         EventBusExt.getDefault().post(this);
         super.onComplete(context);
-    }
-
-    @Override
-    protected boolean handleError(Context context, Throwable throwable)
-    {
-        return throwable instanceof RetrofitError && ((RetrofitError) throwable).getResponse()
-                                                                                .getStatus() == HttpURLConnection.HTTP_NOT_FOUND || throwable
-                .getCause() instanceof NetworkException;
     }
 }
