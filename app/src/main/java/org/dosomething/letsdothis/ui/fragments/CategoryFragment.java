@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
+import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.ReportBack;
@@ -63,7 +64,10 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
     {
         super.onStart();
 
-        EventBusExt.getDefault().registerSticky(this);
+        EventBusExt.getDefault().register(this);
+        String campaigns = StringUtils.join(sampleIdsSubset, ",");
+        TaskQueue.loadQueueDefault(getActivity())
+                 .execute(new ReportBackListTask(position, campaigns, 1));
     }
 
     @Override
@@ -102,9 +106,6 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
 
         recyclerView.setLayoutManager(layoutManager);
 
-        ReportBackListTask task = new ReportBackListTask(position,
-                                                         StringUtils.join(sampleIdsSubset, ","), 1);
-        TaskQueue.loadQueueDefault(getActivity()).execute(task);
     }
 
     private List<Campaign> generateSampleData()
@@ -154,7 +155,10 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
     {
         if(currentPage < totalPages)
         {
-            Toast.makeText(getActivity(), "get more data", Toast.LENGTH_SHORT).show();
+            if(BuildConfig.DEBUG)
+            {
+                Toast.makeText(getActivity(), "get more data", Toast.LENGTH_SHORT).show();
+            }
             ReportBackListTask task = new ReportBackListTask(position,
                                                              StringUtils.join(sampleIdsSubset, ","),
                                                              currentPage + 1);
