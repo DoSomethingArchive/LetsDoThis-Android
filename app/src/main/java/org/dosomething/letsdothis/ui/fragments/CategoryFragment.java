@@ -33,6 +33,7 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     private static final Integer[] SAMPLE_DATA_IDS = {15, 48, 50, 362, 955, 1261, 1334, 1273, 1293, 1427, 1429, 1467}; //FIXME this is dev only
     public static final  String    KEY_POSITION    = "position";
+    public static final int FIRST_PAGE = 1;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private RecyclerView recyclerView;
@@ -67,7 +68,7 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
         EventBusExt.getDefault().register(this);
         String campaigns = StringUtils.join(sampleIdsSubset, ",");
         TaskQueue.loadQueueDefault(getActivity())
-                 .execute(new ReportBackListTask(position, campaigns, 1));
+                .execute(new ReportBackListTask(position, campaigns, FIRST_PAGE));
     }
 
     @Override
@@ -83,7 +84,7 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
         super.onActivityCreated(savedInstanceState);
         position = getArguments().getInt(KEY_POSITION);
         recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
-        adapter = new CampaignAdapter(generateSampleData(), this);
+        adapter = new CampaignAdapter(generateSampleData(), this); //FIXME get real data eventually
         adapter.addItem("campaign footer");
 
         recyclerView.setAdapter(adapter);
@@ -175,7 +176,6 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
             currentPage = task.page;
             List<ReportBack> reportBacks = task.reportBacks;
             adapter.addAll(reportBacks);
-
         }
 
     }
