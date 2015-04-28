@@ -15,19 +15,25 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
 public class ReportBackListTask extends BaseNetworkErrorHandlerTask
 {
 
-    public List<ReportBack> reportBacks;
-    public int position;
+    public  List<ReportBack> reportBacks;
+    public  int              position;
+    private String           campaigns;
+    public  int              page;
+    public  int              totalPages;
 
-    public ReportBackListTask(int position)
+    public ReportBackListTask(int position, String campaigns, int page)
     {
         this.position = position;
+        this.campaigns = campaigns;
+        this.page = page;
     }
 
     @Override
     protected void run(Context context) throws Throwable
     {
         ResponseReportBackList response = NetworkHelper.getDoSomethingAPIService()
-                                                       .reportBackList(null, 20, true, 1);
+                                                       .reportBackList(campaigns, 20, false, page);
+        totalPages = response.pagination.total_pages;
         reportBacks = ResponseReportBackList.getReportBacks(response);
     }
 

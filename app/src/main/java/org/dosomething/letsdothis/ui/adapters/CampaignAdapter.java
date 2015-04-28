@@ -28,22 +28,26 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public static final int VIEW_TYPE_REPORT_BACK       = 3;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
-    private ArrayList<Object> campaigns = new ArrayList<>();
-    private CampaignClickListener campaignClickListener;
+    private ArrayList<Object> dataSet = new ArrayList<>();
+    private CampaignAdapterClickListener campaignAdapterClickListener;
     private int selectedPosition = - 1;
 
-    public interface CampaignClickListener
+    public interface CampaignAdapterClickListener
     {
         void onCampaignClicked(int campaignId);
 
         void onCampaignExpanded(int position);
+
+        void onReportBackClicked(int reportBackId);
+
+        void onScrolledToBottom();
     }
 
-    public CampaignAdapter(List<Campaign> campaigns, CampaignClickListener campaignClickListener)
+    public CampaignAdapter(List<Campaign> campaigns, CampaignAdapterClickListener campaignAdapterClickListener)
     {
         super();
-        this.campaigns.addAll(campaigns);
-        this.campaignClickListener = campaignClickListener;
+        this.dataSet.addAll(campaigns);
+        this.campaignAdapterClickListener = campaignAdapterClickListener;
     }
 
     @Override
@@ -77,9 +81,14 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position)
     {
+        if(dataSet.size() >= 24 && position == dataSet.size() - 3)
+        {
+            campaignAdapterClickListener.onScrolledToBottom();
+        }
+
         if(getItemViewType(position) == VIEW_TYPE_CAMPAIGN)
         {
-            final Campaign campaign = (Campaign) campaigns.get(position);
+            final Campaign campaign = (Campaign) dataSet.get(position);
             CampaignViewHolder campaignViewHolder = (CampaignViewHolder) holder;
             campaignViewHolder.title.setText(campaign.title);
             campaignViewHolder.callToAction.setText(campaign.callToAction);
@@ -91,14 +100,14 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 public void onClick(View v)
                 {
                     selectedPosition = position;
-                    campaignClickListener.onCampaignExpanded(position);
+                    campaignAdapterClickListener.onCampaignExpanded(position);
                     notifyItemChanged(position);
                 }
             });
         }
         else if(getItemViewType(position) == VIEW_TYPE_CAMPAIGN_EXPANDED)
         {
-            final Campaign campaign = (Campaign) campaigns.get(position);
+            final Campaign campaign = (Campaign) dataSet.get(position);
             ExpandedCampaignViewHolder expandedCampaignViewHolder = (ExpandedCampaignViewHolder) holder;
             expandedCampaignViewHolder.title.setText(campaign.title);
             expandedCampaignViewHolder.callToAction.setText(campaign.callToAction);
@@ -118,7 +127,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 @Override
                 public void onClick(View v)
                 {
-                    campaignClickListener.onCampaignClicked(campaign.id);
+                    campaignAdapterClickListener.onCampaignClicked(campaign.id);
                 }
             });
 
@@ -126,11 +135,20 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
         else if(getItemViewType(position) == VIEW_TYPE_REPORT_BACK)
         {
-            final ReportBack reportBack = (ReportBack) campaigns.get(position);
+            final ReportBack reportBack = (ReportBack) dataSet.get(position);
             ReportBackViewHolder reportBackViewHolder = (ReportBackViewHolder) holder;
 
             Picasso.with(reportBackViewHolder.root.getContext()).load(reportBack.getImagePath())
                    .into(reportBackViewHolder.root);
+
+            reportBackViewHolder.root.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    campaignAdapterClickListener.onReportBackClicked(reportBack.id);
+                }
+            });
         }
 
 
@@ -139,7 +157,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemViewType(int position)
     {
-        Object currentObject = campaigns.get(position);
+        Object currentObject = dataSet.get(position);
         if(currentObject instanceof Campaign)
         {
             if(position == selectedPosition)
@@ -163,19 +181,19 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void addItem(Object o)
     {
-        campaigns.add(o);
-        notifyItemInserted(campaigns.size() - 1);
+        dataSet.add(o);
+        notifyItemInserted(dataSet.size() - 1);
     }
 
     public void addAll(List<ReportBack> objects)
     {
-        campaigns.addAll(objects);
-        notifyItemRangeInserted(campaigns.size() - objects.size(), campaigns.size() - 1);
+        dataSet.addAll(objects);
+        notifyItemRangeInserted(dataSet.size() - objects.size(), dataSet.size() - 1);
     }
     @Override
     public int getItemCount()
     {
-        return campaigns.size();
+        return dataSet.size();
     }
 
     public static class CampaignViewHolder extends RecyclerView.ViewHolder
