@@ -111,7 +111,7 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
                 campaign.id = id;
                 campaign.imagePath = "https://dosomething-a.akamaihd.net/sites/default/files/images/SocialMediaMakeover_hero_lanscape2.jpg";
                 campaign.title = String.format("Sample Campaign %d", id);
-                campaign.callToAction = "Call to action.";
+                campaign.callToAction = "Call to callToAction.";
                 campaign.problemFact = "Problem fact";
                 campaigns.add(campaign);
             }
