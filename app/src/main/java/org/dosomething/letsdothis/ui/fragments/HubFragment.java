@@ -85,12 +85,8 @@ public class HubFragment extends Fragment
         super.onActivityCreated(savedInstanceState);
         recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
 
-
-        List<Object> hubList = new ArrayList<>();
         User user = new User(null, "firstName", "lastName", "birthday");
-        hubList.add(user);
-
-        adapter = new HubAdapter(hubList);
+        adapter = new HubAdapter(user);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
