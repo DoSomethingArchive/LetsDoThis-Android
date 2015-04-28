@@ -11,13 +11,20 @@ import java.util.List;
 public class ResponseReportBackList
 {
 
-    public int retrieved_count;
     public ReportBack data[];
     public Pagination pagination;
 
     public static List<ReportBack> getReportBacks(ResponseReportBackList response)
     {
-        return new ArrayList<>(Arrays.asList(response.data));
+        //FIXME crashlytics
+        try
+        {
+            return new ArrayList<>(Arrays.asList(response.data));
+        }
+        catch(NullPointerException e)
+        {
+            return new ArrayList<>();
+        }
     }
 
     public static class Pagination
