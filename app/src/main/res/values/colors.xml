@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="nav_bar">#F9F9F9</color>
     <color name="gallery">#EEEEEE</color>
     <color name="porcelain">#F6F7F8</color>
     <color name="white">#FFFFFF</color>
@@ -26,4 +27,5 @@
     <color name="rock">#2A4D4A</color>
     <color name="blue_zodiac">#122C4A</color>
     <color name="mine_shaft">#252B28</color>
+    <color name="gray">#979797</color>
 </resources>
