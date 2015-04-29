@@ -149,6 +149,10 @@ public class CampaignDetailsActivity extends AppCompatActivity
 
     public void choosePicture()
     {
+        Intent getIntent = new Intent();
+        getIntent.setType("image/*");
+        getIntent.setAction(Intent.ACTION_GET_CONTENT);
+
         Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         pickIntent.setType("image/*");
 
@@ -163,8 +167,8 @@ public class CampaignDetailsActivity extends AppCompatActivity
         takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
 
         String pickTitle = getString(R.string.select_picture);
-        Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {takePhotoIntent});
+        Intent chooserIntent = Intent.createChooser(getIntent, pickTitle);
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent, takePhotoIntent});
 
         startActivityForResult(chooserIntent, SELECT_PICTURE);
     }
