@@ -52,10 +52,21 @@
         <item name="android:textColor">@color/cerulean_1</item>
     </style>
 
+    <style name="IntroButton" parent="PrimaryButton">
+        <item name="android:background">@drawable/bg_white_rounded_rect</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="IntroText" parent="TextAppearance.AppCompat">
         <item name="android:textSize">@dimen/text_36</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="SignInText" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/text_33</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
 </resources>

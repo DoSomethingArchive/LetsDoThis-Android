@@ -12,6 +12,7 @@ import org.dosomething.letsdothis.R;
  */
 public class RegisterLoginActivity extends AppCompatActivity
 {
+    //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     private static final String TAG = RegisterLoginActivity.class.getSimpleName();
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
@@ -49,6 +50,15 @@ public class RegisterLoginActivity extends AppCompatActivity
             {
                 startActivity(SignupActivity.getLaunchIntent(RegisterLoginActivity.this));
                 finish();
+            }
+        });
+
+        findViewById(R.id.fb_connect).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+
             }
         });
     }

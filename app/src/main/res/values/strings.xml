@@ -26,4 +26,8 @@
     <string name="invite_friends">Invite Friends</string>
     <string name="share_photo">Share Photo</string>
     <string name="friends">Friends</string>
+    <string name="fb_connect">FB Connect</string>
+    <string name="desc_login_reg">Create an account to save your\n activities and group up with
+        friends.
+    </string>
 </resources>
