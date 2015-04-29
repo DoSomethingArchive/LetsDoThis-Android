@@ -4,6 +4,10 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="vpiTabPageIndicatorStyle">@style/CustomTabPageIndicator</item>
         <item name="vpiCirclePageIndicatorStyle">@style/CustomTabPageIndicator</item>
+        <item name="android:textSize">@dimen/text_30</item>
+        <item name="android:buttonStyle">@style/PrimaryButton</item>
+        <item name="android:editTextStyle">@style/EditText</item>
+        <item name="colorPrimary">@color/web_orange</item>
     </style>
     <style name="NavButton" parent="AppTheme">
         <item name="android:gravity">center</item>
@@ -11,15 +15,14 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:textColor">@color/bg_text_selectable_black</item>
-        <item name="android:background">@drawable/bg_selectable_black</item>
+        <item name="android:textColor">@color/selectable_gray</item>
     </style>
 
     <style name="CustomTabPageIndicator">
         <item name="android:gravity">center</item>
         <item name="android:maxLines">1</item>
-        <item name="android:textColor">@color/bg_text_selectable_black</item>
-        <item name="android:background">@drawable/bg_selectable_black</item>
+        <item name="android:textColor">@color/bg_text_selectable_gray</item>
+        <item name="android:background">@drawable/bg_selectable_cerulean</item>
     </style>
 
     <style name="CustomCirclePageIndicator">
@@ -32,5 +35,27 @@
     <style name="IntroArrowStyle">
     </style>
 
+    <style name="EditText" parent="Widget.AppCompat.EditText">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:background">@drawable/bg_white_rounded_rect_filled</item>
+    </style>
+
+    <style name="PrimaryButton" parent="Widget.AppCompat.Button">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:background">@drawable/bg_cerulean_rounded_rect_filled</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/text_36</item>
+    </style>
+
+    <style name="SecondaryButton" parent="PrimaryButton">
+        <item name="android:background">@drawable/bg_cerulean_rounded_rect</item>
+        <item name="android:textColor">@color/cerulean_1</item>
+    </style>
+
+    <style name="IntroText" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/text_36</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
 
 </resources>

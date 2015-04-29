@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
 
-    <Button
+    <org.dosomething.letsdothis.ui.views.typeface.CustomButton
         android:id="@+id/login"
+        app:typeface="brandon_bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="login"/>
+        android:text="@string/sign_in"/>
 
-    <Button
+    <org.dosomething.letsdothis.ui.views.typeface.CustomButton
         android:id="@+id/register"
+        app:typeface="brandon_bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="register"/>
+        android:text="@string/register"/>
 
 </LinearLayout>

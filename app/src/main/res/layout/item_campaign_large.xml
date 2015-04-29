@@ -2,6 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
@@ -17,17 +18,21 @@
             android:scaleType="centerCrop"
             android:layout_height="match_parent"/>
 
-        <TextView
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:id="@+id/title"
             tools:text="Title"
+            app:typeface="brandon_bold"
+            android:textAllCaps="true"
+            android:textSize="@dimen/text_48"
             android:layout_above="@+id/call_to_action"
             android:textColor="@android:color/white"
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <TextView
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             tools:text="Call to action"
+            android:textSize="@dimen/text_33"
             android:textColor="@android:color/white"
             android:layout_centerInParent="true"
             android:layout_alignParentBottom="true"
@@ -37,18 +42,64 @@
 
     </RelativeLayout>
 
-    <TextView
+    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:layout_below="@+id/image_and_title"
         android:id="@+id/problemFact"
         tools:text="Problem fact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <Button
+    <!--FIXME we need some lightning here-->
+    <org.dosomething.letsdothis.ui.views.typeface.CustomButton
         android:layout_below="@+id/problemFact"
         android:id="@+id/campaign_details"
+        app:typeface="brandon_bold"
         android:textAllCaps="true"
         android:text="@string/stop_being_bored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:id="@+id/expire"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/campaign_details">
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:typeface="brandon_bold"
+            android:layout_weight="1"
+            android:textSize="@dimen/text_36"
+            android:textColor="@color/gray"
+            android:text="@string/expires_in"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:typeface="brandon_bold"
+            android:textSize="@dimen/text_33"
+            tools:text="30\nDays"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/hours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:typeface="brandon_bold"
+            android:textSize="@dimen/text_33"
+            tools:text="24\nHours"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:typeface="brandon_bold"
+            android:layout_weight="1"
+            android:textSize="@dimen/text_33"
+            tools:text="55\nMinutes"/>
+    </LinearLayout>
 </RelativeLayout>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -15,31 +16,62 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <TextView
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:id="@+id/title"
+            app:typeface="brandon_bold"
+            android:textAllCaps="true"
+            android:textSize="@dimen/text_48"
             android:textAppearance="?android:textAppearanceLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <TextView
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:id="@+id/call_to_action"
+            android:textSize="@dimen/text_33"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <TextView
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:id="@+id/problemFact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <TextView
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:id="@+id/solutionCopy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <TextView
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:id="@+id/solutionSupport"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/action_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+                style="@style/SecondaryButton"
+                android:id="@+id/prove_share"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                app:typeface="brandon_bold"
+                android:layout_margin="@dimen/padding_tiny"
+                android:text="@string/share_photo"
+                android:layout_height="wrap_content"/>
+
+            <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+                android:id="@+id/invite"
+                app:typeface="brandon_bold"
+                android:text="@string/invite_friends"
+                android:layout_margin="@dimen/padding_tiny"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>

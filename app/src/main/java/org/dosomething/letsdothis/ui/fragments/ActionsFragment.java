@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import com.viewpagerindicator.TabPageIndicator;
 
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.ui.views.typeface.CustomTypefaceSpan;
+import org.dosomething.letsdothis.ui.views.typeface.TypefaceManager;
 
 /**
  * Created by izzyoji :) on 4/15/15.
@@ -56,7 +58,8 @@ public class ActionsFragment extends Fragment
             @Override
             public CharSequence getPageTitle(int position)
             {
-                return Integer.toString(position);
+                return CustomTypefaceSpan.format(getActivity(), "Interest: " + position,
+                                                 TypefaceManager.BRANDON_BOLD);
             }
         });
 
