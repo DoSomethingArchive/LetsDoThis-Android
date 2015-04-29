@@ -6,8 +6,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
-    <LinearLayout
+    <RelativeLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -15,167 +14,136 @@
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="240dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/placeholder"/>
+
+        <FrameLayout android:layout_width="match_parent"
+                     android:layout_height="175dp"
+                     android:layout_alignBottom="@+id/image"
+                     android:background="@drawable/gradient"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:id="@+id/title"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="@color/white"
             app:typeface="brandon_bold"
             android:textAllCaps="true"
             android:textSize="@dimen/text_48"
-            android:textAppearance="?android:textAppearanceLarge"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="@dimen/padding_medium"
+            android:paddingRight="@dimen/padding_medium"
+            android:layout_above="@+id/call_to_action"
+            tool:text="title"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:id="@+id/call_to_action"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="@color/white"
+            app:typeface="brandon_bold"
             android:textSize="@dimen/text_33"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/image"
+            android:paddingLeft="@dimen/padding_medium"
+            android:paddingRight="@dimen/padding_medium"
+            android:layout_marginBottom="@dimen/padding_large"
+            android:layout_centerHorizontal="true"
+            tool:text="call to action. make chocolate and give to all the people because it has antioxidants."/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:id="@+id/problemFact"
+            android:textAppearance="?android:textAppearanceLarge"
+            app:typeface="brandon_bold"
+            android:paddingLeft="@dimen/padding_medium"
+            android:paddingRight="@dimen/padding_medium"
+            android:textSize="@dimen/text_33"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:id="@+id/solutionCopy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:id="@+id/solutionSupport"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/image"
+            tool:text="problem fact"/>
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:id="@+id/action_buttons"
+            android:id="@+id/solutionWrapper"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="50dp"
+            android:paddingLeft="@dimen/padding_medium"
+            android:paddingRight="@dimen/padding_medium"
+            android:paddingBottom="@dimen/padding_medium"
+            android:background="@color/web_orange"
+            android:layout_below="@+id/problemFact">
+
+            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                android:id="@+id/solutionCopy"
+                android:textAppearance="?android:textAppearanceLarge"
+                app:typeface="brandon_bold"
+                android:textSize="@dimen/text_33"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tool:text="solution copy"/>
+
+            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                android:id="@+id/solutionSupport"
+                android:textAppearance="?android:textAppearanceLarge"
+                app:typeface="brandon_bold"
+                android:textSize="@dimen/text_33"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/solutionCopy"
+                tool:text="solution support"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/solutionWrapper">
+
+            <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+                style="@style/SecondaryButton"
+                android:id="@+id/prove_it"
+                android:textAppearance="?android:textAppearanceLarge"
+                app:typeface="brandon_bold"
+                android:textAllCaps="true"
+                android:textSize="@dimen/text_36"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/padding_tiny"
+                android:text="prove it"/>
 
             <org.dosomething.letsdothis.ui.views.typeface.CustomButton
                 style="@style/SecondaryButton"
                 android:id="@+id/prove_share"
+                android:textAppearance="?android:textAppearanceLarge"
+                app:typeface="brandon_bold"
+                android:textAllCaps="true"
+                android:textSize="@dimen/text_36"
                 android:layout_weight="1"
                 android:layout_width="0dp"
-                app:typeface="brandon_bold"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/padding_tiny"
-                android:text="@string/share_photo"
-                android:layout_height="wrap_content"/>
-
-            <org.dosomething.letsdothis.ui.views.typeface.CustomButton
-                android:id="@+id/invite"
-                app:typeface="brandon_bold"
-                android:text="@string/invite_friends"
-                android:layout_margin="@dimen/padding_tiny"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"/>
-
+                android:text="@string/share_photo"/>
         </LinearLayout>
-    </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/test"
+            android:layout_below="@id/solutionWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:layout_marginTop="100dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher"/>
+
+
+    </RelativeLayout>
 
 </ScrollView>
 
 
 
-<RelativeLayout
-android:orientation="vertical"
-android:layout_width="match_parent"
-android:layout_height="match_parent">
-
-<ImageView
-    android:id="@+id/image"
-    android:layout_width="match_parent"
-    android:layout_height="240dp"
-    android:scaleType="centerCrop"
-    android:src="@drawable/placeholder"/>
-
-<FrameLayout android:layout_width="match_parent"
-             android:layout_height="175dp"
-             android:layout_alignBottom="@+id/image"
-             android:background="@drawable/gradient"/>
-
-<TextView
-    android:id="@+id/title"
-    android:textAppearance="?android:textAppearanceLarge"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_centerHorizontal="true"
-    android:layout_above="@+id/call_to_action"
-    tool:text="title"/>
-
-<TextView
-    android:id="@+id/call_to_action"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignBottom="@+id/image"
-    android:layout_centerHorizontal="true"
-    android:layout_marginBottom="30dp"
-    tool:text="call to action"/>
-
-<TextView
-    android:id="@+id/problemFact"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/image"
-    tool:text="problem fact"/>
-
-<LinearLayout
-    android:id="@+id/solutionWrapper"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingTop="40dp"
-    android:paddingLeft="40dp"
-    android:paddingRight="40dp"
-    android:background="@color/web_orange"
-    android:layout_below="@+id/problemFact">
-
-    <TextView
-        android:id="@+id/solutionCopy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tool:text="solution copy"/>
-
-    <TextView
-        android:id="@+id/solutionSupport"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/solutionCopy"
-        tool:text="solution support"/>
-</LinearLayout>
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_below="@id/solutionWrapper">
-
-    <Button
-        android:id="@+id/prove_it"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="prove it"/>
-
-    <Button
-        android:id="@+id/invite"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="invite friends"/>
-</LinearLayout>
-
-
-<ImageView
-    android:id="@+id/test"
-    android:layout_below="@id/solutionWrapper"
-    android:layout_width="match_parent"
-    android:layout_height="240dp"
-    android:layout_marginTop="100dp"
-    android:scaleType="centerCrop"
-    android:src="@mipmap/ic_launcher"/>
-
-
-</RelativeLayout>
