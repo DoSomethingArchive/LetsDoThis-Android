@@ -1,4 +1,10 @@
 package org.dosomething.letsdothis.ui.adapters;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -6,9 +12,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.User;
+import org.dosomething.letsdothis.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +34,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public static final int    VIEW_TYPE_SECTION_TITLE    = 1;
     public static final int    VIEW_TYPE_CURRENT_CAMPAIGN = 2;
     public static final int    VIEW_TYPE_PAST_CAMPAIGN    = 3;
+    public static final int    VIEW_TYPE_EXPIRE           = 4;
     public static final String CURRENTLY_DOING            = "currently doing";
     public static final String BEEN_THERE_DONE_GOOD       = "been there, done good";
 
@@ -59,6 +70,10 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 View pastLayout = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_hub_past_campaign, parent, false);
                 return new PastCampaignViewHolder(pastLayout);
+            case VIEW_TYPE_EXPIRE:
+                View expireLayout = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_hub_expire, parent, false);
+                return new ExpireViewHolder(expireLayout);
             default:
                 return null;
         }
@@ -77,7 +92,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             User user = (User) hubList.get(position);
             ProfileViewHolder profileViewHolder = (ProfileViewHolder) holder;
-            profileViewHolder.name.setText(String.format("%s %s.", user.first_name, user.last_name.charAt(0)));
+            profileViewHolder.name
+                    .setText(String.format("%s %s.", user.first_name, user.last_name.charAt(0)));
         }
         else if(getItemViewType(position) == VIEW_TYPE_CURRENT_CAMPAIGN)
         {
@@ -86,12 +102,31 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             currentCampaignViewHolder.title.setText(campaign.title);
             currentCampaignViewHolder.callToAction.setText(campaign.callToAction);
         }
-        else if(getItemViewType(position) == VIEW_TYPE_PAST_CAMPAIGN)
+        else
         {
-            Campaign campaign = (Campaign) hubList.get(position);
-            PastCampaignViewHolder pastCampaignViewHolder = (PastCampaignViewHolder) holder;
-            //FIXME add image
-            pastCampaignViewHolder.title.setText(campaign.title);
+            if(getItemViewType(position) == VIEW_TYPE_PAST_CAMPAIGN)
+            {
+                Campaign campaign = (Campaign) hubList.get(position);
+                PastCampaignViewHolder pastCampaignViewHolder = (PastCampaignViewHolder) holder;
+                //FIXME add image
+
+                ColorMatrix cm = new ColorMatrix();
+                cm.setSaturation(0);
+
+                pastCampaignViewHolder.title.setText(campaign.title);
+                pastCampaignViewHolder.campImage.setImageResource(R.mipmap.ic_launcher);
+                pastCampaignViewHolder.campImage.setColorFilter(new ColorMatrixColorFilter(cm));
+            }
+            else if(getItemViewType(position) == VIEW_TYPE_EXPIRE)
+            {
+                ExpireViewHolder expireViewHolder = (ExpireViewHolder) holder;
+
+                Long expire = (Long) hubList.get(position);
+                List<String> timeUntilExpiration = TimeUtils.getTimeUntilExpiration(expire);
+                expireViewHolder.days.setText(timeUntilExpiration.get(0));
+                expireViewHolder.hours.setText(timeUntilExpiration.get(1));
+                expireViewHolder.min.setText(timeUntilExpiration.get(2));
+            }
         }
     }
 
@@ -120,14 +155,29 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 return VIEW_TYPE_PAST_CAMPAIGN;
             }
         }
+        else if(currentObject instanceof Long)
+        {
+            return VIEW_TYPE_EXPIRE;
+        }
         return 0;
     }
 
     public void addCurrentCampaign(List<Campaign> objects)
     {
+        Campaign campaign = objects.get(0);
+        setExpirationView(campaign);
         int i = hubList.indexOf(BEEN_THERE_DONE_GOOD);
         hubList.addAll(i, objects);
         notifyItemRangeInserted(hubList.size() - objects.size(), hubList.size() - 1);
+    }
+
+    private void setExpirationView(Campaign campaign)
+    {
+        //        campaign.startTime  //FIXME get real expiration time
+
+        Long l = System.currentTimeMillis();
+        int i = hubList.indexOf(CURRENTLY_DOING);
+        hubList.add(i + 1, l);
     }
 
     public void addPastCampaign(List<Campaign> objects)
@@ -189,6 +239,21 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             super(itemView);
             campImage = (ImageView) itemView.findViewById(R.id.camp_image);
             title = (TextView) itemView.findViewById(R.id.title);
+        }
+    }
+
+    public static class ExpireViewHolder extends RecyclerView.ViewHolder
+    {
+        protected final TextView days;
+        protected final TextView hours;
+        protected final TextView min;
+
+        public ExpireViewHolder(View itemView)
+        {
+            super(itemView);
+            days = (TextView) itemView.findViewById(R.id.days);
+            hours = (TextView) itemView.findViewById(R.id.hours);
+            min = (TextView) itemView.findViewById(R.id.min);
         }
     }
 
