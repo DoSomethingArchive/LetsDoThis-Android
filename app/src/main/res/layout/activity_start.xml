@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#ffa600">
 
 
 
-    <TextView
+    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="intro0"/>
+        tools:text="intro0"/>
 
-    <Button
+    <org.dosomething.letsdothis.ui.views.typeface.CustomButton
         android:id="@+id/start"
+        app:typeface="brandon_bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:text="start"/>
+        android:text="@string/show_me_how"/>
 
 </RelativeLayout>

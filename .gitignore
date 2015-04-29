@@ -38,6 +38,7 @@ gen/
 *.ipr
 *~
 *.swp
+*.patch
 
 /build
 

@@ -2,9 +2,11 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tool="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <!--FIXME this image should be in black and white-->
     <ImageView
         android:id="@+id/camp_image"
         android:layout_width="match_parent"
@@ -12,11 +14,17 @@
         android:scaleType="centerCrop"
         android:src="@mipmap/ic_launcher"/>
 
-    <TextView
+    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        tool:text="Title"
+        app:typeface="brandon_bold"
+        android:textAllCaps="true"
+        android:textSize="@dimen/text_48"
+        android:textColor="@android:color/white"
+        android:layout_below="@id/expire"
         android:layout_centerInParent="true"
-        tool:text="title"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 
 </RelativeLayout>

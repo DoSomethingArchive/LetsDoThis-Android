@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#ffa600">
@@ -12,27 +13,24 @@
         android:layout_alignParentBottom="true">
 
 
-        <TextView
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:id="@+id/intro_text"
+            style="@style/IntroText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="intro1"/>
+            tools:text="This is some intro text."/>
 
         <ImageButton
             android:id="@+id/prev"
-
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:scaleType="fitCenter"
-
             android:src="@drawable/prev_intro_arrow"
             android:background="#00000000"
-
             android:layout_marginLeft="20dp"
             android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:text="prev"/>
+            android:layout_centerVertical="true"/>
 
 
         <ImageButton
@@ -40,14 +38,11 @@
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:scaleType="fitCenter"
-
             android:layout_marginRight="20dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-
             android:src="@drawable/next_intro_arrow"
-            android:background="#00000000"
-            android:text="next"/>
+            android:background="#00000000"/>
     </RelativeLayout>
 
 </RelativeLayout>
