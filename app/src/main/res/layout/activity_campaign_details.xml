@@ -56,7 +56,7 @@
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:id="@+id/problemFact"
             android:textAppearance="?android:textAppearanceLarge"
-            app:typeface="brandon_bold"
+            app:typeface="brandon_regular"
             android:paddingLeft="@dimen/padding_medium"
             android:paddingRight="@dimen/padding_medium"
             android:textSize="@dimen/text_33"
@@ -80,7 +80,7 @@
             <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
                 android:id="@+id/solutionCopy"
                 android:textAppearance="?android:textAppearanceLarge"
-                app:typeface="brandon_bold"
+                app:typeface="brandon_regular"
                 android:textSize="@dimen/text_33"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -106,7 +106,6 @@
             <org.dosomething.letsdothis.ui.views.typeface.CustomButton
                 style="@style/SecondaryButton"
                 android:id="@+id/prove_it"
-                android:textAppearance="?android:textAppearanceLarge"
                 app:typeface="brandon_bold"
                 android:textAllCaps="true"
                 android:textSize="@dimen/text_36"
@@ -117,9 +116,8 @@
                 android:text="prove it"/>
 
             <org.dosomething.letsdothis.ui.views.typeface.CustomButton
-                style="@style/SecondaryButton"
+                style="@style/PrimaryButton"
                 android:id="@+id/prove_share"
-                android:textAppearance="?android:textAppearanceLarge"
                 app:typeface="brandon_bold"
                 android:textAllCaps="true"
                 android:textSize="@dimen/text_36"
