@@ -149,9 +149,8 @@ public class CampaignDetailsActivity extends AppCompatActivity
 
     public void choosePicture()
     {
-        Intent pickIntent = new Intent();
+        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         pickIntent.setType("image/*");
-        pickIntent.setAction(Intent.ACTION_GET_CONTENT);
 
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File externalFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
