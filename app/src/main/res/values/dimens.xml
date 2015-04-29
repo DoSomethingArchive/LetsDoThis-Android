@@ -34,6 +34,18 @@
     <dimen name="text_xxxxlarge">36sp</dimen>
     <dimen name="text_huge">48sp</dimen>
     <dimen name="text_xhuge">64sp</dimen>
-    <dimen name="height_nav_bar">@dimen/height_large</dimen>
+
+    <dimen name="height_nav_bar">@dimen/height_small</dimen>
+    <dimen name="height_actions_nav_bar">60dp</dimen>
     <dimen name="campaign_height">160dp</dimen>
+
+    <!--Sizes from Sketch-->
+    <dimen name="text_48">@dimen/text_xlarge</dimen>
+    <dimen name="text_36">@dimen/text_large</dimen>
+    <dimen name="text_33">16sp</dimen>
+    <dimen name="text_30">15sp</dimen>
+    <dimen name="text_20">10sp</dimen>
+    <dimen name="hub_profile_header">189dp</dimen>
+    <dimen name="hub_avatar_height">75dp</dimen>
+    <dimen name="text_26">13sp</dimen>
 </resources>

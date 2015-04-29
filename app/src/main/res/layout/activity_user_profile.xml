@@ -4,28 +4,28 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <TextView
+    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:id="@id/id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    <TextView
+    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:id="@id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    <TextView
+    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:id="@id/phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <TextView
+    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:id="@+id/first_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    <TextView
+    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:id="@+id/last_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    <TextView
+    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:id="@+id/birthday"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

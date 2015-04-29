@@ -1,61 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:background="@color/web_orange"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
 
-    <EditText
+    <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
         android:id="@+id/first_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="First Name"/>
+        android:hint="@string/first_name"/>
 
-    <EditText
+    <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
         android:id="@+id/last_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Last Name"/>
+        android:hint="@string/last_name"/>
 
-    <EditText
+    <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
         android:id="@+id/phone_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Phone Number or Email"/>
+        android:hint="@string/phone_email"/>
 
-    <EditText
+    <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:layout_marginTop="10dp"
-        android:hint="Password"/>
+        android:hint="@string/password"/>
 
-    <EditText
+    <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
         android:id="@+id/birthday"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="date"
-        android:hint="birthday (mm/dd/yyyy)"/>
+        android:hint="@string/birthday"/>
 
-    <TextView
+    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="If you received a code from a friend, put it here to join their group right away."/>
+        android:textColor="@color/white"
+        android:text="@string/footer_invite_code"/>
 
-    <EditText
+    <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
         android:id="@+id/invite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:hint="Invite Code (optional)"/>
+        android:hint="@string/invite_code_opt"/>
 
 
-    <Button
+    <org.dosomething.letsdothis.ui.views.typeface.CustomButton
         android:id="@+id/register"
+        app:typeface="brandon_bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Create Account"/>
+        android:text="@string/create_account"/>
 
 </LinearLayout>
