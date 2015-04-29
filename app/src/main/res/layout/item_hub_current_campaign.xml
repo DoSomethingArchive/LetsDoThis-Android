@@ -15,51 +15,6 @@
         android:scaleType="centerCrop"
         android:src="@mipmap/ic_launcher"/>
 
-    <!--FIX ME, expires should be a view Currently Doing-->
-    <LinearLayout
-        android:id="@+id/expire"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@id/camp_image">
-
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:typeface="brandon_bold"
-            android:layout_weight="1"
-            android:textSize="@dimen/text_36"
-            android:textColor="@color/gray"
-            android:text="@string/expires_in"/>
-
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:id="@+id/days"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:typeface="brandon_bold"
-            android:textSize="@dimen/text_33"
-            tool:text="30\nDays"/>
-
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:id="@+id/hours"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:typeface="brandon_bold"
-            android:textSize="@dimen/text_33"
-            tool:text="24\nHours"/>
-
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:id="@+id/min"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:typeface="brandon_bold"
-            android:layout_weight="1"
-            android:textSize="@dimen/text_33"
-            tool:text="55\nMinutes"/>
-    </LinearLayout>
-
     <!--FIXME if the title is long, it'll overlap the count-->
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:id="@+id/title"
@@ -67,7 +22,7 @@
         app:typeface="brandon_bold"
         android:textAllCaps="true"
         android:textColor="@color/cerulean_1"
-        android:layout_below="@id/expire"
+        android:layout_below="@id/camp_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
