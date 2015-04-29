@@ -77,8 +77,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             User user = (User) hubList.get(position);
             ProfileViewHolder profileViewHolder = (ProfileViewHolder) holder;
-            profileViewHolder.fName.setText(user.first_name);
-            profileViewHolder.lName.setText(user.last_name);
+            profileViewHolder.name.setText(String.format("%s %s.", user.first_name, user.last_name.charAt(0)));
         }
         else if(getItemViewType(position) == VIEW_TYPE_CURRENT_CAMPAIGN)
         {
@@ -110,8 +109,9 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
         else if(currentObject instanceof Campaign)
         {
-            Campaign cam = (Campaign) currentObject;
-            if(true)//FIXME detect the past campaign
+            //FIXME properly get if campaign is past
+            int posOfPastHeader = hubList.indexOf(BEEN_THERE_DONE_GOOD);
+            if(position < posOfPastHeader)
             {
                 return VIEW_TYPE_CURRENT_CAMPAIGN;
             }
@@ -145,15 +145,13 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public static class ProfileViewHolder extends RecyclerView.ViewHolder
     {
         protected ImageView userImage;
-        protected TextView  fName;
-        protected TextView  lName;
+        protected TextView  name;
 
         public ProfileViewHolder(View itemView)
         {
             super(itemView);
             this.userImage = (ImageView) itemView.findViewById(R.id.user_image);
-            this.fName = (TextView) itemView.findViewById(R.id.user_fname);
-            this.lName = (TextView) itemView.findViewById(R.id.user_lname);
+            this.name = (TextView) itemView.findViewById(R.id.name);
         }
     }
 
@@ -189,7 +187,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public PastCampaignViewHolder(View itemView)
         {
             super(itemView);
-            campImage = (ImageView) itemView.findViewById(R.id.user_image);
+            campImage = (ImageView) itemView.findViewById(R.id.camp_image);
             title = (TextView) itemView.findViewById(R.id.title);
         }
     }

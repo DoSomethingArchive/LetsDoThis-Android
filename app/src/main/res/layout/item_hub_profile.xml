@@ -2,33 +2,32 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tool="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="@dimen/hub_profile_header"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="20dp"
         android:background="@drawable/lightning">
 
         <ImageView
             android:id="@+id/user_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/hub_avatar_height"
+            android:layout_height="@dimen/hub_avatar_height"
             android:src="@mipmap/ic_launcher"/>
-        <TextView
-            android:id="@+id/user_fname"
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            app:typeface="brandon_bold"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_48"
+            android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tool:text="firstname"/>
-        <TextView
-            android:id="@+id/user_lname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tool:text="lastname"/>
+            tool:text="Person P."/>
 
     </LinearLayout>
 
