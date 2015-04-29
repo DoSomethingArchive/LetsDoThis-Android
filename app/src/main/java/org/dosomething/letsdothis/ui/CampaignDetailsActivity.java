@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -182,12 +183,25 @@ public class CampaignDetailsActivity extends AppCompatActivity
             problemFact.setText(campaign.problemFact);
             if(BuildConfig.DEBUG && campaign.solutionCopy != null) //FIXME this is null sometime
             {
-                solutionCopy.setText(Html.fromHtml(campaign.solutionCopy));
+                String cleanText = campaign.solutionCopy.replace("\n", "");
+                solutionCopy.setText(Html.fromHtml(cleanText));
+            }
+            else
+            {
+                solutionCopy.setVisibility(View.GONE);
             }
             if(BuildConfig.DEBUG && campaign.solutionSupport != null) //FIXME this is null sometime
             {
-                solutionSupport.setText(Html.fromHtml(campaign.solutionSupport));
+                //FIXME also this is a problem. might need to filter the text as soon as we get in from the response.
+                Spanned spanned = Html.fromHtml(campaign.solutionSupport);
+                String cleanText = spanned.toString().replace("\n", "");
+                solutionSupport.setText(cleanText);
             }
+            else
+            {
+                solutionCopy.setVisibility(View.GONE);
+            }
+
         }
         else
         {
