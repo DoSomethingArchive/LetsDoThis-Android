@@ -2,6 +2,8 @@ package org.dosomething.letsdothis;
 import android.app.Application;
 import android.content.Context;
 
+import com.facebook.FacebookSdk;
+
 /**
  * Created by izzyoji :) on 4/14/15.
  */
@@ -14,6 +16,7 @@ public class LDTApplication extends Application
     {
         super.onCreate();
         context = this;
+        FacebookSdk.sdkInitialize(getApplicationContext());
     }
 
 
