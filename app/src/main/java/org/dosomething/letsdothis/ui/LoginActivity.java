@@ -83,7 +83,6 @@ public class LoginActivity extends AppCompatActivity
         {
             Toast.makeText(this, "success login", Toast.LENGTH_SHORT).show();
             startActivity(MainActivity.getLaunchIntent(this));
-            //FIXME broadcast to finish the RegisterLoginActivity
             finish();
         }
         else
