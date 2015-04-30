@@ -40,6 +40,9 @@
 
         <activity android:name=".ui.ReportBackDetailsActivity"/>
 
+        <activity android:name=".ui.SettingsActivity"
+            android:label="@string/settings"/>
+
     </application>
 
 </manifest>

@@ -2,7 +2,6 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,13 +13,12 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.tasks.CampaignDetailsTask;
 
-import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
 
 /**
  * Created by izzyoji :) on 4/17/15.
  */
-public class CampaignDetailsActivity extends AppCompatActivity
+public class CampaignDetailsActivity extends BaseActivity
 {
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
@@ -47,17 +45,8 @@ public class CampaignDetailsActivity extends AppCompatActivity
         solutionCopy = (TextView) findViewById(R.id.solutionCopy);
         solutionSupport = (TextView) findViewById(R.id.solutionSupport);
 
-        EventBusExt.getDefault().register(this);
-
         TaskQueue.loadQueueDefault(this)
                  .execute(new CampaignDetailsTask(getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1)));
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        EventBusExt.getDefault().unregister(this);
-        super.onDestroy();
     }
 
     public static Intent getLaunchIntent(Context context, int campaignId)

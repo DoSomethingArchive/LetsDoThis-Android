@@ -2,6 +2,7 @@ package org.dosomething.letsdothis.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -12,6 +13,7 @@ public class AppPrefs
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String CURRENT_USER_ID = "CURRENT_USER_ID";
+    public static final String USER_SESSION_TOKEN = "CURRENT_SESSION_TOKEN";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private static AppPrefs          instance;
@@ -29,24 +31,74 @@ public class AppPrefs
         return instance;
     }
 
+
+    private void setBoolean(String key, Boolean value)
+    {
+        prefs.edit().putBoolean(key, value).apply();
+    }
+
+    private Boolean getBoolean(String key, Boolean defaultVal)
+    {
+        return prefs.getBoolean(key, defaultVal);
+    }
+
+    private void setString(String key, String value)
+    {
+        prefs.edit().putString(key, value).apply();
+    }
+    private String getString(String key, String defaultVal)
+    {
+        return prefs.getString(key, defaultVal);
+    }
+
+    private void setInt(String key, Integer value)
+    {
+        prefs.edit().putInt(key, value).apply();
+    }
+
+    private Integer getInt(String key, Integer defaultVal)
+    {
+        return prefs.getInt(key, defaultVal);
+    }
+
+    private void setLong(String key, Long value)
+    {
+        prefs.edit().putLong(key, value).apply();
+    }
+
+    private Long getLong(String key, Long defaultVal)
+    {
+        return prefs.getLong(key, defaultVal);
+    }
+
     public boolean isLoggedIn()
     {
-        return (prefs.getString(CURRENT_USER_ID, null) != null);
+        return !TextUtils.isEmpty(getString(CURRENT_USER_ID, null));
     }
 
     public void logout()
     {
-        prefs.edit().putString(CURRENT_USER_ID, null).apply();
+        setCurrentUserId(null);
+        setSessionToken(null);
     }
 
     public void setCurrentUserId(String id)
     {
-        prefs.edit().putString(CURRENT_USER_ID, id).apply();
+        setString(CURRENT_USER_ID, id);
     }
 
     public String getCurrentUserId()
     {
-        return prefs.getString(CURRENT_USER_ID, null);
+        return getString(CURRENT_USER_ID, null);
     }
 
+    public void setSessionToken(String token)
+    {
+        setString(USER_SESSION_TOKEN, token);
+    }
+
+    public String getSessionToken()
+    {
+        return getString(USER_SESSION_TOKEN, null);
+    }
 }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--FIXME: implement settings-->
+    <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory
+        android:title="@string/account">
+
+        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference
+            android:title="@string/change_photo"
+            android:enabled="false"
+            android:key="@string/change_photo"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference
+            android:title="@string/change_email"
+            android:enabled="false"
+            android:key="@string/change_email"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference
+            android:title="@string/change_password"
+            android:defaultValue="@string/password_hint"
+            android:enabled="false"
+            android:key="@string/change_password"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference
+            android:title="@string/logout"
+            android:key="@string/logout"/>
+
+    </org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory>
+
+    <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory
+        android:title="@string/notifications">
+
+        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomCheckBoxPreference
+            android:title="@string/receive_notifications"
+            android:enabled="false"
+            android:defaultValue=""
+            android:key="@string/receive_notifications"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference
+            android:enabled="false"
+            android:title="@string/change_notifications_prefs"
+            android:key="@string/change_notifications_prefs"/>
+
+    </org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory>
+
+    <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory>
+
+
+        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference
+            android:title="@string/rate"
+            android:enabled="false"
+            android:key="@string/rate"/>
+
+    </org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory>
+
+
+
+</PreferenceScreen>

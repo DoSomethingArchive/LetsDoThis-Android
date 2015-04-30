@@ -1,7 +1,7 @@
 package org.dosomething.letsdothis.network;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
-import org.dosomething.letsdothis.network.models.ResponseSignup;
+import org.dosomething.letsdothis.network.models.ResponseRegister;
 import org.dosomething.letsdothis.network.models.ResponseUser;
 import org.dosomething.letsdothis.network.models.ResponseUserList;
 import org.dosomething.letsdothis.network.models.ResponseUserUpdate;
@@ -42,11 +42,11 @@ public interface NorthstarAPI
 
     @Headers("Content-Type: application/json")
     @POST("/users")
-    ResponseSignup registerWithEmail(@Body User user) throws NetworkException;
+    ResponseRegister registerWithEmail(@Body User user) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @POST("/users")
-    ResponseSignup registerWithMobile(@Body User json) throws NetworkException;
+    ResponseRegister registerWithMobile(@Body User json) throws NetworkException;
 
     @GET("/users")
     ResponseUserList userList(@Query("page") int page, @Query(
@@ -62,15 +62,14 @@ public interface NorthstarAPI
     @PUT("/users/{id}")
     ResponseUserUpdate updateUser(@Path("id") String id, @Body TypedInput user) throws NetworkException;
 
-
-
-    //-----------NOT DONE
-    //-----------NOT DONE
-    //-----------NOT DONE
-    //-----------NOT DONE
-    //-----------NOT DONE
     @POST("/logout")
     public Response logout(@Header("Session") String sessionToken) throws NetworkException;
+
+    //-----------NOT DONE
+    //-----------NOT DONE
+    //-----------NOT DONE
+    //-----------NOT DONE
+    //-----------NOT DONE
 
     @POST("/users")
     public Response registerWithEmail(@Query("email") String email, @Query(
