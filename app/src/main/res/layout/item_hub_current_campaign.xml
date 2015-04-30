@@ -34,7 +34,6 @@
         android:textSize="@dimen/text_26"
         android:layout_alignParentRight="true"
         android:textColor="@color/gray"
-        android:layout_below="@id/expire"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
