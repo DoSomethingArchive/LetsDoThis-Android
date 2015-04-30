@@ -61,24 +61,6 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
     }
 
     @Override
-    public void onStart()
-    {
-        super.onStart();
-
-        EventBusExt.getDefault().register(this);
-        String campaigns = StringUtils.join(sampleIdsSubset, ",");
-        TaskQueue.loadQueueDefault(getActivity())
-                .execute(new InterestReportBackListTask(position, campaigns, FIRST_PAGE));
-    }
-
-    @Override
-    public void onStop()
-    {
-        super.onStop();
-        EventBusExt.getDefault().unregister(this);
-    }
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
@@ -107,6 +89,10 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
 
         recyclerView.setLayoutManager(layoutManager);
 
+        EventBusExt.getDefault().register(this);
+        String campaigns = StringUtils.join(sampleIdsSubset, ",");
+        TaskQueue.loadQueueDefault(getActivity())
+                 .execute(new InterestReportBackListTask(position, campaigns, FIRST_PAGE));
     }
 
     private List<Campaign> generateSampleData()
@@ -123,7 +109,7 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
                 campaign.id = id;
                 campaign.imagePath = "https://dosomething-a.akamaihd.net/sites/default/files/images/SocialMediaMakeover_hero_lanscape2.jpg";
                 campaign.title = String.format("Sample Campaign %d", id);
-                campaign.callToAction = "Call to callToAction.";
+                campaign.callToAction = "Call to action.";
                 campaign.problemFact = "Problem fact";
                 campaigns.add(campaign);
             }
