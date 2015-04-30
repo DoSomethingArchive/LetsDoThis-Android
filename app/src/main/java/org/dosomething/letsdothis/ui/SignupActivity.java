@@ -96,8 +96,8 @@ public class SignupActivity extends AppCompatActivity
     @Override
     public void onBackPressed()
     {
-        super.onBackPressed();
         LDTApplication.loginManager.logOut();
+        super.onBackPressed();
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -107,6 +107,7 @@ public class SignupActivity extends AppCompatActivity
         {
             Toast.makeText(this, "success register", Toast.LENGTH_SHORT).show();
             startActivity(MainActivity.getLaunchIntent(this));
+            //FIXME broadcast to finish the RegisterLoginActivity
             finish();
         }
         else
