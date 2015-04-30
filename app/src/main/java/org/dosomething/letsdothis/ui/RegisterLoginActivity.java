@@ -59,7 +59,6 @@ public class RegisterLoginActivity extends AppCompatActivity
             public void onClick(View view)
             {
                 startActivity(LoginActivity.getLaunchIntent(RegisterLoginActivity.this));
-                finish();
             }
         });
         findViewById(R.id.register).setOnClickListener(new View.OnClickListener()
@@ -75,7 +74,6 @@ public class RegisterLoginActivity extends AppCompatActivity
     private void startSignupActivity(Profile currentProfile)
     {
         startActivity(SignupActivity.getLaunchIntent(RegisterLoginActivity.this, currentProfile));
-        finish();
     }
 
     private void initFbConnect()
