@@ -18,6 +18,7 @@ import org.dosomething.letsdothis.tasks.InterestReportBackListTask;
 import org.dosomething.letsdothis.ui.CampaignDetailsActivity;
 import org.dosomething.letsdothis.ui.ReportBackDetailsActivity;
 import org.dosomething.letsdothis.ui.adapters.CampaignAdapter;
+import org.dosomething.letsdothis.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,6 +100,7 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
     {
         List<Campaign> campaigns = new ArrayList<>();
         sampleIdsSubset = new ArrayList<>();
+        long endTime = TimeUtils.getSampleExpirationTime();
         for(int i = 0, sample_data_idsLength = SAMPLE_DATA_IDS.length; i < sample_data_idsLength; i++)
         {
             if(i % 4 == position)
@@ -111,6 +113,8 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
                 campaign.title = String.format("Sample Campaign %d", id);
                 campaign.callToAction = "Call to action.";
                 campaign.problemFact = "Problem fact";
+                campaign.endTime = endTime;
+
                 campaigns.add(campaign);
             }
 

@@ -8,6 +8,7 @@ import org.dosomething.letsdothis.R;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -90,4 +91,11 @@ public class TimeUtils
         return expire;
     }
 
+    public static long getSampleExpirationTime()
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.add(Calendar.MONTH, 1);
+        return calendar.getTimeInMillis();
+    }
 }

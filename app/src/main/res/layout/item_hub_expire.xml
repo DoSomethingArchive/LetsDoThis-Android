@@ -27,13 +27,15 @@
             android:layout_height="wrap_content"
             app:typeface="brandon_bold"
             android:textSize="@dimen/text_33"
+            android:paddingRight="@dimen/padding_small"
             tool:text="30"/>
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:typeface="brandon_medium"
             android:textSize="@dimen/text_33"
-            android:text=" Days"/>
+            android:id="@+id/days_label"
+            tool:text="Days"/>
     </LinearLayout>
 
     <LinearLayout
@@ -48,13 +50,15 @@
             android:layout_height="wrap_content"
             app:typeface="brandon_bold"
             android:textSize="@dimen/text_33"
+            android:paddingRight="@dimen/padding_small"
             tool:text="30"/>
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:typeface="brandon_medium"
             android:textSize="@dimen/text_33"
-            android:text=" Hours"/>
+            android:id="@+id/hours_label"
+            tool:text="Hours"/>
     </LinearLayout>
 
     <LinearLayout
@@ -69,13 +73,15 @@
             android:layout_height="wrap_content"
             app:typeface="brandon_bold"
             android:textSize="@dimen/text_33"
+            android:paddingRight="@dimen/padding_small"
             tool:text="30"/>
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:typeface="brandon_medium"
             android:textSize="@dimen/text_33"
-            android:text=" Minutes"/>
+            android:id="@+id/minutes_label"
+            tool:text="Minutes"/>
     </LinearLayout>
 
 </LinearLayout>

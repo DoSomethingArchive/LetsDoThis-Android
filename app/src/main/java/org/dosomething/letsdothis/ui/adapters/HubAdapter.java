@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.ui.adapters;
+import android.content.res.Resources;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.support.v7.widget.RecyclerView;
@@ -116,9 +117,21 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 Long expire = (Long) hubList.get(position);
                 List<String> timeUntilExpiration = TimeUtils.getTimeUntilExpiration(expire);
-                expireViewHolder.days.setText(timeUntilExpiration.get(0));
-                expireViewHolder.hours.setText(timeUntilExpiration.get(1));
-                expireViewHolder.min.setText(timeUntilExpiration.get(2));
+                String days = timeUntilExpiration.get(0);
+                expireViewHolder.days.setText(days);
+                String hours = timeUntilExpiration.get(1);
+                expireViewHolder.hours.setText(hours);
+                String minutes = timeUntilExpiration.get(2);
+                expireViewHolder.minutes.setText(minutes);
+                Resources resources = expireViewHolder.itemView.getContext().getResources();
+                expireViewHolder.daysLabel.setText(resources.getQuantityString(R.plurals.days,
+                                                                                         Integer.parseInt(
+                                                                                                 days)));
+                expireViewHolder.hoursLabel.setText(resources.getQuantityString(R.plurals.hours,
+                                                                                          Integer.parseInt(
+                                                                                                  hours)));
+                expireViewHolder.minutesLabel.setText(resources.getQuantityString(
+                        R.plurals.minutes, Integer.parseInt(minutes)));
             }
         }
     }
@@ -168,7 +181,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     {
         //        campaign.startTime  //FIXME get real expiration time
 
-        Long l = System.currentTimeMillis();
+        Long l = TimeUtils.getSampleExpirationTime();
         int i = hubList.indexOf(CURRENTLY_DOING);
         hubList.add(i + 1, l);
     }
@@ -226,16 +239,22 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public static class ExpireViewHolder extends RecyclerView.ViewHolder
     {
-        protected final TextView days;
-        protected final TextView hours;
-        protected final TextView min;
+        protected final  TextView days;
+        protected final  TextView hours;
+        protected final  TextView minutes;
+        protected final  TextView daysLabel;
+        protected final  TextView hoursLabel;
+        protected final  TextView minutesLabel;
 
         public ExpireViewHolder(View itemView)
         {
             super(itemView);
             days = (TextView) itemView.findViewById(R.id.days);
             hours = (TextView) itemView.findViewById(R.id.hours);
-            min = (TextView) itemView.findViewById(R.id.min);
+            minutes = (TextView) itemView.findViewById(R.id.min);
+            daysLabel = (TextView) itemView.findViewById(R.id.days_label);
+            hoursLabel = (TextView) itemView.findViewById(R.id.hours_label);
+            minutesLabel = (TextView) itemView.findViewById(R.id.minutes_label);
         }
     }
 
