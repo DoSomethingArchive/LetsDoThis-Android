@@ -3,19 +3,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.Profile;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 
 import org.dosomething.letsdothis.BuildConfig;
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
@@ -30,10 +28,10 @@ public class RegisterLoginActivity extends AppCompatActivity
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     private static final String       TAG            = RegisterLoginActivity.class.getSimpleName();
     private static final List<String> FB_PERMISSIONS = Arrays.asList("public_profile", "email");
-    private CallbackManager callbackManager;
-    private LoginManager    loginManager;
 
-    //~=~=~=~=~=~=~=~=~=~=~=~=Views
+
+    //~=~=~=~=~=~=~=~=~=~=~=~=Fields
+    public CallbackManager callbackManager;
 
     public static Intent getLaunchIntent(Context context)
     {
@@ -81,9 +79,6 @@ public class RegisterLoginActivity extends AppCompatActivity
 
     private void initFbConnect()
     {
-        loginManager = LoginManager.getInstance();
-        callbackManager = CallbackManager.Factory.create();
-
         Profile currentProfile = Profile.getCurrentProfile();
         if(currentProfile != null)
         {
@@ -96,55 +91,63 @@ public class RegisterLoginActivity extends AppCompatActivity
             startLoginActivity(currentProfile);
         }
 
-
+        callbackManager = CallbackManager.Factory.create();
         findViewById(R.id.fb_connect).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>()
-                {
-                    @Override
-                    public void onSuccess(LoginResult loginResult)
-                    {
-                        if(BuildConfig.DEBUG)
-                        {
-                            Toast.makeText(getApplicationContext(),
-                                           loginResult.getAccessToken().toString(),
-                                           Toast.LENGTH_SHORT).show();
-                            Profile currentProfile = Profile.getCurrentProfile();
-                            if(BuildConfig.DEBUG)
-                            {
-                                Toast.makeText(getApplicationContext(), "User first name: " + currentProfile
-                                        .getFirstName() + " User id: " + currentProfile.getId(), Toast.LENGTH_SHORT)
-                                        .show();
-                            }
-                            startLoginActivity(currentProfile);
-                        }
-                    }
+                LDTApplication.loginManager
+                        .registerCallback(callbackManager, new FacebookCallback<LoginResult>()
+                                          {
+                                              @Override
+                                              public void onSuccess(LoginResult loginResult)
+                                              {
+                                                  if(BuildConfig.DEBUG)
+                                                  {
+                                                      Toast.makeText(getApplicationContext(),
+                                                                     loginResult.getAccessToken()
+                                                                             .toString(),
+                                                                     Toast.LENGTH_SHORT).show();
+                                                      Profile currentProfile = Profile
+                                                              .getCurrentProfile();
+                                                      if(BuildConfig.DEBUG)
+                                                      {
+                                                          Toast.makeText(getApplicationContext(),
+                                                                         "User first name: " + currentProfile
+                                                                                 .getFirstName() + " User id: " + currentProfile
+                                                                                 .getId(),
+                                                                         Toast.LENGTH_SHORT).show();
+                                                      }
+                                                      startLoginActivity(currentProfile);
+                                                  }
+                                              }
 
-                    @Override
-                    public void onCancel()
-                    {
-                        if(BuildConfig.DEBUG)
-                        {
-                            Toast.makeText(getApplicationContext(), "Cancel", Toast.LENGTH_SHORT)
-                                    .show();
-                        }
-                    }
+                                              @Override
+                                              public void onCancel()
+                                              {
+                                                  if(BuildConfig.DEBUG)
+                                                  {
+                                                      Toast.makeText(getApplicationContext(),
+                                                                     "Cancel", Toast.LENGTH_SHORT)
+                                                              .show();
+                                                  }
+                                              }
 
-                    @Override
-                    public void onError(FacebookException e)
-                    {
-                        if(BuildConfig.DEBUG)
-                        {
-                            Toast.makeText(getApplicationContext(), e.getMessage(),
-                                           Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                                              @Override
+                                              public void onError(FacebookException e)
+                                              {
+                                                  if(BuildConfig.DEBUG)
+                                                  {
+                                                      Toast.makeText(getApplicationContext(),
+                                                                     e.getMessage(),
+                                                                     Toast.LENGTH_SHORT).show();
+                                                  }
+                                              }
+                                          });
 
-                loginManager.logInWithReadPermissions(RegisterLoginActivity.this, FB_PERMISSIONS);
+                LDTApplication.loginManager
+                        .logInWithReadPermissions(RegisterLoginActivity.this, FB_PERMISSIONS);
             }
         });
     }
