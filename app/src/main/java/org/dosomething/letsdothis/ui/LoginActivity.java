@@ -23,19 +23,16 @@ import co.touchlab.android.threading.tasks.TaskQueue;
  */
 public class LoginActivity extends AppCompatActivity
 {
-    private static final String TAG = LoginActivity.class.getSimpleName();
-    public static final String FB_PROFILE = "FB_PROFILE";
+    private static final String TAG        = LoginActivity.class.getSimpleName();
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private EditText phoneEmail;
     private EditText password;
 
 
-    public static Intent getLaunchIntent(Context context, Profile fbProfile)
+    public static Intent getLaunchIntent(Context context)
     {
-        Intent intent = new Intent(context, LoginActivity.class);
-        intent.putExtra(FB_PROFILE, fbProfile);
-        return intent;
+        return new Intent(context, LoginActivity.class);
     }
 
     @Override
@@ -44,10 +41,6 @@ public class LoginActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         EventBusExt.getDefault().register(this);
-
-        //FIXME we have out fb profile info
-        Profile profile = getIntent().getParcelableExtra(FB_PROFILE);
-        profile.getFirstName();
 
         initLoginListener();
 

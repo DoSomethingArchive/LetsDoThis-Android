@@ -27,7 +27,8 @@ public class RegisterLoginActivity extends AppCompatActivity
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     private static final String       TAG            = RegisterLoginActivity.class.getSimpleName();
-    private static final List<String> FB_PERMISSIONS = Arrays.asList("public_profile", "email");
+    private static final List<String> FB_PERMISSIONS = Arrays
+            .asList("public_profile", "email", "user_friends");
 
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
@@ -57,7 +58,8 @@ public class RegisterLoginActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                startLoginActivity(null);
+                startActivity(LoginActivity.getLaunchIntent(RegisterLoginActivity.this));
+                finish();
             }
         });
         findViewById(R.id.register).setOnClickListener(new View.OnClickListener()
@@ -65,32 +67,19 @@ public class RegisterLoginActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                startActivity(SignupActivity.getLaunchIntent(RegisterLoginActivity.this));
-                finish();
+                startSignupActivity(null);
             }
         });
     }
 
-    private void startLoginActivity(Profile profile)
+    private void startSignupActivity(Profile currentProfile)
     {
-        startActivity(LoginActivity.getLaunchIntent(this, profile));
+        startActivity(SignupActivity.getLaunchIntent(RegisterLoginActivity.this, currentProfile));
         finish();
     }
 
     private void initFbConnect()
     {
-        Profile currentProfile = Profile.getCurrentProfile();
-        if(currentProfile != null)
-        {
-            if(BuildConfig.DEBUG)
-            {
-                Toast.makeText(getApplicationContext(), "User first name: " + currentProfile
-                        .getFirstName() + " User id: " + currentProfile.getId(), Toast.LENGTH_SHORT)
-                        .show();
-            }
-            startLoginActivity(currentProfile);
-        }
-
         callbackManager = CallbackManager.Factory.create();
         findViewById(R.id.fb_connect).setOnClickListener(new View.OnClickListener()
         {
@@ -99,59 +88,46 @@ public class RegisterLoginActivity extends AppCompatActivity
             {
                 LDTApplication.loginManager
                         .registerCallback(callbackManager, new FacebookCallback<LoginResult>()
-                                          {
-                                              @Override
-                                              public void onSuccess(LoginResult loginResult)
-                                              {
-                                                  if(BuildConfig.DEBUG)
-                                                  {
-                                                      Toast.makeText(getApplicationContext(),
-                                                                     loginResult.getAccessToken()
-                                                                             .toString(),
-                                                                     Toast.LENGTH_SHORT).show();
-                                                      Profile currentProfile = Profile
-                                                              .getCurrentProfile();
-                                                      if(BuildConfig.DEBUG)
-                                                      {
-                                                          Toast.makeText(getApplicationContext(),
-                                                                         "User first name: " + currentProfile
-                                                                                 .getFirstName() + " User id: " + currentProfile
-                                                                                 .getId(),
-                                                                         Toast.LENGTH_SHORT).show();
-                                                      }
-                                                      startLoginActivity(currentProfile);
-                                                  }
-                                              }
+                        {
+                            @Override
+                            public void onSuccess(LoginResult loginResult)
+                            {
+                                if(BuildConfig.DEBUG)
+                                {
+                                    Toast.makeText(getApplicationContext(),
+                                                   loginResult.getAccessToken().toString(),
+                                                   Toast.LENGTH_SHORT).show();
+                                    Profile currentProfile = Profile.getCurrentProfile();
+                                    startSignupActivity(currentProfile);
+                                }
+                            }
 
-                                              @Override
-                                              public void onCancel()
-                                              {
-                                                  if(BuildConfig.DEBUG)
-                                                  {
-                                                      Toast.makeText(getApplicationContext(),
-                                                                     "Cancel", Toast.LENGTH_SHORT)
-                                                              .show();
-                                                  }
-                                              }
+                            @Override
+                            public void onCancel()
+                            {
+                                if(BuildConfig.DEBUG)
+                                {
+                                    Toast.makeText(getApplicationContext(), "Cancel",
+                                                   Toast.LENGTH_SHORT).show();
+                                }
+                            }
 
-                                              @Override
-                                              public void onError(FacebookException e)
-                                              {
-                                                  if(BuildConfig.DEBUG)
-                                                  {
-                                                      Toast.makeText(getApplicationContext(),
-                                                                     e.getMessage(),
-                                                                     Toast.LENGTH_SHORT).show();
-                                                  }
-                                              }
-                                          });
+                            @Override
+                            public void onError(FacebookException e)
+                            {
+                                if(BuildConfig.DEBUG)
+                                {
+                                    Toast.makeText(getApplicationContext(), e.getMessage(),
+                                                   Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
 
                 LDTApplication.loginManager
                         .logInWithReadPermissions(RegisterLoginActivity.this, FB_PERMISSIONS);
             }
         });
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)

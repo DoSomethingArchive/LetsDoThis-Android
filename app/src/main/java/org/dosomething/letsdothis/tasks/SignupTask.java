@@ -67,4 +67,5 @@ public class SignupTask extends BaseRegistrationTask
         EventBusExt.getDefault().post(this);
         super.onComplete(context);
     }
+
 }
