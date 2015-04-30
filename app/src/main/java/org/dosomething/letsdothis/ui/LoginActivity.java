@@ -2,7 +2,6 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -12,13 +11,12 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.LoginTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
-import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
 
 /**
  * Created by toidiu on 4/15/15.
  */
-public class LoginActivity extends AppCompatActivity
+public class LoginActivity extends BaseActivity
 {
     private static final String TAG = LoginActivity.class.getSimpleName();
 
@@ -37,7 +35,6 @@ public class LoginActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        EventBusExt.getDefault().register(this);
 
         initLoginListener();
 
@@ -46,13 +43,6 @@ public class LoginActivity extends AppCompatActivity
             phoneEmail.setText("touch@lab.co");
             password.setText("test");
         }
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        EventBusExt.getDefault().unregister(this);
-        super.onDestroy();
     }
 
     private void initLoginListener()

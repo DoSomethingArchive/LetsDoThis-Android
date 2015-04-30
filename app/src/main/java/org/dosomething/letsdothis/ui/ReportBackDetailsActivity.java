@@ -2,7 +2,6 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,13 +14,12 @@ import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.ReportBackDetailsTask;
 import org.dosomething.letsdothis.utils.TimeUtils;
 
-import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
 
 /**
  * Created by izzyoji :) on 4/27/15.
  */
-public class ReportBackDetailsActivity extends AppCompatActivity
+public class ReportBackDetailsActivity extends BaseActivity
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String EXTRA_REPORT_BACK_ID = "report_back_id";
@@ -42,8 +40,6 @@ public class ReportBackDetailsActivity extends AppCompatActivity
         timestamp = (TextView) findViewById(R.id.timestamp);
         caption = (TextView) findViewById(R.id.caption);
         name = (TextView) findViewById(R.id.name);
-
-        EventBusExt.getDefault().register(this);
 
         TaskQueue.loadQueueDefault(this).execute(
                 new ReportBackDetailsTask(getIntent().getIntExtra(EXTRA_REPORT_BACK_ID, - 1)));
