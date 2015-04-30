@@ -35,8 +35,9 @@
     <style name="IntroArrowStyle">
     </style>
 
-    <style name="EditText" parent="Widget.AppCompat.EditText">
+    <style name="EditText" parent="@style/Widget.AppCompat.EditText">
         <item name="android:textAllCaps">true</item>
+        <item name="android:inputType">textAutoComplete</item>
         <item name="android:background">@drawable/bg_white_rounded_rect_filled</item>
     </style>
 

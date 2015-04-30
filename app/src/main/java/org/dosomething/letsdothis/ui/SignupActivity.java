@@ -49,16 +49,7 @@ public class SignupActivity extends AppCompatActivity
 
         Profile profile = getIntent().getParcelableExtra(FB_PROFILE);
         initRegisterListener();
-        initUI(profile);
-    }
-
-    private void initUI(Profile profile)
-    {
-        if(profile != null)
-        {
-            firstName.setText(profile.getFirstName());
-            lastName.setText(profile.getLastName());
-        }
+//        initUI(profile);
     }
 
     @Override
@@ -70,27 +61,36 @@ public class SignupActivity extends AppCompatActivity
 
     private void initRegisterListener()
     {
-        phoneEmail = (EditText) findViewById(R.id.phone_email);
-        password = (EditText) findViewById(R.id.password);
-        firstName = (EditText) findViewById(R.id.first_name);
-        lastName = (EditText) findViewById(R.id.last_name);
-        birthday = (EditText) findViewById(R.id.birthday);
+//        phoneEmail = (EditText) findViewById(R.id.phone_email);
+//        password = (EditText) findViewById(R.id.password);
+//        firstName = (EditText) findViewById(R.id.first_name);
+//        lastName = (EditText) findViewById(R.id.last_name);
+//        birthday = (EditText) findViewById(R.id.birthday);
+//
+//        findViewById(R.id.register).setOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View view)
+//            {
+//                String phoneEmailtext = phoneEmail.getText().toString();
+//                String passtext = password.getText().toString();
+//                String firsttext = firstName.getText().toString();
+//                String lasttext = lastName.getText().toString();
+//                String birthtext = birthday.getText().toString();
+//
+//                TaskQueue.loadQueueDefault(SignupActivity.this).execute(
+//                        new SignupTask(phoneEmailtext, passtext, firsttext, lasttext, birthtext));
+//            }
+//        });
+    }
 
-        findViewById(R.id.register).setOnClickListener(new View.OnClickListener()
+    private void initUI(Profile profile)
+    {
+        if(profile != null)
         {
-            @Override
-            public void onClick(View view)
-            {
-                String phoneEmailtext = phoneEmail.getText().toString();
-                String passtext = password.getText().toString();
-                String firsttext = firstName.getText().toString();
-                String lasttext = lastName.getText().toString();
-                String birthtext = birthday.getText().toString();
-
-                TaskQueue.loadQueueDefault(SignupActivity.this).execute(
-                        new SignupTask(phoneEmailtext, passtext, firsttext, lasttext, birthtext));
-            }
-        });
+            firstName.setText(profile.getFirstName());
+            lastName.setText(profile.getLastName());
+        }
     }
 
     @Override
@@ -107,7 +107,6 @@ public class SignupActivity extends AppCompatActivity
         {
             Toast.makeText(this, "success register", Toast.LENGTH_SHORT).show();
             startActivity(MainActivity.getLaunchIntent(this));
-            //FIXME broadcast to finish the RegisterLoginActivity
             finish();
         }
         else
