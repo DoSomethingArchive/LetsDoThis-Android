@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.facebook.Profile;
+
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.SignupTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
@@ -19,16 +22,22 @@ import co.touchlab.android.threading.tasks.TaskQueue;
  */
 public class SignupActivity extends AppCompatActivity
 {
+    //~=~=~=~=~=~=~=~=~=~=~=~=Constants
+    public static final String FB_PROFILE = "FB_PROFILE";
+
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private EditText phoneEmail;
     private EditText password;
     private EditText firstName;
     private EditText lastName;
     private EditText birthday;
+    //~=~=~=~=~=~=~=~=~=~=~=~=Fields
 
-    public static Intent getLaunchIntent(Context context)
+    public static Intent getLaunchIntent(Context context, Profile fbProfile)
     {
-        return new Intent(context, SignupActivity.class);
+        Intent intent = new Intent(context, SignupActivity.class);
+        intent.putExtra(FB_PROFILE, fbProfile);
+        return intent;
     }
 
     @Override
@@ -38,7 +47,18 @@ public class SignupActivity extends AppCompatActivity
         setContentView(R.layout.activity_signup);
         EventBusExt.getDefault().register(this);
 
+        Profile profile = getIntent().getParcelableExtra(FB_PROFILE);
         initRegisterListener();
+        initUI(profile);
+    }
+
+    private void initUI(Profile profile)
+    {
+        if(profile != null)
+        {
+            firstName.setText(profile.getFirstName());
+            lastName.setText(profile.getLastName());
+        }
     }
 
     @Override
@@ -71,6 +91,13 @@ public class SignupActivity extends AppCompatActivity
                         new SignupTask(phoneEmailtext, passtext, firsttext, lasttext, birthtext));
             }
         });
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        LDTApplication.loginManager.logOut();
     }
 
     @SuppressWarnings("UnusedDeclaration")
