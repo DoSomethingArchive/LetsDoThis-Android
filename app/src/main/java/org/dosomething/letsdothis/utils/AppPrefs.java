@@ -12,6 +12,7 @@ public class AppPrefs
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String CURRENT_USER_ID = "CURRENT_USER_ID";
+    public static final  String FIRST_RUN = "FIRST_RUN";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private static AppPrefs          instance;
@@ -49,4 +50,13 @@ public class AppPrefs
         return prefs.getString(CURRENT_USER_ID, null);
     }
 
+    public void setFirstRun(boolean first)
+    {
+        prefs.edit().putBoolean(FIRST_RUN, first).apply();
+    }
+
+    public boolean isFirstRun()
+    {
+        return prefs.getBoolean(FIRST_RUN, true);
+    }
 }

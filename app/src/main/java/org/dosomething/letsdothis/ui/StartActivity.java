@@ -20,10 +20,11 @@ public class StartActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
 
-        if( AppPrefs.getInstance(this).isLoggedIn())
-            {goToMain();
+        if(AppPrefs.getInstance(this).isLoggedIn())
+        {
+            goToMain();
         }
-        else if(false) //FIXME check first run
+        else if(! AppPrefs.getInstance(this).isFirstRun()) //FIXME check first run
         {
             goToRegisterLogin();
         }
