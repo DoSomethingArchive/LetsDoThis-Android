@@ -2,10 +2,13 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.facebook.Profile;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
@@ -21,15 +24,18 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 public class LoginActivity extends AppCompatActivity
 {
     private static final String TAG = LoginActivity.class.getSimpleName();
+    public static final String FB_PROFILE = "FB_PROFILE";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private EditText phoneEmail;
     private EditText password;
 
 
-    public static Intent getLaunchIntent(Context context)
+    public static Intent getLaunchIntent(Context context, Profile fbProfile)
     {
-        return new Intent(context, LoginActivity.class);
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.putExtra(FB_PROFILE, fbProfile);
+        return intent;
     }
 
     @Override
@@ -38,6 +44,10 @@ public class LoginActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         EventBusExt.getDefault().register(this);
+
+        //FIXME we have out fb profile info
+        Profile profile = getIntent().getParcelableExtra(FB_PROFILE);
+        profile.getFirstName();
 
         initLoginListener();
 
@@ -71,7 +81,6 @@ public class LoginActivity extends AppCompatActivity
             }
         });
     }
-
 
 
     @SuppressWarnings("UnusedDeclaration")
