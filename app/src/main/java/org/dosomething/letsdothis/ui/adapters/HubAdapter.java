@@ -1,10 +1,6 @@
 package org.dosomething.letsdothis.ui.adapters;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
-import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
-import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.User;
@@ -202,17 +195,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             super(itemView);
             this.userImage = (ImageView) itemView.findViewById(R.id.user_image);
             this.name = (TextView) itemView.findViewById(R.id.name);
-        }
-    }
-
-    public static class SectionTitleViewHolder extends ProfileViewHolder
-    {
-        protected final TextView textView;
-
-        public SectionTitleViewHolder(TextView itemView)
-        {
-            super(itemView);
-            textView = itemView;
         }
     }
 

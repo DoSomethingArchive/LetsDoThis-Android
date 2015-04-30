@@ -14,7 +14,7 @@ import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.ReportBack;
-import org.dosomething.letsdothis.tasks.ReportBackListTask;
+import org.dosomething.letsdothis.tasks.InterestReportBackListTask;
 import org.dosomething.letsdothis.ui.CampaignDetailsActivity;
 import org.dosomething.letsdothis.ui.ReportBackDetailsActivity;
 import org.dosomething.letsdothis.ui.adapters.CampaignAdapter;
@@ -68,7 +68,7 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
         EventBusExt.getDefault().register(this);
         String campaigns = StringUtils.join(sampleIdsSubset, ",");
         TaskQueue.loadQueueDefault(getActivity())
-                .execute(new ReportBackListTask(position, campaigns, FIRST_PAGE));
+                .execute(new InterestReportBackListTask(position, campaigns, FIRST_PAGE));
     }
 
     @Override
@@ -160,7 +160,7 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
             {
                 Toast.makeText(getActivity(), "get more data", Toast.LENGTH_SHORT).show();
             }
-            ReportBackListTask task = new ReportBackListTask(position,
+            InterestReportBackListTask task = new InterestReportBackListTask(position,
                                                              StringUtils.join(sampleIdsSubset, ","),
                                                              currentPage + 1);
             TaskQueue.loadQueueDefault(getActivity()).execute(task);
@@ -168,7 +168,7 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(ReportBackListTask task)
+    public void onEventMainThread(InterestReportBackListTask task)
     {
         if(task.position == position)
         {

@@ -59,7 +59,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 View footerLayout = LayoutInflater.from(parent.getContext())
                                                       .inflate(R.layout.item_campaign_footer,
                                                                parent, false);
-                return new CampaignFooterViewHolder((TextView) footerLayout);
+                return new SectionTitleViewHolder((TextView) footerLayout);
             case VIEW_TYPE_REPORT_BACK:
                 View reportBackLayout = LayoutInflater.from(parent.getContext())
                                                       .inflate(R.layout.item_report_back_square,
@@ -150,6 +150,11 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             });
         }
+        else if(getItemViewType(position) == VIEW_TYPE_CAMPAIGN_FOOTER)
+        {
+            SectionTitleViewHolder sectionTitleViewHolder = (SectionTitleViewHolder) holder;
+            sectionTitleViewHolder.textView.setText(sectionTitleViewHolder.textView.getContext().getString(R.string.people_doing_stuff));
+        }
 
 
     }
@@ -237,11 +242,4 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    public static class CampaignFooterViewHolder extends RecyclerView.ViewHolder
-    {
-        public CampaignFooterViewHolder(TextView itemView)
-        {
-            super(itemView);
-        }
-    }
 }

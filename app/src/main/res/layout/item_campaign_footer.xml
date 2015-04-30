@@ -8,5 +8,4 @@
     app:typeface="brandon_bold"
     android:gravity="center"
     android:padding="@dimen/padding_wedge"
-    android:text="@string/people_doing_stuff"
     android:layout_height="wrap_content"/>
