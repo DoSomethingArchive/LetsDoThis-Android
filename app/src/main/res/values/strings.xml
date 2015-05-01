@@ -27,5 +27,15 @@
     <string name="invite_friends">Invite Friends</string>
     <string name="share_photo">Share Photo</string>
     <string name="friends">Friends</string>
+    <string name="settings">Settings</string>
+    <string name="rate">Rate Let\'s Do This</string>
     <string name="people_doing_it">People Doing It</string>
+    <string name="account">Account</string>
+    <string name="change_photo">Change Photo</string>
+    <string name="receive_notifications">Receive Notifications</string>
+    <string name="change_email">Change Email</string>
+    <string name="change_password">Change Password</string>
+    <string name="password_hint">********</string>
+    <string name="logout">Log Out</string>
+    <string name="change_notifications_prefs">Change Notification Preferences</string>
 </resources>
