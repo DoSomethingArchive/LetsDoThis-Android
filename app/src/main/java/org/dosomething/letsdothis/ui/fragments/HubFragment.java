@@ -13,9 +13,9 @@ import android.view.ViewGroup;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.User;
-import org.dosomething.letsdothis.tasks.BaseRegistrationTask;
 import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignTask;
 import org.dosomething.letsdothis.tasks.GetPastUserCampaignTask;
+import org.dosomething.letsdothis.ui.SettingsActivity;
 import org.dosomething.letsdothis.ui.UserListActivity;
 import org.dosomething.letsdothis.ui.UserProfileActivity;
 import org.dosomething.letsdothis.ui.UserUpdateActivity;
@@ -88,7 +88,7 @@ public class HubFragment extends Fragment
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
-        inflater.inflate(R.menu.main_menu, menu);
+        inflater.inflate(R.menu.fragment_hub, menu);
     }
 
     @Override
@@ -96,9 +96,8 @@ public class HubFragment extends Fragment
     {
         switch(item.getItemId())
         {
-            case R.id.logout:
-                BaseRegistrationTask.logout(getActivity());
-                getActivity().finish();
+            case R.id.settings:
+                startActivity(SettingsActivity.getLaunchIntent(getActivity()));
                 break;
             case R.id.user_list:
                 startActivity(UserListActivity.getLaunchIntent(getActivity()));

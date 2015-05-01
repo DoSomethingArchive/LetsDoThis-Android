@@ -5,6 +5,7 @@ import org.apache.http.HttpStatus;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
@@ -24,23 +25,23 @@ public class LoginTask extends BaseRegistrationTask
     @Override
     protected void attemptRegistration(Context context) throws Throwable
     {
-        ResponseLogin response = null;
+        ResponseLogin response;
+        User user;
 
         if(matchesEmail(phoneEmail))
         {
             response = NetworkHelper.getNorthstarAPIService().loginWithEmail(phoneEmail, password);
 
-            User user = new User(phoneEmail, null, null);
-            validateResponse(context, response, user);
+            user = new User(phoneEmail, null, null);
         }
         else
         {
             response = NetworkHelper.getNorthstarAPIService().loginWithMobile(phoneEmail, password);
 
-            User user = new User(null, phoneEmail, null);
-            validateResponse(context, response, user);
+            user = new User(null, phoneEmail, null);
         }
 
+        validateResponse(context, response, user);
     }
 
     private void validateResponse(Context context, ResponseLogin response, User user) throws Throwable
@@ -50,6 +51,7 @@ public class LoginTask extends BaseRegistrationTask
             if(response._id != null)
             {
                 user.id = response._id;
+                AppPrefs.getInstance(context).setSessionToken(response.session_token);
                 loginUser(context, user);
 
                 TaskQueue.loadQueueDefault(context).execute(new GetUserTask(user.id));

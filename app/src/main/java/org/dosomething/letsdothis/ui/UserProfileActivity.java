@@ -2,7 +2,6 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import org.dosomething.letsdothis.R;
@@ -10,13 +9,12 @@ import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.GetUserTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
-import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
 
 /**
  * Created by toidiu on 4/16/15.
  */
-public class UserProfileActivity extends AppCompatActivity
+public class UserProfileActivity extends BaseActivity
 {
     public static Intent getLaunchIntent(Context context)
     {
@@ -28,17 +26,9 @@ public class UserProfileActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
-        EventBusExt.getDefault().register(this);
 
         String id = AppPrefs.getInstance(this).getCurrentUserId();
         TaskQueue.loadQueueDefault(this).execute(new GetUserTask(id));
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        EventBusExt.getDefault().unregister(this);
-        super.onDestroy();
     }
 
     private void updateUI(User user)
