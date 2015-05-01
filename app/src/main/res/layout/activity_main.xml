@@ -6,6 +6,10 @@
               android:orientation="vertical"
               tools:ignore="MergeRootFrame">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"/>
+
     <FrameLayout
         android:id="@+id/container"
         android:layout_weight="1"

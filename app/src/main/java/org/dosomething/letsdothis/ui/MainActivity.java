@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -16,11 +18,11 @@ import org.dosomething.letsdothis.ui.fragments.NotificationsFragment;
 
 public class MainActivity extends BaseActivity
 {
-
     private View actions;
     private View hub;
     private View invites;
     private View notifications;
+    public Toolbar toolbar;
 
     public static Intent getLaunchIntent(Context context)
     {
@@ -38,6 +40,10 @@ public class MainActivity extends BaseActivity
                     .add(R.id.container, ActionsFragment.newInstance(), ActionsFragment.TAG)
                     .commit();
         }
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         initBottomBarNav();
     }
