@@ -10,10 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.Toast;
-
-import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
@@ -54,7 +51,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_campaign_details);
+        setContentView(R.layout.activity_fragment_recycler);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);

@@ -16,7 +16,7 @@
         app:border_width="0dp"
         app:border_color="@color/white"
         app:background_color="@color/white"
-        android:src="@drawable/user_image"/>
+        tools:src="@drawable/user_image"/>
 
     <LinearLayout
         android:layout_width="match_parent"
