@@ -50,4 +50,5 @@
     <dimen name="hub_avatar_height">75dp</dimen>
     <dimen name="text_26">13sp</dimen>
     <dimen name="report_back_expanded">375dp</dimen>
+    <dimen name="notification_image">60dp</dimen>
 </resources>
