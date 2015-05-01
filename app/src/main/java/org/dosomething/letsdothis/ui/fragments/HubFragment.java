@@ -33,8 +33,6 @@ public class HubFragment extends Fragment
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String TAG = HubFragment.class.getSimpleName();
-    //~=~=~=~=~=~=~=~=~=~=~=~=Views
-    private RecyclerView recyclerView;
     private HubAdapter   adapter;
 
     public static HubFragment newInstance()
@@ -78,7 +76,7 @@ public class HubFragment extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
+        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
 
         User user = new User(null, "firstName", "lastName", "birthday");
         adapter = new HubAdapter(user);
