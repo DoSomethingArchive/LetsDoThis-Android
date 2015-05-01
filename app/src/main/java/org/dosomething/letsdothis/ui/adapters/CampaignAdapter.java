@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.ui.adapters;
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import com.squareup.picasso.Picasso;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.ReportBack;
+import org.dosomething.letsdothis.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +61,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 View footerLayout = LayoutInflater.from(parent.getContext())
                                                       .inflate(R.layout.item_campaign_footer,
                                                                parent, false);
-                return new CampaignFooterViewHolder((TextView) footerLayout);
+                return new SectionTitleViewHolder((TextView) footerLayout);
             case VIEW_TYPE_REPORT_BACK:
                 View reportBackLayout = LayoutInflater.from(parent.getContext())
                                                       .inflate(R.layout.item_report_back_square,
@@ -132,6 +134,24 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             });
 
             expandedCampaignViewHolder.problemFact.setText(campaign.problemFact);
+
+            List<String> timeUntilExpiration = TimeUtils.getTimeUntilExpiration(campaign.endTime);
+            String days = timeUntilExpiration.get(0);
+            expandedCampaignViewHolder.days.setText(days);
+            String hours = timeUntilExpiration.get(1);
+            expandedCampaignViewHolder.hours.setText(hours);
+            String minutes = timeUntilExpiration.get(2);
+            expandedCampaignViewHolder.minutes.setText(minutes);
+            Resources resources = expandedCampaignViewHolder.itemView.getContext().getResources();
+            expandedCampaignViewHolder.daysLabel.setText(resources.getQuantityString(R.plurals.days,
+                                                                                     Integer.parseInt(
+                                                                                             days)));
+            expandedCampaignViewHolder.hoursLabel.setText(resources.getQuantityString(R.plurals.hours,
+                                                                                      Integer.parseInt(
+                                                                                              hours)));
+            expandedCampaignViewHolder.minutesLabel.setText(resources.getQuantityString(R.plurals.minutes,
+                                                                                        Integer.parseInt(
+                                                                                                minutes)));
         }
         else if(getItemViewType(position) == VIEW_TYPE_REPORT_BACK)
         {
@@ -149,6 +169,12 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     campaignAdapterClickListener.onReportBackClicked(reportBack.id);
                 }
             });
+        }
+        else if(getItemViewType(position) == VIEW_TYPE_CAMPAIGN_FOOTER)
+        {
+            SectionTitleViewHolder sectionTitleViewHolder = (SectionTitleViewHolder) holder;
+            sectionTitleViewHolder.textView.setText(sectionTitleViewHolder.textView.getContext().getString(
+                    R.string.people_doing_stuff));
         }
 
 
@@ -217,12 +243,24 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     {
         private TextView problemFact;
         private View     campaignDetails;
+        public  TextView days;
+        public  TextView hours;
+        public  TextView minutes;
+        public  TextView daysLabel;
+        public  TextView hoursLabel;
+        public  TextView minutesLabel;
 
         public ExpandedCampaignViewHolder(View itemView)
         {
             super(itemView);
             problemFact = (TextView) itemView.findViewById(R.id.problemFact);
             campaignDetails = itemView.findViewById(R.id.campaign_details);
+            days = (TextView) itemView.findViewById(R.id.days);
+            hours = (TextView) itemView.findViewById(R.id.hours);
+            minutes = (TextView) itemView.findViewById(R.id.min);
+            daysLabel = (TextView) itemView.findViewById(R.id.days_label);
+            hoursLabel = (TextView) itemView.findViewById(R.id.hours_label);
+            minutesLabel = (TextView) itemView.findViewById(R.id.minutes_label);
         }
     }
 
@@ -237,11 +275,4 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    public static class CampaignFooterViewHolder extends RecyclerView.ViewHolder
-    {
-        public CampaignFooterViewHolder(TextView itemView)
-        {
-            super(itemView);
-        }
-    }
 }

@@ -28,11 +28,6 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
         AppPrefs.getInstance(context).setCurrentUserId(user.id);
     }
 
-    public static void logout(Context context)
-    {
-        AppPrefs.getInstance(context).logout();
-    }
-
     @Override
     protected void run(Context context) throws Throwable
     {
