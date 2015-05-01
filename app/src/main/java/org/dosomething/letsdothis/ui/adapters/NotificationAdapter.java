@@ -31,7 +31,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public NotificationViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         View view = LayoutInflater.from(parent.getContext())
-                                          .inflate(R.layout.item_notification, parent, false);
+                .inflate(R.layout.item_notification, parent, false);
         return new NotificationViewHolder(view);
     }
 
@@ -40,10 +40,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     {
         Notification notification = notifications.get(position);
 
-        Picasso.with(holder.imageView.getContext()).load(notification.imagePath).into(holder.imageView);
+        Picasso.with(holder.imageView.getContext()).load(notification.imagePath)
+                .placeholder(R.drawable.user_image).into(holder.imageView);
         holder.title.setText(notification.title);
         holder.details.setText(notification.details);
-        holder.timestamp.setText(TimeUtils.getTimeSince(holder.timestamp.getContext(),notification.timeStamp));
+        holder.timestamp.setText(
+                TimeUtils.getTimeSince(holder.timestamp.getContext(), notification.timeStamp));
     }
 
     @Override
