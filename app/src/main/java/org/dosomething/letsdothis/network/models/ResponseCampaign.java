@@ -12,6 +12,7 @@ public class ResponseCampaign
     public String title;
     public String call_to_action;
     public Date high_season_start;
+    public Date high_season_end;
     public ResponseImage image_cover;
     public String solution_support;
     public String solution_copy;
@@ -24,6 +25,7 @@ public class ResponseCampaign
         campaign.title = response.title;
         campaign.callToAction = response.call_to_action;
         campaign.startTime = response.getHighSeasonStart();
+        campaign.endTime = response.getHighSeasonEnd();
         campaign.imagePath = response.getImageCover().getUrl().getLandscape().getRaw();
         campaign.solutionCopy = response.solution_copy;
         campaign.solutionSupport = response.solution_support;
@@ -40,6 +42,11 @@ public class ResponseCampaign
     private long getHighSeasonStart()
     {
         return high_season_start == null? 0 : high_season_start.getTime();
+    }
+
+    private long getHighSeasonEnd()
+    {
+        return high_season_end == null? 0 : high_season_end.getTime();
     }
 
     public ResponseImage getImageCover()

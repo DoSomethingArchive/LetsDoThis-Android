@@ -2,7 +2,6 @@ package org.dosomething.letsdothis.ui.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,18 +13,14 @@ import android.view.ViewGroup;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.User;
-import org.dosomething.letsdothis.tasks.BaseRegistrationTask;
 import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignTask;
 import org.dosomething.letsdothis.tasks.GetPastUserCampaignTask;
+import org.dosomething.letsdothis.ui.SettingsActivity;
 import org.dosomething.letsdothis.ui.UserListActivity;
 import org.dosomething.letsdothis.ui.UserProfileActivity;
 import org.dosomething.letsdothis.ui.UserUpdateActivity;
-import org.dosomething.letsdothis.ui.adapters.CampaignAdapter;
 import org.dosomething.letsdothis.ui.adapters.HubAdapter;
 import org.dosomething.letsdothis.utils.AppPrefs;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
@@ -38,8 +33,6 @@ public class HubFragment extends Fragment
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String TAG = HubFragment.class.getSimpleName();
-    //~=~=~=~=~=~=~=~=~=~=~=~=Views
-    private RecyclerView recyclerView;
     private HubAdapter   adapter;
 
     public static HubFragment newInstance()
@@ -83,7 +76,7 @@ public class HubFragment extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
+        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
 
         User user = new User(null, "firstName", "lastName", "birthday");
         adapter = new HubAdapter(user);
@@ -95,7 +88,7 @@ public class HubFragment extends Fragment
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
-        inflater.inflate(R.menu.main_menu, menu);
+        inflater.inflate(R.menu.fragment_hub, menu);
     }
 
     @Override
@@ -103,9 +96,8 @@ public class HubFragment extends Fragment
     {
         switch(item.getItemId())
         {
-            case R.id.logout:
-                BaseRegistrationTask.logout(getActivity());
-                getActivity().finish();
+            case R.id.settings:
+                startActivity(SettingsActivity.getLaunchIntent(getActivity()));
                 break;
             case R.id.user_list:
                 startActivity(UserListActivity.getLaunchIntent(getActivity()));

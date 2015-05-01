@@ -4,22 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 
 import org.dosomething.letsdothis.R;
-import org.dosomething.letsdothis.tasks.BaseRegistrationTask;
 import org.dosomething.letsdothis.ui.fragments.ActionsFragment;
 import org.dosomething.letsdothis.ui.fragments.HubFragment;
 import org.dosomething.letsdothis.ui.fragments.InvitesFragment;
 import org.dosomething.letsdothis.ui.fragments.NotificationsFragment;
 
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
 {
 
     private View actions;
