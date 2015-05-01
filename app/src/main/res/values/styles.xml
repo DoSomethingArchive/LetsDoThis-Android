@@ -5,6 +5,7 @@
         <item name="vpiTabPageIndicatorStyle">@style/CustomTabPageIndicator</item>
         <item name="vpiCirclePageIndicatorStyle">@style/CustomTabPageIndicator</item>
         <item name="android:textSize">@dimen/text_30</item>
+        <item name="android:textColor">@android:color/black</item>
         <item name="android:buttonStyle">@style/PrimaryButton</item>
         <item name="android:editTextStyle">@style/EditText</item>
         <item name="colorPrimary">@color/web_orange</item>
