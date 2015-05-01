@@ -6,14 +6,12 @@ import android.text.TextUtils;
 
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created by kgalligan on 8/1/14.
- */
 public class AppPrefs
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String CURRENT_USER_ID = "CURRENT_USER_ID";
     public static final String USER_SESSION_TOKEN = "CURRENT_SESSION_TOKEN";
+    public static final  String FIRST_RUN = "FIRST_RUN";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private static AppPrefs          instance;
@@ -100,5 +98,14 @@ public class AppPrefs
     public String getSessionToken()
     {
         return getString(USER_SESSION_TOKEN, null);
+    }
+    public void setFirstRun(boolean first)
+    {
+        setBoolean(FIRST_RUN, first);
+    }
+
+    public boolean isFirstRun()
+    {
+        return getBoolean(FIRST_RUN, true);
     }
 }

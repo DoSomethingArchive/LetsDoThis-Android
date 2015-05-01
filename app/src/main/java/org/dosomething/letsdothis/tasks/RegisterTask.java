@@ -68,4 +68,5 @@ public class RegisterTask extends BaseRegistrationTask
         EventBusExt.getDefault().post(this);
         super.onComplete(context);
     }
+
 }

@@ -23,7 +23,7 @@ public class StartActivity extends BaseActivity
         {
             goToMain();
         }
-        else if(false) //FIXME check first run
+        else if(! AppPrefs.getInstance(this).isFirstRun())
         {
             goToRegisterLogin();
         }

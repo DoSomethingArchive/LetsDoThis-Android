@@ -1,25 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/web_orange"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-
-    <org.dosomething.letsdothis.ui.views.typeface.CustomButton
-        android:id="@+id/login"
-        app:typeface="brandon_bold"
+    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/sign_in"/>
+        style="@style/SignInText"
+        android:text="@string/desc_login_reg"/>
+
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+        android:layout_margin="@dimen/padding_tiny"
         android:id="@+id/register"
         app:typeface="brandon_bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:layout_above="@+id/action_buttons"
         android:text="@string/register"/>
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/action_buttons"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+            android:id="@+id/fb_connect"
+            app:typeface="brandon_bold"
+            style="@style/IntroButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/padding_tiny"
+            android:layout_height="wrap_content"
+            android:text="@string/fb_connect"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+            android:id="@+id/login"
+            app:typeface="brandon_bold"
+            style="@style/IntroButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_tiny"
+            android:text="@string/sign_in"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
