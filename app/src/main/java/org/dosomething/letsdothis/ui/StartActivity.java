@@ -24,7 +24,7 @@ public class StartActivity extends AppCompatActivity
         {
             goToMain();
         }
-        else if(! AppPrefs.getInstance(this).isFirstRun()) //FIXME check first run
+        else if(! AppPrefs.getInstance(this).isFirstRun())
         {
             goToRegisterLogin();
         }
