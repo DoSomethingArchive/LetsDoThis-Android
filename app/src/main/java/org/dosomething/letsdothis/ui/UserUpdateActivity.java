@@ -2,7 +2,6 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -13,13 +12,12 @@ import org.dosomething.letsdothis.tasks.DbGetUser;
 import org.dosomething.letsdothis.tasks.UpdateUserTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
-import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
 
 /**
  * Created by toidiu on 4/17/15.
  */
-public class UserUpdateActivity extends AppCompatActivity
+public class UserUpdateActivity extends BaseActivity
 {
 
     private EditText firstName;
@@ -40,19 +38,11 @@ public class UserUpdateActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_user);
-        EventBusExt.getDefault().register(this);
 
         initSubmitListener();
 
         String id = AppPrefs.getInstance(this).getCurrentUserId();
         TaskQueue.loadQueueDefault(this).execute(new DbGetUser(id));
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        EventBusExt.getDefault().unregister(this);
-        super.onDestroy();
     }
 
     private void initSubmitListener()

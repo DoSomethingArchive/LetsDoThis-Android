@@ -15,13 +15,12 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.LoginTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
-import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
 
 /**
  * Created by toidiu on 4/15/15.
  */
-public class LoginActivity extends AppCompatActivity
+public class LoginActivity extends BaseActivity
 {
     private static final String TAG        = LoginActivity.class.getSimpleName();
 
@@ -40,7 +39,6 @@ public class LoginActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        EventBusExt.getDefault().register(this);
 
         initLoginListener();
 
@@ -49,13 +47,6 @@ public class LoginActivity extends AppCompatActivity
             phoneEmail.setText("touch@lab.co");
             password.setText("test");
         }
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        EventBusExt.getDefault().unregister(this);
-        super.onDestroy();
     }
 
     private void initLoginListener()

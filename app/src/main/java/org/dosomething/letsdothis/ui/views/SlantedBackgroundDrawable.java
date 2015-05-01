@@ -41,6 +41,23 @@ public class SlantedBackgroundDrawable extends ColorDrawable
 
     }
 
+    public SlantedBackgroundDrawable(boolean slatedLeft, int color)
+    {
+        slantedLeft = slatedLeft;
+
+        wallpaint = new Paint();
+        wallpaint.setColor(color);
+        wallpaint.setStyle(Paint.Style.FILL);
+        wallpaint.setAntiAlias(true);
+
+        shadowPaint = new Paint();
+        shadowPaint.setColor(0x22000000);
+        shadowPaint.setAntiAlias(true);
+        shadowPaint.setStyle(Paint.Style.FILL);
+        shadowPaint.setMaskFilter(new BlurMaskFilter(HEIGHT_SHADOW_HEIGHT, BlurMaskFilter.Blur.OUTER));
+
+    }
+
     @Override
     public void draw(Canvas canvas)
     {
