@@ -42,4 +42,10 @@
     <string name="logout">Log Out</string>
     <string name="change_notifications_prefs">Change Notification Preferences</string>
     <string name="select_picture">Select or Take Picture</string>
+    <string name="join_group">Join a friend\'s group with a code</string>
+    <string name="my_codes">My Codes</string>
+    <string name="invite_using">Invite using</string>
+    <string name="share_invite">I want you to join the %1$s campaign with me, here\'s the code %2$s.</string>
+    <string name="done">Done</string>
+    <string name="error_code_length">An invite code should be 6 digits long!</string>
 </resources>
