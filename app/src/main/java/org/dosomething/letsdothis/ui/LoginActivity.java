@@ -2,9 +2,13 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.facebook.Profile;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
@@ -18,7 +22,7 @@ import co.touchlab.android.threading.tasks.TaskQueue;
  */
 public class LoginActivity extends BaseActivity
 {
-    private static final String TAG = LoginActivity.class.getSimpleName();
+    private static final String TAG        = LoginActivity.class.getSimpleName();
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private EditText phoneEmail;
@@ -61,7 +65,6 @@ public class LoginActivity extends BaseActivity
             }
         });
     }
-
 
 
     @SuppressWarnings("UnusedDeclaration")

@@ -46,6 +46,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
+
         switch(viewType)
         {
             case VIEW_TYPE_SECTION_TITLE:
