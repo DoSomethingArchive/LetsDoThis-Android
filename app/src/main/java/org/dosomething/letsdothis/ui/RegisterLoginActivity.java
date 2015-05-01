@@ -3,6 +3,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -10,6 +11,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.Profile;
+import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 
 import org.dosomething.letsdothis.BuildConfig;
@@ -80,7 +82,15 @@ public class RegisterLoginActivity extends AppCompatActivity
 
     private void initFbConnect()
     {
+        if(Profile.getCurrentProfile() != null)
+        {
+            LDTApplication.loginManager.logOut();
+        }
+
         callbackManager = CallbackManager.Factory.create();
+        final ProfileTracker[] mProfileTracker = new ProfileTracker[1];
+
+
         findViewById(R.id.fb_connect).setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -92,14 +102,19 @@ public class RegisterLoginActivity extends AppCompatActivity
                             @Override
                             public void onSuccess(LoginResult loginResult)
                             {
-                                if(BuildConfig.DEBUG)
+                                mProfileTracker[0] = new ProfileTracker()
                                 {
-                                    Toast.makeText(getApplicationContext(),
-                                                   loginResult.getAccessToken().toString(),
-                                                   Toast.LENGTH_SHORT).show();
-                                    Profile currentProfile = Profile.getCurrentProfile();
-                                    startSignupActivity(currentProfile);
-                                }
+                                    @Override
+                                    protected void onCurrentProfileChanged(Profile profile, Profile profile2)
+                                    {
+                                        mProfileTracker[0].stopTracking();
+                                        if(BuildConfig.DEBUG)
+                                        {
+                                            startSignupActivity(profile2);
+                                        }
+                                    }
+                                };
+                                mProfileTracker[0].startTracking();
                             }
 
                             @Override
@@ -132,7 +147,10 @@ public class RegisterLoginActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
+        if(callbackManager.onActivityResult(requestCode, resultCode, data))
+        {
+            return;
+        }
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }
