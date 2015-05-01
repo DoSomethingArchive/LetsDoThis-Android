@@ -2,7 +2,6 @@ package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 import android.util.Patterns;
 
-import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.utils.AppPrefs;
@@ -27,12 +26,6 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
     {
         DatabaseHelper.getInstance(context).getUserDao().createOrUpdate(user);
         AppPrefs.getInstance(context).setCurrentUserId(user.id);
-    }
-
-    public static void logout(Context context)
-    {
-        AppPrefs.getInstance(context).logout();
-        LDTApplication.loginManager.logOut();
     }
 
     @Override

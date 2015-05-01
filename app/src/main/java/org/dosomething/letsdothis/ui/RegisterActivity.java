@@ -2,7 +2,6 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -11,16 +10,15 @@ import com.facebook.Profile;
 
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
-import org.dosomething.letsdothis.tasks.SignupTask;
+import org.dosomething.letsdothis.tasks.RegisterTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
-import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
 
 /**
  * Created by toidiu on 4/15/15.
  */
-public class SignupActivity extends AppCompatActivity
+public class RegisterActivity extends BaseActivity
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String FB_PROFILE = "FB_PROFILE";
@@ -35,7 +33,7 @@ public class SignupActivity extends AppCompatActivity
 
     public static Intent getLaunchIntent(Context context, Profile fbProfile)
     {
-        Intent intent = new Intent(context, SignupActivity.class);
+        Intent intent = new Intent(context, RegisterActivity.class);
         intent.putExtra(FB_PROFILE, fbProfile);
         return intent;
     }
@@ -45,18 +43,10 @@ public class SignupActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        EventBusExt.getDefault().register(this);
 
         Profile profile = getIntent().getParcelableExtra(FB_PROFILE);
         initRegisterListener();
         initUI(profile);
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        EventBusExt.getDefault().unregister(this);
-        super.onDestroy();
     }
 
     private void initRegisterListener()
@@ -78,8 +68,8 @@ public class SignupActivity extends AppCompatActivity
                 String lasttext = lastName.getText().toString();
                 String birthtext = birthday.getText().toString();
 
-                TaskQueue.loadQueueDefault(SignupActivity.this).execute(
-                        new SignupTask(phoneEmailtext, passtext, firsttext, lasttext, birthtext));
+                TaskQueue.loadQueueDefault(RegisterActivity.this).execute(
+                        new RegisterTask(phoneEmailtext, passtext, firsttext, lasttext, birthtext));
             }
         });
     }
@@ -101,7 +91,7 @@ public class SignupActivity extends AppCompatActivity
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(SignupTask task)
+    public void onEventMainThread(RegisterTask task)
     {
         if(AppPrefs.getInstance(this).isLoggedIn())
         {

@@ -1,6 +1,5 @@
 package org.dosomething.letsdothis.ui;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import org.dosomething.letsdothis.R;
@@ -9,7 +8,7 @@ import org.dosomething.letsdothis.utils.AppPrefs;
 /**
  * Created by toidiu on 4/15/15.
  */
-public class StartActivity extends AppCompatActivity
+public class StartActivity extends BaseActivity
 {
     private static final String TAG = StartActivity.class.getSimpleName();
 

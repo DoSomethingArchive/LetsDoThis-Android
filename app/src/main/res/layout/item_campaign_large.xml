@@ -59,47 +59,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <LinearLayout
-        android:id="@+id/expire"
+    <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@id/campaign_details">
-
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:typeface="brandon_bold"
-            android:layout_weight="1"
-            android:textSize="@dimen/text_36"
-            android:textColor="@color/gray"
-            android:text="@string/expires_in"/>
-
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:id="@+id/days"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:typeface="brandon_bold"
-            android:textSize="@dimen/text_33"
-            tools:text="30\nDays"/>
-
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:id="@+id/hours"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:typeface="brandon_bold"
-            android:textSize="@dimen/text_33"
-            tools:text="24\nHours"/>
-
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:id="@+id/min"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:typeface="brandon_bold"
-            android:layout_weight="1"
-            android:textSize="@dimen/text_33"
-            tools:text="55\nMinutes"/>
-    </LinearLayout>
+        android:layout_below="@id/campaign_details"
+        layout="@layout/item_hub_expire"/>
 </RelativeLayout>

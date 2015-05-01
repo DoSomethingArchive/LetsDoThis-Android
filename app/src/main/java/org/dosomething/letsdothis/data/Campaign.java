@@ -9,6 +9,7 @@ public class Campaign
     public String callToAction;
     public String imagePath;
     public long   startTime;
+    public long   endTime;
     public String solutionCopy;
     public String solutionSupport;
     public String problemFact;
