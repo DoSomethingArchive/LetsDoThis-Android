@@ -3,7 +3,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -105,13 +104,10 @@ public class RegisterLoginActivity extends AppCompatActivity
                                 mProfileTracker[0] = new ProfileTracker()
                                 {
                                     @Override
-                                    protected void onCurrentProfileChanged(Profile profile, Profile profile2)
+                                    protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile)
                                     {
                                         mProfileTracker[0].stopTracking();
-                                        if(BuildConfig.DEBUG)
-                                        {
-                                            startSignupActivity(profile2);
-                                        }
+                                        startSignupActivity(newProfile);
                                     }
                                 };
                                 mProfileTracker[0].startTracking();
