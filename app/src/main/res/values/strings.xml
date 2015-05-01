@@ -41,4 +41,5 @@
     <string name="password_hint">********</string>
     <string name="logout">Log Out</string>
     <string name="change_notifications_prefs">Change Notification Preferences</string>
+    <string name="select_picture">Select or Take Picture</string>
 </resources>

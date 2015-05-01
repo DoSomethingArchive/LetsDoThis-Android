@@ -1,6 +1,7 @@
 package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
@@ -23,6 +24,7 @@ public class LogoutTask extends BaseNetworkErrorHandlerTask
         if(response != null && response.getStatus() == HttpURLConnection.HTTP_OK)
         {
             AppPrefs.getInstance(context).logout();
+            LDTApplication.loginManager.logOut();
             EventBusExt.getDefault().post(this);
         }
 
