@@ -7,12 +7,10 @@ import org.dosomething.letsdothis.network.models.ResponseReportBackList;
 
 import java.util.List;
 
-import co.touchlab.android.threading.eventbus.EventBusExt;
-
 /**
  * Created by izzyoji :) on 4/23/15.
  */
-public class ReportBackListTask extends BaseNetworkErrorHandlerTask
+public abstract class BaseReportBackListTask extends BaseNetworkErrorHandlerTask
 {
 
     public  List<ReportBack> reportBacks;
@@ -21,7 +19,7 @@ public class ReportBackListTask extends BaseNetworkErrorHandlerTask
     public  int              page;
     public  int              totalPages;
 
-    public ReportBackListTask(int position, String campaigns, int page)
+    public BaseReportBackListTask(int position, String campaigns, int page)
     {
         this.position = position;
         this.campaigns = campaigns;
@@ -37,10 +35,4 @@ public class ReportBackListTask extends BaseNetworkErrorHandlerTask
         reportBacks = ResponseReportBackList.getReportBacks(response);
     }
 
-    @Override
-    protected void onComplete(Context context)
-    {
-        EventBusExt.getDefault().post(this);
-        super.onComplete(context);
-    }
 }
