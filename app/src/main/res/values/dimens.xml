@@ -37,7 +37,8 @@
 
     <dimen name="height_nav_bar">@dimen/height_small</dimen>
     <dimen name="height_actions_nav_bar">60dp</dimen>
-    <dimen name="campaign_height">160dp</dimen>
+    <dimen name="campaign_height">150dp</dimen>
+    <dimen name="campaign_height_expanded">242dp</dimen>
 
     <!--Sizes from Sketch-->
     <dimen name="text_48">@dimen/text_xlarge</dimen>
@@ -48,4 +49,5 @@
     <dimen name="hub_profile_header">189dp</dimen>
     <dimen name="hub_avatar_height">75dp</dimen>
     <dimen name="text_26">13sp</dimen>
+    <dimen name="report_back_expanded">375dp</dimen>
 </resources>

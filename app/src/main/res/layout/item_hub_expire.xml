@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tool="http://schemas.android.com/tools"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:typeface="brandon_bold"
+        android:layout_weight="1"
+        android:textSize="@dimen/text_36"
+        android:textColor="@color/gray"
+        android:text="@string/expires_in"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:typeface="brandon_bold"
+            android:textSize="@dimen/text_33"
+            android:paddingRight="@dimen/padding_small"
+            tool:text="30"/>
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:typeface="brandon_medium"
+            android:textSize="@dimen/text_33"
+            android:id="@+id/days_label"
+            tool:text="Days"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/hours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:typeface="brandon_bold"
+            android:textSize="@dimen/text_33"
+            android:paddingRight="@dimen/padding_small"
+            tool:text="30"/>
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:typeface="brandon_medium"
+            android:textSize="@dimen/text_33"
+            android:id="@+id/hours_label"
+            tool:text="Hours"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:typeface="brandon_bold"
+            android:textSize="@dimen/text_33"
+            android:paddingRight="@dimen/padding_small"
+            tool:text="30"/>
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:typeface="brandon_medium"
+            android:textSize="@dimen/text_33"
+            android:id="@+id/minutes_label"
+            tool:text="Minutes"/>
+    </LinearLayout>
+
+</LinearLayout>

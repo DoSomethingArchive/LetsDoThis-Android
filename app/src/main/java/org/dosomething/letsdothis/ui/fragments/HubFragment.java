@@ -2,7 +2,6 @@ package org.dosomething.letsdothis.ui.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,12 +19,8 @@ import org.dosomething.letsdothis.tasks.GetPastUserCampaignTask;
 import org.dosomething.letsdothis.ui.UserListActivity;
 import org.dosomething.letsdothis.ui.UserProfileActivity;
 import org.dosomething.letsdothis.ui.UserUpdateActivity;
-import org.dosomething.letsdothis.ui.adapters.CampaignAdapter;
 import org.dosomething.letsdothis.ui.adapters.HubAdapter;
 import org.dosomething.letsdothis.utils.AppPrefs;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
@@ -38,8 +33,6 @@ public class HubFragment extends Fragment
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String TAG = HubFragment.class.getSimpleName();
-    //~=~=~=~=~=~=~=~=~=~=~=~=Views
-    private RecyclerView recyclerView;
     private HubAdapter   adapter;
 
     public static HubFragment newInstance()
@@ -83,7 +76,7 @@ public class HubFragment extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
+        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
 
         User user = new User(null, "firstName", "lastName", "birthday");
         adapter = new HubAdapter(user);

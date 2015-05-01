@@ -1,18 +1,29 @@
 package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
-import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.tasks.CampaignDetailsTask;
+import org.dosomething.letsdothis.tasks.IndividualCampaignReportBackList;
+import org.dosomething.letsdothis.ui.adapters.CampaignDetailsAdapter;
+
+import java.io.File;
+import java.util.List;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
@@ -20,37 +31,96 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 /**
  * Created by izzyoji :) on 4/17/15.
  */
-public class CampaignDetailsActivity extends AppCompatActivity
+public class CampaignDetailsActivity extends AppCompatActivity implements CampaignDetailsAdapter.DetailsAdapterClickListener
 {
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String EXTRA_CAMPAIGN_ID = "campaign_id";
+    public static final int    SELECT_PICTURE    = 23123;
 
-    //~=~=~=~=~=~=~=~=~=~=~=~=Views
-    private ImageView image;
-    private TextView  title;
-    private TextView  callToAction;
-    private TextView  problemFact;
-    private TextView  solutionCopy;
-    private TextView  solutionSupport;
+    //~=~=~=~=~=~=~=~=~=~=~=~=Fields
+    private Uri                    imageUri;
+    private CampaignDetailsAdapter adapter;
+    private int                    totalPages;
+    private int currentPage = 1;
+
+    public static Intent getLaunchIntent(Context context, int campaignId)
+    {
+        return new Intent(context, CampaignDetailsActivity.class)
+                .putExtra(EXTRA_CAMPAIGN_ID, campaignId);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_campaign_details);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        image = (ImageView)findViewById(R.id.image);
-        title = (TextView) findViewById(R.id.title);
-        callToAction = (TextView) findViewById(R.id.call_to_action);
-        problemFact = (TextView) findViewById(R.id.problemFact);
-        solutionCopy = (TextView) findViewById(R.id.solutionCopy);
-        solutionSupport = (TextView) findViewById(R.id.solutionSupport);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
+        adapter = new CampaignDetailsAdapter(this);
+
+        recyclerView.setAdapter(adapter);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+
+        recyclerView.setLayoutManager(layoutManager);
 
         EventBusExt.getDefault().register(this);
 
-        TaskQueue.loadQueueDefault(this)
-                 .execute(new CampaignDetailsTask(getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1)));
+        int campaignId = getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1);
+        if(campaignId != - 1)
+        {
+            TaskQueue.loadQueueDefault(this).execute(new CampaignDetailsTask(campaignId));
+            TaskQueue.loadQueueDefault(this).execute(
+                    new IndividualCampaignReportBackList(- 1, Integer.toString(campaignId),
+                                                         currentPage));
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch(item.getItemId())
+        {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onScrolledToBottom()
+    {
+        if(currentPage < totalPages)
+        {
+            if(BuildConfig.DEBUG)
+            {
+                Toast.makeText(this, "get more data", Toast.LENGTH_SHORT).show();
+            }
+            String campaigns = Integer.toString(getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1));
+            IndividualCampaignReportBackList task = new IndividualCampaignReportBackList(- 1,
+                                                                                         campaigns,
+                                                                                         currentPage + 1);
+            TaskQueue.loadQueueDefault(this).execute(task);
+        }
+    }
+
+    @Override
+    public void proveShareClicked()
+    {
+        choosePicture();
+    }
+
+    @Override
+    public void inviteClicked()
+    {
+        if(BuildConfig.DEBUG)
+        {
+            Toast.makeText(this, "TODO", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -60,9 +130,73 @@ public class CampaignDetailsActivity extends AppCompatActivity
         super.onDestroy();
     }
 
-    public static Intent getLaunchIntent(Context context, int campaignId)
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        return new Intent(context, CampaignDetailsActivity.class).putExtra(EXTRA_CAMPAIGN_ID, campaignId);
+        if(resultCode == RESULT_OK)
+        {
+            if(requestCode == SELECT_PICTURE)
+            {
+                final boolean isCamera;
+                if(data == null)
+                {
+                    isCamera = true;
+                }
+                else
+                {
+                    final String action = data.getAction();
+                    if(action == null)
+                    {
+                        isCamera = false;
+                    }
+                    else
+                    {
+                        isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    }
+                }
+
+                Uri selectedImageUri;
+                if(isCamera)
+                {
+                    selectedImageUri = imageUri;
+                }
+                else
+                {
+                    selectedImageUri = data == null
+                            ? null
+                            : data.getData();
+                }
+                if(BuildConfig.DEBUG)
+                {
+                    Log.d("asdf-----------", selectedImageUri.toString());
+                }
+                adapter.refreshTestImage(selectedImageUri);
+            }
+        }
+    }
+
+
+    public void choosePicture()
+    {
+        Intent pickIntent = new Intent(Intent.ACTION_PICK,
+                                       android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setType("image/*");
+
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File externalFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                                     "userPic" + System.currentTimeMillis() + ".jpg");
+        imageUri = Uri.fromFile(externalFile);
+        if(BuildConfig.DEBUG)
+        {
+            Log.d("photo location", imageUri.toString());
+        }
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+
+        String pickTitle = getString(R.string.select_picture);
+        Intent chooserIntent = Intent.createChooser(takePhotoIntent, pickTitle);
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+
+        startActivityForResult(chooserIntent, SELECT_PICTURE);
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -70,18 +204,21 @@ public class CampaignDetailsActivity extends AppCompatActivity
     {
         if(task.campaign != null)
         {
-            Campaign campaign = task.campaign;
-
-            Picasso.with(this).load(campaign.imagePath).resize(image.getWidth(), 0).into(image);
-            title.setText(campaign.title);
-            callToAction.setText(campaign.callToAction);
-            problemFact.setText(campaign.problemFact);
-            solutionCopy.setText(Html.fromHtml(campaign.solutionCopy));
-            solutionSupport.setText(Html.fromHtml(campaign.solutionSupport));
+            adapter.updateCampaign(task.campaign);
         }
         else
         {
             Toast.makeText(this, "campaign data failed", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(IndividualCampaignReportBackList task)
+    {
+        totalPages = task.totalPages;
+        currentPage = task.page;
+        List<ReportBack> reportBacks = task.reportBacks;
+        adapter.addAll(reportBacks);
+
     }
 }

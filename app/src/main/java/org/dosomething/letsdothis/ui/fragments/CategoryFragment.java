@@ -14,10 +14,11 @@ import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.ReportBack;
-import org.dosomething.letsdothis.tasks.ReportBackListTask;
+import org.dosomething.letsdothis.tasks.InterestReportBackListTask;
 import org.dosomething.letsdothis.ui.CampaignDetailsActivity;
 import org.dosomething.letsdothis.ui.ReportBackDetailsActivity;
 import org.dosomething.letsdothis.ui.adapters.CampaignAdapter;
+import org.dosomething.letsdothis.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     private static final Integer[] SAMPLE_DATA_IDS = {15, 48, 50, 362, 955, 1261, 1334, 1273, 1293, 1427, 1429, 1467}; //FIXME this is dev only
     public static final  String    KEY_POSITION    = "position";
+    public static final int FIRST_PAGE = 1;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private RecyclerView recyclerView;
@@ -60,30 +62,12 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
     }
 
     @Override
-    public void onStart()
-    {
-        super.onStart();
-
-        EventBusExt.getDefault().register(this);
-        String campaigns = StringUtils.join(sampleIdsSubset, ",");
-        TaskQueue.loadQueueDefault(getActivity())
-                 .execute(new ReportBackListTask(position, campaigns, 1));
-    }
-
-    @Override
-    public void onStop()
-    {
-        super.onStop();
-        EventBusExt.getDefault().unregister(this);
-    }
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
         position = getArguments().getInt(KEY_POSITION);
         recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
-        adapter = new CampaignAdapter(generateSampleData(), this);
+        adapter = new CampaignAdapter(generateSampleData(), this); //FIXME get real data eventually
         adapter.addItem("campaign footer");
 
         recyclerView.setAdapter(adapter);
@@ -106,12 +90,17 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
 
         recyclerView.setLayoutManager(layoutManager);
 
+        EventBusExt.getDefault().register(this);
+        String campaigns = StringUtils.join(sampleIdsSubset, ",");
+        TaskQueue.loadQueueDefault(getActivity())
+                 .execute(new InterestReportBackListTask(position, campaigns, FIRST_PAGE));
     }
 
     private List<Campaign> generateSampleData()
     {
         List<Campaign> campaigns = new ArrayList<>();
         sampleIdsSubset = new ArrayList<>();
+        long endTime = TimeUtils.getSampleExpirationTime();
         for(int i = 0, sample_data_idsLength = SAMPLE_DATA_IDS.length; i < sample_data_idsLength; i++)
         {
             if(i % 4 == position)
@@ -122,8 +111,10 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
                 campaign.id = id;
                 campaign.imagePath = "https://dosomething-a.akamaihd.net/sites/default/files/images/SocialMediaMakeover_hero_lanscape2.jpg";
                 campaign.title = String.format("Sample Campaign %d", id);
-                campaign.callToAction = "Call to callToAction.";
+                campaign.callToAction = "Call to action.";
                 campaign.problemFact = "Problem fact";
+                campaign.endTime = endTime;
+
                 campaigns.add(campaign);
             }
 
@@ -159,7 +150,7 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
             {
                 Toast.makeText(getActivity(), "get more data", Toast.LENGTH_SHORT).show();
             }
-            ReportBackListTask task = new ReportBackListTask(position,
+            InterestReportBackListTask task = new InterestReportBackListTask(position,
                                                              StringUtils.join(sampleIdsSubset, ","),
                                                              currentPage + 1);
             TaskQueue.loadQueueDefault(getActivity()).execute(task);
@@ -167,7 +158,7 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(ReportBackListTask task)
+    public void onEventMainThread(InterestReportBackListTask task)
     {
         if(task.position == position)
         {
@@ -175,7 +166,6 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
             currentPage = task.page;
             List<ReportBack> reportBacks = task.reportBacks;
             adapter.addAll(reportBacks);
-
         }
 
     }
