@@ -105,3 +105,4 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
         }
     }
 }
+
