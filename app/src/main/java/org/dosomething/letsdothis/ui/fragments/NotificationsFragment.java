@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.ui.fragments;
+import android.animation.Animator;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -27,16 +28,8 @@ public class NotificationsFragment extends Fragment
 
     public static final  String TAG             = NotificationsFragment.class.getSimpleName();
     //~=~=~=~=~=~=~=~=~=~=~=~=QuickReturn
-    private static final int    STATE_ONSCREEN  = 0;
-    private static final int    STATE_OFFSCREEN = 1;
-    private static final int    STATE_RETURNING = 2;
     private Toolbar      toolbar;
-    private View         placeholderView;
     private RecyclerView recycleView;
-    private int mMinRawY = 0;
-    private int mState   = STATE_ONSCREEN;
-    private int mQuickReturnHeight;
-    private int mMaxScrollY;
 
 
     public static NotificationsFragment newInstance()
@@ -47,7 +40,7 @@ public class NotificationsFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.fragment_notifications, container, false);
+        View rootView = inflater.inflate(R.layout.activity_fragment_recycler, container, false);
 
         recycleView = (RecyclerView) rootView.findViewById(R.id.recycler);
         toolbar = ((MainActivity) getActivity()).toolbar;
@@ -78,7 +71,8 @@ public class NotificationsFragment extends Fragment
     {
         RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener()
         {
-            boolean hideToolBar = false;
+            private boolean isShowingAnimation;
+            private boolean isHidingAnimation;
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState)
@@ -87,15 +81,6 @@ public class NotificationsFragment extends Fragment
 
                 float translate = toolbar.getTranslationY();
                 Log.d("----------", "translate " + translate);
-
-                //                if(hideToolBar)
-                //                {
-                //                    ((BaseActivity) getActivity()).getSupportActionBar().hide();
-                //                }
-                //                else
-                //                {
-                //                    ((BaseActivity) getActivity()).getSupportActionBar().show();
-                //                }
             }
 
             @Override
@@ -106,26 +91,73 @@ public class NotificationsFragment extends Fragment
                 float translate = toolbar.getTranslationY();
 
                 Log.d("----------", "dy " + dy);
-                Log.d("----------", "translate " + translate);
+                //                Log.d("----------", "translate " + translate);
+
                 if(dy > 0)
                 {
-                    if(translate <= - height)
+                    if(translate == 0 && ! isHidingAnimation)
                     {
-                        toolbar.setTranslationY(-height);
-                        return;
+                        Log.d("----------", "hide");
+                        isHidingAnimation = true;
+                        //hide
+                        toolbar.animate().translationY(- height)
+                                .setListener(new Animator.AnimatorListener()
+                                {
+                                    @Override
+                                    public void onAnimationStart(Animator animator)
+                                    {
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(Animator animator)
+                                    {
+                                        isHidingAnimation = false;
+                                    }
+
+                                    @Override
+                                    public void onAnimationCancel(Animator animator)
+                                    {
+                                    }
+
+                                    @Override
+                                    public void onAnimationRepeat(Animator animator)
+                                    {
+                                    }
+                                });
                     }
-                    toolbar.setTranslationY(translate - dy);
-                    //                    hideToolBar = true;
                 }
                 else
                 {
-                    if(translate >= 0)
+                    if(translate != 0 && ! isShowingAnimation)
                     {
-                        toolbar.setTranslationY(0);
-                        return;
+                        isShowingAnimation = true;
+                        Log.d("----------", "show");
+                        //show
+                        toolbar.animate().setDuration(200).translationY(0)
+                                .setListener(new Animator.AnimatorListener()
+                                {
+                                    @Override
+                                    public void onAnimationStart(Animator animator)
+                                    {
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(Animator animator)
+                                    {
+                                        isShowingAnimation = false;
+                                    }
+
+                                    @Override
+                                    public void onAnimationCancel(Animator animator)
+                                    {
+                                    }
+
+                                    @Override
+                                    public void onAnimationRepeat(Animator animator)
+                                    {
+                                    }
+                                });
                     }
-                    toolbar.setTranslationY(translate - dy);
-                    //                    hideToolBar = false;
                 }
             }
         };
@@ -144,8 +176,6 @@ public class NotificationsFragment extends Fragment
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        placeholderView = getView().findViewById(R.id.placeholder);
-
     }
 
     private List<Object> generateSampleData()
