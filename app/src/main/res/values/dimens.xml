@@ -53,4 +53,5 @@
     <dimen name="notification_image">60dp</dimen>
     <dimen name="text_42">21sp</dimen>
     <dimen name="invite_code_input">209dp</dimen>
+    <dimen name="avatar">100dp</dimen>
 </resources>
