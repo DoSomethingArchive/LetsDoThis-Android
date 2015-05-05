@@ -8,14 +8,19 @@ import android.widget.Toast;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.Profile;
-import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
+import com.google.gson.Gson;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.data.FbUser;
+import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.utils.AppPrefs;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.List;
@@ -73,9 +78,9 @@ public class RegisterLoginActivity extends BaseActivity
         });
     }
 
-    private void startRegisterActivity(Profile currentProfile)
+    private void startRegisterActivity(FbUser user)
     {
-        startActivity(RegisterActivity.getLaunchIntent(RegisterLoginActivity.this, currentProfile));
+        startActivity(RegisterActivity.getLaunchIntent(RegisterLoginActivity.this, user));
         finish();
     }
 
@@ -87,9 +92,6 @@ public class RegisterLoginActivity extends BaseActivity
         }
 
         callbackManager = CallbackManager.Factory.create();
-        final ProfileTracker[] mProfileTracker = new ProfileTracker[1];
-
-
         findViewById(R.id.fb_connect).setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -101,16 +103,27 @@ public class RegisterLoginActivity extends BaseActivity
                             @Override
                             public void onSuccess(LoginResult loginResult)
                             {
-                                mProfileTracker[0] = new ProfileTracker()
-                                {
-                                    @Override
-                                    protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile)
-                                    {
-                                        mProfileTracker[0].stopTracking();
-                                        startRegisterActivity(newProfile);
-                                    }
-                                };
-                                mProfileTracker[0].startTracking();
+                                final GraphRequest request = GraphRequest
+                                        .newMeRequest(loginResult.getAccessToken(),
+                                                      new GraphRequest.GraphJSONObjectCallback()
+                                                      {
+                                                          @Override
+                                                          public void onCompleted(JSONObject object, GraphResponse response)
+                                                          {
+                                                              if(response.getError() == null)
+                                                              {
+                                                                  FbUser user = new Gson().fromJson(
+                                                                          response.getRawResponse(),
+                                                                          FbUser.class);
+                                                                  startRegisterActivity(user);
+                                                              }
+                                                          }
+                                                      });
+                                Bundle parameters = new Bundle();
+                                parameters.putString("fields",
+                                                     "id,email, gender, birthday, first_name, last_name");
+                                request.setParameters(parameters);
+                                request.executeAsync();
                             }
 
                             @Override
