@@ -21,7 +21,6 @@ import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.tasks.CampaignDetailsTask;
 import org.dosomething.letsdothis.tasks.IndividualCampaignReportBackList;
 import org.dosomething.letsdothis.ui.adapters.CampaignDetailsAdapter;
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.List;

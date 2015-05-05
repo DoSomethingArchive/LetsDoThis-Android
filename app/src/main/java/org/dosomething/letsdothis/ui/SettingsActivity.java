@@ -22,7 +22,7 @@ public class SettingsActivity extends BaseActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         TextView title = (TextView) findViewById(R.id.toolbar_title);
         toolbar.setTitle("");
-        title.setText("SETTINGS");
+        title.setText(R.string.settings);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

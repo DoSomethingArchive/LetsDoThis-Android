@@ -75,7 +75,7 @@ public class HubFragment extends AbstractQuickReturnFragment
         toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
         TextView title = (TextView) rootView.findViewById(R.id.toolbar_title);
         toolbar.setTitle("");
-        title.setText(getResources().getString(R.string.app_name_cap));
+        title.setText(getString(R.string.app_name));
         setToolbarListener.setToolbar(toolbar);
 
         return rootView;

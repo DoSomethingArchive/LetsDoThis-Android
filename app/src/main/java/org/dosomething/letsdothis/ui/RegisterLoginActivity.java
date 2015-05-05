@@ -18,7 +18,6 @@ import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.FbUser;
-import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.utils.AppPrefs;
 import org.json.JSONObject;
 
@@ -121,7 +120,7 @@ public class RegisterLoginActivity extends BaseActivity
                                                       });
                                 Bundle parameters = new Bundle();
                                 parameters.putString("fields",
-                                                     "id,email, gender, birthday, first_name, last_name");
+                                                     "id,email, birthday, first_name, last_name");
                                 request.setParameters(parameters);
                                 request.executeAsync();
                             }
