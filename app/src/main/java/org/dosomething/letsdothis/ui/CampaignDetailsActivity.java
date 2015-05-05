@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.dosomething.letsdothis.BuildConfig;
@@ -55,6 +56,10 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_toolbar_recycler);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        TextView title = (TextView) findViewById(R.id.toolbar_title);
+        toolbar.setTitle("");
+        title.setText(getResources().getString(R.string.app_name_cap));
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
