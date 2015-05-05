@@ -21,6 +21,11 @@ import org.dosomething.letsdothis.tasks.RegisterTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Arrays;
 
 import co.touchlab.android.threading.tasks.TaskQueue;
 
@@ -30,19 +35,20 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 public class RegisterActivity extends BaseActivity
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final String FB_PROFILE = "FB_PROFILE";
-    public static final int    SELECT_PICTURE    = 321;
+    public static final String FB_PROFILE     = "FB_PROFILE";
+    public static final int    SELECT_PICTURE = 321;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
-    private EditText phoneEmail;
-    private EditText password;
-    private EditText firstName;
-    private EditText lastName;
-    private EditText birthday;
+    private EditText  phoneEmail;
+    private EditText  password;
+    private EditText  firstName;
+    private EditText  lastName;
+    private EditText  birthday;
     private ImageView avatar;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
-    private Uri                    imageUri;
+    private Uri imageUri;
+    private File externalFile;
 
     public static Intent getLaunchIntent(Context context, Profile fbProfile)
     {
@@ -128,9 +134,7 @@ public class RegisterActivity extends BaseActivity
                 }
                 else
                 {
-                    selectedImageUri = data == null
-                            ? null
-                            : data.getData();
+                    selectedImageUri = data.getData();
                 }
                 if(BuildConfig.DEBUG)
                 {
@@ -138,12 +142,57 @@ public class RegisterActivity extends BaseActivity
                 }
 
                 Picasso.with(this).load(selectedImageUri).resize(avatar.getWidth(), avatar.getHeight()).into(avatar);
-                String path = selectedImageUri.getPath();
-                Log.d("test-----------", path);
-                String absolutePath = new File(path).getAbsolutePath();
-                Log.d("test-----------", absolutePath);
-                AppPrefs.getInstance(this).setAvatarPath(absolutePath);
+
+                File externalFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                                             "avatar.jpg");
+                saveFile(selectedImageUri, externalFile);
+                //FIXME: this should be loaded into Hub
+                AppPrefs.getInstance(this).setAvatarPath(externalFile.getAbsolutePath());
             }
+        }
+    }
+
+    private void saveFile(Uri sourceUri, File externalFile)
+    {
+
+        final int chunkSize = 1024;
+        byte[] imageData = new byte[chunkSize];
+
+        InputStream in = null;
+        OutputStream out = null;
+        try
+        {
+            in = getContentResolver().openInputStream(sourceUri);
+            out = new FileOutputStream(externalFile);
+
+            int bytesRead;
+            while((bytesRead = in.read(imageData)) > 0)
+            {
+                out.write(Arrays.copyOfRange(imageData, 0, Math.max(0, bytesRead)));
+            }
+
+        }
+        catch(IOException ex)
+        {
+            Toast.makeText(this, "Saving picture failed.", Toast.LENGTH_SHORT).show();
+        }
+        finally
+        {
+                try
+                {
+                    if(in != null)
+                    {
+                        in.close();
+                    }
+                    if(out != null)
+                    {
+                        out.close();
+                    }
+                }
+                catch(IOException e)
+                {
+                    throw new RuntimeException(e);
+                }
         }
     }
 
