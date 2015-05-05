@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.ui.fragments;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,7 +16,6 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignTask;
 import org.dosomething.letsdothis.tasks.GetPastUserCampaignTask;
-import org.dosomething.letsdothis.ui.MainActivity;
 import org.dosomething.letsdothis.ui.SettingsActivity;
 import org.dosomething.letsdothis.ui.UserListActivity;
 import org.dosomething.letsdothis.ui.UserProfileActivity;
@@ -34,7 +34,9 @@ public class HubFragment extends AbstractQuickReturnFragment
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String TAG = HubFragment.class.getSimpleName();
-    private HubAdapter adapter;
+
+    private HubAdapter         adapter;
+    private SetToolbarListener setToolbarListener;
 
     public static HubFragment newInstance()
     {
@@ -49,26 +51,29 @@ public class HubFragment extends AbstractQuickReturnFragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    public void onAttach(Activity activity)
     {
-        View rootView = inflater
-                .inflate(R.layout.activity_fragment_quickreturn_recycler, container, false);
-        recycleView = (RecyclerView) rootView.findViewById(R.id.recycler);
-        toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
-        ((MainActivity) getActivity()).setSupportActionBar(toolbar);
-        return rootView;
+        super.onAttach(activity);
+        setToolbarListener = (SetToolbarListener) getActivity();
     }
 
     @Override
-    public void onStart()
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        super.onStart();
         EventBusExt.getDefault().register(this);
         String currentUserId = AppPrefs.getInstance(getActivity()).getCurrentUserId();
         TaskQueue.loadQueueDefault(getActivity())
                 .execute(new GetCurrentUserCampaignTask(currentUserId));
         TaskQueue.loadQueueDefault(getActivity())
                 .execute(new GetPastUserCampaignTask(currentUserId));
+
+        View rootView = inflater
+                .inflate(R.layout.activity_fragment_quickreturn_recycler, container, false);
+        recycleView = (RecyclerView) rootView.findViewById(R.id.recycler);
+
+        toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        setToolbarListener.setToolbar(toolbar);
+        return rootView;
     }
 
     @Override
@@ -137,4 +142,9 @@ public class HubFragment extends AbstractQuickReturnFragment
         }
     }
 
+
+    public interface SetToolbarListener
+    {
+        void setToolbar(Toolbar toolbar);
+    }
 }
