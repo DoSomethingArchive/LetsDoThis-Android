@@ -9,13 +9,24 @@
         <item name="android:editTextStyle">@style/EditText</item>
         <item name="colorPrimary">@color/web_orange</item>
     </style>
-    <style name="NavButton" parent="AppTheme">
+    <style name="NavButtonHolder" parent="AppTheme">
+        <item name="android:orientation">vertical</item>
         <item name="android:gravity">center</item>
-        <item name="android:singleLine">true</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="NavButtonText" parent="AppTheme">
+        <item name="android:singleLine">true</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/selectable_gray</item>
+        <item name="android:textSize">@dimen/text_20</item>
+    </style>
+    <style name="NavButtonImage" parent="AppTheme">
+        <item name="android:layout_width">@dimen/height_xxtiny</item>
+        <item name="android:layout_height">@dimen/height_xxtiny</item>
     </style>
 
     <style name="CustomTabPageIndicator">
