@@ -2,6 +2,8 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ public class ReportBackDetailsActivity extends BaseActivity
     private TextView  timestamp;
     private TextView  caption;
     private TextView  name;
+    private TextView toolbarTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -41,6 +44,15 @@ public class ReportBackDetailsActivity extends BaseActivity
         caption = (TextView) findViewById(R.id.caption);
         name = (TextView) findViewById(R.id.name);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+//        toolbarTitle.setText(getResources().getString(R.string.app_name_cap));
+
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         TaskQueue.loadQueueDefault(this).execute(
                 new ReportBackDetailsTask(getIntent().getIntExtra(EXTRA_REPORT_BACK_ID, - 1)));
     }
@@ -51,6 +63,19 @@ public class ReportBackDetailsActivity extends BaseActivity
                 .putExtra(EXTRA_REPORT_BACK_ID, reportBackId);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch(item.getItemId())
+        {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(ReportBackDetailsTask task)
     {
@@ -59,7 +84,8 @@ public class ReportBackDetailsActivity extends BaseActivity
             ReportBack reportBack = task.reportBack;
             User user = task.user;
 
-            Picasso.with(this).load(reportBack.getImagePath()).resize(image.getWidth(), 0).into(image);
+            Picasso.with(this).load(reportBack.getImagePath()).resize(image.getWidth(), 0)
+                    .into(image);
             timestamp.setText(TimeUtils.getTimeSince(this, reportBack.createdAt * 1000));
             caption.setText(reportBack.caption);
             if(user != null)
@@ -70,7 +96,7 @@ public class ReportBackDetailsActivity extends BaseActivity
             {
                 name.setText(reportBack.user.id);
             }
-            setTitle(reportBack.campaign.title);
+            toolbarTitle.setText(reportBack.campaign.title);
 
             //FIXME add user's avatar
             //FIXME add kudos

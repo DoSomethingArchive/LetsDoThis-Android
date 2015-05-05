@@ -16,6 +16,8 @@ import com.squareup.picasso.Picasso;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.data.FbUser;
+import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.RegisterTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
 import org.dosomething.letsdothis.utils.ImageUtils;
@@ -35,7 +37,7 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 public class RegisterActivity extends BaseActivity
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final  String FB_PROFILE     = "FB_PROFILE";
+    public static final String FB_USER = "FB_USER";
     public static final  int    SELECT_PICTURE = 321;
     private static final String TAG            = RegisterActivity.class.getSimpleName();
 
@@ -50,10 +52,10 @@ public class RegisterActivity extends BaseActivity
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private Uri imageUri;
 
-    public static Intent getLaunchIntent(Context context, Profile fbProfile)
+    public static Intent getLaunchIntent(Context context, FbUser user)
     {
         Intent intent = new Intent(context, RegisterActivity.class);
-        intent.putExtra(FB_PROFILE, fbProfile);
+        intent.putExtra(FB_USER, user);
         return intent;
     }
 
@@ -63,7 +65,7 @@ public class RegisterActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        Profile profile = getIntent().getParcelableExtra(FB_PROFILE);
+        FbUser fbUser = (FbUser) getIntent().getSerializableExtra(FB_USER);
 
         avatar = (ImageView) findViewById(R.id.avatar);
         avatar.setOnClickListener(new View.OnClickListener()
@@ -86,7 +88,7 @@ public class RegisterActivity extends BaseActivity
         });
 
         initRegisterListener();
-        initUI(profile);
+        initUI(fbUser);
     }
 
     public void choosePicture()
@@ -190,24 +192,24 @@ public class RegisterActivity extends BaseActivity
         }
         finally
         {
-                try
+            try
+            {
+                if(in != null)
                 {
-                    if(in != null)
-                    {
-                        in.close();
-                    }
-                    if(out != null)
-                    {
-                        out.close();
-                    }
+                    in.close();
                 }
-                catch(IOException e)
+                if(out != null)
                 {
-                    Log.e(TAG, "error closing input and output stream");
+                    out.close();
                 }
+            }
+            catch(IOException e)
+            {
+                Log.e(TAG, "error closing input and output stream");
+            }
         }
     }
-
+    
     private void initRegisterListener()
     {
         phoneEmail = (EditText) findViewById(R.id.phone_email);
@@ -233,12 +235,14 @@ public class RegisterActivity extends BaseActivity
         });
     }
 
-    private void initUI(Profile profile)
+    private void initUI(FbUser fbUser)
     {
-        if(profile != null)
+        if(fbUser != null)
         {
-            firstName.setText(profile.getFirstName());
-            lastName.setText(profile.getLastName());
+            firstName.setText(fbUser.first_name);
+            lastName.setText(fbUser.last_name);
+            phoneEmail.setText(fbUser.email);
+            birthday.setText(fbUser.birthday);
         }
     }
 

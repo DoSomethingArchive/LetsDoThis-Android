@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
@@ -6,23 +6,14 @@
               android:orientation="vertical"
               tools:ignore="MergeRootFrame">
 
-    <FrameLayout
-        android:id="@+id/container"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"/>
-
     <LinearLayout
+        android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
         android:layout_gravity="bottom"
         android:orientation="horizontal"
         android:background="@color/nav_bar"
-        android:layout_height="@dimen/height_nav_bar">
+        android:layout_height="@dimen/height_nav_bar"
+        android:layout_alignParentBottom="true">
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             style="@style/NavButton"
@@ -41,4 +32,20 @@
             android:id="@+id/notifications"
             android:text="@string/notifications"/>
     </LinearLayout>
-</LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@id/bottom_nav"
+        android:background="@android:color/darker_gray"/>
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/divider"/>
+
+
+</RelativeLayout>

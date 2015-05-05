@@ -50,7 +50,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         {
             currentCampaign = campaign;
             dataSet.add(campaign);
-            dataSet.add("footer placeholder");
+            dataSet.add("footer item_placeholder");
             notifyItemInserted(0);
         }
         else
