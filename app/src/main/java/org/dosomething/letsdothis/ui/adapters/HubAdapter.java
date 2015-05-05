@@ -95,7 +95,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ProfileViewHolder profileViewHolder = (ProfileViewHolder) holder;
             profileViewHolder.name
                     .setText(String.format("%s %s.", user.first_name, user.last_name.charAt(0)));
-        }
+            }
         else if(getItemViewType(position) == VIEW_TYPE_CURRENT_CAMPAIGN)
         {
             Campaign campaign = (Campaign) hubList.get(position);

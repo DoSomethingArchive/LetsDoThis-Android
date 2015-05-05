@@ -9,9 +9,10 @@ import org.jetbrains.annotations.NotNull;
 public class AppPrefs
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final String CURRENT_USER_ID = "CURRENT_USER_ID";
+    public static final String CURRENT_USER_ID    = "CURRENT_USER_ID";
     public static final String USER_SESSION_TOKEN = "CURRENT_SESSION_TOKEN";
-    public static final  String FIRST_RUN = "FIRST_RUN";
+    public static final String FIRST_RUN          = "FIRST_RUN";
+    public static final String AVATAR_PATH        = "AVATAR_PATH";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private static AppPrefs          instance;
@@ -107,5 +108,15 @@ public class AppPrefs
     public boolean isFirstRun()
     {
         return getBoolean(FIRST_RUN, true);
+    }
+
+    public void setAvatarPath(String path)
+    {
+        setString(AVATAR_PATH, path);
+    }
+
+    public String getAvatarPath()
+    {
+        return getString(AVATAR_PATH, null);
     }
 }

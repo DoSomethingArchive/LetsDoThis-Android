@@ -1,66 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:background="@color/web_orange"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:background="@color/web_orange"
+            android:layout_height="match_parent">
 
 
-    <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
-        android:id="@+id/first_name"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:hint="@string/first_name"/>
+        android:layout_height="match_parent"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
 
-    <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
-        android:id="@+id/last_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/last_name"/>
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="@dimen/text_33"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_marginTop="@dimen/padding_small"
+            android:text="@string/tell_us"/>
 
-    <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
-        android:id="@+id/phone_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/phone_email"/>
+        <org.dosomething.letsdothis.ui.views.CircleImageView
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_action_add"
+            android:id="@+id/avatar"
+            android:layout_margin="@dimen/padding_medium"
+            android:layout_width="@dimen/avatar"
+            app:background_color="@color/porcelain"
+            app:draw_border="true"
+            app:border_width="@dimen/padding_tiny"
+            app:border_color="@color/white"
+            android:layout_height="@dimen/avatar"/>
 
-    <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:layout_marginTop="10dp"
-        android:hint="@string/password"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_small"
+            android:layout_marginRight="@dimen/padding_small"
+            android:orientation="horizontal">
 
-    <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
-        android:id="@+id/birthday"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="date"
-        android:hint="@string/birthday"/>
+            <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
+                android:id="@+id/first_name"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:layout_marginRight="@dimen/padding_tiny"
+                android:hint="@string/first_name"/>
 
-    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:text="@string/footer_invite_code"/>
+            <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
+                android:id="@+id/last_name"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_tiny"
+                android:hint="@string/last_name"/>
 
-    <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
-        android:id="@+id/invite"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:hint="@string/invite_code_opt"/>
+        </LinearLayout>
 
 
-    <org.dosomething.letsdothis.ui.views.typeface.CustomButton
-        android:id="@+id/register"
-        app:typeface="brandon_bold"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/create_account"/>
+        <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
+            android:id="@+id/phone_email"
+            android:layout_margin="@dimen/padding_small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/phone_email"/>
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_small"
+            android:layout_marginRight="@dimen/padding_small"
+            android:orientation="horizontal">
+
+            <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
+                android:id="@+id/password"
+                android:layout_marginRight="@dimen/padding_tiny"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:hint="@string/password"/>
+
+            <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
+                android:id="@+id/birthday"
+                android:layout_width="0dp"
+                android:layout_marginLeft="@dimen/padding_tiny"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:inputType="date"
+                android:hint="@string/birthday"/>
+
+        </LinearLayout>
+
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/padding_medium"
+            android:layout_marginLeft="@dimen/padding_small"
+            android:layout_marginRight="@dimen/padding_small"
+            android:textColor="@color/white"
+            android:text="@string/footer_invite_code"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
+            android:id="@+id/invite"
+            android:layout_marginLeft="@dimen/padding_small"
+            android:layout_marginRight="@dimen/padding_small"
+            android:layout_marginBottom="@dimen/padding_small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="@string/invite_code_opt"/>
+
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+            android:id="@+id/register"
+            android:layout_marginLeft="@dimen/padding_small"
+            android:layout_marginRight="@dimen/padding_small"
+            app:typeface="brandon_bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/create_account"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:padding="@dimen/padding_small"
+            android:id="@+id/sign_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/footer_register"/>
+
+    </LinearLayout>
+
+</ScrollView>
