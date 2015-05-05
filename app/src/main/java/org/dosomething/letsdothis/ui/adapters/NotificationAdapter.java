@@ -35,15 +35,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
-        switch(viewType)
-        {
-            case VIEW_TYPE_NOTIFICAITON:
-                View notificationLayout = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_notification, parent, false);
-                return new NotificationViewHolder(notificationLayout);
-            default:
-                return null;
-        }
+        View notificationLayout = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_notification, parent, false);
+        return new NotificationViewHolder(notificationLayout);
     }
 
     @Override
@@ -66,12 +60,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public int getItemViewType(int position)
     {
-        Object currentObject = notifications.get(position);
-        if(currentObject instanceof Notification)
-        {
-            return VIEW_TYPE_NOTIFICAITON;
-        }
-        return 0;
+        return VIEW_TYPE_NOTIFICAITON;
     }
 
     @Override
