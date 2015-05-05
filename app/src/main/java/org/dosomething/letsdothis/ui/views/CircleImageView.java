@@ -129,7 +129,7 @@ public class CircleImageView extends ImageView
             return;
         }
 
-        if(mIsPlaceholder)
+//        if(mIsPlaceholder) when this is true, the background doesn't get drawn?
         {
             canvas.drawCircle(getWidth() / 2, getHeight() / 2, mDrawableRadius - getPaddingLeft(),
                               mBackgroundPaint);
