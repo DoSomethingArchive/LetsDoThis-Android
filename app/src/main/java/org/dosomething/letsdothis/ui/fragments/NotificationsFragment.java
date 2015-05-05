@@ -1,6 +1,7 @@
 package org.dosomething.letsdothis.ui.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -19,7 +20,7 @@ import java.util.List;
 /**
  * Created by izzyoji :) on 4/15/15.
  */
-public class NotificationsFragment extends AbstractQuickReturnFragment
+public class NotificationsFragment extends Fragment
 {
 
     public static final String TAG = NotificationsFragment.class.getSimpleName();
@@ -33,16 +34,7 @@ public class NotificationsFragment extends AbstractQuickReturnFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.activity_fragment_quickreturn_recycler, container, false);
-
-        recycleView = (RecyclerView) rootView.findViewById(R.id.recycler);
-
-
-        toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
-        ((MainActivity) getActivity()).setSupportActionBar(toolbar);
-
-
-        return rootView;
+        return inflater.inflate(R.layout.activity_fragment_recycler, container, false);
     }
 
     @Override
@@ -53,9 +45,7 @@ public class NotificationsFragment extends AbstractQuickReturnFragment
         NotificationAdapter adapter = new NotificationAdapter(generateSampleData());
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
         recyclerView.setAdapter(adapter);
-
-        layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     private List<Object> generateSampleData()

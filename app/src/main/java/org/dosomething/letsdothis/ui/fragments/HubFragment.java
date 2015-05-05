@@ -1,9 +1,9 @@
 package org.dosomething.letsdothis.ui.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,6 +15,7 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignTask;
 import org.dosomething.letsdothis.tasks.GetPastUserCampaignTask;
+import org.dosomething.letsdothis.ui.MainActivity;
 import org.dosomething.letsdothis.ui.SettingsActivity;
 import org.dosomething.letsdothis.ui.UserListActivity;
 import org.dosomething.letsdothis.ui.UserProfileActivity;
@@ -28,12 +29,12 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 /**
  * Created by izzyoji :) on 4/15/15.
  */
-public class HubFragment extends Fragment
+public class HubFragment extends AbstractQuickReturnFragment
 {
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String TAG = HubFragment.class.getSimpleName();
-    private HubAdapter   adapter;
+    private HubAdapter adapter;
 
     public static HubFragment newInstance()
     {
@@ -50,7 +51,12 @@ public class HubFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.activity_fragment_recycler, container, false);
+        View rootView = inflater
+                .inflate(R.layout.activity_fragment_quickreturn_recycler, container, false);
+        recycleView = (RecyclerView) rootView.findViewById(R.id.recycler);
+        toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        ((MainActivity) getActivity()).setSupportActionBar(toolbar);
+        return rootView;
     }
 
     @Override
@@ -81,7 +87,8 @@ public class HubFragment extends Fragment
         User user = new User(null, "firstName", "lastName", "birthday");
         adapter = new HubAdapter(user);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
     }
 
 

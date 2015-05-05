@@ -22,7 +22,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final int VIEW_TYPE_NOTIFICAITON = 0;
-    public static final int VIEW_TYPE_PLACEHOLDER  = 1;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private List<Object> notifications;
@@ -31,7 +30,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     {
         super();
         this.notifications = notifications;
-        this.notifications.add(0, new PlaceHolder());
     }
 
     @Override
@@ -43,10 +41,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 View notificationLayout = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_notification, parent, false);
                 return new NotificationViewHolder(notificationLayout);
-            case VIEW_TYPE_PLACEHOLDER:
-                View placeholderLayout = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_placeholder, parent, false);
-                return new PlaceholderViewHolder(placeholderLayout);
             default:
                 return null;
         }
@@ -67,10 +61,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             notificationViewHolder.timestamp.setText(TimeUtils.getTimeSince(
                     notificationViewHolder.timestamp.getContext(), notification.timeStamp));
         }
-        else
-        {
-            PlaceholderViewHolder placeholderViewHolder = (PlaceholderViewHolder) holder;
-        }
     }
 
     @Override
@@ -81,10 +71,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         {
             return VIEW_TYPE_NOTIFICAITON;
         }
-        else
-        {
-            return VIEW_TYPE_PLACEHOLDER;
-        }
+        return 0;
     }
 
     @Override
@@ -110,18 +97,4 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    public static class PlaceholderViewHolder extends RecyclerView.ViewHolder
-    {
-        public PlaceholderViewHolder(View itemView)
-        {
-            super(itemView);
-        }
-    }
-
-
-    //FIXME move to appropriate location
-    public static class PlaceHolder
-    {
-
-    }
 }
