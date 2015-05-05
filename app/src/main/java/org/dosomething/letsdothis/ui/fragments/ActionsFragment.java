@@ -1,12 +1,15 @@
 package org.dosomething.letsdothis.ui.fragments;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.viewpagerindicator.TabPageIndicator;
 
@@ -21,6 +24,7 @@ public class ActionsFragment extends Fragment
 {
 
     public static final String TAG = ActionsFragment.class.getSimpleName();
+    private HubFragment.SetToolbarListener setToolbarListener;
 
     public static ActionsFragment newInstance()
     {
@@ -30,7 +34,18 @@ public class ActionsFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.fragment_actions, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_actions, container, false);
+        TextView title = (TextView) rootView.findViewById(R.id.toolbar_title);
+        title.setText(getResources().getString(R.string.app_name_cap));
+
+        return rootView;
+    }
+
+    @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+        setToolbarListener = (HubFragment.SetToolbarListener) getActivity();
     }
 
     @Override

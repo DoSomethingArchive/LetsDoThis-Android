@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.User;
@@ -72,7 +73,11 @@ public class HubFragment extends AbstractQuickReturnFragment
         recycleView = (RecyclerView) rootView.findViewById(R.id.recycler);
 
         toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        TextView title = (TextView) rootView.findViewById(R.id.toolbar_title);
+        toolbar.setTitle("");
+        title.setText(getResources().getString(R.string.app_name_cap));
         setToolbarListener.setToolbar(toolbar);
+
         return rootView;
     }
 
@@ -145,6 +150,7 @@ public class HubFragment extends AbstractQuickReturnFragment
 
     public interface SetToolbarListener
     {
-        void setToolbar(Toolbar toolbar);
+         abstract void setToolbar(Toolbar toolbar);
+
     }
 }
