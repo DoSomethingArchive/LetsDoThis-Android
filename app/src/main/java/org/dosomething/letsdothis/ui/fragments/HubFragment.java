@@ -1,15 +1,17 @@
 package org.dosomething.letsdothis.ui.fragments;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.User;
@@ -28,12 +30,14 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 /**
  * Created by izzyoji :) on 4/15/15.
  */
-public class HubFragment extends Fragment
+public class HubFragment extends AbstractQuickReturnFragment
 {
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String TAG = HubFragment.class.getSimpleName();
-    private HubAdapter   adapter;
+
+    private HubAdapter         adapter;
+    private SetToolbarListener setToolbarListener;
 
     public static HubFragment newInstance()
     {
@@ -48,21 +52,33 @@ public class HubFragment extends Fragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    public void onAttach(Activity activity)
     {
-        return inflater.inflate(R.layout.activity_fragment_recycler, container, false);
+        super.onAttach(activity);
+        setToolbarListener = (SetToolbarListener) getActivity();
     }
 
     @Override
-    public void onStart()
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        super.onStart();
         EventBusExt.getDefault().register(this);
         String currentUserId = AppPrefs.getInstance(getActivity()).getCurrentUserId();
         TaskQueue.loadQueueDefault(getActivity())
                 .execute(new GetCurrentUserCampaignTask(currentUserId));
         TaskQueue.loadQueueDefault(getActivity())
                 .execute(new GetPastUserCampaignTask(currentUserId));
+
+        View rootView = inflater
+                .inflate(R.layout.activity_fragment_quickreturn_recycler, container, false);
+        recycleView = (RecyclerView) rootView.findViewById(R.id.recycler);
+
+        toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        TextView title = (TextView) rootView.findViewById(R.id.toolbar_title);
+        toolbar.setTitle("");
+        title.setText(getString(R.string.app_name));
+        setToolbarListener.setToolbar(toolbar);
+
+        return rootView;
     }
 
     @Override
@@ -81,7 +97,8 @@ public class HubFragment extends Fragment
         User user = new User(null, "firstName", "lastName", "birthday");
         adapter = new HubAdapter(user);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
     }
 
 
@@ -130,4 +147,10 @@ public class HubFragment extends Fragment
         }
     }
 
+
+    public interface SetToolbarListener
+    {
+         abstract void setToolbar(Toolbar toolbar);
+
+    }
 }

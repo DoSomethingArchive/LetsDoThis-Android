@@ -21,16 +21,16 @@ public interface DoSomethingAPI
             : "https://www.dosomething.org/api/v1/";
 
     @Headers("Content-Type: application/json")
-    @GET("/content/{id}")
+    @GET("/content/{id}.json")
     ResponseCampaign campaign(@Path("id") int id) throws NetworkException;
 
     @Headers("Content-Type: application/json")
-    @GET("/reportback-items?status=approved")
+    @GET("/reportback-items.json?status=approved")
     ResponseReportBackList reportBackList(@Query("campaigns") String campaignIds, @Query(
             "count") int count, @Query("random") boolean random, @Query(
             "page") int page) throws NetworkException;
 
     @Headers("Content-Type: application/json")
-    @GET("/reportback-items/{id}")
+    @GET("/reportback-items/{id}.json")
     ResponseReportBack reportBack(@Path("id") int id) throws NetworkException;
 }

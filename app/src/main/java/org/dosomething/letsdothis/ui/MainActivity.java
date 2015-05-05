@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -14,9 +15,8 @@ import org.dosomething.letsdothis.ui.fragments.InvitesFragment;
 import org.dosomething.letsdothis.ui.fragments.NotificationsFragment;
 
 
-public class MainActivity extends BaseActivity
+public class MainActivity extends BaseActivity implements HubFragment.SetToolbarListener
 {
-
     private View actions;
     private View hub;
     private View invites;
@@ -117,5 +117,12 @@ public class MainActivity extends BaseActivity
         invites.setSelected(TextUtils.equals(InvitesFragment.TAG, currentFragTag));
 
     }
+
+    @Override
+    public void setToolbar(Toolbar toolbar)
+    {
+        setSupportActionBar(toolbar);
+    }
+
 
 }

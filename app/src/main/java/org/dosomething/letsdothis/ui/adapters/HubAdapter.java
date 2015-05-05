@@ -24,6 +24,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
+    public static final int    VIEW_TYPE_PLACEHOLDER      = - 1;
     public static final int    VIEW_TYPE_PROFILE          = 0;
     public static final int    VIEW_TYPE_SECTION_TITLE    = 1;
     public static final int    VIEW_TYPE_CURRENT_CAMPAIGN = 2;
@@ -41,6 +42,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.hubList.add(user);
         hubList.add(CURRENTLY_DOING);
         hubList.add(BEEN_THERE_DONE_GOOD);
+        this.hubList.add(0, new PlaceHolder());
     }
 
     @Override
@@ -69,6 +71,10 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 View expireLayout = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_hub_expire, parent, false);
                 return new ExpireViewHolder(expireLayout);
+            case VIEW_TYPE_PLACEHOLDER:
+                View placeholderLayout = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_placeholder, parent, false);
+                return new PlaceholderViewHolder(placeholderLayout);
             default:
                 return null;
         }
@@ -125,14 +131,12 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 String minutes = timeUntilExpiration.get(2);
                 expireViewHolder.minutes.setText(minutes);
                 Resources resources = expireViewHolder.itemView.getContext().getResources();
-                expireViewHolder.daysLabel.setText(resources.getQuantityString(R.plurals.days,
-                                                                                         Integer.parseInt(
-                                                                                                 days)));
-                expireViewHolder.hoursLabel.setText(resources.getQuantityString(R.plurals.hours,
-                                                                                          Integer.parseInt(
-                                                                                                  hours)));
-                expireViewHolder.minutesLabel.setText(resources.getQuantityString(
-                        R.plurals.minutes, Integer.parseInt(minutes)));
+                expireViewHolder.daysLabel.setText(
+                        resources.getQuantityString(R.plurals.days, Integer.parseInt(days)));
+                expireViewHolder.hoursLabel.setText(
+                        resources.getQuantityString(R.plurals.hours, Integer.parseInt(hours)));
+                expireViewHolder.minutesLabel.setText(
+                        resources.getQuantityString(R.plurals.minutes, Integer.parseInt(minutes)));
             }
         }
     }
@@ -165,6 +169,10 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         else if(currentObject instanceof Long)
         {
             return VIEW_TYPE_EXPIRE;
+        }
+        else if(currentObject instanceof PlaceHolder)
+        {
+            return VIEW_TYPE_PLACEHOLDER;
         }
         return 0;
     }
@@ -240,12 +248,12 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public static class ExpireViewHolder extends RecyclerView.ViewHolder
     {
-        protected final  TextView days;
-        protected final  TextView hours;
-        protected final  TextView minutes;
-        protected final  TextView daysLabel;
-        protected final  TextView hoursLabel;
-        protected final  TextView minutesLabel;
+        protected final TextView days;
+        protected final TextView hours;
+        protected final TextView minutes;
+        protected final TextView daysLabel;
+        protected final TextView hoursLabel;
+        protected final TextView minutesLabel;
 
         public ExpireViewHolder(View itemView)
         {
@@ -259,4 +267,17 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
+
+    public static class PlaceholderViewHolder extends RecyclerView.ViewHolder
+    {
+        public PlaceholderViewHolder(View itemView)
+        {
+            super(itemView);
+        }
+    }
+
+
+    public static class PlaceHolder
+    {
+    }
 }

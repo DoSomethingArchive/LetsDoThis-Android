@@ -4,12 +4,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Notification;
+import org.dosomething.letsdothis.ui.MainActivity;
 import org.dosomething.letsdothis.ui.adapters.NotificationAdapter;
 
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ import java.util.List;
  */
 public class NotificationsFragment extends Fragment
 {
+
     public static final String TAG = NotificationsFragment.class.getSimpleName();
 
     public static NotificationsFragment newInstance()
@@ -27,10 +30,11 @@ public class NotificationsFragment extends Fragment
         return new NotificationsFragment();
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.activity_fragment_recycler, container, false);
+        return inflater.inflate(R.layout.activity_fragment_toolbar_recycler, container, false);
     }
 
     @Override
@@ -41,16 +45,12 @@ public class NotificationsFragment extends Fragment
         NotificationAdapter adapter = new NotificationAdapter(generateSampleData());
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
         recyclerView.setAdapter(adapter);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-
-        recyclerView.setLayoutManager(layoutManager);
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    private List<Notification> generateSampleData()
+    private List<Object> generateSampleData()
     {
-        List<Notification> notifications = new ArrayList<>();
+        List<Object> notifications = new ArrayList<>();
         for(int i = 0; i < 10; i++)
         {
             Notification notification = new Notification();
@@ -63,4 +63,5 @@ public class NotificationsFragment extends Fragment
 
         return notifications;
     }
+
 }
