@@ -17,35 +17,50 @@ import java.util.List;
 /**
  * Created by toidiu on 4/30/15.
  */
-public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder>
+public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
-    private List<Notification> notifications;
 
-    public NotificationAdapter(List<Notification> notifications)
+    //~=~=~=~=~=~=~=~=~=~=~=~=Constants
+    public static final int VIEW_TYPE_NOTIFICAITON = 0;
+
+    //~=~=~=~=~=~=~=~=~=~=~=~=Fields
+    private List<Object> notifications;
+
+    public NotificationAdapter(List<Object> notifications)
     {
         super();
         this.notifications = notifications;
     }
 
     @Override
-    public NotificationViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
-        View view = LayoutInflater.from(parent.getContext())
+        View notificationLayout = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_notification, parent, false);
-        return new NotificationViewHolder(view);
+        return new NotificationViewHolder(notificationLayout);
     }
 
     @Override
-    public void onBindViewHolder(NotificationViewHolder holder, int position)
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position)
     {
-        Notification notification = notifications.get(position);
+        if(getItemViewType(position) == VIEW_TYPE_NOTIFICAITON)
+        {
+            NotificationViewHolder notificationViewHolder = (NotificationViewHolder) holder;
+            Notification notification = (Notification) notifications.get(position);
 
-        Picasso.with(holder.imageView.getContext()).load(notification.imagePath)
-                .placeholder(R.drawable.user_image).into(holder.imageView);
-        holder.title.setText(notification.title);
-        holder.details.setText(notification.details);
-        holder.timestamp.setText(
-                TimeUtils.getTimeSince(holder.timestamp.getContext(), notification.timeStamp));
+            Picasso.with(notificationViewHolder.imageView.getContext()).load(notification.imagePath)
+                    .placeholder(R.drawable.user_image).into(notificationViewHolder.imageView);
+            notificationViewHolder.title.setText(notification.title);
+            notificationViewHolder.details.setText(notification.details);
+            notificationViewHolder.timestamp.setText(TimeUtils.getTimeSince(
+                    notificationViewHolder.timestamp.getContext(), notification.timeStamp));
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position)
+    {
+        return VIEW_TYPE_NOTIFICAITON;
     }
 
     @Override
@@ -70,4 +85,5 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             this.timestamp = (TextView) itemView.findViewById(R.id.timestamp);
         }
     }
+
 }

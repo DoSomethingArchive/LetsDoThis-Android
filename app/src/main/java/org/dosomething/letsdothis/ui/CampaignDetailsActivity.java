@@ -8,8 +8,11 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.dosomething.letsdothis.BuildConfig;
@@ -51,7 +54,15 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment_recycler);
+        setContentView(R.layout.activity_fragment_quickreturn_recycler);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        TextView toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
+        toolbar.setTitle("");
+        toolbarTitle.setVisibility(View.GONE);
+
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
