@@ -32,4 +32,5 @@
     <color name="invite_background">#F8F8F6</color>
     <color name="invite_code">#FFCF00</color>
     <color name="divider">#CCCCCC</color>
+    <color name="transparent">#00000000</color>
 </resources>

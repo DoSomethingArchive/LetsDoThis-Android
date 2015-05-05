@@ -21,6 +21,7 @@ import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.tasks.CampaignDetailsTask;
 import org.dosomething.letsdothis.tasks.IndividualCampaignReportBackList;
 import org.dosomething.letsdothis.ui.adapters.CampaignDetailsAdapter;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.List;
@@ -54,11 +55,13 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment_toolbar_recycler);
+        setContentView(R.layout.activity_fragment_quickreturn_recycler);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        TextView title = (TextView) findViewById(R.id.toolbar_title);
+        TextView toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
         toolbar.setTitle("");
-        title.setText(getResources().getString(R.string.app_name_cap));
+        toolbarTitle.setVisibility(View.GONE);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
