@@ -74,6 +74,16 @@ public class RegisterActivity extends BaseActivity
             }
         });
 
+        findViewById(R.id.sign_in).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(LoginActivity.getLaunchIntent(RegisterActivity.this));
+                finish();
+            }
+        });
+
         initRegisterListener();
         initUI(profile);
     }
