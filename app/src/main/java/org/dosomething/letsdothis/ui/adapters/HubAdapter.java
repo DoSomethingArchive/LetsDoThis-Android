@@ -1,17 +1,24 @@
 package org.dosomething.letsdothis.ui.adapters;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.User;
+import org.dosomething.letsdothis.utils.AppPrefs;
 import org.dosomething.letsdothis.utils.TimeUtils;
 
 import java.util.ArrayList;
@@ -89,6 +96,14 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ProfileViewHolder profileViewHolder = (ProfileViewHolder) holder;
             profileViewHolder.name
                     .setText(String.format("%s %s.", user.first_name, user.last_name.charAt(0)));
+            Context context = profileViewHolder.userImage.getContext();
+            int avatarHeight = context.getResources().getDimensionPixelSize(R.dimen.hub_avatar_height);
+            String avatarPath = AppPrefs.getInstance(context).getAvatarPath();
+            if(BuildConfig.DEBUG && !TextUtils.isEmpty(avatarPath))
+            {
+                Log.d("test", avatarPath);
+            }
+            Picasso.with(context).load(avatarPath).resize(0, avatarHeight).into(profileViewHolder.userImage);
         }
         else if(getItemViewType(position) == VIEW_TYPE_CURRENT_CAMPAIGN)
         {
@@ -207,7 +222,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public ProfileViewHolder(View itemView)
         {
             super(itemView);
-            this.userImage = (ImageView) itemView.findViewById(R.id.user_image);
+            this.userImage = (ImageView) itemView.findViewById(R.id.avatar);
             this.name = (TextView) itemView.findViewById(R.id.name);
         }
     }

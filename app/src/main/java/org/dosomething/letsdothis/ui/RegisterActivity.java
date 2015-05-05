@@ -1,17 +1,26 @@
 package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.facebook.Profile;
+import com.squareup.picasso.Picasso;
 
+import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.RegisterTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
+
+import java.io.File;
 
 import co.touchlab.android.threading.tasks.TaskQueue;
 
@@ -22,6 +31,7 @@ public class RegisterActivity extends BaseActivity
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String FB_PROFILE = "FB_PROFILE";
+    public static final int    SELECT_PICTURE    = 321;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private EditText phoneEmail;
@@ -29,7 +39,10 @@ public class RegisterActivity extends BaseActivity
     private EditText firstName;
     private EditText lastName;
     private EditText birthday;
+    private ImageView avatar;
+
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
+    private Uri                    imageUri;
 
     public static Intent getLaunchIntent(Context context, Profile fbProfile)
     {
@@ -45,8 +58,93 @@ public class RegisterActivity extends BaseActivity
         setContentView(R.layout.activity_signup);
 
         Profile profile = getIntent().getParcelableExtra(FB_PROFILE);
+
+        avatar = (ImageView) findViewById(R.id.avatar);
+        avatar.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                choosePicture();
+            }
+        });
+
         initRegisterListener();
         initUI(profile);
+    }
+
+    public void choosePicture()
+    {
+        Intent pickIntent = new Intent(Intent.ACTION_PICK,
+                                       android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setType("image/*");
+
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File externalFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                                     "avatar.jpg");
+        imageUri = Uri.fromFile(externalFile);
+        if(BuildConfig.DEBUG)
+        {
+            Log.d("photo location", imageUri.toString());
+        }
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+
+        String pickTitle = getString(R.string.select_picture);
+        Intent chooserIntent = Intent.createChooser(takePhotoIntent, pickTitle);
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+
+        startActivityForResult(chooserIntent, SELECT_PICTURE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if(resultCode == RESULT_OK)
+        {
+            if(requestCode == SELECT_PICTURE)
+            {
+                final boolean isCamera;
+                if(data == null)
+                {
+                    isCamera = true;
+                }
+                else
+                {
+                    final String action = data.getAction();
+                    if(action == null)
+                    {
+                        isCamera = false;
+                    }
+                    else
+                    {
+                        isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    }
+                }
+
+                Uri selectedImageUri;
+                if(isCamera)
+                {
+                    selectedImageUri = imageUri;
+                }
+                else
+                {
+                    selectedImageUri = data == null
+                            ? null
+                            : data.getData();
+                }
+                if(BuildConfig.DEBUG)
+                {
+                    Log.d("test-----------", selectedImageUri.toString());
+                }
+
+                Picasso.with(this).load(selectedImageUri).resize(avatar.getWidth(), avatar.getHeight()).into(avatar);
+                String path = selectedImageUri.getPath();
+                Log.d("test-----------", path);
+                String absolutePath = new File(path).getAbsolutePath();
+                Log.d("test-----------", absolutePath);
+                AppPrefs.getInstance(this).setAvatarPath(absolutePath);
+            }
+        }
     }
 
     private void initRegisterListener()
