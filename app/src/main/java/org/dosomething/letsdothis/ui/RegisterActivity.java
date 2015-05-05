@@ -3,7 +3,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +18,7 @@ import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.RegisterTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
+import org.dosomething.letsdothis.utils.ImageUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,8 +35,9 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 public class RegisterActivity extends BaseActivity
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final String FB_PROFILE     = "FB_PROFILE";
-    public static final int    SELECT_PICTURE = 321;
+    public static final  String FB_PROFILE     = "FB_PROFILE";
+    public static final  int    SELECT_PICTURE = 321;
+    private static final String TAG            = RegisterActivity.class.getSimpleName();
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private EditText  phoneEmail;
@@ -95,8 +96,7 @@ public class RegisterActivity extends BaseActivity
         pickIntent.setType("image/*");
 
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File externalFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                                     "avatar.jpg");
+        File externalFile = ImageUtils.getAvatarFile(this);
         imageUri = Uri.fromFile(externalFile);
         if(BuildConfig.DEBUG)
         {
@@ -152,8 +152,7 @@ public class RegisterActivity extends BaseActivity
 
                 Picasso.with(this).load(selectedImageUri).resize(avatar.getWidth(), avatar.getHeight()).into(avatar);
 
-                File externalFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                                             "avatar.jpg");
+                File externalFile = ImageUtils.getAvatarFile(this);
                 saveFile(selectedImageUri, externalFile);
                 //FIXME: this should be loaded into Hub
                 AppPrefs.getInstance(this).setAvatarPath(externalFile.getAbsolutePath());
@@ -171,8 +170,10 @@ public class RegisterActivity extends BaseActivity
         OutputStream out = null;
         try
         {
+            File temp = new File(getFilesDir(), "temp" + System.currentTimeMillis() +".jpg");
+
             in = getContentResolver().openInputStream(sourceUri);
-            out = new FileOutputStream(externalFile);
+            out = new FileOutputStream(temp);
 
             int bytesRead;
             while((bytesRead = in.read(imageData)) > 0)
@@ -180,10 +181,12 @@ public class RegisterActivity extends BaseActivity
                 out.write(Arrays.copyOfRange(imageData, 0, Math.max(0, bytesRead)));
             }
 
+            temp.renameTo(externalFile);
+
         }
         catch(IOException ex)
         {
-            Toast.makeText(this, "Saving picture failed.", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, ex.getMessage());
         }
         finally
         {
@@ -200,7 +203,7 @@ public class RegisterActivity extends BaseActivity
                 }
                 catch(IOException e)
                 {
-                    throw new RuntimeException(e);
+                    Log.e(TAG, "error closing input and output stream");
                 }
         }
     }
