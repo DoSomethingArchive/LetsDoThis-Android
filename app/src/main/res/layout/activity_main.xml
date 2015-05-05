@@ -48,8 +48,5 @@
         android:layout_above="@+id/divider"
         android:background="#00942244"/>
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar"/>
 
 </RelativeLayout>
