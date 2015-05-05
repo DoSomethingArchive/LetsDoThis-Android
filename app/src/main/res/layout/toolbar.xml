@@ -11,6 +11,7 @@
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
+    <!--FIXME: Discuss action bar styling with Luke-->
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:id="@+id/toolbar_title"
         app:typeface="brandon_bold"
@@ -18,7 +19,8 @@
         android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_name_cap"
+        android:textAllCaps="true"
+        android:text="@string/app_name"
         android:layout_gravity="center"/>
 
     </app:android.support.v7.widget.Toolbar>
