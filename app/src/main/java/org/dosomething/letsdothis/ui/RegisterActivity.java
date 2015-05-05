@@ -48,7 +48,6 @@ public class RegisterActivity extends BaseActivity
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private Uri imageUri;
-    private File externalFile;
 
     public static Intent getLaunchIntent(Context context, Profile fbProfile)
     {
