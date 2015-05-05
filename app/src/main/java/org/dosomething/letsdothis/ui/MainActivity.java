@@ -22,7 +22,6 @@ public class MainActivity extends BaseActivity
     private View hub;
     private View invites;
     private View notifications;
-    public Toolbar toolbar;
 
     public static Intent getLaunchIntent(Context context)
     {
@@ -40,10 +39,6 @@ public class MainActivity extends BaseActivity
                     .add(R.id.container, ActionsFragment.newInstance(), ActionsFragment.TAG)
                     .commit();
         }
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         initBottomBarNav();
     }

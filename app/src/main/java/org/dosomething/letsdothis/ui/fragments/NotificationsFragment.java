@@ -3,6 +3,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,13 +29,18 @@ public class NotificationsFragment extends AbstractQuickReturnFragment
         return new NotificationsFragment();
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.activity_fragment_recycler, container, false);
+        View rootView = inflater.inflate(R.layout.activity_fragment_quickreturn_recycler, container, false);
 
         recycleView = (RecyclerView) rootView.findViewById(R.id.recycler);
-        toolbar = ((MainActivity) getActivity()).toolbar;
+
+
+        toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        ((MainActivity) getActivity()).setSupportActionBar(toolbar);
+
 
         return rootView;
     }
