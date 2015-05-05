@@ -6,10 +6,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.facebook.Profile;
-
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.data.FbUser;
+import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.RegisterTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
@@ -21,7 +21,7 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 public class RegisterActivity extends BaseActivity
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final String FB_PROFILE = "FB_PROFILE";
+    public static final String FB_USER = "FB_USER";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private EditText phoneEmail;
@@ -31,10 +31,10 @@ public class RegisterActivity extends BaseActivity
     private EditText birthday;
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
 
-    public static Intent getLaunchIntent(Context context, Profile fbProfile)
+    public static Intent getLaunchIntent(Context context, FbUser user)
     {
         Intent intent = new Intent(context, RegisterActivity.class);
-        intent.putExtra(FB_PROFILE, fbProfile);
+        intent.putExtra(FB_USER, user);
         return intent;
     }
 
@@ -44,9 +44,9 @@ public class RegisterActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        Profile profile = getIntent().getParcelableExtra(FB_PROFILE);
+        FbUser fbUser = (FbUser) getIntent().getSerializableExtra(FB_USER);
         initRegisterListener();
-        initUI(profile);
+        initUI(fbUser);
     }
 
     private void initRegisterListener()
@@ -74,12 +74,14 @@ public class RegisterActivity extends BaseActivity
         });
     }
 
-    private void initUI(Profile profile)
+    private void initUI(FbUser fbUser)
     {
-        if(profile != null)
+        if(fbUser != null)
         {
-            firstName.setText(profile.getFirstName());
-            lastName.setText(profile.getLastName());
+            firstName.setText(fbUser.first_name);
+            lastName.setText(fbUser.last_name);
+            phoneEmail.setText(fbUser.email);
+            birthday.setText(fbUser.birthday);
         }
     }
 
