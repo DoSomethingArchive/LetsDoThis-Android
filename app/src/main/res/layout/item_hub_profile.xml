@@ -15,7 +15,7 @@
         android:background="@drawable/lightning">
 
         <ImageView
-            android:id="@+id/avatar"
+            android:id="@+id/user_image"
             android:layout_width="@dimen/hub_avatar_height"
             android:layout_height="@dimen/hub_avatar_height"
             android:src="@mipmap/ic_launcher"/>
