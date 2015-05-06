@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="@dimen/padding_medium">
+    android:paddingBottom="@dimen/padding_small"
+    android:paddingLeft="@dimen/padding_small"
+    android:paddingRight="@dimen/padding_small"
+    android:paddingTop="@dimen/padding_wedge"
+    >
 
     <org.dosomething.letsdothis.ui.views.CircleImageView
         android:id="@+id/image"
         android:layout_width="@dimen/notification_image"
         android:layout_height="@dimen/notification_image"
         android:layout_marginRight="@dimen/padding_medium"
-        app:border_width="0dp"
-        app:border_color="@color/white"
         app:background_color="@color/white"
+        app:border_color="@color/white"
+        app:border_width="0dp"
         tools:src="@drawable/user_image"/>
 
     <LinearLayout
@@ -25,27 +29,29 @@
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:id="@+id/title"
-            android:textAllCaps="true"
-            app:typeface="brandon_bold"
-            android:textSize="@dimen/text_30"
-            android:textColor="@color/sunglow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textAllCaps="true"
+            android:textColor="@color/sunglow"
+            android:textSize="@dimen/text_30"
+            app:typeface="brandon_bold"
             tools:text="MUSIC MARCH OUT"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:textColor="@android:color/black"
+            android:id="@+id/details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/details"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_30"
             tools:text="Just three days left to finish this month’s actions."/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:id="@+id/timestamp"
-            android:layout_marginTop="12dp"
-            android:textColor="@color/alto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_wedge"
+            android:textColor="@color/alto"
+            android:textSize="@dimen/text_30"
             tools:text="Just now."/>
 
     </LinearLayout>
