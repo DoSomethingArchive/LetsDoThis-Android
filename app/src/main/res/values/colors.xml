@@ -5,6 +5,7 @@
     <color name="porcelain">#F6F7F8</color>
     <color name="white">#FFFFFF</color>
     <color name="fantasy">#EBFAF9</color>
+    <color name="desertStorm">#F8F8F6</color>
     <color name="torch_red">#FB1D52</color>
     <color name="torch_red_1">#FB0052</color>
     <color name="coral_red">#FF463E</color>
@@ -29,7 +30,6 @@
     <color name="mine_shaft">#252B28</color>
     <color name="gray">#979797</color>
     <color name="alto">#D8D8D8</color>
-    <color name="invite_background">#F8F8F6</color>
     <color name="invite_code">#FFCF00</color>
     <color name="divider">#CCCCCC</color>
     <color name="transparent">#00000000</color>

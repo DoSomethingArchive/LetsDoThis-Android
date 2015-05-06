@@ -18,6 +18,7 @@ import org.dosomething.letsdothis.tasks.InterestReportBackListTask;
 import org.dosomething.letsdothis.ui.CampaignDetailsActivity;
 import org.dosomething.letsdothis.ui.ReportBackDetailsActivity;
 import org.dosomething.letsdothis.ui.adapters.CampaignAdapter;
+import org.dosomething.letsdothis.ui.views.ActionGridSpacingDecoration;
 import org.dosomething.letsdothis.utils.TimeUtils;
 
 import java.util.ArrayList;
@@ -73,6 +74,7 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
         recyclerView.setAdapter(adapter);
 
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
+        recyclerView.addItemDecoration(new ActionGridSpacingDecoration());
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup()
         {
             @Override
