@@ -13,6 +13,7 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Notification;
 import org.dosomething.letsdothis.ui.MainActivity;
 import org.dosomething.letsdothis.ui.adapters.NotificationAdapter;
+import org.dosomething.letsdothis.ui.views.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,7 @@ public class NotificationsFragment extends Fragment
         //FIXME: get real data
         NotificationAdapter adapter = new NotificationAdapter(generateSampleData());
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
