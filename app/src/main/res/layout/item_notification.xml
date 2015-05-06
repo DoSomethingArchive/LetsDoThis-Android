@@ -6,11 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:background="@color/white"
     android:paddingBottom="@dimen/padding_small"
     android:paddingLeft="@dimen/padding_small"
     android:paddingRight="@dimen/padding_small"
-    android:paddingTop="@dimen/padding_wedge"
-    >
+    android:paddingTop="@dimen/padding_wedge">
 
     <org.dosomething.letsdothis.ui.views.CircleImageView
         android:id="@+id/image"
