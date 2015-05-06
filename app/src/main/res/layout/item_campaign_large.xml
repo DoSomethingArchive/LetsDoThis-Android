@@ -10,35 +10,47 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/image_and_title"
-        android:layout_height="250dp">
+        android:layout_height="@dimen/campaign_height_expanded">
 
-        <ImageView
+        <FrameLayout
             android:layout_width="match_parent"
-            android:id="@+id/image"
-            android:scaleType="centerCrop"
-            android:layout_height="match_parent"/>
+            android:id="@+id/image_container"
+            android:layout_height="@dimen/campaign_height_expanded">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/campaign_height_expanded"
+                android:scaleType="centerCrop"
+                android:src="@drawable/placeholder"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient"/>
+        </FrameLayout>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:id="@+id/title"
-            tools:text="Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:typeface="brandon_bold"
             android:textAllCaps="true"
             android:textSize="@dimen/text_48"
             android:layout_above="@+id/call_to_action"
             android:textColor="@android:color/white"
             android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            tools:text="Title"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            tools:text="Call to action"
+            android:id="@+id/call_to_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textSize="@dimen/text_33"
             android:textColor="@android:color/white"
             android:layout_centerInParent="true"
             android:layout_alignParentBottom="true"
-            android:id="@+id/call_to_action"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            tools:text="Call to action"/>
 
     </RelativeLayout>
 
