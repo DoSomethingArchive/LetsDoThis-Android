@@ -1,10 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              tools:context=".MainActivity"
-              android:orientation="vertical"
-              tools:ignore="MergeRootFrame">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".MainActivity"
+                android:orientation="vertical"
+                tools:ignore="MergeRootFrame">
 
     <LinearLayout
         android:id="@+id/bottom_nav"
@@ -15,22 +15,51 @@
         android:layout_height="@dimen/height_nav_bar"
         android:layout_alignParentBottom="true">
 
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            style="@style/NavButton"
+
+        <LinearLayout
             android:id="@+id/actions"
-            android:text="@string/actions"/>
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            style="@style/NavButton"
+            style="@style/NavButtonHolder">
+            <ImageView
+                style="@style/NavButtonImage"
+                android:src="@drawable/ic_actions"/>
+            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                style="@style/NavButtonText"
+                android:text="@string/actions"/>
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/hub"
-            android:text="@string/hub"/>
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            style="@style/NavButton"
+            style="@style/NavButtonHolder">
+            <ImageView
+                style="@style/NavButtonImage"
+                android:src="@drawable/ic_hub"/>
+            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                style="@style/NavButtonText"
+                android:text="@string/hub"/>
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/invites"
-            android:text="@string/invites"/>
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            style="@style/NavButton"
+            style="@style/NavButtonHolder">
+            <ImageView
+                style="@style/NavButtonImage"
+                android:src="@drawable/ic_invites"/>
+            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                style="@style/NavButtonText"
+                android:text="@string/invites"/>
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/notifications"
-            android:text="@string/notifications"/>
+            style="@style/NavButtonHolder">
+            <ImageView
+                style="@style/NavButtonImage"
+                android:src="@drawable/ic_notifications"/>
+            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                style="@style/NavButtonText"
+                android:text="@string/notifications"/>
+        </LinearLayout>
+
     </LinearLayout>
 
     <View
