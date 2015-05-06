@@ -46,7 +46,7 @@
     <dimen name="text_33">16sp</dimen>
     <dimen name="text_30">15sp</dimen>
     <dimen name="text_20">10sp</dimen>
-    <dimen name="hub_profile_header">189dp</dimen>
+    <dimen name="hub_profile_header">169dp</dimen>
     <dimen name="hub_avatar_height">75dp</dimen>
     <dimen name="text_26">13sp</dimen>
     <dimen name="report_back_expanded">375dp</dimen>
@@ -54,4 +54,5 @@
     <dimen name="text_42">21sp</dimen>
     <dimen name="invite_code_input">209dp</dimen>
     <dimen name="avatar">100dp</dimen>
+    <dimen name="friend_avatar">50dp</dimen>
 </resources>
