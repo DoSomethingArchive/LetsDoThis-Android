@@ -12,20 +12,22 @@ import retrofit.mime.TypedInput;
 public class User
 {
     @DatabaseField(id = true)
-    public  String id;
+    public String id;
     @DatabaseField
-    public  String email;
+    public String email;
     @DatabaseField
-    public  String mobile;
+    public String mobile;
     @DatabaseField
-    public  String first_name;
+    public String first_name;
     @DatabaseField
-    public  String last_name;
+    public String last_name;
     @DatabaseField
-    public String   birthdate;
+    public String birthdate;
 
     //DON'T STORE PASSWORD IN DATABASE
     public String password;
+
+    public String avatarPath;
 
     public User()
     {

@@ -14,10 +14,13 @@
         android:gravity="center"
         android:background="@drawable/lightning">
 
-        <ImageView
+        <org.dosomething.letsdothis.ui.views.CircleImageView
             android:id="@+id/user_image"
             android:layout_width="@dimen/hub_avatar_height"
             android:layout_height="@dimen/hub_avatar_height"
+            app:border_color="@color/white"
+            app:draw_border="true"
+            app:border_width="@dimen/padding_tiny"
             android:src="@mipmap/ic_launcher"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
@@ -25,8 +28,10 @@
             android:textColor="@color/white"
             android:textSize="@dimen/text_48"
             android:id="@+id/name"
+            android:textAllCaps="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="@dimen/padding_small"
             tool:text="Person P."/>
 
     </LinearLayout>

@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.ui.adapters;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
@@ -6,8 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
@@ -35,14 +40,23 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private ArrayList<Object> hubList = new ArrayList<>();
+    private User user;
+    private HubAdapterClickListener hubAdapterClickListener;
 
-    public HubAdapter(User user)
+    public HubAdapter(User user, HubAdapterClickListener hubAdapterClickListener)
     {
         super();
+        this.user = user;
+        this.hubAdapterClickListener = hubAdapterClickListener;
         this.hubList.add(user);
         hubList.add(CURRENTLY_DOING);
         hubList.add(BEEN_THERE_DONE_GOOD);
         this.hubList.add(0, new PlaceHolder());
+    }
+
+    public interface HubAdapterClickListener
+    {
+        void groupClicked(int campaignId, String userId);
     }
 
     @Override
@@ -53,27 +67,32 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             case VIEW_TYPE_SECTION_TITLE:
                 View sectionLayout = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_campaign_footer, parent, false);
+                                                   .inflate(R.layout.item_campaign_footer, parent,
+                                                            false);
                 return new SectionTitleViewHolder((TextView) sectionLayout);
             case VIEW_TYPE_PROFILE:
                 View profileLayout = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_hub_profile, parent, false);
+                                                   .inflate(R.layout.item_hub_profile, parent,
+                                                            false);
                 return new ProfileViewHolder(profileLayout);
             case VIEW_TYPE_CURRENT_CAMPAIGN:
                 View currentLayout = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_hub_current_campaign, parent, false);
+                                                   .inflate(R.layout.item_hub_current_campaign,
+                                                            parent, false);
                 return new CurrentCampaignViewHolder(currentLayout);
             case VIEW_TYPE_PAST_CAMPAIGN:
                 View pastLayout = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_hub_past_campaign, parent, false);
+                                                .inflate(R.layout.item_hub_past_campaign, parent,
+                                                         false);
                 return new PastCampaignViewHolder(pastLayout);
             case VIEW_TYPE_EXPIRE:
                 View expireLayout = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_hub_expire, parent, false);
+                                                  .inflate(R.layout.item_hub_expire, parent, false);
                 return new ExpireViewHolder(expireLayout);
             case VIEW_TYPE_PLACEHOLDER:
                 View placeholderLayout = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_placeholder, parent, false);
+                                                       .inflate(R.layout.item_placeholder, parent,
+                                                                false);
                 return new PlaceholderViewHolder(placeholderLayout);
             default:
                 return null;
@@ -95,49 +114,90 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ProfileViewHolder profileViewHolder = (ProfileViewHolder) holder;
             profileViewHolder.name
                     .setText(String.format("%s %s.", user.first_name, user.last_name.charAt(0)));
-            }
+        }
         else if(getItemViewType(position) == VIEW_TYPE_CURRENT_CAMPAIGN)
         {
-            Campaign campaign = (Campaign) hubList.get(position);
+            final Campaign campaign = (Campaign) hubList.get(position);
             CurrentCampaignViewHolder currentCampaignViewHolder = (CurrentCampaignViewHolder) holder;
             currentCampaignViewHolder.title.setText(campaign.title);
             currentCampaignViewHolder.callToAction.setText(campaign.callToAction);
+            currentCampaignViewHolder.count.setText(campaign.count);
+
+            Context context = currentCampaignViewHolder.image.getContext();
+            int height = context.getResources().getDimensionPixelSize(R.dimen.campaign_height);
+            Picasso.with(context).load(campaign.imagePath).resize(0, height)
+                   .into(currentCampaignViewHolder.image);
+
+            int size = campaign.group.size();
+            if(size > 0)
+            {
+                int friendSize = context.getResources().getDimensionPixelSize(R.dimen.friend_avatar);
+                currentCampaignViewHolder.friends.setVisibility(View.VISIBLE);
+                currentCampaignViewHolder.friendsCount.setText(Integer.toString(size));
+                currentCampaignViewHolder.friendsCount.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        hubAdapterClickListener.groupClicked(campaign.id, user.id);
+                    }
+                });
+
+                for(int i = 0; i < 4; i++)
+                {
+                    FrameLayout childAt = (FrameLayout) currentCampaignViewHolder.friendsContainer.getChildAt(i);
+                    ImageView imageView = (ImageView) childAt.getChildAt(0);
+
+                    if(campaign.group.size() > i)
+                    {
+                        Picasso.with(context).load(campaign.group.get(i).avatarPath)
+                               .resize(friendSize, 0).into(imageView);
+                    }
+                    else
+                    {
+                        imageView.setImageDrawable(null);
+                    }
+                }
+            }
+            else
+            {
+                currentCampaignViewHolder.friends.setVisibility(View.GONE);
+            }
         }
-        else
+        else if(getItemViewType(position) == VIEW_TYPE_PAST_CAMPAIGN)
         {
-            if(getItemViewType(position) == VIEW_TYPE_PAST_CAMPAIGN)
-            {
-                Campaign campaign = (Campaign) hubList.get(position);
-                PastCampaignViewHolder pastCampaignViewHolder = (PastCampaignViewHolder) holder;
-                //FIXME add image
+            Campaign campaign = (Campaign) hubList.get(position);
+            PastCampaignViewHolder pastCampaignViewHolder = (PastCampaignViewHolder) holder;
+            Context context = pastCampaignViewHolder.image.getContext();
+            int height = context.getResources().getDimensionPixelSize(R.dimen.campaign_height);
+            Picasso.with(context).load(campaign.imagePath).resize(0, height)
+                   .into(pastCampaignViewHolder.image);
 
-                ColorMatrix cm = new ColorMatrix();
-                cm.setSaturation(0);
+            ColorMatrix cm = new ColorMatrix();
+            cm.setSaturation(0);
 
-                pastCampaignViewHolder.title.setText(campaign.title);
-                pastCampaignViewHolder.campImage.setImageResource(R.mipmap.ic_launcher);
-                pastCampaignViewHolder.campImage.setColorFilter(new ColorMatrixColorFilter(cm));
-            }
-            else if(getItemViewType(position) == VIEW_TYPE_EXPIRE)
-            {
-                ExpireViewHolder expireViewHolder = (ExpireViewHolder) holder;
+            pastCampaignViewHolder.title.setText(campaign.title);
+            pastCampaignViewHolder.image.setColorFilter(new ColorMatrixColorFilter(cm));
+        }
+        else if(getItemViewType(position) == VIEW_TYPE_EXPIRE)
+        {
+            ExpireViewHolder expireViewHolder = (ExpireViewHolder) holder;
 
-                Long expire = (Long) hubList.get(position);
-                List<String> timeUntilExpiration = TimeUtils.getTimeUntilExpiration(expire);
-                String days = timeUntilExpiration.get(0);
-                expireViewHolder.days.setText(days);
-                String hours = timeUntilExpiration.get(1);
-                expireViewHolder.hours.setText(hours);
-                String minutes = timeUntilExpiration.get(2);
-                expireViewHolder.minutes.setText(minutes);
-                Resources resources = expireViewHolder.itemView.getContext().getResources();
-                expireViewHolder.daysLabel.setText(
-                        resources.getQuantityString(R.plurals.days, Integer.parseInt(days)));
-                expireViewHolder.hoursLabel.setText(
-                        resources.getQuantityString(R.plurals.hours, Integer.parseInt(hours)));
-                expireViewHolder.minutesLabel.setText(
-                        resources.getQuantityString(R.plurals.minutes, Integer.parseInt(minutes)));
-            }
+            Long expire = (Long) hubList.get(position);
+            List<String> timeUntilExpiration = TimeUtils.getTimeUntilExpiration(expire);
+            String days = timeUntilExpiration.get(0);
+            expireViewHolder.days.setText(days);
+            String hours = timeUntilExpiration.get(1);
+            expireViewHolder.hours.setText(hours);
+            String minutes = timeUntilExpiration.get(2);
+            expireViewHolder.minutes.setText(minutes);
+            Resources resources = expireViewHolder.itemView.getContext().getResources();
+            expireViewHolder.daysLabel
+                    .setText(resources.getQuantityString(R.plurals.days, Integer.parseInt(days)));
+            expireViewHolder.hoursLabel
+                    .setText(resources.getQuantityString(R.plurals.hours, Integer.parseInt(hours)));
+            expireViewHolder.minutesLabel.setText(
+                    resources.getQuantityString(R.plurals.minutes, Integer.parseInt(minutes)));
         }
     }
 
@@ -222,26 +282,36 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public static class CurrentCampaignViewHolder extends RecyclerView.ViewHolder
     {
-        protected final TextView title;
-        protected final TextView callToAction;
+        protected final TextView     title;
+        protected final TextView     callToAction;
+        protected final TextView     count;
+        protected final ImageView    image;
+        protected final View         friends;
+        protected final TextView     friendsCount;
+        protected final LinearLayout friendsContainer;
 
         public CurrentCampaignViewHolder(View itemView)
         {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
             callToAction = (TextView) itemView.findViewById(R.id.call_to_action);
+            image = (ImageView) itemView.findViewById(R.id.image);
+            count = (TextView) itemView.findViewById(R.id.count);
+            friends = itemView.findViewById(R.id.friends);
+            friendsCount = (TextView) itemView.findViewById(R.id.friends_count);
+            friendsContainer = (LinearLayout) itemView.findViewById(R.id.friends_container);
         }
     }
 
     public static class PastCampaignViewHolder extends RecyclerView.ViewHolder
     {
-        protected final ImageView campImage;
+        protected final ImageView image;
         protected final TextView  title;
 
         public PastCampaignViewHolder(View itemView)
         {
             super(itemView);
-            campImage = (ImageView) itemView.findViewById(R.id.camp_image);
+            image = (ImageView) itemView.findViewById(R.id.image);
             title = (TextView) itemView.findViewById(R.id.title);
         }
     }
