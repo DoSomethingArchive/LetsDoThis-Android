@@ -7,11 +7,16 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/camp_image"
+        android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="@dimen/campaign_height"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher"/>
+        tool:src="@drawable/placeholder"
+        android:scaleType="centerCrop"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/campaign_height"
+        android:background="@drawable/gradient"/>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:id="@+id/title"
