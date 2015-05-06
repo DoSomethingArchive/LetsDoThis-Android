@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.User;
@@ -30,7 +31,7 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 /**
  * Created by izzyoji :) on 4/15/15.
  */
-public class HubFragment extends AbstractQuickReturnFragment
+public class HubFragment extends AbstractQuickReturnFragment implements HubAdapter.HubAdapterClickListener
 {
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
@@ -95,7 +96,7 @@ public class HubFragment extends AbstractQuickReturnFragment
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
 
         User user = new User(null, "firstName", "lastName", "birthday");
-        adapter = new HubAdapter(user);
+        adapter = new HubAdapter(user, this);
         recyclerView.setAdapter(adapter);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -145,6 +146,12 @@ public class HubFragment extends AbstractQuickReturnFragment
         {
             adapter.addPastCampaign(task.campaignList);
         }
+    }
+
+    @Override
+    public void groupClicked(int campaignId, String userId)
+    {
+        Toast.makeText(getActivity(), "FIXME", Toast.LENGTH_SHORT).show();
     }
 
 

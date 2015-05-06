@@ -1,4 +1,7 @@
 package org.dosomething.letsdothis.data;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by izzyoji :) on 4/17/15.
  */
@@ -13,4 +16,6 @@ public class Campaign
     public String solutionCopy;
     public String solutionSupport;
     public String problemFact;
+    public String count;
+    public List<User> group = new ArrayList<>();
 }

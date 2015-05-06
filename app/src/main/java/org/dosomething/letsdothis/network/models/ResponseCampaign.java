@@ -17,6 +17,9 @@ public class ResponseCampaign
     public String solution_support;
     public String solution_copy;
     public ResponseFactProblem fact_problem;
+    public String reportback_noun;
+    public String reportback_verb;
+    public Stats stats;
 
     public static Campaign getCampaign(ResponseCampaign response)
     {
@@ -30,8 +33,14 @@ public class ResponseCampaign
         campaign.solutionCopy = response.solution_copy;
         campaign.solutionSupport = response.solution_support;
         campaign.problemFact = response.getFactProblem().getFact();
+        campaign.count = response.getCountString();
 
         return campaign;
+    }
+
+    private String getCountString()
+    {
+        return String.format("%1$d %2$s %3$s", stats.signups, reportback_noun, reportback_verb);
     }
 
     private ResponseFactProblem getFactProblem()
@@ -99,5 +108,10 @@ public class ResponseCampaign
         {
             return fact == null ? "" : fact;
         }
+    }
+
+    private static class Stats
+    {
+        public int signups;
     }
 }

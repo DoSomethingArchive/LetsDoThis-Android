@@ -9,39 +9,53 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/camp_image"
+        android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="@dimen/campaign_height"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher"/>
+        tool:src="@drawable/placeholder"
+        android:scaleType="centerCrop"/>
 
-    <!--FIXME if the title is long, it'll overlap the count-->
-    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-        android:id="@+id/title"
-        tool:text="Title"
-        app:typeface="brandon_bold"
-        android:textAllCaps="true"
-        android:textColor="@color/cerulean_1"
-        android:layout_below="@id/camp_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+                  android:paddingTop="@dimen/padding_small"
+                  android:layout_below="@id/image"
+                  android:id="@+id/title_and_count">
 
-    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-        android:id="@+id/count"
-        tool:text="5 people completed"
-        app:typeface="brandon_bold"
-        android:textAllCaps="true"
-        android:textSize="@dimen/text_26"
-        android:layout_alignParentRight="true"
-        android:textColor="@color/gray"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/title"
+            tool:text="Title"
+            app:typeface="brandon_bold"
+            android:textAllCaps="true"
+            android:maxLines="1"
+            android:paddingLeft="@dimen/padding_small"
+            android:paddingRight="@dimen/padding_small"
+            android:textColor="@color/cerulean_1"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/count"
+            tool:text="5 people completed"
+            app:typeface="brandon_medium"
+            android:paddingLeft="@dimen/padding_small"
+            android:paddingRight="@dimen/padding_small"
+            android:textSize="@dimen/text_26"
+            android:textColor="@color/gray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         tool:text="Call to action"
         android:textColor="@android:color/black"
+        android:paddingLeft="@dimen/padding_small"
+        android:paddingRight="@dimen/padding_small"
+        android:paddingBottom="@dimen/padding_medium"
         android:id="@+id/call_to_action"
-        android:layout_below="@+id/title"
+        android:layout_below="@+id/title_and_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -49,6 +63,8 @@
         android:layout_below="@id/call_to_action"
         android:orientation="horizontal"
         android:id="@+id/action_buttons"
+        android:paddingLeft="@dimen/padding_tiny"
+        android:paddingRight="@dimen/padding_tiny"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -73,40 +89,136 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/friends_header"
-        android:layout_below="@id/action_buttons">
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/gray"
-            android:textAllCaps="true"
-            android:text="@string/friends"/>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:id="@+id/friends"
+                  android:visibility="gone"
+                  tool:visibility="visible"
+                  android:orientation="vertical"
+                  android:layout_below="@id/action_buttons">
 
-        <View
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="1dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/padding_wedge"
-            android:background="@color/gray"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/padding_small">
+
+            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/silver"
+                android:textAllCaps="true"
+                android:text="@string/friends"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/padding_wedge"
+                android:background="@color/silver"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/padding_small"
+            android:paddingBottom="@dimen/padding_wedge">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:weightSum="4"
+                android:orientation="horizontal"
+                android:id="@+id/friends_container"
+                android:layout_height="wrap_content">
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/friend_avatar">
+                    <org.dosomething.letsdothis.ui.views.CircleImageView
+                        android:layout_width="@dimen/friend_avatar"
+                        android:layout_height="@dimen/friend_avatar"
+                        android:id="@+id/friend_1"
+                        android:layout_gravity="center"
+                        tool:src="@mipmap/ic_launcher"/>
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/friend_avatar">
+                    <org.dosomething.letsdothis.ui.views.CircleImageView
+                        android:layout_width="@dimen/friend_avatar"
+                        android:layout_height="@dimen/friend_avatar"
+                        android:id="@+id/friend_2"
+                        android:layout_gravity="center"
+                        tool:src="@mipmap/ic_launcher"/>
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/friend_avatar">
+                    <org.dosomething.letsdothis.ui.views.CircleImageView
+                        android:layout_width="@dimen/friend_avatar"
+                        android:layout_height="@dimen/friend_avatar"
+                        android:id="@+id/friend_3"
+                        android:layout_gravity="center"
+                        tool:src="@mipmap/ic_launcher"/>
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/friend_avatar">
+                    <org.dosomething.letsdothis.ui.views.CircleImageView
+                        android:layout_width="@dimen/friend_avatar"
+                        android:layout_height="@dimen/friend_avatar"
+                        android:id="@+id/friend_4"
+                        android:layout_gravity="center"
+                        tool:src="@mipmap/ic_launcher"/>
+
+                </FrameLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:id="@+id/group"
+                android:padding="@dimen/padding_small"
+                android:layout_gravity="center_vertical"
+                android:gravity="right|center"
+                android:layout_height="wrap_content">
+
+                <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/friends_count"
+                    android:textSize="@dimen/text_48"
+                    app:typeface="brandon_bold"
+                    android:gravity="center"
+                    android:drawableRight="@drawable/next_intro_arrow"
+                    android:drawablePadding="@dimen/padding_small"
+                    android:textColor="@color/cerulean_1"
+                    tool:text="23"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
 
-    <LinearLayout
+
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@id/friends_header">
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tool:text="friend 1"/>
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tool:text="friend 2"/>
-    </LinearLayout>
+        android:layout_height="1dp"
+        android:layout_gravity="center"
+        android:layout_below="@id/friends"
+        android:layout_marginBottom="@dimen/padding_medium"
+        android:background="@color/silver"/>
 </RelativeLayout>
