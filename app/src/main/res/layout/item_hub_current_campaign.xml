@@ -106,7 +106,7 @@
             <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/divider"
+                android:textColor="@color/silver"
                 android:textAllCaps="true"
                 android:text="@string/friends"/>
 
@@ -116,7 +116,7 @@
                 android:layout_height="1dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/padding_wedge"
-                android:background="@color/divider"/>
+                android:background="@color/silver"/>
         </LinearLayout>
 
         <LinearLayout
@@ -220,5 +220,5 @@
         android:layout_gravity="center"
         android:layout_below="@id/friends"
         android:layout_marginBottom="@dimen/padding_medium"
-        android:background="@color/divider"/>
+        android:background="@color/silver"/>
 </RelativeLayout>
