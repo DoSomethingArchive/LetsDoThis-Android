@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import org.dosomething.letsdothis.ui.views.typeface.CustomTextView;
+import org.dosomething.letsdothis.utils.ViewUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by toidiu on 5/6/15.
@@ -23,32 +25,31 @@ public class ActionGridSpacingDecoration extends RecyclerView.ItemDecoration
         Resources r = view.getResources();
         if(view instanceof CustomTextView)
         {
-            outRect.bottom = getPxFromDip(r);
+            outRect.bottom = getPxFromEightDp(r);
         }
         if(view instanceof ImageView)
         {
-            outRect.bottom = getPxFromDip(r);
-            outRect.right = getPxFromDip(r);
-            outRect.left = getPxFromDip(r);
+            outRect.bottom = getPxFromEightDp(r);
+            outRect.right = getPxFromEightDp(r);
+            outRect.left = getPxFromEightDp(r);
 
             int childPosition = parent.getChildPosition(view);
             if(childPosition % 2 == 0)
             {
-                outRect.right = (getPxFromDip(r) / 2);
+                outRect.right = (getPxFromEightDp(r) / 2);
             }
             else
             {
-                outRect.left = (getPxFromDip(r) / 2);
+                outRect.left = (getPxFromEightDp(r) / 2);
             }
         }
     }
 
-    private int getPxFromDip(Resources r)
+    private int getPxFromEightDp(Resources r)
     {
         if(eightDp == 0)
         {
-            Float v = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, GRID_SPACING,
-                                                r.getDisplayMetrics());
+            Float v = ViewUtils.getPxFromDip(r, GRID_SPACING);
             eightDp = v.intValue();
         }
         return eightDp;
