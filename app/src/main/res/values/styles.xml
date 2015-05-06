@@ -69,4 +69,13 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="SectionTitle" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/text_36</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:padding">@dimen/padding_wedge</item>
+    </style>
+
+
 </resources>
