@@ -7,11 +7,23 @@
     android:layout_width="wrap_content"
     android:layout_height="@dimen/campaign_height">
 
-    <ImageView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:id="@+id/image"
-        android:scaleType="centerCrop"
-        android:layout_height="match_parent"/>
+        android:id="@+id/image_container"
+        android:layout_height="@dimen/campaign_height_expanded">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/campaign_height"
+            android:scaleType="centerCrop"
+            android:src="@drawable/placeholder"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/darken_30"/>
+    </FrameLayout>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:id="@+id/title"
