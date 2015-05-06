@@ -26,8 +26,9 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final int VIEW_TYPE_CAMPAIGN          = 0;
     public static final int VIEW_TYPE_CAMPAIGN_EXPANDED = 1;
-    public static final int VIEW_TYPE_CAMPAIGN_FOOTER   = 2;
-    public static final int VIEW_TYPE_REPORT_BACK       = 3;
+    public static final int VIEW_TYPE_CAMPAIGN_SMALL    = 2;
+    public static final int VIEW_TYPE_CAMPAIGN_FOOTER   = 3;
+    public static final int VIEW_TYPE_REPORT_BACK       = 4;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private ArrayList<Object> dataSet = new ArrayList<>();
@@ -59,23 +60,24 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         {
             case VIEW_TYPE_CAMPAIGN_FOOTER:
                 View footerLayout = LayoutInflater.from(parent.getContext())
-                                                      .inflate(R.layout.item_campaign_footer,
-                                                               parent, false);
+                        .inflate(R.layout.item_campaign_footer, parent, false);
                 return new SectionTitleViewHolder((TextView) footerLayout);
             case VIEW_TYPE_REPORT_BACK:
                 View reportBackLayout = LayoutInflater.from(parent.getContext())
-                                                      .inflate(R.layout.item_report_back_square,
-                                                               parent, false);
+                        .inflate(R.layout.item_report_back_square, parent, false);
                 return new ReportBackViewHolder((ImageView) reportBackLayout);
             case VIEW_TYPE_CAMPAIGN_EXPANDED:
                 View bigLayout = LayoutInflater.from(parent.getContext())
-                                               .inflate(R.layout.item_campaign_large, parent,
-                                                        false);
+                        .inflate(R.layout.item_campaign_large, parent, false);
                 return new ExpandedCampaignViewHolder(bigLayout);
-            default:
+            case VIEW_TYPE_CAMPAIGN_SMALL:
                 View smallLayout = LayoutInflater.from(parent.getContext())
-                                                 .inflate(R.layout.item_campaign, parent, false);
+                        .inflate(R.layout.item_campaign_small, parent, false);
                 return new CampaignViewHolder(smallLayout);
+            default:
+                View normalLayout = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_campaign, parent, false);
+                return new CampaignViewHolder(normalLayout);
 
         }
     }
@@ -95,7 +97,26 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             campaignViewHolder.title.setText(campaign.title);
             campaignViewHolder.callToAction.setText(campaign.callToAction);
             Picasso.with(campaignViewHolder.imageView.getContext()).load(campaign.imagePath)
-                   .into(campaignViewHolder.imageView);
+                    .into(campaignViewHolder.imageView);
+            campaignViewHolder.root.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    selectedPosition = position;
+                    campaignAdapterClickListener.onCampaignExpanded(position);
+                    notifyItemChanged(position);
+                }
+            });
+        }
+        if(getItemViewType(position) == VIEW_TYPE_CAMPAIGN_SMALL)
+        {
+            final Campaign campaign = (Campaign) dataSet.get(position);
+            CampaignViewHolder campaignViewHolder = (CampaignViewHolder) holder;
+            campaignViewHolder.title.setText(campaign.title);
+            campaignViewHolder.callToAction.setText(campaign.callToAction);
+            Picasso.with(campaignViewHolder.imageView.getContext()).load(campaign.imagePath)
+                    .into(campaignViewHolder.imageView);
             campaignViewHolder.root.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -114,7 +135,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             expandedCampaignViewHolder.title.setText(campaign.title);
             expandedCampaignViewHolder.callToAction.setText(campaign.callToAction);
             Picasso.with(expandedCampaignViewHolder.imageView.getContext()).load(campaign.imagePath)
-                   .into(expandedCampaignViewHolder.imageView);
+                    .into(expandedCampaignViewHolder.imageView);
             expandedCampaignViewHolder.imageView.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -143,15 +164,12 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             String minutes = timeUntilExpiration.get(2);
             expandedCampaignViewHolder.minutes.setText(minutes);
             Resources resources = expandedCampaignViewHolder.itemView.getContext().getResources();
-            expandedCampaignViewHolder.daysLabel.setText(resources.getQuantityString(R.plurals.days,
-                                                                                     Integer.parseInt(
-                                                                                             days)));
-            expandedCampaignViewHolder.hoursLabel.setText(resources.getQuantityString(R.plurals.hours,
-                                                                                      Integer.parseInt(
-                                                                                              hours)));
-            expandedCampaignViewHolder.minutesLabel.setText(resources.getQuantityString(R.plurals.minutes,
-                                                                                        Integer.parseInt(
-                                                                                                minutes)));
+            expandedCampaignViewHolder.daysLabel
+                    .setText(resources.getQuantityString(R.plurals.days, Integer.parseInt(days)));
+            expandedCampaignViewHolder.hoursLabel
+                    .setText(resources.getQuantityString(R.plurals.hours, Integer.parseInt(hours)));
+            expandedCampaignViewHolder.minutesLabel.setText(
+                    resources.getQuantityString(R.plurals.minutes, Integer.parseInt(minutes)));
         }
         else if(getItemViewType(position) == VIEW_TYPE_REPORT_BACK)
         {
@@ -159,7 +177,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ReportBackViewHolder reportBackViewHolder = (ReportBackViewHolder) holder;
 
             Picasso.with(reportBackViewHolder.root.getContext()).load(reportBack.getImagePath())
-                   .into(reportBackViewHolder.root);
+                    .into(reportBackViewHolder.root);
 
             reportBackViewHolder.root.setOnClickListener(new View.OnClickListener()
             {
@@ -173,8 +191,9 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         else if(getItemViewType(position) == VIEW_TYPE_CAMPAIGN_FOOTER)
         {
             SectionTitleViewHolder sectionTitleViewHolder = (SectionTitleViewHolder) holder;
-            sectionTitleViewHolder.textView.setText(sectionTitleViewHolder.textView.getContext().getString(
-                    R.string.people_doing_stuff));
+            sectionTitleViewHolder.textView.setText(sectionTitleViewHolder.textView.getContext()
+                                                            .getString(
+                                                                    R.string.people_doing_stuff));
         }
 
 
@@ -190,12 +209,16 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             {
                 return VIEW_TYPE_CAMPAIGN_EXPANDED;
             }
+            else if(selectedPosition != - 1)
+            {
+                return VIEW_TYPE_CAMPAIGN_SMALL;
+            }
             else
             {
                 return VIEW_TYPE_CAMPAIGN;
             }
         }
-        else if (currentObject instanceof String)
+        else if(currentObject instanceof String)
         {
             return VIEW_TYPE_CAMPAIGN_FOOTER;
         }
@@ -216,6 +239,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         dataSet.addAll(objects);
         notifyItemRangeInserted(dataSet.size() - objects.size(), dataSet.size() - 1);
     }
+
     @Override
     public int getItemCount()
     {
