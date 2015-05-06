@@ -14,7 +14,8 @@ import org.dosomething.letsdothis.ui.views.typeface.CustomTextView;
 public class ActionGridSpacingDecoration extends RecyclerView.ItemDecoration
 {
 
-    private static float eightDp = 0;
+    public static final int GRID_SPACING = 8;
+    private static      int eightDp      = 0;
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state)
@@ -22,35 +23,35 @@ public class ActionGridSpacingDecoration extends RecyclerView.ItemDecoration
         Resources r = view.getResources();
         if(view instanceof CustomTextView)
         {
-            getPxFromDip(r);
-            outRect.bottom = (int) (eightDp);
+            outRect.bottom = getPxFromDip(r);
         }
         if(view instanceof ImageView)
         {
-            getPxFromDip(r);
-            outRect.bottom = (int) (eightDp);
-            outRect.right = (int) eightDp;
-            outRect.left = (int) eightDp;
+            outRect.bottom = getPxFromDip(r);
+            outRect.right = getPxFromDip(r);
+            outRect.left = getPxFromDip(r);
 
             int childPosition = parent.getChildPosition(view);
             if(childPosition % 2 == 0)
             {
-                outRect.right = (int) (eightDp / 2);
+                outRect.right = (getPxFromDip(r) / 2);
             }
             else
             {
-                outRect.left = (int) (eightDp / 2);
+                outRect.left = (getPxFromDip(r) / 2);
             }
         }
     }
 
-    private void getPxFromDip(Resources r)
+    private int getPxFromDip(Resources r)
     {
         if(eightDp == 0)
         {
-            eightDp = TypedValue
-                    .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, r.getDisplayMetrics());
+            Float v = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, GRID_SPACING,
+                                                r.getDisplayMetrics());
+            eightDp = v.intValue();
         }
+        return eightDp;
     }
 
 }
