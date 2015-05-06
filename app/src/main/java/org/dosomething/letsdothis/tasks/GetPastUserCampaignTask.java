@@ -36,8 +36,8 @@ public class GetPastUserCampaignTask extends BaseNetworkErrorHandlerTask
         for(int i = 0; i < 3; i++)
         {
             Campaign campaign = new Campaign();
-            campaign.title = "adfa";
-            campaign.callToAction = "call to callToAction...";
+            campaign.title = "Teens for Jeans";
+            campaign.imagePath = "http://staging.beta.dosomething.org/sites/default/files/images/Vamps_landscape_1.jpg";
 
             campaignList.add(campaign);
         }

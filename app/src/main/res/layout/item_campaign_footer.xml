@@ -2,10 +2,9 @@
 <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:textAllCaps="true"
-    android:textSize="@dimen/text_36"
     app:typeface="brandon_bold"
-    android:gravity="center"
-    android:padding="@dimen/padding_wedge"
+    style="@style/SectionTitle"
+    tools:text="Section"
     android:layout_height="wrap_content"/>
