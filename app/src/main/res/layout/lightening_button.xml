@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/campaign_details_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="@dimen/padding_small"
+                android:background="@drawable/bg_cerulean_rounded_rect_filled">
+
+    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+        android:id="@+id/campaign_details"
+        style="@style/lightening_btn_text"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="@string/stop_being_bored"
+        app:typeface="brandon_bold"/>
+
+    <ImageView
+        android:layout_width="21dp"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/campaign_details"
+        android:scaleType="centerCrop"
+        android:src="@drawable/button_lightening_left"/>
+
+    <ImageView
+        android:layout_width="21dp"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/campaign_details"
+        android:scaleType="centerCrop"
+        android:src="@drawable/button_lightening_right"/>
+
+</RelativeLayout>

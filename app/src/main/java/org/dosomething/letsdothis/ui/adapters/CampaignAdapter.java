@@ -12,6 +12,7 @@ import com.squareup.picasso.Picasso;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.ReportBack;
+import org.dosomething.letsdothis.ui.views.SlantedBackgroundDrawable;
 import org.dosomething.letsdothis.utils.TimeUtils;
 
 import java.util.ArrayList;
@@ -145,7 +146,9 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     notifyItemChanged(position);
                 }
             });
-            expandedCampaignViewHolder.campaignDetails.setOnClickListener(new View.OnClickListener()
+
+            expandedCampaignViewHolder.slantedBg.setBackground(new SlantedBackgroundDrawable(false, Integer.valueOf(50)));
+            expandedCampaignViewHolder.campaignDetailsWrapper.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View v)
@@ -266,19 +269,21 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public static class ExpandedCampaignViewHolder extends CampaignViewHolder
     {
         private TextView problemFact;
-        private View     campaignDetails;
+        private View     campaignDetailsWrapper;
         public  TextView days;
         public  TextView hours;
         public  TextView minutes;
         public  TextView daysLabel;
         public  TextView hoursLabel;
         public  TextView minutesLabel;
+        private final View slantedBg;
 
         public ExpandedCampaignViewHolder(View itemView)
         {
             super(itemView);
             problemFact = (TextView) itemView.findViewById(R.id.problemFact);
-            campaignDetails = itemView.findViewById(R.id.campaign_details);
+            slantedBg = itemView.findViewById(R.id.slanted_bg);
+            campaignDetailsWrapper = itemView.findViewById(R.id.campaign_details_wrapper);
             days = (TextView) itemView.findViewById(R.id.days);
             hours = (TextView) itemView.findViewById(R.id.hours);
             minutes = (TextView) itemView.findViewById(R.id.min);

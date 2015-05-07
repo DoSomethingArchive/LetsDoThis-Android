@@ -30,82 +30,78 @@
                 android:background="@drawable/gradient"/>
         </FrameLayout>
 
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/call_to_action"
-            android:layout_centerInParent="true"
-            android:textAllCaps="true"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_48"
-            app:typeface="brandon_bold"
-            tools:text="Title"/>
-
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:id="@+id/call_to_action"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_centerInParent="true"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_33"
-            tools:text="Call to action"/>
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_medium">
+
+            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:maxLines="2"
+                android:textAllCaps="true"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_48"
+                app:typeface="brandon_bold"
+                tools:text="Title and we also want to test for a long title"/>
+
+            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                android:id="@+id/call_to_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:maxLines="2"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_33"
+                tools:text="Call to action. and more longer text to try and break"/>
+        </LinearLayout>
 
     </RelativeLayout>
-
-    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-        android:id="@+id/problemFact"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/image_and_title"
-        android:layout_margin="@dimen/padding_small"
-        tools:text="Problem fact"/>
-
-    <!--FIXME we need some lightning here-->
 
 
     <RelativeLayout
-        android:id="@+id/campaign_details_wrapper"
+        android:id="@+id/slanted_wrapper"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@+id/problemFact"
-        android:background="@drawable/bg_cerulean_rounded_rect_filled"
-        android:layout_margin="@dimen/padding_small">
+        android:layout_height="wrap_content"
+        android:background="@color/porcelain"
+        android:layout_below="@+id/image_and_title"
+        android:orientation="vertical">
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:id="@+id/campaign_details"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            style="@style/lightening_btn_text"
-            android:gravity="center"
-            android:text="@string/stop_being_bored"
-            app:typeface="brandon_bold"/>
+            android:id="@+id/problemFact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_small"
+            android:background="@color/porcelain"
+            android:textColor="@android:color/black"
+            tools:text="Music programs are constantly in danger of being cut from shrinking school budgets even though they're proven to improve academics."/>
 
-        <ImageView
-            android:layout_width="21dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/campaign_details"
-            android:scaleType="centerCrop"
-            android:src="@drawable/button_lightening_left"/>
+        <FrameLayout
+            android:id="@+id/slanted_bg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/problemFact"
+            android:background="#ffffff"
+            android:paddingTop="@dimen/slanted_padding_50">
 
-        <ImageView
-            android:layout_width="21dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/campaign_details"
-            android:scaleType="centerCrop"
-            android:src="@drawable/button_lightening_right"/>
+        <include layout="@layout/lightening_button"/>
+
+        </FrameLayout>
+
 
     </RelativeLayout>
+
 
     <include
         layout="@layout/item_hub_expire"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/padding_small"
-        android:layout_below="@id/campaign_details_wrapper"/>
+        android:layout_below="@id/slanted_wrapper"
+        android:padding="@dimen/padding_small"/>
 
 </RelativeLayout>
