@@ -42,5 +42,6 @@
     <View
         android:background="@color/silver"
         android:layout_width="match_parent"
+        android:layout_marginBottom="@dimen/padding_small"
         android:layout_height="1dp"/>
 </LinearLayout>

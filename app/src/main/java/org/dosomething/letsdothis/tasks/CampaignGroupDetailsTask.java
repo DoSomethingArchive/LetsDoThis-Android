@@ -4,6 +4,8 @@ import android.content.Context;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.User;
 
+import java.util.Random;
+
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
 /**
@@ -33,7 +35,9 @@ public class CampaignGroupDetailsTask extends BaseNetworkErrorHandlerTask
         campaign.imagePath = "http://staging.beta.dosomething.org/sites/default/files/MommoGrams_hero_landscape.jpg";
 
 
-        for(int i = 0; i < 10; i++)
+        Random rand = new Random();
+        int randomNum = rand.nextInt(20);
+        for(int i = 0; i < randomNum; i++)
         {
             User user = new User();
             user.avatarPath = "http://awesomeish.com/wp-content/uploads/2013/01/Michael-Jordan.jpg";
