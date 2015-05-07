@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="horizontal"
+        android:id="@+id/action_buttons"
+        android:paddingLeft="@dimen/padding_small"
+        android:paddingRight="@dimen/padding_small"
+        android:paddingTop="@dimen/padding_medium"
+        android:paddingBottom="@dimen/padding_medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+            style="@style/SecondaryButton"
+            android:id="@+id/prove_share"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            app:typeface="brandon_bold"
+            android:layout_marginRight="@dimen/padding_tiny"
+            android:text="@string/prove_it"
+            android:layout_height="wrap_content"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+            android:id="@+id/invite"
+            app:typeface="brandon_bold"
+            android:text="@string/invite_friends"
+            android:layout_marginLeft="@dimen/padding_tiny"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <View
+        android:background="@color/silver"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+</LinearLayout>
