@@ -18,7 +18,6 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignTask;
 import org.dosomething.letsdothis.tasks.GetPastUserCampaignTask;
-import org.dosomething.letsdothis.ui.PhotoScaleActivity;
 import org.dosomething.letsdothis.ui.SettingsActivity;
 import org.dosomething.letsdothis.ui.UserListActivity;
 import org.dosomething.letsdothis.ui.UserProfileActivity;

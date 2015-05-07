@@ -50,4 +50,5 @@
     <string name="error_code_length">An invite code should be 6 digits long!</string>
     <string name="tell_us">Tell us about yourself!</string>
     <string name="footer_register">Have a DoSomething.org account? Sign in</string>
+    <string name="crop_photo">crop photo</string>
 </resources>
