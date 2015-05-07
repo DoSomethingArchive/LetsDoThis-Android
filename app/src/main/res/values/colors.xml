@@ -34,4 +34,5 @@
     <color name="invite_code">#FFCF00</color>
     <color name="silver">#CCCCCC</color>
     <color name="transparent">#00000000</color>
+    <color name="black_70">#70000000</color>
 </resources>
