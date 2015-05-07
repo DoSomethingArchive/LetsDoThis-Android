@@ -37,22 +37,26 @@
 
     <dimen name="height_nav_bar">@dimen/height_small</dimen>
     <dimen name="height_actions_nav_bar">60dp</dimen>
+    <dimen name="campaign_small_height">106dp</dimen>
     <dimen name="campaign_height">150dp</dimen>
     <dimen name="campaign_height_expanded">242dp</dimen>
 
     <!--Sizes from Sketch-->
-    <dimen name="text_48">@dimen/text_xlarge</dimen>
-    <dimen name="text_36">@dimen/text_large</dimen>
-    <dimen name="text_33">16sp</dimen>
-    <dimen name="text_30">15sp</dimen>
     <dimen name="text_20">10sp</dimen>
+    <dimen name="text_26">13sp</dimen>
+    <dimen name="text_30">15sp</dimen>
+    <dimen name="text_33">16sp</dimen>
+    <dimen name="text_42">21sp</dimen>
+    <dimen name="text_36">@dimen/text_large</dimen>
+    <dimen name="text_48">@dimen/text_xlarge</dimen>
     <dimen name="hub_profile_header">169dp</dimen>
     <dimen name="hub_avatar_height">75dp</dimen>
-    <dimen name="text_26">13sp</dimen>
     <dimen name="report_back_expanded">375dp</dimen>
     <dimen name="notification_image">60dp</dimen>
-    <dimen name="text_42">21sp</dimen>
     <dimen name="invite_code_input">209dp</dimen>
     <dimen name="avatar">100dp</dimen>
     <dimen name="friend_avatar">50dp</dimen>
+    <dimen name="space_14">14dp</dimen>
+    <dimen name="space_35">35dp</dimen>
+    <dimen name="slanted_padding_50">35dp</dimen>
 </resources>

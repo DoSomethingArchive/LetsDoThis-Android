@@ -7,4 +7,5 @@
     app:typeface="brandon_bold"
     style="@style/SectionTitle"
     tools:text="Section"
+    android:background="@color/desertStorm"
     android:layout_height="wrap_content"/>
