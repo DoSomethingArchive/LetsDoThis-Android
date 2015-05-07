@@ -183,6 +183,7 @@ public class PhotoCropActivity extends AppCompatActivity
         if(mPhotoLoaded)
         {
             Bitmap bitmap = null;
+            //FIXME this is testig
             File scaledAvatar = Environment.getExternalStoragePublicDirectory("test.jpg");
             //            File scaledAvatar = new File(getFilesDir(),
             //                                         "scaledAvatar_" + System.currentTimeMillis() + ".jpg");

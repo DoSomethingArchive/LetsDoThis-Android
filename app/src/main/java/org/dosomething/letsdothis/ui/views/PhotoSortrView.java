@@ -23,26 +23,15 @@ import java.util.ArrayList;
  */
 public class PhotoSortrView extends View implements MultiTouchController.MultiTouchObjectCanvas<MultiTouchEntity>
 {
-
-    private ArrayList<MultiTouchEntity> mImages = new ArrayList<MultiTouchEntity>();
-
+    //~=~=~=~=~=~=~=~=~=~=~=~=Constants
+    public static final  boolean mShowDebugInfo = false;
+    private static final int     UI_MODE_ROTATE = 1, UI_MODE_ANISOTROPIC_SCALE = 2;
+    public static final int mUIMode = UI_MODE_ROTATE;
+    private Paint mLinePaintTouchPointCircle = new Paint();
+    private ArrayList<MultiTouchEntity>            mImages              = new ArrayList<MultiTouchEntity>();
     private MultiTouchController<MultiTouchEntity> multiTouchController = new MultiTouchController<MultiTouchEntity>(
             this);
-
-    private MultiTouchController.PointInfo currTouchPoint = new MultiTouchController.PointInfo();
-
-    public static final boolean mShowDebugInfo = false;
-
-    private static final int UI_MODE_ROTATE = 1, UI_MODE_ANISOTROPIC_SCALE = 2;
-
-    public static final int mUIMode = UI_MODE_ROTATE;
-
-    private Paint mLinePaintTouchPointCircle = new Paint();
-
-    private boolean skipDots = false;
-
-    private Paint mBorderPaint;
-    private int   mBorderWidth;
+    private MultiTouchController.PointInfo         currTouchPoint       = new MultiTouchController.PointInfo();
 
 
     public PhotoSortrView(Context context)
@@ -86,12 +75,6 @@ public class PhotoSortrView extends View implements MultiTouchController.MultiTo
     {
         setDrawingCacheEnabled(true);
         setBackgroundColor(getResources().getColor(R.color.black_70));
-
-        mBorderPaint = new Paint();
-        mBorderPaint.setColor(getResources().getColor(R.color.black_30));
-        mBorderPaint.setStyle(Paint.Style.FILL);
-//        mBorderWidth = getResources().getDimensionPixelSize(R.dimen.padding_large);
-        mBorderWidth = 0;
 
         mLinePaintTouchPointCircle.setColor(Color.YELLOW);
         mLinePaintTouchPointCircle.setStrokeWidth(5);
@@ -138,37 +121,22 @@ public class PhotoSortrView extends View implements MultiTouchController.MultiTo
         {
             drawMultitouchDebugMarks(canvas);
         }
-
-        if(! skipDots)
-        {
-            drawBorder(canvas);
-        }
     }
 
-    public Bitmap takeScreenshot() throws IOException
+    public Bitmap takeSquareScreenshot() throws IOException
     {
-        skipDots = true;
-
         invalidate();
         Bitmap drawingCache = getDrawingCache();
-        skipDots = false;
-
+        //FIXME do the square cropping thing
         return drawingCache;
     }
 
-    private void drawBorder(Canvas canvas)
+
+    public Bitmap takeScreenshot() throws IOException
     {
-        int w = canvas.getWidth();
-        int h = canvas.getHeight();
-
-        //Horizontal Lines
-        canvas.drawRect(0, 0, h, mBorderWidth, mBorderPaint);
-        canvas.drawRect(0, h - mBorderWidth, w, h, mBorderPaint);
-
-        //Vertical lines
-        canvas.drawRect(0, 0, mBorderWidth, h, mBorderPaint);
-        canvas.drawRect(w - mBorderWidth, 0, w, h, mBorderPaint);
-
+        invalidate();
+        Bitmap drawingCache = getDrawingCache();
+        return drawingCache;
     }
 
     private void drawMultitouchDebugMarks(Canvas canvas)
