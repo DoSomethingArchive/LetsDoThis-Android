@@ -264,15 +264,4 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    public static class ReportBackViewHolder extends RecyclerView.ViewHolder
-    {
-        protected ImageView root;
-
-        public ReportBackViewHolder(ImageView itemView)
-        {
-            super(itemView);
-            this.root = itemView;
-        }
-    }
-
 }

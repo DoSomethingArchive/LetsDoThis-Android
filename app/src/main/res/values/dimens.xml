@@ -55,4 +55,5 @@
     <dimen name="invite_code_input">209dp</dimen>
     <dimen name="avatar">100dp</dimen>
     <dimen name="friend_avatar">50dp</dimen>
+    <dimen name="campaign_expanded">242dp</dimen>
 </resources>
