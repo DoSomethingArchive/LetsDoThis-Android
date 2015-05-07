@@ -14,14 +14,16 @@ import com.viewpagerindicator.TabPageIndicator;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.views.typeface.CustomTypefaceSpan;
 import org.dosomething.letsdothis.ui.views.typeface.TypefaceManager;
+import org.dosomething.letsdothis.utils.ViewUtils;
 
 /**
  * Created by izzyoji :) on 4/15/15.
  */
 public class ActionsFragment extends Fragment
 {
-
+    //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String TAG = ActionsFragment.class.getSimpleName();
+    public static final int INDICATOR_SPACING = 8;
 
     public static ActionsFragment newInstance()
     {
@@ -43,6 +45,8 @@ public class ActionsFragment extends Fragment
     {
         super.onViewCreated(view, savedInstanceState);
         TabPageIndicator indicator = (TabPageIndicator) view.findViewById(R.id.indicator);
+        int pxFromDip = ViewUtils.getPxFromDip(getResources(), INDICATOR_SPACING).intValue();
+        indicator.setPadding(pxFromDip, pxFromDip, pxFromDip, pxFromDip);
 
         ViewPager pager = (ViewPager) view.findViewById(R.id.pager);
         pager.setOffscreenPageLimit(3);
