@@ -179,7 +179,17 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
                     Log.d("asdf-----------", selectedImageUri.toString());
                 }
                 adapter.refreshTestImage(selectedImageUri);
+                startActivityForResult(
+                        PhotoScaleActivity.getLaunchIntent(this, selectedImageUri.toString()),
+                        PhotoScaleActivity.RESULT_CROP_IMG);
             }
+        }
+        else if(resultCode == PhotoScaleActivity.RESULT_CROP_IMG)
+        {
+            String stringExtra = data.getStringExtra(PhotoScaleActivity.AVATAR_PATH);
+            Log.d("------AVATAR PAth", stringExtra);
+            adapter.refreshTestImage(Uri.parse("file://" + stringExtra));
+
         }
     }
 
