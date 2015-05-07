@@ -14,6 +14,7 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.data.User;
+import org.dosomething.letsdothis.ui.views.ReportBackImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +70,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 View reportBackLayout = LayoutInflater.from(parent.getContext())
                                                       .inflate(R.layout.item_report_back_square,
                                                                parent, false);
-                return new ReportBackViewHolder((ImageView) reportBackLayout);
+                return new ReportBackViewHolder((ReportBackImageView) reportBackLayout);
             case VIEW_TYPE_ACTION_BUTTONS:
                 View primaryButton = LayoutInflater.from(parent.getContext())
                                                .inflate(R.layout.item_action_buttons, parent, false);
@@ -206,6 +207,11 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
         dataSet.addAll(reportBacks);
         notifyDataSetChanged();
+    }
+
+    public int getStartPositionOfReportBacks()
+    {
+        return dataSet.indexOf(actionButtons);
     }
 
     public void updateCampaign(Campaign campaign)

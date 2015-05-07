@@ -12,6 +12,7 @@ import com.squareup.picasso.Picasso;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.ReportBack;
+import org.dosomething.letsdothis.ui.views.ReportBackImageView;
 import org.dosomething.letsdothis.ui.views.SlantedBackgroundDrawable;
 import org.dosomething.letsdothis.utils.TimeUtils;
 
@@ -66,7 +67,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case VIEW_TYPE_REPORT_BACK:
                 View reportBackLayout = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_report_back_square, parent, false);
-                return new ReportBackViewHolder((ImageView) reportBackLayout);
+                return new ReportBackViewHolder((ReportBackImageView) reportBackLayout);
             case VIEW_TYPE_CAMPAIGN_EXPANDED:
                 View bigLayout = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_campaign_large, parent, false);

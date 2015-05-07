@@ -14,6 +14,7 @@ import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.tasks.CampaignGroupDetailsTask;
 import org.dosomething.letsdothis.tasks.IndividualCampaignReportBackList;
 import org.dosomething.letsdothis.ui.adapters.GroupAdapter;
+import org.dosomething.letsdothis.ui.views.GroupReportBackItemDecoration;
 
 import java.util.List;
 
@@ -47,8 +48,8 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
         setSupportActionBar((android.support.v7.widget.Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setTitle(null);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //FIXME the reportbacks need padding
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
+        recyclerView.addItemDecoration(new GroupReportBackItemDecoration());
         adapter = new GroupAdapter(generateSampleData(), this);
         recyclerView.setAdapter(adapter);
 

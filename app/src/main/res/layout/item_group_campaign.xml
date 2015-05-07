@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:id="@+id/image_and_title"
-    android:layout_height="@dimen/campaign_expanded">
+    android:layout_height="@dimen/campaign_height_expanded">
 
     <ImageView
         android:layout_width="match_parent"
