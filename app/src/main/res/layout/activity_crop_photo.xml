@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tool="http://schemas.android.com/tools"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/confirm_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/black"
+        android:paddingTop="@dimen/padding_large"
+        android:paddingBottom="@dimen/padding_large"
+        android:paddingLeft="@dimen/padding_small"
+        android:paddingRight="@dimen/padding_small"
+        >
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+            android:id="@+id/start"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            app:typeface="brandon_bold"
+            android:onClick="saveAvatar"
+            android:text="@string/crop_photo"/>
+
+    </FrameLayout>
+
+
+    <org.dosomething.letsdothis.ui.views.PhotoSortrView
+        android:id="@+id/photo_crop_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/confirm_wrapper"
+        android:padding="0dp"/>
+
+    <FrameLayout
+        android:id="@+id/transparency"
+        android:layout_width="match_parent"
+        android:layout_height="381px"
+        android:layout_above="@id/confirm_wrapper"
+        android:background="@color/black_70"
+        tool:layout_height="70dp"/>
+
+
+</RelativeLayout>

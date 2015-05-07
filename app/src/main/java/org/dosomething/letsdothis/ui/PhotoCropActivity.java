@@ -14,7 +14,9 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.views.BitmapUtils;
@@ -31,23 +33,24 @@ import java.io.IOException;
  * Time: 12:33 AM
  * To change this template use File | Settings | File Templates.
  */
-public class PhotoScaleActivity extends AppCompatActivity
+public class PhotoCropActivity extends AppCompatActivity
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final String CONTENT_URI_PREFIX = "content://";
-    public static final String IMAGE_PATH         = "IMAGE_PATH";
-    public static final String AVATAR_PATH        = "avatarPath";
-    public static final int    RESULT_FAILED      = 100;
-    private static final int DEFAULT_MAX_SIZE = 640;
-    public static final int RESULT_CROP_IMG = 25384;
-
+    public static final  String CONTENT_URI_PREFIX = "content://";
+    public static final  String IMAGE_PATH         = "IMAGE_PATH";
+    public static final  String AVATAR_PATH        = "avatarPath";
+    public static final  int    RESULT_FAILED      = 100;
+    private static final int    DEFAULT_MAX_SIZE   = 640;
+    public static final  int    RESULT_CROP_IMG    = 25384;
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private boolean        mPhotoLoaded;
-    private PhotoSortrView photoSortrView;
+    //~=~=~=~=~=~=~=~=~=~=~=~=Views
+    private PhotoSortrView photoCropView;
+    private FrameLayout transparency;
 
     public static Intent getLaunchIntent(Context context, String path)
     {
-        Intent intent = new Intent(context, PhotoScaleActivity.class);
+        Intent intent = new Intent(context, PhotoCropActivity.class);
         intent.putExtra(IMAGE_PATH, path);
         return intent;
     }
@@ -55,20 +58,26 @@ public class PhotoScaleActivity extends AppCompatActivity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        super.setContentView(R.layout.crop_photo_activity);
+        super.setContentView(R.layout.activity_crop_photo);
 
-        photoSortrView = (PhotoSortrView) findViewById(R.id.photo_sorter);
+        photoCropView = (PhotoSortrView) findViewById(R.id.photo_crop_view);
+        transparency = (FrameLayout) findViewById(R.id.transparency);
+
         final long createdTime = System.currentTimeMillis();
 
-        photoSortrView.getViewTreeObserver()
+        photoCropView.getViewTreeObserver()
                 .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener()
                 {
                     @Override
                     public void onGlobalLayout()
                     {
-                        photoSortrView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        photoCropView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        setTransparencyHeight();
 
-                        String filePath = getIntent().getStringExtra(IMAGE_PATH);
+
+                        //FIXME---------------------------------------------------------testing
+                        //                        String filePath = getIntent().getStringExtra(IMAGE_PATH);
+                        String filePath = "content://media/external/images/media/90999";
 
                         new AsyncTask<String, Void, Bitmap>()
                         {
@@ -76,10 +85,10 @@ public class PhotoScaleActivity extends AppCompatActivity
                             protected Bitmap doInBackground(String... params)
                             {
                                 String path = params[0];
-                                int preferredSize = photoSortrView
+                                int preferredSize = photoCropView
                                         .getMeasuredWidth() > DEFAULT_MAX_SIZE
                                         ? DEFAULT_MAX_SIZE
-                                        : photoSortrView.getMeasuredWidth();
+                                        : photoCropView.getMeasuredWidth();
 
                                 Bitmap raw;
                                 if(path.startsWith(CONTENT_URI_PREFIX))
@@ -88,7 +97,7 @@ public class PhotoScaleActivity extends AppCompatActivity
                                     //which is probably from the network, so show a loading spinner
                                     publishProgress();
                                     raw = BitmapUtils
-                                            .decodeSampledBitmapFromURI(PhotoScaleActivity.this,
+                                            .decodeSampledBitmapFromURI(PhotoCropActivity.this,
                                                                         Uri.parse(path),
                                                                         preferredSize,
                                                                         preferredSize);
@@ -146,14 +155,27 @@ public class PhotoScaleActivity extends AppCompatActivity
                                     return;
                                 }
 
-                                photoSortrView.addImage(new BitmapDrawable(getResources(), bitmap));
-                                photoSortrView.invalidate();
+                                photoCropView.addImage(new BitmapDrawable(getResources(), bitmap));
+                                photoCropView.invalidate();
                                 mPhotoLoaded = true;
                             }
                         }.execute(filePath);
                     }
                 });
 
+    }
+
+    private void setTransparencyHeight()
+    {
+        int h = photoCropView.getMeasuredHeight();
+        int w = photoCropView.getMeasuredWidth();
+
+        //assume height bigger than width
+        int i = h - w;
+        ViewGroup.LayoutParams layoutParams = transparency.getLayoutParams();
+        layoutParams.height = i;
+        transparency.setLayoutParams(layoutParams);
+        //assume width bigger than height
     }
 
     public void saveAvatar(View save)
@@ -167,7 +189,7 @@ public class PhotoScaleActivity extends AppCompatActivity
 
             try
             {
-                bitmap = photoSortrView.takeScreenshot();
+                bitmap = photoCropView.takeScreenshot();
 
                 FileOutputStream out = new FileOutputStream(scaledAvatar);
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);

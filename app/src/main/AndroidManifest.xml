@@ -19,7 +19,7 @@
         android:name=".LDTApplication"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.StartActivity">
+        <activity android:name=".ui.PhotoCropActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -29,7 +29,7 @@
 
         <activity android:name=".ui.IntroActivity"/>
 
-        <activity android:name=".ui.PhotoScaleActivity"/>
+        <activity android:name=".ui.StartActivity"/>
 
         <activity android:name=".ui.RegisterLoginActivity"/>
 
