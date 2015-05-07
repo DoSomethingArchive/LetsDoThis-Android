@@ -25,24 +25,36 @@
             android:background="@drawable/darken_30"/>
     </FrameLayout>
 
-    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-        android:id="@+id/title"
-        tools:text="Title"
-        android:textAllCaps="true"
-        app:typeface="brandon_bold"
-        android:textSize="@dimen/text_48"
-        android:textColor="@android:color/white"
-        android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
 
-    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-        android:layout_below="@+id/title"
-        tools:text="Call to action"
-        android:textSize="@dimen/text_33"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textColor="@android:color/white"
-        android:id="@+id/call_to_action"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_medium">
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="true"
+            android:maxLines="1"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_48"
+            app:typeface="brandon_bold"
+            tools:text="Title"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/call_to_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:maxLines="2"
+            android:textSize="@dimen/text_33"
+            tools:text="Call to action. and more longer text to try and break"/>
+    </LinearLayout>
+
 </RelativeLayout>
