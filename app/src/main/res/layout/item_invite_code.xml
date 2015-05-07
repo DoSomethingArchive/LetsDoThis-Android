@@ -4,7 +4,7 @@
              xmlns:app="http://schemas.android.com/apk/res-auto"
              android:orientation="vertical"
              android:layout_width="match_parent"
-             android:background="@color/invite_background"
+             android:background="@color/desertStorm"
              android:layout_height="@dimen/invite_code_input">
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
@@ -29,12 +29,12 @@
         android:textSize="@dimen/text_xhuge"/>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+        android:id="@+id/join"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         app:typeface="brandon_bold"
         android:layout_margin="@dimen/padding_small"
-        android:id="@+id/join"
         android:visibility="gone"
         tools:visibility="visible"
         tools:text="Join Music March Out"/>

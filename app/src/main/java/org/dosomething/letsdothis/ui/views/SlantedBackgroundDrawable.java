@@ -16,13 +16,14 @@ import java.util.List;
 public class SlantedBackgroundDrawable extends ColorDrawable
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final int WIDTH_OVERSHOOT      = 50;
-    public static final int HEIGHT_SHADOW_HEIGHT = 30;
+    private static final int WIDTH_OVERSHOOT         = 50;
+    private static final int HEIGHT_SHADOW_OVERSHOOT = 30;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private final Paint   wallpaint;
     private final Paint   shadowPaint;
     private final boolean slantedLeft;
+    private Integer SLANT_HEIGHT = 100;
 
     public SlantedBackgroundDrawable(boolean slatedLeft)
     {
@@ -37,9 +38,30 @@ public class SlantedBackgroundDrawable extends ColorDrawable
         shadowPaint.setColor(0x22000000);
         shadowPaint.setAntiAlias(true);
         shadowPaint.setStyle(Paint.Style.FILL);
-        shadowPaint.setMaskFilter(new BlurMaskFilter(HEIGHT_SHADOW_HEIGHT, BlurMaskFilter.Blur.OUTER));
+        shadowPaint.setMaskFilter(
+                new BlurMaskFilter(HEIGHT_SHADOW_OVERSHOOT, BlurMaskFilter.Blur.OUTER));
 
     }
+
+    public SlantedBackgroundDrawable(boolean slatedLeft, Integer slantHeight)
+    {
+        slantedLeft = slatedLeft;
+
+        wallpaint = new Paint();
+        wallpaint.setColor(Color.WHITE);
+        wallpaint.setStyle(Paint.Style.FILL);
+        wallpaint.setAntiAlias(true);
+
+        shadowPaint = new Paint();
+        shadowPaint.setColor(0x22000000);
+        shadowPaint.setAntiAlias(true);
+        shadowPaint.setStyle(Paint.Style.FILL);
+        shadowPaint.setMaskFilter(
+                new BlurMaskFilter(HEIGHT_SHADOW_OVERSHOOT, BlurMaskFilter.Blur.OUTER));
+
+        SLANT_HEIGHT = slantHeight;
+    }
+
 
     public SlantedBackgroundDrawable(boolean slatedLeft, int color)
     {
@@ -54,7 +76,8 @@ public class SlantedBackgroundDrawable extends ColorDrawable
         shadowPaint.setColor(0x22000000);
         shadowPaint.setAntiAlias(true);
         shadowPaint.setStyle(Paint.Style.FILL);
-        shadowPaint.setMaskFilter(new BlurMaskFilter(HEIGHT_SHADOW_HEIGHT, BlurMaskFilter.Blur.OUTER));
+        shadowPaint.setMaskFilter(
+                new BlurMaskFilter(HEIGHT_SHADOW_OVERSHOOT, BlurMaskFilter.Blur.OUTER));
 
     }
 
@@ -76,15 +99,15 @@ public class SlantedBackgroundDrawable extends ColorDrawable
         List<Point> coord = new ArrayList<>();
         if(slantedLeft)
         {
-            coord.add(new Point(- WIDTH_OVERSHOOT, 100 + HEIGHT_SHADOW_HEIGHT));
-            coord.add(new Point(width + WIDTH_OVERSHOOT, 0 + HEIGHT_SHADOW_HEIGHT));
+            coord.add(new Point(- WIDTH_OVERSHOOT, SLANT_HEIGHT + HEIGHT_SHADOW_OVERSHOOT));
+            coord.add(new Point(width + WIDTH_OVERSHOOT, 0 + HEIGHT_SHADOW_OVERSHOOT));
             coord.add(new Point(width + WIDTH_OVERSHOOT, height));
             coord.add(new Point(- WIDTH_OVERSHOOT, height));
         }
         else
         {
-            coord.add(new Point(- WIDTH_OVERSHOOT, 0 + HEIGHT_SHADOW_HEIGHT));
-            coord.add(new Point(width+ WIDTH_OVERSHOOT, 100 + HEIGHT_SHADOW_HEIGHT));
+            coord.add(new Point(- WIDTH_OVERSHOOT, 0 + HEIGHT_SHADOW_OVERSHOOT));
+            coord.add(new Point(width + WIDTH_OVERSHOOT, SLANT_HEIGHT + HEIGHT_SHADOW_OVERSHOOT));
             coord.add(new Point(width + WIDTH_OVERSHOOT, height));
             coord.add(new Point(- WIDTH_OVERSHOOT, height));
         }
