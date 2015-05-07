@@ -10,17 +10,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.facebook.Profile;
 import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.FbUser;
-import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.RegisterTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
-import org.dosomething.letsdothis.utils.ImageUtils;
+import org.dosomething.letsdothis.utils.ViewUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -98,7 +96,7 @@ public class RegisterActivity extends BaseActivity
         pickIntent.setType("image/*");
 
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File externalFile = ImageUtils.getAvatarFile(this);
+        File externalFile = ViewUtils.getAvatarFile(this);
         imageUri = Uri.fromFile(externalFile);
         if(BuildConfig.DEBUG)
         {
@@ -154,7 +152,7 @@ public class RegisterActivity extends BaseActivity
 
                 Picasso.with(this).load(selectedImageUri).resize(avatar.getWidth(), avatar.getHeight()).into(avatar);
 
-                File externalFile = ImageUtils.getAvatarFile(this);
+                File externalFile = ViewUtils.getAvatarFile(this);
                 saveFile(selectedImageUri, externalFile);
                 //FIXME: this should be loaded into Hub
                 AppPrefs.getInstance(this).setAvatarPath(externalFile.getAbsolutePath());
