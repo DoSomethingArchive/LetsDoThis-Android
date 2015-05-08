@@ -123,12 +123,13 @@ public class PhotoSortrView extends View implements MultiTouchController.MultiTo
         }
     }
 
-    public Bitmap takeSquareScreenshot() throws IOException
+    public Bitmap takeSquareScreenshot(int imageSize) throws IOException
     {
         invalidate();
+        System.gc();
         Bitmap drawingCache = getDrawingCache();
-        //FIXME do the square cropping thing
-        return drawingCache;
+        Bitmap bitmap = Bitmap.createBitmap(drawingCache, 0, 0, imageSize, imageSize);
+        return bitmap;
     }
 
 

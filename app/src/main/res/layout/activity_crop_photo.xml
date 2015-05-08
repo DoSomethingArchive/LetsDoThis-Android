@@ -22,7 +22,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             app:typeface="brandon_bold"
-            android:onClick="saveAvatar"
+            android:onClick="saveReportBackImage"
             android:text="@string/crop_photo"/>
 
     </FrameLayout>

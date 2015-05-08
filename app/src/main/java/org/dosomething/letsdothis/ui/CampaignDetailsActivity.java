@@ -178,18 +178,12 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
                 {
                     Log.d("asdf-----------", selectedImageUri.toString());
                 }
-                adapter.refreshTestImage(selectedImageUri);
-                startActivityForResult(
-                        PhotoCropActivity.getLaunchIntent(this, selectedImageUri.toString()),
-                        PhotoCropActivity.RESULT_CROP_IMG);
-            }
-        }
-        else if(resultCode == PhotoCropActivity.RESULT_CROP_IMG)
-        {
-            String stringExtra = data.getStringExtra(PhotoCropActivity.AVATAR_PATH);
-            Log.d("------AVATAR PAth", stringExtra);
-            adapter.refreshTestImage(Uri.parse("file://" + stringExtra));
 
+                //FIXME--------------
+//                adapter.refreshTestImage(selectedImageUri);
+                startActivity(
+                        PhotoCropActivity.getLaunchIntent(this, selectedImageUri.toString()));
+            }
         }
     }
 
