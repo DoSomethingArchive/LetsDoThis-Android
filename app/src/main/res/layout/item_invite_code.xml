@@ -23,10 +23,10 @@
         android:imeOptions="actionDone"
         android:textColor="@color/invite_code"
         android:id="@+id/code"
-        android:maxLength="6"
+        android:maxLength="15"
         android:background="@android:color/transparent"
-        android:inputType="numberPassword"
-        android:textSize="@dimen/text_xhuge"/>
+        android:inputType="textNoSuggestions"
+        android:textSize="@dimen/text_huge"/>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomButton
         android:id="@+id/join"
