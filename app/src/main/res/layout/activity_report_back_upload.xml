@@ -7,10 +7,9 @@
               android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/image_wrapper"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:background="@drawable/drop_shadow"
-        >
+        android:layout_height="150dp">
 
         <ImageView
             android:id="@+id/image_hero"
@@ -34,11 +33,17 @@
             tool:src="@drawable/placeholder"/>
     </RelativeLayout>
 
+    <include layout="@layout/drop_shadow"/>
+
     <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
         android:id="@+id/caption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="16dp"
@@ -61,6 +66,7 @@
         android:inputType="number"/>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+        android:id="@+id/upload"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
