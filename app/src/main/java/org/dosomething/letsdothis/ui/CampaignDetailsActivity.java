@@ -132,6 +132,16 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     }
 
     @Override
+    public void onUserClicked(String id)
+    {
+        //FIXME
+        if(BuildConfig.DEBUG)
+        {
+            Toast.makeText(this, "TODO", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
     protected void onDestroy()
     {
         EventBusExt.getDefault().unregister(this);
