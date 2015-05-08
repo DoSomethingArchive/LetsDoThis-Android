@@ -201,9 +201,8 @@ public class PhotoCropActivity extends AppCompatActivity
 
     private void startReportBackUpload(File cropedSquare)
     {
-        startActivity(ReportBackUploadActivity
-                              .getLaunchIntent(this, cropedSquare.getAbsolutePath()));
-        //            "file://" + cropedSquare.getPath()
+        startActivity(
+                ReportBackUploadActivity.getLaunchIntent(this, cropedSquare.getAbsolutePath()));
         finish();
     }
 
