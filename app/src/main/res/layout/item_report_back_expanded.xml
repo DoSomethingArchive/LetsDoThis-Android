@@ -2,58 +2,91 @@
 <LinearLayout
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="@color/white"
     android:layout_height="wrap_content"
     android:layout_width="match_parent">
 
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:paddingTop="@dimen/padding_wedge"
         android:layout_height="wrap_content">
 
         <ImageView
-            android:layout_below="@+id/name"
+            android:layout_marginTop="41dp"
             android:id="@+id/image"
+            android:scaleType="centerCrop"
             android:layout_width="match_parent"
             android:layout_height="@dimen/report_back_expanded"/>
 
-        <ImageView
-            android:layout_marginLeft="@dimen/padding_wedge"
+        <org.dosomething.letsdothis.ui.views.CircleImageView
+            android:layout_marginLeft="@dimen/padding_small"
             android:id="@+id/avatar"
             android:src="@drawable/placeholder"
-            android:scaleType="centerCrop"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
+            android:layout_width="@dimen/friend_avatar"
+            android:layout_height="@dimen/friend_avatar"
+            app:border_width="@dimen/padding_tiny"
+            app:draw_border="true"
+            app:border_color="@color/white"
+            android:layout_marginTop="@dimen/padding_medium"
             tools:src="@drawable/placeholder"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="41dp"
             android:layout_gravity="end"
+            app:typeface="brandon_bold"
             tools:text="Person"
+            android:textAllCaps="true"
+            android:paddingLeft="@dimen/padding_tiny"
+            android:gravity="bottom"
             android:textColor="@color/cerulean_1"
             android:layout_toRightOf="@+id/avatar"
             android:id="@+id/name"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:layout_height="41dp"
+            android:paddingRight="@dimen/padding_small"
+            android:gravity="bottom"
             android:textColor="@color/gray"
+            app:typeface="brandon_medium"
             android:layout_alignParentRight="true"
             tools:text="Timestamp"
             android:id="@+id/timestamp"/>
 
+        <!--FIXME get real kudos resources-->
+        <org.dosomething.letsdothis.ui.views.CircleImageView
+            android:layout_width="@dimen/kudos"
+            android:layout_height="@dimen/kudos"
+            android:id="@+id/kudos_toggle"
+            android:src="@color/white"
+            app:border_color="@color/cerulean_1"
+            app:border_width="@dimen/padding_micro"
+            app:draw_border="true"
+            android:layout_margin="@dimen/padding_small"
+            android:layout_alignBottom="@+id/image"
+            android:layout_alignParentRight="true"/>
+
     </RelativeLayout>
 
+    <!--FIXME get real kudos resources-->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/kudos_bar"
+        android:id="@+id/kudos_bar"
+        android:background="@color/desertStorm"/>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Caption"
+        android:paddingLeft="@dimen/padding_small"
+        android:paddingRight="@dimen/padding_small"
+        android:paddingTop="@dimen/padding_tiny"
+        android:paddingBottom="@dimen/padding_tiny"
         android:textColor="@android:color/black"
         android:id="@+id/caption"/>
 </LinearLayout>
