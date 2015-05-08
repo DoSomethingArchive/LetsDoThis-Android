@@ -22,7 +22,6 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.FbUser;
 import org.dosomething.letsdothis.ui.LoginActivity;
 import org.dosomething.letsdothis.ui.RegisterActivity;
-import org.dosomething.letsdothis.ui.RegisterLoginActivity;
 import org.dosomething.letsdothis.utils.AppPrefs;
 import org.json.JSONObject;
 
@@ -144,8 +143,8 @@ public class RegisterLoginFragment extends Fragment
                             {
                                 if(BuildConfig.DEBUG)
                                 {
-                                    Toast.makeText(getActivity(), "Cancel",
-                                                   Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), "Cancel", Toast.LENGTH_SHORT)
+                                            .show();
                                 }
                             }
 
@@ -160,8 +159,7 @@ public class RegisterLoginFragment extends Fragment
                             }
                         });
 
-                LDTApplication.loginManager
-                        .logInWithReadPermissions(getActivity(), FB_PERMISSIONS);
+                LDTApplication.loginManager.logInWithReadPermissions(getActivity(), FB_PERMISSIONS);
             }
         });
     }
