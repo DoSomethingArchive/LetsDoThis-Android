@@ -5,11 +5,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 
 import com.viewpagerindicator.CirclePageIndicator;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.fragments.IntroFragment;
+import org.dosomething.letsdothis.ui.fragments.RegisterLoginFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,8 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private ViewPager                               pager;
     private List<IntroFragment.FragmentExtraHolder> extraList;
+    private CirclePageIndicator                     indicator;
+    private int                                     indicatorTop;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
 
@@ -49,6 +53,7 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
         extraList.add(new IntroFragment.FragmentExtraHolder(true, "intro 1 text", null));
         extraList.add(new IntroFragment.FragmentExtraHolder(false, "intro 2 text", null));
         extraList.add(new IntroFragment.FragmentExtraHolder(true, "intro 3 text", null));
+        extraList.add(new IntroFragment.FragmentExtraHolder(true, "REGISTER LOGIN SCREEN", null));
 
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager())
@@ -68,6 +73,10 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
                     showPrev = false;
                 }
 
+                if(position == (extraList.size() - 1))
+                {
+                    return RegisterLoginFragment.newInstance();
+                }
                 return IntroFragment.newInstance(showPrev, extraList.get(position));
             }
 
@@ -78,8 +87,32 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
             }
         });
 
-        CirclePageIndicator indicator = (CirclePageIndicator) findViewById(R.id.indicator);
+        indicator = (CirclePageIndicator) findViewById(R.id.indicator);
         indicator.setViewPager(pager);
+        indicatorTop = indicator.getTop();
+        indicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener()
+        {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+            {
+                if(position == (extraList.size() - 2))
+                {
+                    indicator.setTranslationY(indicatorTop + positionOffsetPixels/2);
+                }
+                Log.d("--",
+                      "position " + position + "offset " + positionOffset + " px " + position * positionOffsetPixels);
+            }
+
+            @Override
+            public void onPageSelected(int position)
+            {
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state)
+            {
+            }
+        });
     }
 
     @Override
@@ -96,15 +129,7 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
     public void navigateNext()
     {
         int currentItem = pager.getCurrentItem();
-        if(currentItem == (extraList.size() - 1))
-        {
-            startActivity(RegisterLoginActivity.getLaunchIntent(this));
-            finish();
-        }
-        else
-        {
-            pager.setCurrentItem(currentItem + 1);
-        }
+        pager.setCurrentItem(currentItem + 1);
     }
 
 }
