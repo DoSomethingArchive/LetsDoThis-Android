@@ -10,7 +10,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -41,12 +40,12 @@ public class PhotoCropActivity extends AppCompatActivity
     public static final  String AVATAR_PATH        = "avatarPath";
     public static final  int    RESULT_FAILED      = 100;
     private static final int    DEFAULT_MAX_SIZE   = 640;
-    public static final  int    RESULT_CROP_IMG    = 25384;
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private boolean        mPhotoLoaded;
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private PhotoSortrView photoCropView;
-    private FrameLayout transparency;
+    private FrameLayout    transparency;
+    private int            imageWidth;
 
     public static Intent getLaunchIntent(Context context, String path)
     {
@@ -74,10 +73,7 @@ public class PhotoCropActivity extends AppCompatActivity
                         photoCropView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         setTransparencyHeight();
 
-
-                        //FIXME---------------------------------------------------------testing
-                        //                        String filePath = getIntent().getStringExtra(IMAGE_PATH);
-                        String filePath = "content://media/external/images/media/90999";
+                        String filePath = getIntent().getStringExtra(IMAGE_PATH);
 
                         new AsyncTask<String, Void, Bitmap>()
                         {
@@ -168,29 +164,26 @@ public class PhotoCropActivity extends AppCompatActivity
     private void setTransparencyHeight()
     {
         int h = photoCropView.getMeasuredHeight();
-        int w = photoCropView.getMeasuredWidth();
+        imageWidth = photoCropView.getMeasuredWidth();
 
         //assume height bigger than width
-        int i = h - w;
+        int i = h - imageWidth;
         ViewGroup.LayoutParams layoutParams = transparency.getLayoutParams();
         layoutParams.height = i;
         transparency.setLayoutParams(layoutParams);
-        //assume width bigger than height
     }
 
-    public void saveAvatar(View save)
+    public void saveReportBackImage(View save)
     {
         if(mPhotoLoaded)
         {
             Bitmap bitmap = null;
-            //FIXME this is testig
-            File scaledAvatar = Environment.getExternalStoragePublicDirectory("test.jpg");
-            //            File scaledAvatar = new File(getFilesDir(),
-            //                                         "scaledAvatar_" + System.currentTimeMillis() + ".jpg");
+            File scaledAvatar = new File(getFilesDir(),
+                                         "squareReportBack_" + System.currentTimeMillis() + ".jpg");
 
             try
             {
-                bitmap = photoCropView.takeScreenshot();
+                bitmap = photoCropView.takeSquareScreenshot(imageWidth);
 
                 FileOutputStream out = new FileOutputStream(scaledAvatar);
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
@@ -200,11 +193,18 @@ public class PhotoCropActivity extends AppCompatActivity
             {
                 throw new RuntimeException(e);
             }
-            Intent intent = new Intent();
-            intent.putExtra(AVATAR_PATH, scaledAvatar.getPath());
-            super.setResult(RESULT_CROP_IMG, intent);
-            super.finish();
+
+
+            startReportBackUpload(scaledAvatar);
         }
+    }
+
+    private void startReportBackUpload(File cropedSquare)
+    {
+        startActivity(ReportBackUploadActivity
+                              .getLaunchIntent(this, cropedSquare.getAbsolutePath()));
+        //            "file://" + cropedSquare.getPath()
+        finish();
     }
 
 }

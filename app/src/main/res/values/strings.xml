@@ -51,4 +51,7 @@
     <string name="tell_us">Tell us about yourself!</string>
     <string name="footer_register">Have a DoSomething.org account? Sign in</string>
     <string name="crop_photo">crop photo</string>
+    <string name="report_back_caption">Caption your photo</string>
+    <string name="report_back_number">Number of protesters attended</string>
+    <string name="eupload_photo">upload photo</string>
 </resources>
