@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.View;
 
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -96,42 +95,22 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
             {
-                //                if(position == (extraList.size() - 1))
-                //                {
-                //                    indicator.setVisibility(View.GONE);
-                //                }
-                //                else
-                //                {
-                //                    indicator.setVisibility(View.VISIBLE);
-                //                }
-
-                Log.d("--", "offset " + positionOffset + " px " + position * positionOffsetPixels);
-
-
-                if(position == (extraList.size() - 1))
+                if(position == (extraList.size() - 2))
                 {
-                    indicator.setVisibility(View.GONE);
+                    indicator.setTranslationY(indicatorTop + positionOffsetPixels/2);
                 }
-                else
-                {
-                    indicator.setVisibility(View.VISIBLE);
-                }
-
+                Log.d("--",
+                      "position " + position + "offset " + positionOffset + " px " + position * positionOffsetPixels);
             }
 
             @Override
             public void onPageSelected(int position)
             {
-                Log.d("--", "asdfds23a");
-
-
             }
 
             @Override
             public void onPageScrollStateChanged(int state)
             {
-                Log.d("--", "asdfdsa12");
-
             }
         });
     }
