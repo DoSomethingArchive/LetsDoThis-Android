@@ -313,6 +313,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.timestamp = (TextView) view.findViewById(R.id.timestamp);
             this.caption = (TextView) view.findViewById(R.id.caption);
             this.kudosToggle = (ImageView) view.findViewById(R.id.kudos_toggle);
+            this.kudosToggle.setVisibility(View.VISIBLE);
             this.kudosBar = view.findViewById(R.id.kudos_bar);
         }
     }
