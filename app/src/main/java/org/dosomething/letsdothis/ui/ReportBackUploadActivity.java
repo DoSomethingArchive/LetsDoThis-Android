@@ -3,10 +3,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -37,10 +39,25 @@ public class ReportBackUploadActivity extends AppCompatActivity
 
         String croppedImage = getIntent().getStringExtra(CROPPED_SQUARE);
 
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        TextView title = (TextView) findViewById(R.id.toolbar_title);
+        toolbar.setTitle("");
+        //FIXME get title of the report back
+        title.setText("get this from network");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        initView(croppedImage);
+    }
+
+    private void initView(String croppedImage)
+    {
         ImageView image = (ImageView) findViewById(R.id.image);
         ImageView imageHero = (ImageView) findViewById(R.id.image_hero);
         Picasso.with(this).load(new File(croppedImage)).into(image);
         Picasso.with(this).load(new File(croppedImage)).into(imageHero);
+
 
         View wrapper = findViewById(R.id.image_wrapper);
         //        wrapper.setBackground(new ShadowBackgroundDrawable());
