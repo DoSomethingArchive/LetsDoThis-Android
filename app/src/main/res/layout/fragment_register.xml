@@ -11,16 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/SignInText"
+        android:layout_marginTop="@dimen/padding_large"
         android:text="@string/desc_login_reg"/>
 
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomButton
-        android:layout_margin="@dimen/padding_tiny"
+        android:layout_margin="@dimen/padding_small"
         android:id="@+id/register"
         app:typeface="brandon_bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_above="@+id/action_buttons"
         android:text="@string/register"/>
 
@@ -29,6 +29,9 @@
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/padding_small"
+        android:layout_marginRight="@dimen/padding_small"
+        android:layout_marginBottom="@dimen/padding_small"
         android:orientation="horizontal">
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomButton
@@ -37,7 +40,7 @@
             style="@style/IntroButton"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_margin="@dimen/padding_tiny"
+            android:layout_marginRight="@dimen/padding_tiny"
             android:layout_height="wrap_content"
             android:text="@string/fb_connect"/>
 
@@ -48,7 +51,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_tiny"
+            android:layout_marginLeft="@dimen/padding_tiny"
             android:text="@string/sign_in"/>
 
     </LinearLayout>
