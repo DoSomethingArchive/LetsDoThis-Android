@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.dosomething.letsdothis.ui.views.CircleImageView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_margin="@dimen/padding_micro"
+    android:layout_width="@dimen/friend_avatar"
+    android:layout_height="@dimen/friend_avatar"/>
