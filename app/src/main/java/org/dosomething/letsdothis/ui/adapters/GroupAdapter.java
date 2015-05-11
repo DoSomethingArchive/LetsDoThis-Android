@@ -257,7 +257,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    private class FriendViewHolder extends RecyclerView.ViewHolder
+    private static class FriendViewHolder extends RecyclerView.ViewHolder
     {
         public FriendViewHolder(ImageView friendLayout)
         {
@@ -265,7 +265,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    private class ActionButtonsViewHolder extends RecyclerView.ViewHolder
+    private static class ActionButtonsViewHolder extends RecyclerView.ViewHolder
     {
         protected Button proveShare;
         protected Button invite;
@@ -279,7 +279,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    private class RewardViewHolder extends RecyclerView.ViewHolder
+    private static class RewardViewHolder extends RecyclerView.ViewHolder
     {
         public RewardViewHolder(TextView view)
         {
