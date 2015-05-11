@@ -1,9 +1,14 @@
 package org.dosomething.letsdothis.ui;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -16,6 +21,7 @@ import org.dosomething.letsdothis.tasks.IndividualCampaignReportBackList;
 import org.dosomething.letsdothis.ui.adapters.GroupAdapter;
 import org.dosomething.letsdothis.ui.views.GroupReportBackItemDecoration;
 
+import java.io.File;
 import java.util.List;
 
 import co.touchlab.android.threading.tasks.TaskQueue;
@@ -26,13 +32,15 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAdapterClickListener
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final String EXTRA_CAMPAIGN_ID = "campaign_id";
-    public static final String EXTRA_USER_ID     = "user_id";
+    public static final  String EXTRA_CAMPAIGN_ID = "campaign_id";
+    public static final  String EXTRA_USER_ID     = "user_id";
+    private static final int    SELECT_PICTURE    = 5095;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private int currentPage = 1;
-    private int totalPages;
+    private int          totalPages;
     private GroupAdapter adapter;
+    private Uri          imageUri;
 
     public static Intent getLaunchIntent(Context context, int campaignId, String userId)
     {
@@ -51,7 +59,8 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
         String userId = getIntent().getStringExtra(EXTRA_USER_ID);
         if(campaignId != - 1)
         {
-            TaskQueue.loadQueueDefault(this).execute(new CampaignGroupDetailsTask(campaignId, userId));
+            TaskQueue.loadQueueDefault(this)
+                     .execute(new CampaignGroupDetailsTask(campaignId, userId));
             TaskQueue.loadQueueDefault(this).execute(
                     new IndividualCampaignReportBackList(- 1, Integer.toString(campaignId),
                                                          currentPage));
@@ -135,7 +144,9 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
     @Override
     public void onProveShareClicked()
     {
+        //FIXME
         Toast.makeText(this, "FIXME", Toast.LENGTH_SHORT).show();
+        choosePicture();
     }
 
     @Override
@@ -170,5 +181,70 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
         {
             Toast.makeText(this, "campaign data failed", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if(resultCode == Activity.RESULT_OK)
+        {
+            if(requestCode == SELECT_PICTURE)
+            {
+                final boolean isCamera;
+                if(data == null)
+                {
+                    isCamera = true;
+                }
+                else
+                {
+                    final String action = data.getAction();
+                    if(action == null)
+                    {
+                        isCamera = false;
+                    }
+                    else
+                    {
+                        isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    }
+                }
+
+                Uri selectedImageUri;
+                if(isCamera)
+                {
+                    selectedImageUri = imageUri;
+                }
+                else
+                {
+                    selectedImageUri = data.getData();
+                }
+
+                startActivity(PhotoCropActivity
+                                      .getLaunchIntent(this, selectedImageUri.toString()));
+            }
+        }
+    }
+
+
+    public void choosePicture()
+    {
+        Intent pickIntent = new Intent(Intent.ACTION_PICK,
+                                       android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setType("image/*");
+
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File externalFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                                     "report_back" + System.currentTimeMillis() + ".jpg");
+        imageUri = Uri.fromFile(externalFile);
+        if(BuildConfig.DEBUG)
+        {
+            Log.d("photo location", imageUri.toString());
+        }
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+
+        String pickTitle = getString(R.string.select_picture);
+        Intent chooserIntent = Intent.createChooser(takePhotoIntent, pickTitle);
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+
+        startActivityForResult(chooserIntent, SELECT_PICTURE);
     }
 }

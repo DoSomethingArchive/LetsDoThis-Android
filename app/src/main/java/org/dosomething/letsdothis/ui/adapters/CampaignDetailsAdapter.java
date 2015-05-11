@@ -68,12 +68,6 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         notifyItemRangeInserted(dataSet.size() - reportBacks.size(), dataSet.size() - 1);
     }
 
-    public void refreshTestImage(Uri selectedImageUri)
-    {
-        this.selectedImageUri = selectedImageUri;
-        notifyItemChanged(0);
-    }
-
     public interface DetailsAdapterClickListener
     {
         void onScrolledToBottom();
@@ -174,15 +168,6 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     detailsAdapterClickListener.inviteClicked();
                 }
             });
-
-            //FIXME this is for testing
-            if(selectedImageUri != null)
-            {
-                Picasso.with(campaignViewHolder.debugImage.getContext()).load(selectedImageUri)
-                       .resize(0, height).into(campaignViewHolder.debugImage);
-            }
-
-
         }
         else if(getItemViewType(position) == VIEW_TYPE_REPORT_BACK)
         {
@@ -271,7 +256,6 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         protected TextView  solutionCopy;
         protected TextView  problemFact;
         protected ImageView imageView;
-        protected ImageView debugImage;
         protected TextView  title;
         protected TextView  callToAction;
         protected Button    proveShare;
@@ -283,7 +267,6 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             super(itemView);
             this.solutionWrapper = itemView.findViewById(R.id.solutionWrapper);
             this.imageView = (ImageView) itemView.findViewById(R.id.image);
-            this.debugImage = (ImageView) itemView.findViewById(R.id.test);
             this.title = (TextView) itemView.findViewById(R.id.title);
             this.callToAction = (TextView) itemView.findViewById(R.id.call_to_action);
             this.problemFact = (TextView) itemView.findViewById(R.id.problemFact);
