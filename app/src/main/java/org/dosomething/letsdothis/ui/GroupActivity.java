@@ -45,6 +45,23 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
     {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_group);
+        initUI();
+
+        int campaignId = getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1);
+        String userId = getIntent().getStringExtra(EXTRA_USER_ID);
+        if(campaignId != - 1)
+        {
+            TaskQueue.loadQueueDefault(this).execute(new CampaignGroupDetailsTask(campaignId, userId));
+            TaskQueue.loadQueueDefault(this).execute(
+                    new IndividualCampaignReportBackList(- 1, Integer.toString(campaignId),
+                                                         currentPage));
+        }
+
+
+    }
+
+    private void initUI()
+    {
         setSupportActionBar((android.support.v7.widget.Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setTitle(null);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -72,18 +89,6 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
         });
 
         recyclerView.setLayoutManager(layoutManager);
-
-        int campaignId = getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1);
-        String userId = getIntent().getStringExtra(EXTRA_USER_ID);
-        if(campaignId != - 1)
-        {
-            TaskQueue.loadQueueDefault(this).execute(new CampaignGroupDetailsTask(campaignId, userId));
-            TaskQueue.loadQueueDefault(this).execute(
-                    new IndividualCampaignReportBackList(- 1, Integer.toString(campaignId),
-                                                         currentPage));
-        }
-
-
     }
 
     private Campaign generateSampleData()
