@@ -1,89 +1,108 @@
 package org.dosomething.letsdothis.ui;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.ReportBack;
-import org.dosomething.letsdothis.tasks.CampaignDetailsTask;
+import org.dosomething.letsdothis.tasks.CampaignGroupDetailsTask;
 import org.dosomething.letsdothis.tasks.IndividualCampaignReportBackList;
-import org.dosomething.letsdothis.ui.adapters.CampaignDetailsAdapter;
+import org.dosomething.letsdothis.ui.adapters.GroupAdapter;
+import org.dosomething.letsdothis.ui.views.GroupReportBackItemDecoration;
 
 import java.io.File;
 import java.util.List;
 
-import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
 
 /**
- * Created by izzyoji :) on 4/17/15.
+ * Created by izzyoji :) on 5/6/15.
  */
-public class CampaignDetailsActivity extends AppCompatActivity implements CampaignDetailsAdapter.DetailsAdapterClickListener
+public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAdapterClickListener
 {
-
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final String EXTRA_CAMPAIGN_ID = "campaign_id";
-    public static final int    SELECT_PICTURE    = 23123;
+    public static final  String EXTRA_CAMPAIGN_ID = "campaign_id";
+    public static final  String EXTRA_USER_ID     = "user_id";
+    private static final int    SELECT_PICTURE    = 5095;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
-    private Uri                    imageUri;
-    private CampaignDetailsAdapter adapter;
-    private int                    totalPages;
     private int currentPage = 1;
+    private int          totalPages;
+    private GroupAdapter adapter;
+    private Uri          imageUri;
 
-    public static Intent getLaunchIntent(Context context, int campaignId)
+    public static Intent getLaunchIntent(Context context, int campaignId, String userId)
     {
-        return new Intent(context, CampaignDetailsActivity.class)
-                .putExtra(EXTRA_CAMPAIGN_ID, campaignId);
+        return new Intent(context, GroupActivity.class).putExtra(EXTRA_CAMPAIGN_ID, campaignId)
+                                                       .putExtra(EXTRA_USER_ID, userId);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment_quickreturn_recycler);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        TextView toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
-        toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
-        toolbar.setTitle("");
-        toolbarTitle.setVisibility(View.GONE);
-
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        adapter = new CampaignDetailsAdapter(this);
-
-        recyclerView.setAdapter(adapter);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-
-        recyclerView.setLayoutManager(layoutManager);
-
-        EventBusExt.getDefault().register(this);
+        super.setContentView(R.layout.activity_group);
+        initUI();
 
         int campaignId = getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1);
+        String userId = getIntent().getStringExtra(EXTRA_USER_ID);
         if(campaignId != - 1)
         {
-            TaskQueue.loadQueueDefault(this).execute(new CampaignDetailsTask(campaignId));
+            TaskQueue.loadQueueDefault(this)
+                     .execute(new CampaignGroupDetailsTask(campaignId, userId));
             TaskQueue.loadQueueDefault(this).execute(
                     new IndividualCampaignReportBackList(- 1, Integer.toString(campaignId),
                                                          currentPage));
         }
+
+
+    }
+
+    private void initUI()
+    {
+        setSupportActionBar((android.support.v7.widget.Toolbar) findViewById(R.id.toolbar));
+        getSupportActionBar().setTitle(null);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
+        recyclerView.addItemDecoration(new GroupReportBackItemDecoration());
+        adapter = new GroupAdapter(generateSampleData(), this);
+        recyclerView.setAdapter(adapter);
+
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 6);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup()
+        {
+            @Override
+            public int getSpanSize(int position)
+            {
+                switch(adapter.getItemViewType(position))
+                {
+                    case GroupAdapter.VIEW_TYPE_FRIEND:
+                        return 1;
+                    case GroupAdapter.VIEW_TYPE_REPORT_BACK :
+                        return 3;
+                    default:
+                        return 6;
+                }
+            }
+        });
+
+        recyclerView.setLayoutManager(layoutManager);
+    }
+
+    private Campaign generateSampleData()
+    {
+        return null;
     }
 
     @Override
@@ -97,6 +116,12 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onReportBackClicked(int reportBackId)
+    {
+        startActivity(ReportBackDetailsActivity.getLaunchIntent(this, reportBackId));
     }
 
     @Override
@@ -117,41 +142,51 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     }
 
     @Override
-    public void proveShareClicked()
+    public void onProveShareClicked()
     {
+        //FIXME
+        Toast.makeText(this, "FIXME", Toast.LENGTH_SHORT).show();
         choosePicture();
     }
 
     @Override
-    public void inviteClicked()
+    public void onInviteClicked()
     {
-        if(BuildConfig.DEBUG)
-        {
-            Toast.makeText(this, "TODO", Toast.LENGTH_SHORT).show();
-        }
+        Toast.makeText(this, "FIXME", Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onUserClicked(String id)
+    public void onFriendClicked(String id)
     {
-        //FIXME
-        if(BuildConfig.DEBUG)
-        {
-            Toast.makeText(this, "TODO", Toast.LENGTH_SHORT).show();
-        }
+        Toast.makeText(this, "FIXME", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    protected void onDestroy()
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(IndividualCampaignReportBackList task)
     {
-        EventBusExt.getDefault().unregister(this);
-        super.onDestroy();
+        totalPages = task.totalPages;
+        currentPage = task.page;
+        List<ReportBack> reportBacks = task.reportBacks;
+        adapter.addAll(reportBacks);
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(CampaignGroupDetailsTask task)
+    {
+        if(task.campaign != null)
+        {
+            adapter.updateCampaign(task.campaign);
+        }
+        else
+        {
+            Toast.makeText(this, "campaign data failed", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        if(resultCode == RESULT_OK)
+        if(resultCode == Activity.RESULT_OK)
         {
             if(requestCode == SELECT_PICTURE)
             {
@@ -180,19 +215,11 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
                 }
                 else
                 {
-                    selectedImageUri = data == null
-                            ? null
-                            : data.getData();
-                }
-                if(BuildConfig.DEBUG)
-                {
-                    Log.d("asdf-----------", selectedImageUri.toString());
+                    selectedImageUri = data.getData();
                 }
 
-                //FIXME--------------
-//                adapter.refreshTestImage(selectedImageUri);
-                startActivity(
-                        PhotoCropActivity.getLaunchIntent(this, selectedImageUri.toString()));
+                startActivity(PhotoCropActivity
+                                      .getLaunchIntent(this, selectedImageUri.toString()));
             }
         }
     }
@@ -206,7 +233,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
 
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File externalFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                                     "userPic" + System.currentTimeMillis() + ".jpg");
+                                     "report_back" + System.currentTimeMillis() + ".jpg");
         imageUri = Uri.fromFile(externalFile);
         if(BuildConfig.DEBUG)
         {
@@ -219,28 +246,5 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
 
         startActivityForResult(chooserIntent, SELECT_PICTURE);
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(CampaignDetailsTask task)
-    {
-        if(task.campaign != null)
-        {
-            adapter.updateCampaign(task.campaign);
-        }
-        else
-        {
-            Toast.makeText(this, "campaign data failed", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(IndividualCampaignReportBackList task)
-    {
-        totalPages = task.totalPages;
-        currentPage = task.page;
-        List<ReportBack> reportBacks = task.reportBacks;
-        adapter.addAll(reportBacks);
-
     }
 }

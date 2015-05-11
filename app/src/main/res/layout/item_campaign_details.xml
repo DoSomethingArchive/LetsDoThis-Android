@@ -21,7 +21,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/gradient"/>
+            android:background="@drawable/gradient_270"/>
     </FrameLayout>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
@@ -136,16 +136,5 @@
             android:layout_margin="@dimen/padding_tiny"
             android:text="@string/invite_friends"/>
     </LinearLayout>
-
-
-    <ImageView
-        android:id="@+id/test"
-        android:layout_below="@id/solutionWrapper"
-        android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:layout_marginTop="100dp"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher"/>
-
 
 </RelativeLayout>
