@@ -65,7 +65,8 @@ public class IntroFragment extends Fragment
         View prev = view.findViewById(R.id.prev);
         if(! showPrev)
         {
-            prev.setVisibility(View.GONE);
+            prev.setVisibility(View.INVISIBLE);
+            prev.setClickable(false);
         }
 
         TextView introText = (TextView) view.findViewById(R.id.intro_text);
