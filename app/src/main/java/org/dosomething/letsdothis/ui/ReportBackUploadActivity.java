@@ -49,6 +49,8 @@ public class ReportBackUploadActivity extends AppCompatActivity
 
         EditText caption = (EditText) findViewById(R.id.caption);
         EditText number = (EditText) findViewById(R.id.number);
+        //FIXME-get actual data
+        number.setHint("this is the hint");
 
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
