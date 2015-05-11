@@ -57,4 +57,7 @@
     <string name="crop_photo">crop photo</string>
     <string name="report_back_caption">Caption your photo</string>
     <string name="eupload_photo">upload photo</string>
+    <string name="app_intro_description">Let\'s Do This is an app for finding fun things to do with
+        your friends
+    </string>
 </resources>
