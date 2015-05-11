@@ -21,6 +21,7 @@
             android:text="@string/app_name"
             app:typeface="brandon_bold"
             android:textColor="@color/white"
+            android:gravity="center"
             android:textSize="@dimen/text_xlarge"
             android:textAllCaps="true"/>
 
@@ -28,14 +29,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_medium"
+            android:gravity="center"
             android:textColor="@color/white"
             android:layout_marginBottom="100dp"
-            tools:text="@string/app_intro_description"/>
+            android:text="@string/app_intro_description"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomButton
             android:id="@+id/start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             android:text="@string/show_me_how"
             app:typeface="brandon_bold"/>
     </LinearLayout>
