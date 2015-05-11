@@ -12,10 +12,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.views.BitmapUtils;
@@ -58,6 +61,14 @@ public class PhotoCropActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_crop_photo);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        TextView title = (TextView) findViewById(R.id.toolbar_title);
+        toolbar.setTitle("");
+        //FIXME get title of the report back
+        title.setText("get this from network");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         photoCropView = (PhotoSortrView) findViewById(R.id.photo_crop_view);
         transparency = (FrameLayout) findViewById(R.id.transparency);
@@ -199,11 +210,24 @@ public class PhotoCropActivity extends AppCompatActivity
         }
     }
 
-    private void startReportBackUpload(File cropedSquare)
+    private void startReportBackUpload(File croppedSquare)
     {
         startActivity(
-                ReportBackUploadActivity.getLaunchIntent(this, cropedSquare.getAbsolutePath()));
+                ReportBackUploadActivity.getLaunchIntent(this, croppedSquare.getAbsolutePath()));
         finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch(item.getItemId())
+        {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }

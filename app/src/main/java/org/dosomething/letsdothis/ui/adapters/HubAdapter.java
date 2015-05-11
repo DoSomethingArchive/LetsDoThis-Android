@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,6 +58,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public interface HubAdapterClickListener
     {
         void groupClicked(int campaignId, String userId);
+
+        void onProveShareClicked(Campaign campaign);
     }
 
     @Override
@@ -129,6 +132,15 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                    .into(currentCampaignViewHolder.image);
 
             int size = campaign.group.size();
+
+            currentCampaignViewHolder.proveShare.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    hubAdapterClickListener.onProveShareClicked(campaign);
+                }
+            });
             if(size > 0)
             {
                 int friendSize = context.getResources().getDimensionPixelSize(R.dimen.friend_avatar);
@@ -289,6 +301,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         protected final View         friends;
         protected final TextView     friendsCount;
         protected final LinearLayout friendsContainer;
+        protected final Button       proveShare;
+        protected final Button       invite;
 
         public CurrentCampaignViewHolder(View itemView)
         {
@@ -300,6 +314,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             friends = itemView.findViewById(R.id.friends);
             friendsCount = (TextView) itemView.findViewById(R.id.friends_count);
             friendsContainer = (LinearLayout) itemView.findViewById(R.id.friends_container);
+            proveShare = (Button) itemView.findViewById(R.id.prove_share);
+            invite = (Button) itemView.findViewById(R.id.invite);
         }
     }
 
