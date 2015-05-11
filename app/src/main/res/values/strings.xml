@@ -50,6 +50,10 @@
     <string name="error_code_length">An invite code should be 6 digits long!</string>
     <string name="tell_us">Tell us about yourself!</string>
     <string name="footer_register">Have a DoSomething.org account? Sign in</string>
+    <string name="prove_it">Prove It</string>
+    <string name="desc_rewards">Invite your friends to get rewards copy. There are multiple
+        sentences in this paragraph body.
+    </string>
     <string name="app_intro_description">Let\'s Do This is an app for finding fun things to do with
         your friends
     </string>

@@ -37,6 +37,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private DetailsAdapterClickListener detailsAdapterClickListener;
     private Campaign                    currentCampaign;
     private Uri selectedImageUri;
+    private int selectedPosition = -1;
 
     public CampaignDetailsAdapter(DetailsAdapterClickListener detailsAdapterClickListener)
     {
@@ -80,6 +81,8 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         void proveShareClicked();
 
         void inviteClicked();
+
+        void onUserClicked(String id);
     }
 
     @Override
@@ -186,6 +189,16 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             final ReportBack reportBack = (ReportBack) dataSet.get(position);
             ReportBackViewHolder reportBackViewHolder = (ReportBackViewHolder) holder;
 
+            //FIXME get real avatar
+            reportBackViewHolder.avatar.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    detailsAdapterClickListener.onUserClicked(reportBack.user.id);
+                }
+            });
+
             Picasso.with(reportBackViewHolder.imageView.getContext()).
                     load(reportBack.getImagePath()).into(reportBackViewHolder.imageView);
 
@@ -193,6 +206,28 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             reportBackViewHolder.timestamp.setText(TimeUtils.getTimeSince(
                     reportBackViewHolder.timestamp.getContext(), reportBack.createdAt * 1000));
             reportBackViewHolder.caption.setText(reportBack.caption);
+            final boolean selected = position == selectedPosition;
+            reportBackViewHolder.kudosToggle.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    if(selected)
+                    {
+                        selectedPosition = - 1;
+                        notifyItemChanged(position);
+                    }
+                    else
+                    {
+                        selectedPosition = position;
+                        notifyDataSetChanged();
+                    }
+                }
+            });
+
+            reportBackViewHolder.kudosBar.setVisibility(selected
+                                                                ? View.VISIBLE
+                                                                : View.GONE);
         }
         else if(getItemViewType(position) == VIEW_TYPE_CAMPAIGN_FOOTER)
         {
@@ -266,6 +301,8 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         protected TextView  name;
         protected TextView  timestamp;
         protected TextView  caption;
+        protected ImageView kudosToggle;
+        protected View      kudosBar;
 
         public ReportBackViewHolder(View view)
         {
@@ -275,6 +312,9 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.name = (TextView) view.findViewById(R.id.name);
             this.timestamp = (TextView) view.findViewById(R.id.timestamp);
             this.caption = (TextView) view.findViewById(R.id.caption);
+            this.kudosToggle = (ImageView) view.findViewById(R.id.kudos_toggle);
+            this.kudosToggle.setVisibility(View.VISIBLE);
+            this.kudosBar = view.findViewById(R.id.kudos_bar);
         }
     }
 
