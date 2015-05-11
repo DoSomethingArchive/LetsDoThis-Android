@@ -22,7 +22,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/darken_30"/>
+            android:background="@color/black_30"/>
     </FrameLayout>
 
 
