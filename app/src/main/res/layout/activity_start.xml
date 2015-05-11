@@ -6,20 +6,42 @@
                 android:layout_height="match_parent"
                 android:background="#ffa600">
 
-
-
-    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="intro0"/>
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:padding="60dp">
 
-    <org.dosomething.letsdothis.ui.views.typeface.CustomButton
-        android:id="@+id/start"
-        app:typeface="brandon_bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:text="@string/show_me_how"/>
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/app_name"
+            app:typeface="brandon_bold"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="@dimen/text_xlarge"
+            android:textAllCaps="true"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_medium"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:layout_marginBottom="100dp"
+            android:text="@string/app_intro_description"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+            android:id="@+id/start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="@string/show_me_how"
+            app:typeface="brandon_bold"/>
+    </LinearLayout>
 
 </RelativeLayout>

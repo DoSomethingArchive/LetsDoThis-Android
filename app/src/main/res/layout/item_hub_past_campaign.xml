@@ -16,7 +16,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="@dimen/campaign_height"
-        android:background="@drawable/gradient"/>
+        android:background="@color/black_30"/>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:id="@+id/title"
