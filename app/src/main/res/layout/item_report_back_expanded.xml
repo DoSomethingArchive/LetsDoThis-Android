@@ -26,7 +26,7 @@
             android:src="@drawable/placeholder"
             android:layout_width="@dimen/friend_avatar"
             android:layout_height="@dimen/friend_avatar"
-            app:border_width="@dimen/padding_tiny"
+            app:border_width="@dimen/padding_micro"
             app:draw_border="true"
             app:border_color="@color/white"
             android:layout_marginTop="@dimen/padding_medium"
