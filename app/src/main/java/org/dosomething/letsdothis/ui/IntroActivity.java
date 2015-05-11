@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.viewpagerindicator.CirclePageIndicator;
 
+import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.fragments.IntroFragment;
 import org.dosomething.letsdothis.ui.fragments.RegisterLoginFragment;
@@ -48,12 +49,11 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
 
     private void initPager()
     {
-
         extraList = new ArrayList<>();
         extraList.add(new IntroFragment.FragmentExtraHolder(true, "intro 1 text", null));
         extraList.add(new IntroFragment.FragmentExtraHolder(false, "intro 2 text", null));
         extraList.add(new IntroFragment.FragmentExtraHolder(true, "intro 3 text", null));
-        extraList.add(new IntroFragment.FragmentExtraHolder(true, "REGISTER LOGIN SCREEN", null));
+        extraList.add(new IntroFragment.FragmentExtraHolder(true, null, null));
 
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager())
@@ -73,7 +73,7 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
                     showPrev = false;
                 }
 
-                if(position == (extraList.size() - 1))
+                if(extraList.get(position).text == null)
                 {
                     return RegisterLoginFragment.newInstance();
                 }
@@ -97,10 +97,13 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
             {
                 if(position == (extraList.size() - 2))
                 {
-                    indicator.setTranslationY(indicatorTop + positionOffsetPixels/2);
+                    indicator.setTranslationY(indicatorTop + positionOffsetPixels / 2);
                 }
-                Log.d("--",
-                      "position " + position + "offset " + positionOffset + " px " + position * positionOffsetPixels);
+                if(BuildConfig.DEBUG)
+                {
+                    Log.d("--",
+                          "position " + position + "offset " + positionOffset + " px " + position * positionOffsetPixels);
+                }
             }
 
             @Override
