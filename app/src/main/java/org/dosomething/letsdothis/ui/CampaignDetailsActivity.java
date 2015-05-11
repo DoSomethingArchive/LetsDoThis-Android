@@ -188,7 +188,11 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
                 {
                     Log.d("asdf-----------", selectedImageUri.toString());
                 }
-                adapter.refreshTestImage(selectedImageUri);
+
+                //FIXME--------------
+//                adapter.refreshTestImage(selectedImageUri);
+                startActivity(
+                        PhotoCropActivity.getLaunchIntent(this, selectedImageUri.toString()));
             }
         }
     }
