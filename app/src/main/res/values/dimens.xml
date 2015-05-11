@@ -59,4 +59,6 @@
     <dimen name="space_14">14dp</dimen>
     <dimen name="space_35">35dp</dimen>
     <dimen name="slanted_padding_50">35dp</dimen>
+    <dimen name="kudos_bar">67dp</dimen>
+    <dimen name="kudos">44dp</dimen>
 </resources>

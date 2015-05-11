@@ -12,12 +12,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignTask;
 import org.dosomething.letsdothis.tasks.GetPastUserCampaignTask;
+import org.dosomething.letsdothis.ui.GroupActivity;
 import org.dosomething.letsdothis.ui.SettingsActivity;
 import org.dosomething.letsdothis.ui.UserListActivity;
 import org.dosomething.letsdothis.ui.UserProfileActivity;
@@ -151,7 +151,7 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
     @Override
     public void groupClicked(int campaignId, String userId)
     {
-        Toast.makeText(getActivity(), "FIXME", Toast.LENGTH_SHORT).show();
+        startActivity(GroupActivity.getLaunchIntent(getActivity(), campaignId, userId ));
     }
 
 

@@ -8,6 +8,7 @@
         <item name="android:buttonStyle">@style/PrimaryButton</item>
         <item name="android:editTextStyle">@style/EditText</item>
         <item name="colorPrimary">@color/web_orange</item>
+        <item name="colorPrimaryDark">@color/dark_orange</item>
     </style>
     <style name="NavButtonHolder" parent="AppTheme">
         <item name="android:orientation">vertical</item>
