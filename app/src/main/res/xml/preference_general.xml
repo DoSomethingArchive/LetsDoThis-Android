@@ -23,6 +23,7 @@
         <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomDialogPreference
             android:positiveButtonText="@string/logout"
             android:negativeButtonText="@android:string/cancel"
+            android:dialogMessage="Are you sure you want to log out?"
             android:title="@string/logout"
             android:key="@string/logout"/>
 

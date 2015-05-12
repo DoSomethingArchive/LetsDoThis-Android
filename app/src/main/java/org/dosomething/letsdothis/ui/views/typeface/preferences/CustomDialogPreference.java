@@ -1,7 +1,7 @@
 package org.dosomething.letsdothis.ui.views.typeface.preferences;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.preference.DialogPreference;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
@@ -24,21 +24,40 @@ public class CustomDialogPreference extends DialogPreference
     }
 
     @Override
-    protected void onBindDialogView(View view)
+    protected void onBindView(View view)
     {
-        super.onBindDialogView(view);
-        View dialogMessageView = view.findViewById(android.R.id.message);
+        super.onBindView(view);
+        final TextView titleView = (TextView) view.findViewById(android.R.id.title);
+        if(titleView != null)
+        {
+            titleView.setTypeface(
+                    TypefaceManager.obtainTypeface(getContext(), TypefaceManager.BRANDON_REGULAR));
+        }
 
-        if (dialogMessageView != null) {
-            final CharSequence message = getDialogMessage();
-            if (! TextUtils.isEmpty(message)) {
-                if (dialogMessageView instanceof TextView) {
-                    ((TextView) dialogMessageView).setTypeface(TypefaceManager.obtainTypeface(getContext(), TypefaceManager.BRANDON_REGULAR));
-                }
-
-            }
+        final TextView summaryView = (TextView) view.findViewById(android.R.id.summary);
+        if(summaryView != null)
+        {
+            summaryView.setTypeface(
+                    TypefaceManager.obtainTypeface(getContext(), TypefaceManager.BRANDON_REGULAR));
         }
     }
 
+    @Override
+    protected void onDialogClosed(boolean positiveResult)
+    {
+        super.onDialogClosed(positiveResult);
 
+        if(positiveResult)
+        {
+            SharedPreferences.Editor editor = getEditor();
+            editor.putBoolean(getKey(), true);
+            editor.commit();
+        }
+    }
+
+    @Override
+    protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue)
+    {
+        super.onSetInitialValue(restorePersistedValue, defaultValue);
+    }
 }
