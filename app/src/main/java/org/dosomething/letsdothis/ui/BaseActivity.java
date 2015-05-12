@@ -44,6 +44,8 @@ public abstract class BaseActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         registerReceiver(logoutReceiver, new IntentFilter(LOGOUT_SUCCESS));
+        registerReceiver(loginReceiver, new IntentFilter(LOGIN_SUCCESS));
+
         EventBusExt.getDefault().register(this);
     }
 
@@ -52,6 +54,7 @@ public abstract class BaseActivity extends AppCompatActivity
     protected void onDestroy()
     {
         unregisterReceiver(logoutReceiver);
+        unregisterReceiver(loginReceiver);
         EventBusExt.getDefault().unregister(this);
         super.onDestroy();
     }

@@ -1,7 +1,6 @@
 package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -12,7 +11,6 @@ import com.viewpagerindicator.CirclePageIndicator;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
-import org.dosomething.letsdothis.tasks.BaseRegistrationTask;
 import org.dosomething.letsdothis.ui.fragments.IntroFragment;
 import org.dosomething.letsdothis.ui.fragments.RegisterLoginFragment;
 
@@ -45,7 +43,6 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
-        registerReceiver(loginReceiver, new IntentFilter(LOGIN_SUCCESS));
 
         initPager();
     }
@@ -141,13 +138,6 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
     @Override
     protected void onDestroy()
     {
-        unregisterReceiver(loginReceiver);
         super.onDestroy();
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(BaseRegistrationTask task)
-    {
-        finish();
     }
 }

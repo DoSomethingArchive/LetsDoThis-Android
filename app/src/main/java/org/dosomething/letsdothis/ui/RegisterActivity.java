@@ -259,7 +259,6 @@ public class RegisterActivity extends BaseActivity
             broadcastLogInSuccess(this);
             Toast.makeText(this, "success register", Toast.LENGTH_SHORT).show();
             startActivity(MainActivity.getLaunchIntent(this));
-            finish();
         }
         else
         {
