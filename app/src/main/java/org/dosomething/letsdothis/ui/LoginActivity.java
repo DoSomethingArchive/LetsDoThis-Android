@@ -2,13 +2,9 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.facebook.Profile;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
@@ -42,6 +38,16 @@ public class LoginActivity extends BaseActivity
 
         initLoginListener();
 
+        findViewById(R.id.register).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(RegisterActivity.getLaunchIntent(LoginActivity.this, null));
+                finish();
+            }
+        });
+
         if(BuildConfig.DEBUG)
         {
             phoneEmail.setText("touch@lab.co");
@@ -64,6 +70,7 @@ public class LoginActivity extends BaseActivity
                         .execute(new LoginTask(usertext, passtext));
             }
         });
+
     }
 
 
@@ -72,9 +79,9 @@ public class LoginActivity extends BaseActivity
     {
         if(AppPrefs.getInstance(this).isLoggedIn())
         {
+            broadcastLogInSuccess(this);
             Toast.makeText(this, "success login", Toast.LENGTH_SHORT).show();
             startActivity(MainActivity.getLaunchIntent(this));
-            finish();
         }
         else
         {

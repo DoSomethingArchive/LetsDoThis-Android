@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.ui.fragments;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -7,7 +8,11 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.tasks.LogoutTask;
 import org.dosomething.letsdothis.ui.BaseActivity;
+import org.dosomething.letsdothis.ui.RegisterLoginActivity;
+
+import co.touchlab.android.threading.tasks.TaskQueue;
 
 /**
  * Created by izzyoji :) on 4/29/15.
@@ -45,13 +50,11 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             }
         });
 
-
-
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
     {
-        
     }
+
 }
