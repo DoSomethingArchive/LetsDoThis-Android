@@ -40,7 +40,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             @Override
             public boolean onPreferenceClick(Preference preference)
             {
-                BaseActivity.logOutUser(getActivity());
+//                BaseActivity.logOutUser(getActivity());
                 return true;
             }
         });
