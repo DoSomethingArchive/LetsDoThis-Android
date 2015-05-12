@@ -27,7 +27,8 @@ public class RegisterLoginActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_container);
+        setContentView(R.layout.fragment_lightening_container);
+
 
         if(savedInstanceState == null)
         {
