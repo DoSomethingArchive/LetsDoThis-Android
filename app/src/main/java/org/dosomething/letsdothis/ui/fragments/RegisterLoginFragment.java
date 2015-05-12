@@ -20,6 +20,7 @@ import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.FbUser;
+import org.dosomething.letsdothis.tasks.BaseRegistrationTask;
 import org.dosomething.letsdothis.ui.LoginActivity;
 import org.dosomething.letsdothis.ui.RegisterActivity;
 import org.dosomething.letsdothis.utils.AppPrefs;
@@ -75,7 +76,6 @@ public class RegisterLoginFragment extends Fragment
             public void onClick(View view)
             {
                 startActivity(LoginActivity.getLaunchIntent(getActivity()));
-                getActivity().finish();
             }
         });
         rootView.findViewById(R.id.register).setOnClickListener(new View.OnClickListener()
@@ -91,7 +91,6 @@ public class RegisterLoginFragment extends Fragment
     private void startRegisterActivity(FbUser user)
     {
         startActivity(RegisterActivity.getLaunchIntent(getActivity(), user));
-        getActivity().finish();
     }
 
 
@@ -173,4 +172,5 @@ public class RegisterLoginFragment extends Fragment
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
 }
