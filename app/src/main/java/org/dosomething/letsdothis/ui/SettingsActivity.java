@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.tasks.LogoutTask;
 
 /**
  * Created by izzyoji :) on 4/29/15.
@@ -44,5 +45,12 @@ public class SettingsActivity extends BaseActivity
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(LogoutTask task)
+    {
+        sendBroadcast(new Intent(BaseActivity.LOGOUT_SUCCESS));
+        startActivity(RegisterLoginActivity.getLaunchIntent(this));
     }
 }

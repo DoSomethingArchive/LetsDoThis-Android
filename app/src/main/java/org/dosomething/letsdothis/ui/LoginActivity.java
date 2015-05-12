@@ -72,6 +72,7 @@ public class LoginActivity extends BaseActivity
     {
         if(AppPrefs.getInstance(this).isLoggedIn())
         {
+            broadcastLogInSuccess(this);
             Toast.makeText(this, "success login", Toast.LENGTH_SHORT).show();
             startActivity(MainActivity.getLaunchIntent(this));
             finish();

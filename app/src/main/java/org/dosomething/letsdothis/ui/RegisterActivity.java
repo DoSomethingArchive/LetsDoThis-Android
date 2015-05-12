@@ -256,6 +256,7 @@ public class RegisterActivity extends BaseActivity
     {
         if(AppPrefs.getInstance(this).isLoggedIn())
         {
+            broadcastLogInSuccess(this);
             Toast.makeText(this, "success register", Toast.LENGTH_SHORT).show();
             startActivity(MainActivity.getLaunchIntent(this));
             finish();
