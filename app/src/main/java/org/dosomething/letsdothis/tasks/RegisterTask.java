@@ -12,7 +12,6 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
  */
 public class RegisterTask extends BaseRegistrationTask
 {
-
     private final String firstName;
     private final String lastName;
     private final String birthday;
@@ -65,8 +64,8 @@ public class RegisterTask extends BaseRegistrationTask
     @Override
     protected void onComplete(Context context)
     {
-        EventBusExt.getDefault().post(this);
         super.onComplete(context);
+        EventBusExt.getDefault().post(this);
     }
 
 }
