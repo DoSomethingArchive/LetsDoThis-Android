@@ -60,4 +60,6 @@
     <string name="app_intro_description">Let\'s Do This is an app for finding fun things to do with
         your friends
     </string>
+    <string name="signin_intro">Sign in with your DoSomething.org account.</string>
+    <string name="footer_login">Don’t have an account? Register here</string>
 </resources>

@@ -38,6 +38,16 @@ public class LoginActivity extends BaseActivity
 
         initLoginListener();
 
+        findViewById(R.id.register).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(RegisterActivity.getLaunchIntent(LoginActivity.this, null));
+                finish();
+            }
+        });
+
         if(BuildConfig.DEBUG)
         {
             phoneEmail.setText("touch@lab.co");
@@ -60,6 +70,7 @@ public class LoginActivity extends BaseActivity
                         .execute(new LoginTask(usertext, passtext));
             }
         });
+
     }
 
 
