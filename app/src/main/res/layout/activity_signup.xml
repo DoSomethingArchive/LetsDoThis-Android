@@ -5,7 +5,7 @@
             android:background="@color/web_orange"
             android:layout_height="match_parent">
 
-
+    <!--FIXME needs lightning when parallax is done-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -126,8 +126,8 @@
             android:text="@string/create_account"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:padding="@dimen/padding_small"
             android:id="@+id/sign_in"
+            android:padding="@dimen/padding_small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
