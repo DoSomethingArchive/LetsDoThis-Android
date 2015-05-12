@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import org.dosomething.letsdothis.tasks.LogoutTask;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
@@ -27,12 +28,24 @@ public abstract class BaseActivity extends AppCompatActivity
         }
     };
 
+    public static final String            LOGIN_SUCCESS = "walls breached!";
+    protected             BroadcastReceiver loginReceiver = new BroadcastReceiver()
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            finish();
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         registerReceiver(logoutReceiver, new IntentFilter(LOGOUT_SUCCESS));
+        registerReceiver(loginReceiver, new IntentFilter(LOGIN_SUCCESS));
+
         EventBusExt.getDefault().register(this);
     }
 
@@ -41,6 +54,7 @@ public abstract class BaseActivity extends AppCompatActivity
     protected void onDestroy()
     {
         unregisterReceiver(logoutReceiver);
+        unregisterReceiver(loginReceiver);
         EventBusExt.getDefault().unregister(this);
         super.onDestroy();
     }
@@ -50,10 +64,16 @@ public abstract class BaseActivity extends AppCompatActivity
         TaskQueue.loadQueueDefault(context).execute(new LogoutTask());
     }
 
-    @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(LogoutTask task)
+    public static void broadcastLogInSuccess(Context context)
     {
-        sendBroadcast(new Intent(LOGOUT_SUCCESS));
-        startActivity(RegisterLoginActivity.getLaunchIntent(this));
+        context.sendBroadcast(new Intent(LOGIN_SUCCESS));
     }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(AppPrefs fakeTask)
+    {
+        //EventBus crashes if there is no task registered
+    }
+
+
 }

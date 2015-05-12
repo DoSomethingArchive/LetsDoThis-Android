@@ -135,4 +135,9 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
         pager.setCurrentItem(currentItem + 1);
     }
 
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+    }
 }
