@@ -5,7 +5,7 @@
             android:background="@color/web_orange"
             android:layout_height="match_parent">
 
-
+    <!--FIXME needs lightning when parallax is done-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

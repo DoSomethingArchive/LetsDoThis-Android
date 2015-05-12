@@ -8,6 +8,7 @@
               android:paddingRight="@dimen/padding_small"
               android:orientation="vertical">
 
+    <!--FIXME needs lightning when parallax is done-->
     <ImageView
         android:layout_width="@dimen/login_intro_w"
         android:layout_height="@dimen/login_intro_h"
