@@ -93,7 +93,7 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
     {
         if(BuildConfig.DEBUG)
         {
-            if(code.length() == 6)
+            if(code.length() == 15)
             {
                 //FIXME: get real data
                 adapter.showJoinButton(true);

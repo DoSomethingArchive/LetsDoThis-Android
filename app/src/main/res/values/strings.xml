@@ -47,7 +47,7 @@
     <string name="invite_using">Invite using</string>
     <string name="share_invite">I want you to join the %1$s campaign with me, here\'s the code %2$s.</string>
     <string name="done">Done</string>
-    <string name="error_code_length">An invite code should be 6 digits long!</string>
+    <string name="error_code_length">An invite code should be 15 characters long!</string>
     <string name="tell_us">Tell us about yourself!</string>
     <string name="footer_register">Have a DoSomething.org account? Sign in</string>
     <string name="prove_it">Prove It</string>
