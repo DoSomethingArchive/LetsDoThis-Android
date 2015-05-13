@@ -4,8 +4,9 @@
                 android:layout_height="match_parent"
                 android:background="@color/web_orange"
                 android:orientation="vertical">
-    <!--FIXME add parallax effect-->
+
     <ImageView
+        android:id="@+id/lightening"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingLeft="@dimen/padding_medium"

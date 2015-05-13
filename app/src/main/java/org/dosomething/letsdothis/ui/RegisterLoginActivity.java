@@ -2,6 +2,8 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.fragments.RegisterLoginFragment;
@@ -13,7 +15,6 @@ public class RegisterLoginActivity extends BaseActivity
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     private static final String TAG = RegisterLoginActivity.class.getSimpleName();
-
 
 
     public static Intent getLaunchIntent(Context context)
@@ -28,6 +29,8 @@ public class RegisterLoginActivity extends BaseActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_lightening_container);
+
+        initLightening();
 
         if(savedInstanceState == null)
         {

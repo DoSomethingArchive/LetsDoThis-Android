@@ -3,7 +3,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.dosomething.letsdothis.BuildConfig;
@@ -18,7 +20,7 @@ import co.touchlab.android.threading.tasks.TaskQueue;
  */
 public class LoginActivity extends BaseActivity
 {
-    private static final String TAG        = LoginActivity.class.getSimpleName();
+    private static final String TAG = LoginActivity.class.getSimpleName();
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private EditText phoneEmail;
@@ -37,6 +39,7 @@ public class LoginActivity extends BaseActivity
         setContentView(R.layout.activity_login);
 
         initLoginListener();
+        initLightening();
 
         findViewById(R.id.register).setOnClickListener(new View.OnClickListener()
         {
@@ -72,7 +75,6 @@ public class LoginActivity extends BaseActivity
         });
 
     }
-
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(LoginTask task)

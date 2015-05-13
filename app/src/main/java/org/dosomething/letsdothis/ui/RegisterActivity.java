@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -35,7 +36,7 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 public class RegisterActivity extends BaseActivity
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final String FB_USER = "FB_USER";
+    public static final  String FB_USER        = "FB_USER";
     public static final  int    SELECT_PICTURE = 321;
     private static final String TAG            = RegisterActivity.class.getSimpleName();
 
@@ -62,6 +63,7 @@ public class RegisterActivity extends BaseActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        initLightening();
 
         FbUser fbUser = (FbUser) getIntent().getSerializableExtra(FB_USER);
 
@@ -150,7 +152,8 @@ public class RegisterActivity extends BaseActivity
                     Log.d("test-----------", selectedImageUri.toString());
                 }
 
-                Picasso.with(this).load(selectedImageUri).resize(avatar.getWidth(), avatar.getHeight()).into(avatar);
+                Picasso.with(this).load(selectedImageUri)
+                        .resize(avatar.getWidth(), avatar.getHeight()).into(avatar);
 
                 File externalFile = ViewUtils.getAvatarFile(this);
                 saveFile(selectedImageUri, externalFile);
@@ -170,7 +173,7 @@ public class RegisterActivity extends BaseActivity
         OutputStream out = null;
         try
         {
-            File temp = new File(getFilesDir(), "temp" + System.currentTimeMillis() +".jpg");
+            File temp = new File(getFilesDir(), "temp" + System.currentTimeMillis() + ".jpg");
 
             in = getContentResolver().openInputStream(sourceUri);
             out = new FileOutputStream(temp);
@@ -207,7 +210,7 @@ public class RegisterActivity extends BaseActivity
             }
         }
     }
-    
+
     private void initRegisterListener()
     {
         phoneEmail = (EditText) findViewById(R.id.phone_email);
