@@ -54,7 +54,6 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
     private HubAdapter         adapter;
     private SetToolbarListener setToolbarListener;
     private Uri                imageUri;
-    private boolean isPublic;
 
     public static HubFragment newInstance(boolean isPublic)
     {
@@ -71,8 +70,6 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
     {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
-        isPublic = getArguments().getBoolean(PUBLIC_PROFILE);
     }
 
     @Override
@@ -103,6 +100,7 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
         title.setText(getString(R.string.app_name));
         setToolbarListener.setToolbar(toolbar);
 
+
         return rootView;
     }
 
@@ -122,11 +120,15 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
 
         //FIXME get real user
         User user = new User(null, "firstName", "lastName", "birthday");
+        user.id =             AppPrefs.getInstance(getActivity()).getCurrentUserId();
+
+        boolean isPublic = getArguments().getBoolean(PUBLIC_PROFILE);
         if(isPublic)
         {
             user.first_name = "public";
         }
-        adapter = new HubAdapter(user, this);
+
+        adapter = new HubAdapter(user, this, isPublic);
         recyclerView.setAdapter(adapter);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);

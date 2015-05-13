@@ -43,6 +43,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private ArrayList<Object> hubList = new ArrayList<>();
     private User                    user;
     private HubAdapterClickListener hubAdapterClickListener;
+    private boolean isPublic = false;
 
     public HubAdapter(User user, HubAdapterClickListener hubAdapterClickListener)
     {
@@ -53,6 +54,18 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         hubList.add(CURRENTLY_DOING);
         hubList.add(BEEN_THERE_DONE_GOOD);
         this.hubList.add(0, new PlaceHolder());
+    }
+
+    public HubAdapter(User user, HubAdapterClickListener hubAdapterClickListener, boolean isPublic)
+    {
+        super();
+        this.user = user;
+        this.hubAdapterClickListener = hubAdapterClickListener;
+        this.hubList.add(user);
+        hubList.add(CURRENTLY_DOING);
+        hubList.add(BEEN_THERE_DONE_GOOD);
+        this.hubList.add(0, new PlaceHolder());
+        this.isPublic = isPublic;
     }
 
     @Override
@@ -103,7 +116,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             User user = (User) hubList.get(position);
             ProfileViewHolder profileViewHolder = (ProfileViewHolder) holder;
-            Context context = profileViewHolder.userImage.getContext();
 
             profileViewHolder.name
                     .setText(String.format("%s %s.", user.first_name, user.last_name.charAt(0)));
@@ -115,6 +127,11 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             currentCampaignViewHolder.title.setText(campaign.title);
             currentCampaignViewHolder.callToAction.setText(campaign.callToAction);
             currentCampaignViewHolder.count.setText(campaign.count);
+
+            if(isPublic)
+            {
+                currentCampaignViewHolder.actionButtons.setVisibility(View.GONE);
+            }
 
             Context context = currentCampaignViewHolder.image.getContext();
             int height = context.getResources().getDimensionPixelSize(R.dimen.campaign_height);
@@ -305,6 +322,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         protected final LinearLayout friendsContainer;
         protected final Button       proveShare;
         protected final Button       invite;
+        protected final View         actionButtons;
 
         public CurrentCampaignViewHolder(View itemView)
         {
@@ -318,6 +336,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             friendsContainer = (LinearLayout) itemView.findViewById(R.id.friends_container);
             proveShare = (Button) itemView.findViewById(R.id.prove_share);
             invite = (Button) itemView.findViewById(R.id.invite);
+            actionButtons = itemView.findViewById(R.id.action_buttons);
         }
     }
 
