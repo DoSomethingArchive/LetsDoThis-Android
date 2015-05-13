@@ -64,4 +64,5 @@
     <dimen name="kudos">44dp</dimen>
     <dimen name="login_intro_h">80dp</dimen>
     <dimen name="login_intro_w">100dp</dimen>
+    <dimen name="min_dialog_width">280dp</dimen>
 </resources>

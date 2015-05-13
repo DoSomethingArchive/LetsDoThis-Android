@@ -20,10 +20,7 @@
             android:enabled="false"
             android:key="@string/change_password"/>
 
-        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomDialogPreference
-            android:positiveButtonText="@string/logout"
-            android:negativeButtonText="@android:string/cancel"
-            android:dialogMessage="Are you sure you want to log out?"
+        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference
             android:title="@string/logout"
             android:key="@string/logout"/>
 
