@@ -41,7 +41,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private ArrayList<Object> hubList = new ArrayList<>();
-    private User user;
+    private User                    user;
     private HubAdapterClickListener hubAdapterClickListener;
 
     public HubAdapter(User user, HubAdapterClickListener hubAdapterClickListener)
@@ -55,13 +55,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.hubList.add(0, new PlaceHolder());
     }
 
-    public interface HubAdapterClickListener
-    {
-        void groupClicked(int campaignId, String userId);
-
-        void onProveShareClicked(Campaign campaign);
-    }
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
@@ -70,32 +63,27 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             case VIEW_TYPE_SECTION_TITLE:
                 View sectionLayout = LayoutInflater.from(parent.getContext())
-                                                   .inflate(R.layout.item_campaign_footer, parent,
-                                                            false);
+                        .inflate(R.layout.item_campaign_footer, parent, false);
                 return new SectionTitleViewHolder((TextView) sectionLayout);
             case VIEW_TYPE_PROFILE:
                 View profileLayout = LayoutInflater.from(parent.getContext())
-                                                   .inflate(R.layout.item_hub_profile, parent,
-                                                            false);
+                        .inflate(R.layout.item_hub_profile, parent, false);
                 return new ProfileViewHolder(profileLayout);
             case VIEW_TYPE_CURRENT_CAMPAIGN:
                 View currentLayout = LayoutInflater.from(parent.getContext())
-                                                   .inflate(R.layout.item_hub_current_campaign,
-                                                            parent, false);
+                        .inflate(R.layout.item_hub_current_campaign, parent, false);
                 return new CurrentCampaignViewHolder(currentLayout);
             case VIEW_TYPE_PAST_CAMPAIGN:
                 View pastLayout = LayoutInflater.from(parent.getContext())
-                                                .inflate(R.layout.item_hub_past_campaign, parent,
-                                                         false);
+                        .inflate(R.layout.item_hub_past_campaign, parent, false);
                 return new PastCampaignViewHolder(pastLayout);
             case VIEW_TYPE_EXPIRE:
                 View expireLayout = LayoutInflater.from(parent.getContext())
-                                                  .inflate(R.layout.item_hub_expire, parent, false);
+                        .inflate(R.layout.item_hub_expire, parent, false);
                 return new ExpireViewHolder(expireLayout);
             case VIEW_TYPE_PLACEHOLDER:
                 View placeholderLayout = LayoutInflater.from(parent.getContext())
-                                                       .inflate(R.layout.item_placeholder, parent,
-                                                                false);
+                        .inflate(R.layout.item_placeholder, parent, false);
                 return new PlaceholderViewHolder(placeholderLayout);
             default:
                 return null;
@@ -129,7 +117,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             Context context = currentCampaignViewHolder.image.getContext();
             int height = context.getResources().getDimensionPixelSize(R.dimen.campaign_height);
             Picasso.with(context).load(campaign.imagePath).resize(0, height)
-                   .into(currentCampaignViewHolder.image);
+                    .into(currentCampaignViewHolder.image);
 
             int size = campaign.group.size();
 
@@ -143,7 +131,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             });
             if(size > 0)
             {
-                int friendSize = context.getResources().getDimensionPixelSize(R.dimen.friend_avatar);
+                int friendSize = context.getResources()
+                        .getDimensionPixelSize(R.dimen.friend_avatar);
                 currentCampaignViewHolder.friends.setVisibility(View.VISIBLE);
                 currentCampaignViewHolder.friendsCount.setText(Integer.toString(size));
                 currentCampaignViewHolder.friendsCount.setOnClickListener(new View.OnClickListener()
@@ -157,13 +146,24 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 for(int i = 0; i < 4; i++)
                 {
-                    FrameLayout childAt = (FrameLayout) currentCampaignViewHolder.friendsContainer.getChildAt(i);
+                    FrameLayout childAt = (FrameLayout) currentCampaignViewHolder.friendsContainer
+                            .getChildAt(i);
+                    childAt.setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View view)
+                        {
+                            //FIXME pass in the friend id
+                            hubAdapterClickListener.friendClicked("3");
+                        }
+                    });
+
                     ImageView imageView = (ImageView) childAt.getChildAt(0);
 
                     if(campaign.group.size() > i)
                     {
                         Picasso.with(context).load(campaign.group.get(i).avatarPath)
-                               .resize(friendSize, 0).into(imageView);
+                                .resize(friendSize, 0).into(imageView);
                     }
                     else
                     {
@@ -183,7 +183,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             Context context = pastCampaignViewHolder.image.getContext();
             int height = context.getResources().getDimensionPixelSize(R.dimen.campaign_height);
             Picasso.with(context).load(campaign.imagePath).resize(0, height)
-                   .into(pastCampaignViewHolder.image);
+                    .into(pastCampaignViewHolder.image);
 
             ColorMatrix cm = new ColorMatrix();
             cm.setSaturation(0);
@@ -365,5 +365,14 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public static class PlaceHolder
     {
+    }
+
+    public interface HubAdapterClickListener
+    {
+        void friendClicked(String friendId);
+
+        void groupClicked(int campaignId, String userId);
+
+        void onProveShareClicked(Campaign campaign);
     }
 }

@@ -158,7 +158,7 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
     @Override
     public void onFriendClicked(String id)
     {
-        Toast.makeText(this, "FIXME", Toast.LENGTH_SHORT).show();
+        startActivity(PublicProfileActivity.getLaunchIntent(this));
     }
 
     @SuppressWarnings("UnusedDeclaration")

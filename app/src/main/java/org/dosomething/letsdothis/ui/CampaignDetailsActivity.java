@@ -137,7 +137,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         //FIXME
         if(BuildConfig.DEBUG)
         {
-            Toast.makeText(this, "TODO", Toast.LENGTH_SHORT).show();
+            startActivity(PublicProfileActivity.getLaunchIntent(this));
         }
     }
 
