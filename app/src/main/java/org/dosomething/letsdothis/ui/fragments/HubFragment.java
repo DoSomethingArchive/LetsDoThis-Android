@@ -96,6 +96,7 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
                 .inflate(R.layout.activity_fragment_quickreturn_recycler, container, false);
         recycleView = (RecyclerView) rootView.findViewById(R.id.recycler);
 
+
         toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
         TextView title = (TextView) rootView.findViewById(R.id.toolbar_title);
         toolbar.setTitle("");
@@ -119,7 +120,12 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
         super.onActivityCreated(savedInstanceState);
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
 
+        //FIXME get real user
         User user = new User(null, "firstName", "lastName", "birthday");
+        if(isPublic)
+        {
+            user.first_name = "public";
+        }
         adapter = new HubAdapter(user, this);
         recyclerView.setAdapter(adapter);
         layoutManager = new LinearLayoutManager(getActivity());
