@@ -35,6 +35,6 @@ public class PublicProfileActivity extends BaseActivity implements HubFragment.S
     @Override
     public void setToolbar(Toolbar toolbar)
     {
-
+        setSupportActionBar(toolbar);
     }
 }
