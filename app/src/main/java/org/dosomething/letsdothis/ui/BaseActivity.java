@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 
+import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.LogoutTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
@@ -18,8 +21,13 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 public abstract class BaseActivity extends AppCompatActivity
 {
 
-    public static final String            LOGOUT_SUCCESS = "ship it";
-    protected           BroadcastReceiver logoutReceiver = new BroadcastReceiver()
+    //~=~=~=~=~=~=~=~=~=~=~=~=Constants
+    public static final int    LIGHTENING_OFFSET = 4;
+    public static final String LOGOUT_SUCCESS    = "ship it";
+    public static final String LOGIN_SUCCESS     = "walls breached!";
+
+    //~=~=~=~=~=~=~=~=~=~=~=~=Fields
+    protected BroadcastReceiver logoutReceiver = new BroadcastReceiver()
     {
         @Override
         public void onReceive(Context context, Intent intent)
@@ -27,9 +35,7 @@ public abstract class BaseActivity extends AppCompatActivity
             finish();
         }
     };
-
-    public static final String            LOGIN_SUCCESS = "walls breached!";
-    protected             BroadcastReceiver loginReceiver = new BroadcastReceiver()
+    protected BroadcastReceiver loginReceiver = new BroadcastReceiver()
     {
         @Override
         public void onReceive(Context context, Intent intent)
@@ -67,6 +73,22 @@ public abstract class BaseActivity extends AppCompatActivity
     public static void broadcastLogInSuccess(Context context)
     {
         context.sendBroadcast(new Intent(LOGIN_SUCCESS));
+    }
+
+    protected void initLightening()
+    {
+        final ImageView lightening = (ImageView) findViewById(R.id.lightening);
+        lightening.getViewTreeObserver()
+                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener()
+                {
+                    @Override
+                    public void onGlobalLayout()
+                    {
+                        int measuredWidth = getWindow().getDecorView().getMeasuredWidth();
+                        int translateX = (- measuredWidth * 3 / LIGHTENING_OFFSET);
+                        lightening.setTranslationX(translateX);
+                    }
+                });
     }
 
     @SuppressWarnings("UnusedDeclaration")

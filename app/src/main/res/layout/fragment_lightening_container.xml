@@ -5,6 +5,7 @@
                 android:background="@color/web_orange">
 
     <ImageView
+        android:id="@+id/lightening"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingLeft="@dimen/padding_medium"
