@@ -75,10 +75,10 @@ public abstract class BaseActivity extends AppCompatActivity
         context.sendBroadcast(new Intent(LOGIN_SUCCESS));
     }
 
-    protected void initLightening()
+    protected void initLightning()
     {
-        final ImageView lightening = (ImageView) findViewById(R.id.lightening);
-        lightening.getViewTreeObserver()
+        final ImageView lightning = (ImageView) findViewById(R.id.lightning);
+        lightning.getViewTreeObserver()
                 .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener()
                 {
                     @Override
@@ -86,7 +86,7 @@ public abstract class BaseActivity extends AppCompatActivity
                     {
                         int measuredWidth = getWindow().getDecorView().getMeasuredWidth();
                         int translateX = (- measuredWidth * 3 / LIGHTENING_OFFSET);
-                        lightening.setTranslationX(translateX);
+                        lightning.setTranslationX(translateX);
                     }
                 });
     }

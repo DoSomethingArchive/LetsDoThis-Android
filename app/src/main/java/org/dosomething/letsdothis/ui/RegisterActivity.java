@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -63,7 +62,7 @@ public class RegisterActivity extends BaseActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        initLightening();
+        initLightning();
 
         FbUser fbUser = (FbUser) getIntent().getSerializableExtra(FB_USER);
 

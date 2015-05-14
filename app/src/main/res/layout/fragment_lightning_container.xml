@@ -5,13 +5,13 @@
                 android:background="@color/web_orange">
 
     <ImageView
-        android:id="@+id/lightening"
+        android:id="@+id/lightning"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingLeft="@dimen/padding_medium"
         android:paddingRight="@dimen/padding_medium"
         android:scaleType="centerCrop"
-        android:src="@drawable/light"/>
+        android:src="@drawable/orange_lightning"/>
 
     <FrameLayout
         android:id="@+id/container"
