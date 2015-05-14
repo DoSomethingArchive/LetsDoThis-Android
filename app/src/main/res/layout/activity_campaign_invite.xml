@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <include
+        layout="@layout/toolbar"
+        android:id="@+id/toolbar"/>
+
+    <FrameLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/desertStorm"
+        android:paddingLeft="@dimen/padding_xlarge"
+        android:paddingRight="@dimen/padding_xlarge"
+        android:paddingTop="@dimen/padding_small"
+        android:paddingBottom="@dimen/padding_small"
+        android:layout_weight="1">
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:layout_width="wrap_content"
+            android:id="@+id/title"
+            tools:text="@string/title_campaign_invite"
+            android:textSize="@dimen/text_42"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:layout_gravity="top"
+            android:layout_height="wrap_content"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/web_orange"
+            android:layout_gravity="center"
+            tools:text="alphafudgekites"
+            android:maxLines="1"
+            android:maxLength="15"
+            android:id="@+id/code"
+            android:textSize="@dimen/text_xxxlarge"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/details"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            tools:text="@string/desc_campaign_invite"
+            android:layout_gravity="bottom"/>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:paddingTop="@dimen/padding_medium"
+        android:layout_weight="1">
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+            style="@style/PrimaryButton"
+            android:text="@string/share_code"
+            android:layout_width="match_parent"
+            android:id="@+id/invite"
+            app:typeface="brandon_bold"
+            android:layout_marginLeft="@dimen/padding_small"
+            android:layout_marginRight="@dimen/padding_small"
+            android:layout_marginBottom="@dimen/padding_medium"
+            android:layout_height="wrap_content"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@android:color/black"
+            android:text="@string/footer_campaign_invite"
+            android:layout_gravity="bottom"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
