@@ -1,12 +1,17 @@
 package org.dosomething.letsdothis.ui.fragments;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.BaseActivity;
+import org.dosomething.letsdothis.ui.ChangeNumberActivity;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 /**
  * Created by izzyoji :) on 4/29/15.
@@ -18,6 +23,95 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
         super.onCreate(savedInstanceState);
         super.addPreferencesFromResource(R.xml.preference_general);
 
+        initRate();
+        initLogout();
+        initChangeEmail();
+        initChangeNotifications();
+        initChangePassword();
+        initChangePhone();
+    }
+
+    private void initLogout()
+    {
+        findPreference(getString(R.string.logout))
+                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
+                                              {
+                                                  @Override
+                                                  public boolean onPreferenceClick(Preference preference)
+                                                  {
+                                                      ConfirmDialog confirmDialog = ConfirmDialog
+                                                              .newInstance(getString(
+                                                                      R.string.prompt_logout));
+                                                      confirmDialog
+                                                              .setListener(SettingsFragment.this);
+                                                      confirmDialog.show(getFragmentManager(),
+                                                                         ConfirmDialog.TAG);
+                                                      return true;
+                                                  }
+                                              });
+    }
+
+    private void initChangePhone()
+    {
+        findPreference(getString(R.string.change_number))
+                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
+                {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference)
+                    {
+                        startActivity(ChangeNumberActivity.getLaunchIntent(getActivity()));
+                        return true;
+                    }
+                });
+    }
+
+    private void initChangeEmail()
+    {
+        findPreference(getString(R.string.change_email))
+                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
+                {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference)
+                    {
+                        //FIXME-----
+                        Log.d("------", "");
+                        return true;
+                    }
+                });
+    }
+
+    private void initChangePassword()
+    {
+        findPreference(getString(R.string.change_password))
+                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
+                {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference)
+                    {
+                        //FIXME-----
+                        Log.d("------", "");
+                        return true;
+                    }
+                });
+    }
+
+    private void initChangeNotifications()
+    {
+        findPreference(getString(R.string.change_notifications_prefs))
+                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
+                {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference)
+                    {
+                        //FIXME-----
+                        Log.d("------", "");
+                        return true;
+                    }
+                });
+    }
+
+    private void initRate()
+    {
         findPreference(getString(R.string.rate))
                 .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
                 {
@@ -30,19 +124,6 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                         return true;
                     }
                 });
-
-        findPreference(getString(R.string.logout)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
-        {
-            @Override
-            public boolean onPreferenceClick(Preference preference)
-            {
-                ConfirmDialog confirmDialog = ConfirmDialog.newInstance(getString(R.string.prompt_logout));
-                confirmDialog.setListener(SettingsFragment.this);
-                confirmDialog.show(getFragmentManager(), ConfirmDialog.TAG);
-                return true;
-            }
-        });
-
     }
 
     @Override

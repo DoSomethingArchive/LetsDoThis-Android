@@ -1,4 +1,6 @@
 package org.dosomething.letsdothis.ui;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,12 +11,19 @@ import android.widget.TextView;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.LogoutTask;
+import org.dosomething.letsdothis.ui.fragments.SettingsFragment;
 
 /**
  * Created by izzyoji :) on 4/29/15.
  */
 public class SettingsActivity extends BaseActivity
 {
+
+    public static Intent getLaunchIntent(Context context)
+    {
+        return new Intent(context, SettingsActivity.class);
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
@@ -27,11 +36,9 @@ public class SettingsActivity extends BaseActivity
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
 
-    public static Intent getLaunchIntent(Context context)
-    {
-        return new Intent(context, SettingsActivity.class);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, new SettingsFragment()).commit();
     }
 
     @Override

@@ -1,57 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <!--FIXME: implement settings-->
+    <!--
+        ACCOUNT
+    -->
     <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory
         android:title="@string/account">
 
         <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference
-            android:title="@string/change_photo"
-            android:enabled="false"
-            android:key="@string/change_photo"/>
+            android:enabled="true"
+            android:key="@string/change_photo"
+            android:title="@string/change_photo"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference
-            android:title="@string/change_email"
-            android:enabled="false"
-            android:key="@string/change_email"/>
+            android:enabled="true"
+            android:key="@string/change_email"
+            android:title="@string/change_email"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference
-            android:title="@string/change_password"
+            android:enabled="true"
+            android:key="@string/change_number"
+            android:title="@string/change_number"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference
             android:defaultValue="@string/password_hint"
-            android:enabled="false"
-            android:key="@string/change_password"/>
+            android:enabled="true"
+            android:key="@string/change_password"
+            android:title="@string/change_password"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference
-            android:title="@string/logout"
-            android:key="@string/logout"/>
+            android:key="@string/logout"
+            android:title="@string/logout"/>
 
     </org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory>
 
+    <!--
+        NOTIFICATIONS
+    -->
     <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory
         android:title="@string/notifications">
-
-        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomCheckBoxPreference
-            android:title="@string/receive_notifications"
-            android:enabled="false"
-            android:defaultValue=""
-            android:key="@string/receive_notifications"/>
+        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomSwitchPreference
+            android:defaultValue="true"
+            android:enabled="true"
+            android:key="@string/receive_notifications"
+            android:title="@string/receive_notifications"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference
-            android:enabled="false"
-            android:title="@string/change_notifications_prefs"
-            android:key="@string/change_notifications_prefs"/>
-
+            android:enabled="true"
+            android:key="@string/change_notifications_prefs"
+            android:title="@string/change_notifications_prefs"/>
     </org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory>
 
+    <!--
+        RATE
+    -->
     <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory>
-
+        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference
+            android:enabled="true"
+            android:defaultValue="true"
+            android:key="@string/rate"
+            android:title="@string/rate"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference
-            android:title="@string/rate"
             android:enabled="false"
-            android:key="@string/rate"/>
-
+            android:title="We'll never interrupt you to ask for ratings."/>
     </org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory>
-
 
 
 </PreferenceScreen>

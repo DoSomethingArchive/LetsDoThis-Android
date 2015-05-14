@@ -37,6 +37,7 @@
     <string name="change_photo">Change Photo</string>
     <string name="receive_notifications">Receive Notifications</string>
     <string name="change_email">Change Email</string>
+    <string name="change_number">Change Number</string>
     <string name="change_password">Change Password</string>
     <string name="password_hint">********</string>
     <string name="logout">Log Out</string>
