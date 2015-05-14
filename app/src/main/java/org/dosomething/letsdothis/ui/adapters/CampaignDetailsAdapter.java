@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.ui.adapters;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -32,6 +33,12 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public static final int VIEW_TYPE_CAMPAIGN_FOOTER = 1;
     public static final int VIEW_TYPE_REPORT_BACK     = 2;
 
+    private final int webOrange;
+    private final int shadowColor;
+    private final int slantHeight;
+    private final int widthOvershoot;
+    private final int heightShadowOvershoot;
+
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private ArrayList<Object> dataSet = new ArrayList<>();
     private DetailsAdapterClickListener detailsAdapterClickListener;
@@ -39,10 +46,15 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private Uri selectedImageUri;
     private int selectedPosition = -1;
 
-    public CampaignDetailsAdapter(DetailsAdapterClickListener detailsAdapterClickListener)
+    public CampaignDetailsAdapter(DetailsAdapterClickListener detailsAdapterClickListener, Resources resources)
     {
         super();
         this.detailsAdapterClickListener = detailsAdapterClickListener;
+        webOrange = resources.getColor(R.color.web_orange);
+        shadowColor = resources.getColor(R.color.black_10);
+        slantHeight = resources.getDimensionPixelSize(R.dimen.height_xtiny);
+        widthOvershoot = resources.getDimensionPixelSize(R.dimen.space_50);
+        heightShadowOvershoot = resources.getDimensionPixelSize(R.dimen.padding_tiny);
     }
 
     public void updateCampaign(Campaign campaign)
@@ -146,9 +158,11 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 campaignViewHolder.solutionCopy.setVisibility(View.GONE);
             }
 
-            int webOrange = campaignViewHolder.solutionWrapper.getContext().getResources()
-                                                          .getColor(R.color.web_orange);
-            SlantedBackgroundDrawable background = new SlantedBackgroundDrawable(true, webOrange);
+            SlantedBackgroundDrawable background = new SlantedBackgroundDrawable(true, webOrange,
+                                                                                 shadowColor,
+                                                                                 slantHeight,
+                                                                                 widthOvershoot,
+                                                                                 heightShadowOvershoot);
             campaignViewHolder.solutionWrapper.setBackground(background);
 
             campaignViewHolder.proveShare.setOnClickListener(new View.OnClickListener()

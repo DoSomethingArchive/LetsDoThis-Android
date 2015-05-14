@@ -1,4 +1,6 @@
 package org.dosomething.letsdothis.ui.fragments;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -73,7 +75,18 @@ public class IntroFragment extends Fragment
         introText.setText(text);
 
         View slantedBg = view.findViewById(R.id.slanted_bg);
-        slantedBg.setBackground(new SlantedBackgroundDrawable(slatedLeft));
+        Resources resources = getResources();
+        int shadowColor = resources.getColor(R.color.black_10);
+        int slantHeight = resources.getDimensionPixelSize(R.dimen.height_xxtiny);
+        int widthOvershoot = resources.getDimensionPixelSize(R.dimen.space_50);
+        int heightShadowOvershoot = resources.getDimensionPixelSize(R.dimen.padding_tiny);
+        SlantedBackgroundDrawable background = new SlantedBackgroundDrawable(slatedLeft,
+                                                                             Color.WHITE,
+                                                                             shadowColor,
+                                                                             slantHeight,
+                                                                             widthOvershoot,
+                                                                             heightShadowOvershoot);
+        slantedBg.setBackground(background);
         slantedBg.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
 
