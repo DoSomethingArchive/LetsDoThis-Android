@@ -15,7 +15,7 @@ public class PublicProfileActivity extends BaseActivity implements HubFragment.S
 
     public static Intent getLaunchIntent(Context context)
     {
-        return new Intent(context, PublicProfileActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        return new Intent(context, PublicProfileActivity.class);
     }
 
     @Override
