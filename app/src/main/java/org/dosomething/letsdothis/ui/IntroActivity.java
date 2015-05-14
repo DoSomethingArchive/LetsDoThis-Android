@@ -31,7 +31,7 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
     private List<IntroFragment.FragmentExtraHolder> extraList;
     private CirclePageIndicator                     indicator;
     private int                                     indicatorTop;
-    private ImageView                               lightening;
+    private ImageView                               lightning;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
 
@@ -89,7 +89,7 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
             }
         });
 
-        lightening = (ImageView) findViewById(R.id.lightening);
+        lightning = (ImageView) findViewById(R.id.lightning);
         indicator = (CirclePageIndicator) findViewById(R.id.indicator);
         indicator.setViewPager(pager);
         indicatorTop = indicator.getTop();
@@ -100,7 +100,7 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
             {
                 int measuredWidth = getWindow().getDecorView().getMeasuredWidth();
                 int translateX = (- position * measuredWidth - positionOffsetPixels) / LIGHTENING_OFFSET;
-                lightening.setTranslationX(translateX);
+                lightning.setTranslationX(translateX);
 
                 if(position == (extraList.size() - 2))
                 {

@@ -2,8 +2,6 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ViewTreeObserver;
-import android.widget.ImageView;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.fragments.RegisterLoginFragment;
@@ -28,9 +26,9 @@ public class RegisterLoginActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_lightening_container);
+        setContentView(R.layout.fragment_lightning_container);
 
-        initLightening();
+        initLightning();
 
         if(savedInstanceState == null)
         {

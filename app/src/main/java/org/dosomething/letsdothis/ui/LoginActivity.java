@@ -3,9 +3,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.dosomething.letsdothis.BuildConfig;
@@ -39,7 +37,7 @@ public class LoginActivity extends BaseActivity
         setContentView(R.layout.activity_login);
 
         initLoginListener();
-        initLightening();
+        initLightning();
 
         findViewById(R.id.register).setOnClickListener(new View.OnClickListener()
         {
