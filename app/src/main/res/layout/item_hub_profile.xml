@@ -12,7 +12,7 @@
         android:layout_height="@dimen/hub_profile_header"
         android:orientation="vertical"
         android:gravity="center"
-        android:background="@drawable/lightning">
+        android:background="@drawable/hub_lightning">
 
         <org.dosomething.letsdothis.ui.views.CircleImageView
             android:id="@+id/user_image"
