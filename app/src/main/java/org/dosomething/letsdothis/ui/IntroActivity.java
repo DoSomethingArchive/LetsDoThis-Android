@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -30,6 +31,7 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
     private List<IntroFragment.FragmentExtraHolder> extraList;
     private CirclePageIndicator                     indicator;
     private int                                     indicatorTop;
+    private ImageView                               lightning;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
 
@@ -87,6 +89,7 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
             }
         });
 
+        lightning = (ImageView) findViewById(R.id.lightning);
         indicator = (CirclePageIndicator) findViewById(R.id.indicator);
         indicator.setViewPager(pager);
         indicatorTop = indicator.getTop();
@@ -95,6 +98,10 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
             {
+                int measuredWidth = getWindow().getDecorView().getMeasuredWidth();
+                int translateX = (- position * measuredWidth - positionOffsetPixels) / LIGHTNING_OFFSET;
+                lightning.setTranslationX(translateX);
+
                 if(position == (extraList.size() - 2))
                 {
                     indicator.setTranslationY(indicatorTop + positionOffsetPixels / 2);
@@ -102,7 +109,7 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
                 if(BuildConfig.DEBUG)
                 {
                     Log.d("--",
-                          "position " + position + "offset " + positionOffset + " px " + position * positionOffsetPixels);
+                          "position " + position + " px " + positionOffsetPixels + " width " + measuredWidth + " translateX " + translateX);
                 }
             }
 

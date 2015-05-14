@@ -15,7 +15,6 @@ public class RegisterLoginActivity extends BaseActivity
     private static final String TAG = RegisterLoginActivity.class.getSimpleName();
 
 
-
     public static Intent getLaunchIntent(Context context)
     {
         return new Intent(context, RegisterLoginActivity.class)
@@ -27,7 +26,9 @@ public class RegisterLoginActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_lightening_container);
+        setContentView(R.layout.fragment_lightning_container);
+
+        initLightning();
 
         if(savedInstanceState == null)
         {
