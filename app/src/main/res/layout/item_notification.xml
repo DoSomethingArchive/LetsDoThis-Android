@@ -20,7 +20,7 @@
         app:background_color="@color/white"
         app:border_color="@color/white"
         app:border_width="0dp"
-        tools:src="@drawable/user_image"/>
+        tools:src="@drawable/placeholder"/>
 
     <LinearLayout
         android:layout_width="match_parent"
