@@ -9,7 +9,7 @@
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:id="@+id/campaign_details"
-        style="@style/lightening_btn_text"
+        style="@style/lightning_btn_text"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
@@ -23,7 +23,7 @@
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/campaign_details"
         android:scaleType="centerCrop"
-        android:src="@drawable/button_lightening_left"/>
+        android:src="@drawable/white_lightning_left"/>
 
     <ImageView
         android:layout_width="21dp"
@@ -31,6 +31,6 @@
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/campaign_details"
         android:scaleType="centerCrop"
-        android:src="@drawable/button_lightening_right"/>
+        android:src="@drawable/white_lightning_right"/>
 
 </RelativeLayout>

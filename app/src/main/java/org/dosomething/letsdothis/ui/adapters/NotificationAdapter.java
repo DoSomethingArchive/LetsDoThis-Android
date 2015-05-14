@@ -48,9 +48,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             NotificationViewHolder notificationViewHolder = (NotificationViewHolder) holder;
             Notification notification = (Notification) notifications.get(position);
 
-            //FIXME: get real placeholder image
             Picasso.with(notificationViewHolder.imageView.getContext()).load(notification.imagePath)
-                    .placeholder(R.drawable.user_image).into(notificationViewHolder.imageView);
+                   .into(notificationViewHolder.imageView);
             notificationViewHolder.title.setText(notification.title);
             notificationViewHolder.details.setText(notification.details);
             notificationViewHolder.timestamp.setText(TimeUtils.getTimeSince(

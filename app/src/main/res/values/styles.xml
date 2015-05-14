@@ -87,7 +87,7 @@
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/white</item>
     </style>
-    <style name="lightening_btn_text">
+    <style name="lightning_btn_text">
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/text_large</item>
         <item name="android:textAllCaps">true</item>
