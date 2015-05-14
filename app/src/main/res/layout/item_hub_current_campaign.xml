@@ -38,7 +38,7 @@
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:id="@+id/count"
             tool:text="5 people completed"
-            app:typeface="brandon_medium"
+            app:typeface="brandon_bold"
             android:paddingLeft="@dimen/padding_small"
             android:paddingRight="@dimen/padding_small"
             android:textSize="@dimen/text_26"
