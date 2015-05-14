@@ -87,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/problemFact"
             android:background="#ffffff"
-            android:paddingTop="@dimen/slanted_padding_50">
+            android:paddingTop="@dimen/space_35">
 
         <include layout="@layout/lightening_button"/>
 

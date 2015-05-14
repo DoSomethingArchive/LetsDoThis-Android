@@ -124,7 +124,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                    .into(campaignViewHolder.imageView);
             campaignViewHolder.title.setText(campaign.title);
             campaignViewHolder.callToAction.setText(campaign.callToAction);
-            campaignViewHolder.problemFact.setText(campaign.problemFact);
+            campaignViewHolder.problemFact.setText(campaign.problemFact.replaceAll("\\r\\n", ""));
             if(BuildConfig.DEBUG && campaign.solutionCopy != null) //FIXME this is null sometime
             {
                 String cleanText = campaign.solutionCopy.replace("\n", "");
