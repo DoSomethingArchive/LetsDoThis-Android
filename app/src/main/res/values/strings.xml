@@ -62,6 +62,9 @@
     </string>
     <string name="signin_intro">Sign in with your DoSomething.org account.</string>
     <string name="footer_login">Don’t have an account? Register here</string>
+    <string name="ok">Ok</string>
+    <string name="prompt_logout">Are you sure you want to log out?</string>
+    <string name="cancel">Cancel</string>
     <string name="share_code">Share Code</string>
     <string name="desc_campaign_invite">When a friend uses your code, they join your action group.
         You can rock %s together and unlock rewards as a group.
