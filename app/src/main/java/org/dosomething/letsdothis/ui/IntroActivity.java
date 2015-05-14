@@ -99,7 +99,7 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
             {
                 int measuredWidth = getWindow().getDecorView().getMeasuredWidth();
-                int translateX = (- position * measuredWidth - positionOffsetPixels) / LIGHTENING_OFFSET;
+                int translateX = (- position * measuredWidth - positionOffsetPixels) / LIGHTNING_OFFSET;
                 lightning.setTranslationX(translateX);
 
                 if(position == (extraList.size() - 2))

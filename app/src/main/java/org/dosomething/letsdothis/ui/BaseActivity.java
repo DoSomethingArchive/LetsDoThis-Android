@@ -22,9 +22,9 @@ public abstract class BaseActivity extends AppCompatActivity
 {
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final int    LIGHTENING_OFFSET = 4;
-    public static final String LOGOUT_SUCCESS    = "ship it";
-    public static final String LOGIN_SUCCESS     = "walls breached!";
+    public static final int    LIGHTNING_OFFSET = 4;
+    public static final String LOGOUT_SUCCESS   = "ship it";
+    public static final String LOGIN_SUCCESS    = "walls breached!";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     protected BroadcastReceiver logoutReceiver = new BroadcastReceiver()
@@ -35,7 +35,7 @@ public abstract class BaseActivity extends AppCompatActivity
             finish();
         }
     };
-    protected BroadcastReceiver loginReceiver = new BroadcastReceiver()
+    protected BroadcastReceiver loginReceiver  = new BroadcastReceiver()
     {
         @Override
         public void onReceive(Context context, Intent intent)
@@ -85,7 +85,7 @@ public abstract class BaseActivity extends AppCompatActivity
                     public void onGlobalLayout()
                     {
                         int measuredWidth = getWindow().getDecorView().getMeasuredWidth();
-                        int translateX = (- measuredWidth * 3 / LIGHTENING_OFFSET);
+                        int translateX = (- measuredWidth * 3 / LIGHTNING_OFFSET);
                         lightning.setTranslationX(translateX);
                     }
                 });
