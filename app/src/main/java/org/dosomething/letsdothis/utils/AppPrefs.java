@@ -2,8 +2,11 @@ package org.dosomething.letsdothis.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Log;
 
+import org.dosomething.letsdothis.R;
 import org.jetbrains.annotations.NotNull;
 
 public class AppPrefs
@@ -15,8 +18,9 @@ public class AppPrefs
     public static final String AVATAR_PATH        = "AVATAR_PATH";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
-    private static AppPrefs          instance;
-    private        SharedPreferences prefs;
+    private static AppPrefs instance;
+    volatile private  Context context;
+    private SharedPreferences prefs;
 
     @NotNull
     public static synchronized AppPrefs getInstance(Context context)
@@ -24,12 +28,19 @@ public class AppPrefs
         if(instance == null)
         {
             instance = new AppPrefs();
-            instance.prefs = context.getSharedPreferences("APP_PREFS", Context.MODE_PRIVATE);
+            instance.prefs = PreferenceManager.getDefaultSharedPreferences(context);
         }
 
+        instance.context = context;
         return instance;
     }
 
+    private boolean getReceiveNotification()
+    {
+        boolean notification = prefs
+                .getBoolean(this.context.getResources().getString(R.string.receive_notifications), false);
+        return notification;
+    }
 
     private void setBoolean(String key, Boolean value)
     {
@@ -45,6 +56,7 @@ public class AppPrefs
     {
         prefs.edit().putString(key, value).apply();
     }
+
     private String getString(String key, String defaultVal)
     {
         return prefs.getString(key, defaultVal);
@@ -72,7 +84,7 @@ public class AppPrefs
 
     public boolean isLoggedIn()
     {
-        return !TextUtils.isEmpty(getString(CURRENT_USER_ID, null));
+        return ! TextUtils.isEmpty(getString(CURRENT_USER_ID, null));
     }
 
     public void logout()
@@ -100,6 +112,7 @@ public class AppPrefs
     {
         return getString(USER_SESSION_TOKEN, null);
     }
+
     public void setFirstRun(boolean first)
     {
         setBoolean(FIRST_RUN, first);
