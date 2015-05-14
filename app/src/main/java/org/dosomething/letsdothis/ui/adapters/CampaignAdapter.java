@@ -1,5 +1,7 @@
 package org.dosomething.letsdothis.ui.adapters;
+import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,10 +34,15 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public static final int VIEW_TYPE_CAMPAIGN_FOOTER   = 3;
     public static final int VIEW_TYPE_REPORT_BACK       = 4;
 
+    private final int shadowColor;
+    private final int slantHeight;
+    private final int widthOvershoot;
+    private final int heightShadowOvershoot;
+
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private ArrayList<Object> dataSet = new ArrayList<>();
     private CampaignAdapterClickListener campaignAdapterClickListener;
-    private int selectedPosition = - 1;
+    private int                          selectedPosition = - 1;
 
     public interface CampaignAdapterClickListener
     {
@@ -48,11 +55,15 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         void onScrolledToBottom();
     }
 
-    public CampaignAdapter(List<Campaign> campaigns, CampaignAdapterClickListener campaignAdapterClickListener)
+    public CampaignAdapter(List<Campaign> campaigns, CampaignAdapterClickListener campaignAdapterClickListener, Resources resources)
     {
         super();
         this.dataSet.addAll(campaigns);
         this.campaignAdapterClickListener = campaignAdapterClickListener;
+        shadowColor = resources.getColor(R.color.black_10);
+        slantHeight = resources.getDimensionPixelSize(R.dimen.height_xxtiny);
+        widthOvershoot = resources.getDimensionPixelSize(R.dimen.space_50);
+        heightShadowOvershoot = resources.getDimensionPixelSize(R.dimen.padding_tiny);
     }
 
     @Override
@@ -62,7 +73,8 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         {
             case VIEW_TYPE_CAMPAIGN_FOOTER:
                 View footerLayout = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_campaign_footer, parent, false);
+                                                  .inflate(R.layout.item_campaign_footer, parent,
+                                                           false);
                 return new SectionTitleViewHolder((TextView) footerLayout);
             case VIEW_TYPE_REPORT_BACK:
                 View reportBackLayout = LayoutInflater.from(parent.getContext())
@@ -134,9 +146,11 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         {
             final Campaign campaign = (Campaign) dataSet.get(position);
             ExpandedCampaignViewHolder expandedCampaignViewHolder = (ExpandedCampaignViewHolder) holder;
+            Context context = expandedCampaignViewHolder.itemView.getContext();
+
             expandedCampaignViewHolder.title.setText(campaign.title);
             expandedCampaignViewHolder.callToAction.setText(campaign.callToAction);
-            Picasso.with(expandedCampaignViewHolder.imageView.getContext()).load(campaign.imagePath)
+            Picasso.with(context).load(campaign.imagePath)
                     .into(expandedCampaignViewHolder.imageView);
             expandedCampaignViewHolder.imageView.setOnClickListener(new View.OnClickListener()
             {
@@ -148,7 +162,13 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             });
 
-            expandedCampaignViewHolder.slantedBg.setBackground(new SlantedBackgroundDrawable(false, Integer.valueOf(50)));
+            SlantedBackgroundDrawable background = new SlantedBackgroundDrawable(false, Color.WHITE,
+                                                                                 shadowColor,
+                                                                                 slantHeight,
+                                                                                 widthOvershoot,
+                                                                                 heightShadowOvershoot);
+            expandedCampaignViewHolder.slantedBg
+                    .setBackground(background);
             expandedCampaignViewHolder.campaignDetailsWrapper.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -167,7 +187,8 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             expandedCampaignViewHolder.hours.setText(hours);
             String minutes = timeUntilExpiration.get(2);
             expandedCampaignViewHolder.minutes.setText(minutes);
-            Resources resources = expandedCampaignViewHolder.itemView.getContext().getResources();
+
+            Resources resources = context.getResources();
             expandedCampaignViewHolder.daysLabel
                     .setText(resources.getQuantityString(R.plurals.days, Integer.parseInt(days)));
             expandedCampaignViewHolder.hoursLabel
