@@ -54,18 +54,16 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         hubList.add(CURRENTLY_DOING);
         hubList.add(BEEN_THERE_DONE_GOOD);
         this.hubList.add(0, new PlaceHolder());
+        this.isPublic = isPublic;
     }
 
-    public HubAdapter(User user, HubAdapterClickListener hubAdapterClickListener, boolean isPublic)
+    public interface HubAdapterClickListener
     {
-        super();
-        this.user = user;
-        this.hubAdapterClickListener = hubAdapterClickListener;
-        this.hubList.add(user);
-        hubList.add(CURRENTLY_DOING);
-        hubList.add(BEEN_THERE_DONE_GOOD);
-        this.hubList.add(0, new PlaceHolder());
-        this.isPublic = isPublic;
+        void groupClicked(int campaignId, String userId);
+
+        void onProveShareClicked(Campaign campaign);
+
+        void onInviteClicked(Campaign campaign);
     }
 
     @Override
@@ -148,6 +146,16 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     hubAdapterClickListener.onProveShareClicked(campaign);
                 }
             });
+
+            currentCampaignViewHolder.invite.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    hubAdapterClickListener.onInviteClicked(campaign);
+                }
+            });
+
             if(size > 0)
             {
                 int friendSize = context.getResources()

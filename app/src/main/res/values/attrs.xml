@@ -8,7 +8,6 @@
     <attr name="typeface" format="enum">
         <enum name="brandon_bold"           value="0"/>
         <enum name="brandon_regular"        value="1"/>
-        <enum name="brandon_medium"        value="2"/>
         <enum name="proxima_nova_bold"      value="3"/>
         <enum name="proxima_nova_regular"   value="4"/>
     </attr>

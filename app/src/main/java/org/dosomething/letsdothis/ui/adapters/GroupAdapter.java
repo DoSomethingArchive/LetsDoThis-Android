@@ -221,6 +221,11 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
+    public Campaign getCampaign()
+    {
+        return currentCampaign;
+    }
+
     private class Reward
     {
     }
