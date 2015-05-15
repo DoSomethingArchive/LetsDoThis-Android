@@ -66,7 +66,7 @@ public class MainActivity extends BaseActivity implements HubFragment.SetToolbar
             {
                 if(! hub.isSelected())
                 {
-                    replaceCurrentFragment(HubFragment.newInstance(), HubFragment.TAG);
+                    replaceCurrentFragment(HubFragment.newInstance(false), HubFragment.TAG);
                 }
             }
         });
