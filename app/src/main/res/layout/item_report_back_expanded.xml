@@ -73,12 +73,7 @@
     </RelativeLayout>
 
     <!--FIXME get real kudos resources-->
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/kudos_bar"
-        android:id="@+id/kudos_bar"
-        android:background="@color/desertStorm"/>
+    <include layout="@layout/kudos"/>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:layout_width="wrap_content"
