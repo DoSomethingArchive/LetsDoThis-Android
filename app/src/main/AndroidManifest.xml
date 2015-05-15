@@ -50,6 +50,10 @@
                   android:screenOrientation="portrait"
                   android:configChanges="orientation|keyboardHidden"/>
 
+        <activity android:name=".ui.PublicProfileActivity"
+                  android:screenOrientation="portrait"
+                  android:configChanges="orientation|keyboardHidden"/>
+
         <activity android:name=".ui.RegisterActivity"
                   android:screenOrientation="portrait"
                   android:configChanges="orientation|keyboardHidden"/>
@@ -84,6 +88,10 @@
             android:configChanges="orientation|keyboardHidden"/>
 
         <activity android:name=".ui.GroupActivity"
+                  android:screenOrientation="portrait"
+                  android:configChanges="orientation|keyboardHidden"/>
+
+        <activity android:name=".ui.CampaignInviteActivity"
                   android:screenOrientation="portrait"
                   android:configChanges="orientation|keyboardHidden"/>
 
