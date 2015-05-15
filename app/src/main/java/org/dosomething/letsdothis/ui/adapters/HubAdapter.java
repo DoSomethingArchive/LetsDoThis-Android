@@ -45,7 +45,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private HubAdapterClickListener hubAdapterClickListener;
     private boolean isPublic = false;
 
-    public HubAdapter(User user, HubAdapterClickListener hubAdapterClickListener)
+    public HubAdapter(User user, HubAdapterClickListener hubAdapterClickListener, boolean isPublic)
     {
         super();
         this.user = user;
@@ -55,15 +55,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         hubList.add(BEEN_THERE_DONE_GOOD);
         this.hubList.add(0, new PlaceHolder());
         this.isPublic = isPublic;
-    }
-
-    public interface HubAdapterClickListener
-    {
-        void groupClicked(int campaignId, String userId);
-
-        void onProveShareClicked(Campaign campaign);
-
-        void onInviteClicked(Campaign campaign);
     }
 
     @Override
@@ -406,5 +397,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         void groupClicked(int campaignId, String userId);
 
         void onProveShareClicked(Campaign campaign);
+
+        void onInviteClicked(Campaign campaign);
     }
 }
