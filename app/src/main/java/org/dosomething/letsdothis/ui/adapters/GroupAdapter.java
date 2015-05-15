@@ -44,19 +44,6 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.groupAdapterClickListener = groupAdapterClickListener;
     }
 
-    public interface GroupAdapterClickListener
-    {
-        void onReportBackClicked(int reportBackId);
-
-        void onScrolledToBottom();
-
-        void onProveShareClicked();
-
-        void onInviteClicked();
-
-        void onFriendClicked(String id);
-    }
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
@@ -290,5 +277,18 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             super(view);
         }
+    }
+
+    public interface GroupAdapterClickListener
+    {
+        void onReportBackClicked(int reportBackId);
+
+        void onScrolledToBottom();
+
+        void onProveShareClicked();
+
+        void onInviteClicked();
+
+        void onFriendClicked(String id);
     }
 }

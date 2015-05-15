@@ -68,7 +68,7 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
         super.onActivityCreated(savedInstanceState);
         position = getArguments().getInt(KEY_POSITION);
         recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
-        adapter = new CampaignAdapter(generateSampleData(), this); //FIXME get real data eventually
+        adapter = new CampaignAdapter(generateSampleData(), this, getResources()); //FIXME get real data eventually
         adapter.addItem("campaign footer");
 
         recyclerView.setAdapter(adapter);
