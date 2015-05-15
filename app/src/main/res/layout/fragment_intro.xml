@@ -44,7 +44,6 @@
             android:gravity="center"
             android:layout_toRightOf="@+id/prev"
             android:layout_toLeftOf="@id/next"
-            android:lineSpacingExtra="5dp"
             tools:text="This is some intro text. and then here is some more text"/>
 
     </RelativeLayout>
