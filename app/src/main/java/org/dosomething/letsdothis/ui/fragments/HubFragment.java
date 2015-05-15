@@ -24,6 +24,7 @@ import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignTask;
 import org.dosomething.letsdothis.tasks.GetPastUserCampaignTask;
+import org.dosomething.letsdothis.ui.CampaignInviteActivity;
 import org.dosomething.letsdothis.ui.GroupActivity;
 import org.dosomething.letsdothis.ui.PhotoCropActivity;
 import org.dosomething.letsdothis.ui.SettingsActivity;
@@ -171,6 +172,12 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
     public void onProveShareClicked(Campaign campaign)
     {
         choosePicture();
+    }
+
+    @Override
+    public void onInviteClicked(Campaign campaign)
+    {
+        startActivity(CampaignInviteActivity.getLaunchIntent(getActivity(), campaign.title, campaign.invite.code));
     }
 
     @Override
