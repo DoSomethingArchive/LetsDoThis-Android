@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/desertStorm" tools:showIn="@layout/item_report_back_expanded">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:id="@+id/kudos_bar"
+        android:layout_height="@dimen/kudos_bar"
+        android:orientation="horizontal">
+
+        <!--fixme: get real resources-->
+        <ImageView
+            android:layout_width="@dimen/height_xxtiny"
+            android:layout_height="@dimen/height_xxtiny"
+            android:layout_margin="@dimen/padding_medium"
+            android:src="@mipmap/ic_launcher"/>
+
+        <ImageView
+            android:layout_width="@dimen/height_xxtiny"
+            android:layout_height="@dimen/height_xxtiny"
+            android:layout_margin="@dimen/padding_medium"
+            android:src="@mipmap/ic_launcher"/>
+
+        <ImageView
+            android:layout_width="@dimen/height_xxtiny"
+            android:layout_height="@dimen/height_xxtiny"
+            android:layout_margin="@dimen/padding_medium"
+            android:src="@mipmap/ic_launcher"/>
+
+        <ImageView
+            android:layout_width="@dimen/height_xxtiny"
+            android:layout_height="@dimen/height_xxtiny"
+            android:layout_margin="@dimen/padding_medium"
+            android:src="@mipmap/ic_launcher"/>
+
+        <ImageView
+            android:layout_width="@dimen/height_xxtiny"
+            android:layout_height="@dimen/height_xxtiny"
+            android:layout_margin="@dimen/padding_medium"
+            android:src="@mipmap/ic_launcher"/>
+
+        <ImageView
+            android:layout_width="@dimen/height_xxtiny"
+            android:layout_height="@dimen/height_xxtiny"
+            android:layout_margin="@dimen/padding_medium"
+            android:src="@mipmap/ic_launcher"/>
+
+        <ImageView
+            android:layout_width="@dimen/height_xxtiny"
+            android:layout_height="@dimen/height_xxtiny"
+            android:layout_margin="@dimen/padding_medium"
+            android:src="@mipmap/ic_launcher"/>
+
+        <ImageView
+            android:layout_width="@dimen/height_xxtiny"
+            android:layout_height="@dimen/height_xxtiny"
+            android:layout_margin="@dimen/padding_medium"
+            android:src="@mipmap/ic_launcher"/>
+
+        <ImageView
+            android:layout_width="@dimen/height_xxtiny"
+            android:layout_height="@dimen/height_xxtiny"
+            android:layout_margin="@dimen/padding_medium"
+            android:src="@mipmap/ic_launcher"/>
+
+        <ImageView
+            android:layout_width="@dimen/height_xxtiny"
+            android:layout_height="@dimen/height_xxtiny"
+            android:layout_margin="@dimen/padding_medium"
+            android:src="@mipmap/ic_launcher"/>
+
+        <ImageView
+            android:layout_width="@dimen/height_xxtiny"
+            android:layout_height="@dimen/height_xxtiny"
+            android:layout_margin="@dimen/padding_medium"
+            android:src="@mipmap/ic_launcher"/>
+
+        <ImageView
+            android:layout_width="@dimen/height_xxtiny"
+            android:layout_height="@dimen/height_xxtiny"
+            android:layout_margin="@dimen/padding_medium"
+            android:src="@mipmap/ic_launcher"/>
+
+        <ImageView
+            android:layout_width="@dimen/height_xxtiny"
+            android:layout_height="@dimen/height_xxtiny"
+            android:layout_margin="@dimen/padding_medium"
+            android:src="@mipmap/ic_launcher"/>
+
+        <ImageView
+            android:layout_width="@dimen/height_xxtiny"
+            android:layout_height="@dimen/height_xxtiny"
+            android:layout_margin="@dimen/padding_medium"
+            android:src="@mipmap/ic_launcher"/>
+
+        <ImageView
+            android:layout_width="@dimen/height_xxtiny"
+            android:layout_height="@dimen/height_xxtiny"
+            android:layout_margin="@dimen/padding_medium"
+            android:src="@mipmap/ic_launcher"/>
+    </LinearLayout>
+
+
+</HorizontalScrollView>
