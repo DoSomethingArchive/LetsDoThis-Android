@@ -86,10 +86,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/problemFact"
-            android:background="#ffffff"
-            android:paddingTop="@dimen/slanted_padding_50">
+            android:background="@color/white"
+            android:paddingTop="@dimen/space_35">
 
-        <include layout="@layout/lightning_button"/>
+            <include layout="@layout/lightning_button"/>
 
         </FrameLayout>
 

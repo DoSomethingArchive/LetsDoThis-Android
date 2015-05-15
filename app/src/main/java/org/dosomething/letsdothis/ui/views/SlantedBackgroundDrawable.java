@@ -1,7 +1,6 @@
 package org.dosomething.letsdothis.ui.views;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -15,57 +14,22 @@ import java.util.List;
  */
 public class SlantedBackgroundDrawable extends ColorDrawable
 {
-    //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    private static final int WIDTH_OVERSHOOT         = 50;
-    private static final int HEIGHT_SHADOW_OVERSHOOT = 30;
-
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private final Paint   wallpaint;
     private final Paint   shadowPaint;
     private final boolean slantedLeft;
-    private Integer SLANT_HEIGHT = 100;
+    private final int slantHeight;
+    private final int widthOvershoot;
+    private final int heightShadowOvershoot;
 
-    public SlantedBackgroundDrawable(boolean slatedLeft)
+    //could be this be refactored?
+    public SlantedBackgroundDrawable(boolean slatedLeft, int color, int shadowColor, int slantHeight, int widthOvershoot, int heightShadowOvershoot)
     {
-        slantedLeft = slatedLeft;
 
-        wallpaint = new Paint();
-        wallpaint.setColor(Color.WHITE);
-        wallpaint.setStyle(Paint.Style.FILL);
-        wallpaint.setAntiAlias(true);
-
-        shadowPaint = new Paint();
-        shadowPaint.setColor(0x22000000);
-        shadowPaint.setAntiAlias(true);
-        shadowPaint.setStyle(Paint.Style.FILL);
-        shadowPaint.setMaskFilter(
-                new BlurMaskFilter(HEIGHT_SHADOW_OVERSHOOT, BlurMaskFilter.Blur.OUTER));
-
-    }
-
-    public SlantedBackgroundDrawable(boolean slatedLeft, Integer slantHeight)
-    {
-        slantedLeft = slatedLeft;
-
-        wallpaint = new Paint();
-        wallpaint.setColor(Color.WHITE);
-        wallpaint.setStyle(Paint.Style.FILL);
-        wallpaint.setAntiAlias(true);
-
-        shadowPaint = new Paint();
-        shadowPaint.setColor(0x22000000);
-        shadowPaint.setAntiAlias(true);
-        shadowPaint.setStyle(Paint.Style.FILL);
-        shadowPaint.setMaskFilter(
-                new BlurMaskFilter(HEIGHT_SHADOW_OVERSHOOT, BlurMaskFilter.Blur.OUTER));
-
-        SLANT_HEIGHT = slantHeight;
-    }
-
-
-    public SlantedBackgroundDrawable(boolean slatedLeft, int color)
-    {
-        slantedLeft = slatedLeft;
+        this.slantedLeft = slatedLeft;
+        this.heightShadowOvershoot = heightShadowOvershoot;
+        this.slantHeight = slantHeight;
+        this.widthOvershoot = widthOvershoot;
 
         wallpaint = new Paint();
         wallpaint.setColor(color);
@@ -73,12 +37,11 @@ public class SlantedBackgroundDrawable extends ColorDrawable
         wallpaint.setAntiAlias(true);
 
         shadowPaint = new Paint();
-        shadowPaint.setColor(0x22000000);
+        shadowPaint.setColor(shadowColor);
         shadowPaint.setAntiAlias(true);
         shadowPaint.setStyle(Paint.Style.FILL);
         shadowPaint.setMaskFilter(
-                new BlurMaskFilter(HEIGHT_SHADOW_OVERSHOOT, BlurMaskFilter.Blur.OUTER));
-
+                new BlurMaskFilter(heightShadowOvershoot, BlurMaskFilter.Blur.OUTER));
     }
 
     @Override
@@ -99,17 +62,17 @@ public class SlantedBackgroundDrawable extends ColorDrawable
         List<Point> coord = new ArrayList<>();
         if(slantedLeft)
         {
-            coord.add(new Point(- WIDTH_OVERSHOOT, SLANT_HEIGHT + HEIGHT_SHADOW_OVERSHOOT));
-            coord.add(new Point(width + WIDTH_OVERSHOOT, 0 + HEIGHT_SHADOW_OVERSHOOT));
-            coord.add(new Point(width + WIDTH_OVERSHOOT, height));
-            coord.add(new Point(- WIDTH_OVERSHOOT, height));
+            coord.add(new Point(- widthOvershoot, slantHeight + heightShadowOvershoot));
+            coord.add(new Point(width + widthOvershoot, heightShadowOvershoot));
+            coord.add(new Point(width + widthOvershoot, height));
+            coord.add(new Point(- widthOvershoot, height));
         }
         else
         {
-            coord.add(new Point(- WIDTH_OVERSHOOT, 0 + HEIGHT_SHADOW_OVERSHOOT));
-            coord.add(new Point(width + WIDTH_OVERSHOOT, SLANT_HEIGHT + HEIGHT_SHADOW_OVERSHOOT));
-            coord.add(new Point(width + WIDTH_OVERSHOOT, height));
-            coord.add(new Point(- WIDTH_OVERSHOOT, height));
+            coord.add(new Point(- widthOvershoot, heightShadowOvershoot));
+            coord.add(new Point(width + widthOvershoot, slantHeight + heightShadowOvershoot));
+            coord.add(new Point(width + widthOvershoot, height));
+            coord.add(new Point(- widthOvershoot, height));
         }
 
         Path slantedPath = new Path();

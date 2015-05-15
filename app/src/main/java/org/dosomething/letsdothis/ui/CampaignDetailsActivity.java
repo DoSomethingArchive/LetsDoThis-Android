@@ -69,7 +69,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        adapter = new CampaignDetailsAdapter(this);
+        adapter = new CampaignDetailsAdapter(this, getResources());
 
         recyclerView.setAdapter(adapter);
 
@@ -138,7 +138,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         //FIXME
         if(BuildConfig.DEBUG)
         {
-            Toast.makeText(this, "TODO", Toast.LENGTH_SHORT).show();
+            startActivity(PublicProfileActivity.getLaunchIntent(this));
         }
     }
 

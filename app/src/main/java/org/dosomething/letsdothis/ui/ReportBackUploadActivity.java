@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.R;
-import org.dosomething.letsdothis.ui.views.SlantedBackgroundDrawable;
 
 import java.io.File;
 
@@ -58,12 +57,6 @@ public class ReportBackUploadActivity extends AppCompatActivity
         ImageView imageHero = (ImageView) findViewById(R.id.image_hero);
         Picasso.with(this).load(new File(croppedImage)).into(image);
         Picasso.with(this).load(new File(croppedImage)).into(imageHero);
-
-
-        View wrapper = findViewById(R.id.image_wrapper);
-        //        wrapper.setBackground(new ShadowBackgroundDrawable());
-        wrapper.setBackground(new SlantedBackgroundDrawable(true));
-        wrapper.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
         EditText caption = (EditText) findViewById(R.id.caption);
         EditText number = (EditText) findViewById(R.id.number);
