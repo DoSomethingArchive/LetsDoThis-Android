@@ -167,22 +167,22 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 {
                     FrameLayout childAt = (FrameLayout) currentCampaignViewHolder.friendsContainer
                             .getChildAt(i);
-                    childAt.setOnClickListener(new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View view)
-                        {
-                            //FIXME pass in the friend id
-                            hubAdapterClickListener.friendClicked("3");
-                        }
-                    });
 
                     ImageView imageView = (ImageView) childAt.getChildAt(0);
 
                     if(campaign.group.size() > i)
                     {
-                        Picasso.with(context).load(campaign.group.get(i).avatarPath)
+                        User friend = campaign.group.get(i);
+                        Picasso.with(context).load(friend.avatarPath)
                                 .resize(friendSize, 0).into(imageView);
+                        childAt.setOnClickListener(new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View view)
+                            {
+                                hubAdapterClickListener.friendClicked(user.id);
+                            }
+                        });
                     }
                     else
                     {
@@ -281,9 +281,12 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     {
         //        campaign.startTime  //FIXME get real expiration time
 
-        Long l = TimeUtils.getSampleExpirationTime();
-        int i = hubList.indexOf(CURRENTLY_DOING);
-        hubList.add(i + 1, l);
+        if(!isPublic)
+        {
+            Long l = TimeUtils.getSampleExpirationTime();
+            int i = hubList.indexOf(CURRENTLY_DOING);
+            hubList.add(i + 1, l);
+        }
     }
 
     public void addPastCampaign(List<Campaign> objects)
