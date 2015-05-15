@@ -1,6 +1,4 @@
 package org.dosomething.letsdothis.ui;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,21 +36,21 @@ public class SettingsActivity extends BaseActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         getFragmentManager().beginTransaction()
-                .replace(R.id.container, new SettingsFragment()).commit();
+                .replace(R.id.container, SettingsFragment.newInstance()).commit();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch(item.getItemId())
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item)
         {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+            switch(item.getItemId())
+            {
+                case android.R.id.home:
+                    onBackPressed();
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
         }
-    }
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(LogoutTask task)
@@ -60,4 +58,17 @@ public class SettingsActivity extends BaseActivity
         sendBroadcast(new Intent(BaseActivity.LOGOUT_SUCCESS));
         startActivity(RegisterLoginActivity.getLaunchIntent(this));
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        if(getFragmentManager().getBackStackEntryCount() > 0)
+        {
+            getFragmentManager().popBackStack();
+            return;
+        }
+
+        super.onBackPressed();
+    }
+
 }
