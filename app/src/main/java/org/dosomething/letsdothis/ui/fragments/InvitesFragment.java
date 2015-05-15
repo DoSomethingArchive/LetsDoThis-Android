@@ -1,5 +1,4 @@
 package org.dosomething.letsdothis.ui.fragments;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -69,12 +68,7 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
     @Override
     public void onInviteClicked(String title, String code)
     {
-        String shareBody = getString(R.string.share_invite, title, code);
-        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-        sharingIntent.setType("text/plain");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-        startActivity(Intent.createChooser(sharingIntent, getString(R.string.invite_using)));
+        startActivity(Invite.buildShareIntent(getResources(), title, code));
     }
 
     @Override
