@@ -32,14 +32,14 @@ public class UpdateUserTask extends BaseNetworkErrorHandlerTask
 
         TypedInput jsonTypedInput = User.getJsonTypedInput(user);
         NorthstarAPI northstarAPIService = NetworkHelper.getNorthstarAPIService();
-        northstarAPIService.updateUser(user.id, jsonTypedInput);
+//        northstarAPIService.updateUser(user.id, jsonTypedInput);
 
-        ResponseUser[] responseUsers = northstarAPIService
-                .userProfile(user.id);
+//        ResponseUser[] responseUsers = northstarAPIService
+//                .userProfile(user.id);
 
-        updatedUser = ResponseUser.getUser(responseUsers[0]);
-        Dao<User, String> userDao = DatabaseHelper.getInstance(context).getUserDao();
-        userDao.createOrUpdate(updatedUser);
+//        updatedUser = ResponseUser.getUser(responseUsers[0]);
+//        Dao<User, String> userDao = DatabaseHelper.getInstance(context).getUserDao();
+//        userDao.createOrUpdate(updatedUser);
     }
 
     @Override
