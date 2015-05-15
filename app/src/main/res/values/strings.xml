@@ -66,6 +66,7 @@
     <string name="ok">Ok</string>
     <string name="prompt_logout">Are you sure you want to log out?</string>
     <string name="cancel">Cancel</string>
+    <string name="beep_noise">Fuck that noise</string>
     <string name="share_code">Share Code</string>
     <string name="desc_campaign_invite">When a friend uses your code, they join your action group.
         You can rock %s together and unlock rewards as a group.

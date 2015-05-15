@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.ui.adapters;
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
@@ -14,6 +15,7 @@ import com.squareup.picasso.Picasso;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.data.Kudo;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.ui.views.SlantedBackgroundDrawable;
 import org.dosomething.letsdothis.utils.TimeUtils;
@@ -31,16 +33,27 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public static final int VIEW_TYPE_CAMPAIGN_FOOTER = 1;
     public static final int VIEW_TYPE_REPORT_BACK     = 2;
 
+    private final int webOrange;
+    private final int shadowColor;
+    private final int slantHeight;
+    private final int widthOvershoot;
+    private final int heightShadowOvershoot;
+
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private ArrayList<Object> dataSet = new ArrayList<>();
     private DetailsAdapterClickListener detailsAdapterClickListener;
     private Campaign                    currentCampaign;
     private int selectedPosition = - 1;
 
-    public CampaignDetailsAdapter(DetailsAdapterClickListener detailsAdapterClickListener)
+    public CampaignDetailsAdapter(DetailsAdapterClickListener detailsAdapterClickListener, Resources resources)
     {
         super();
         this.detailsAdapterClickListener = detailsAdapterClickListener;
+        webOrange = resources.getColor(R.color.web_orange);
+        shadowColor = resources.getColor(R.color.black_10);
+        slantHeight = resources.getDimensionPixelSize(R.dimen.height_xtiny);
+        widthOvershoot = resources.getDimensionPixelSize(R.dimen.space_50);
+        heightShadowOvershoot = resources.getDimensionPixelSize(R.dimen.padding_tiny);
     }
 
     public void updateCampaign(Campaign campaign)
@@ -80,6 +93,8 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         void inviteClicked();
 
         void onUserClicked(String id);
+
+        void onKudoClicked(ReportBack reportBack, Kudo kudo);
     }
 
     @Override
@@ -127,7 +142,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                    .into(campaignViewHolder.imageView);
             campaignViewHolder.title.setText(campaign.title);
             campaignViewHolder.callToAction.setText(campaign.callToAction);
-            campaignViewHolder.problemFact.setText(campaign.problemFact);
+            campaignViewHolder.problemFact.setText(campaign.problemFact.replaceAll("\\r\\n", ""));
             if(BuildConfig.DEBUG && campaign.solutionCopy != null) //FIXME this is null sometime
             {
                 String cleanText = campaign.solutionCopy.replace("\n", "");
@@ -149,9 +164,11 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 campaignViewHolder.solutionCopy.setVisibility(View.GONE);
             }
 
-            int webOrange = campaignViewHolder.solutionWrapper.getContext().getResources()
-                                                          .getColor(R.color.web_orange);
-            SlantedBackgroundDrawable background = new SlantedBackgroundDrawable(true, webOrange);
+            SlantedBackgroundDrawable background = new SlantedBackgroundDrawable(true, webOrange,
+                                                                                 shadowColor,
+                                                                                 slantHeight,
+                                                                                 widthOvershoot,
+                                                                                 heightShadowOvershoot);
             campaignViewHolder.solutionWrapper.setBackground(background);
 
             campaignViewHolder.proveShare.setOnClickListener(new View.OnClickListener()
@@ -175,7 +192,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         else if(getItemViewType(position) == VIEW_TYPE_REPORT_BACK)
         {
             final ReportBack reportBack = (ReportBack) dataSet.get(position);
-            ReportBackViewHolder reportBackViewHolder = (ReportBackViewHolder) holder;
+            final ReportBackViewHolder reportBackViewHolder = (ReportBackViewHolder) holder;
 
             //FIXME get real avatar
             reportBackViewHolder.avatar.setOnClickListener(new View.OnClickListener()
@@ -212,6 +229,21 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     }
                 }
             });
+
+            // is there a better way to do this?
+            int count = reportBackViewHolder.kudosBar.getChildCount();
+            for(int i = 0; i < count; i++)
+            {
+                View kudoView = reportBackViewHolder.kudosBar.getChildAt(i);
+                kudoView.setOnClickListener(new KudoClickListener(i)
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        detailsAdapterClickListener.onKudoClicked(reportBack, kudo);
+                    }
+                });
+            }
 
             reportBackViewHolder.kudosBar.setVisibility(selected
                                                                 ? View.VISIBLE
@@ -288,7 +320,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         protected TextView  timestamp;
         protected TextView  caption;
         protected ImageView kudosToggle;
-        protected View      kudosBar;
+        protected ViewGroup      kudosBar;
 
         public ReportBackViewHolder(View view)
         {
@@ -300,7 +332,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.caption = (TextView) view.findViewById(R.id.caption);
             this.kudosToggle = (ImageView) view.findViewById(R.id.kudos_toggle);
             this.kudosToggle.setVisibility(View.VISIBLE);
-            this.kudosBar = view.findViewById(R.id.kudos_bar);
+            this.kudosBar = (ViewGroup) view.findViewById(R.id.kudos_bar);
         }
     }
 
