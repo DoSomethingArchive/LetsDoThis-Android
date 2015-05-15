@@ -9,6 +9,7 @@ import android.widget.Toast;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.UpdateUserTask;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 import co.touchlab.android.threading.tasks.TaskQueue;
 
@@ -44,10 +45,10 @@ public class ChangeEmailActivity extends BaseActivity
             public void onClick(View v)
             {
                 User user = new User();
+                user.id = AppPrefs.getInstance(v.getContext()).getCurrentUserId();
                 user.email = email.getText().toString();
 
                 TaskQueue.loadQueueDefault(v.getContext()).execute(new UpdateUserTask(user));
-                Toast.makeText(v.getContext(), "TODO", Toast.LENGTH_SHORT).show();
             }
         });
     }
