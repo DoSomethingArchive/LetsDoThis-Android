@@ -41,7 +41,7 @@
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:typeface="brandon_medium"
+            app:typeface="brandon_bold"
             android:textSize="@dimen/text_33"
             android:id="@+id/days_label"
 
@@ -68,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/dark_gray"
-            app:typeface="brandon_medium"
+            app:typeface="brandon_bold"
             android:textSize="@dimen/text_33"
             android:id="@+id/hours_label"
             tool:text="Hours"/>
@@ -92,7 +92,7 @@
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:typeface="brandon_medium"
+            app:typeface="brandon_bold"
             android:textSize="@dimen/text_33"
             android:textColor="@color/dark_gray"
             android:id="@+id/minutes_label"

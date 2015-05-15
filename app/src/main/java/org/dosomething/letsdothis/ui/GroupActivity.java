@@ -76,7 +76,7 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
         recyclerView.addItemDecoration(new GroupReportBackItemDecoration());
-        adapter = new GroupAdapter(generateSampleData(), this);
+        adapter = new GroupAdapter(null, this);
         recyclerView.setAdapter(adapter);
 
         GridLayoutManager layoutManager = new GridLayoutManager(this, 6);
@@ -98,11 +98,6 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
         });
 
         recyclerView.setLayoutManager(layoutManager);
-    }
-
-    private Campaign generateSampleData()
-    {
-        return null;
     }
 
     @Override
@@ -152,7 +147,8 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
     @Override
     public void onInviteClicked()
     {
-        Toast.makeText(this, "FIXME", Toast.LENGTH_SHORT).show();
+        Campaign campaign = adapter.getCampaign();
+        startActivity(CampaignInviteActivity.getLaunchIntent(this, campaign.title, campaign.invite.code));
     }
 
     @Override

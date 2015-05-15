@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.tasks.CampaignDetailsTask;
 import org.dosomething.letsdothis.tasks.IndividualCampaignReportBackList;
@@ -125,10 +126,8 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     @Override
     public void inviteClicked()
     {
-        if(BuildConfig.DEBUG)
-        {
-            Toast.makeText(this, "TODO", Toast.LENGTH_SHORT).show();
-        }
+        Campaign campaign = adapter.getCampaign();
+        startActivity(CampaignInviteActivity.getLaunchIntent(this, campaign.title, campaign.invite.code));
     }
 
     @Override
