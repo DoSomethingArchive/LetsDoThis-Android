@@ -47,10 +47,10 @@ public class ChangeNumberActivity extends BaseActivity
             public void onClick(View v)
             {
                 User user = new User();
+                user.id = AppPrefs.getInstance(v.getContext()).getCurrentUserId();
                 user.mobile = phone.getText().toString();
 
                 TaskQueue.loadQueueDefault(v.getContext()).execute(new UpdateUserTask(user));
-                Toast.makeText(v.getContext(), "TODO", Toast.LENGTH_SHORT).show();
             }
         });
     }
