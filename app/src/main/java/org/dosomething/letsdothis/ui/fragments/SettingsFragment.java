@@ -10,7 +10,9 @@ import android.util.Log;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.BaseActivity;
+import org.dosomething.letsdothis.ui.ChangeEmailActivity;
 import org.dosomething.letsdothis.ui.ChangeNumberActivity;
+import org.dosomething.letsdothis.ui.ChangePasswordActivity;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 /**
@@ -74,7 +76,7 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                     public boolean onPreferenceClick(Preference preference)
                     {
                         //FIXME-----
-                        Log.d("------", "");
+                        startActivity(ChangeEmailActivity.getLaunchIntent(getActivity()));
                         return true;
                     }
                 });
@@ -88,7 +90,7 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                     @Override
                     public boolean onPreferenceClick(Preference preference)
                     {
-                        //FIXME-----
+                        startActivity(ChangePasswordActivity.getLaunchIntent(getActivity()));
                         Log.d("------", "");
                         return true;
                     }

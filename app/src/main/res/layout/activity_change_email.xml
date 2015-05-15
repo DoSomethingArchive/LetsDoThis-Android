@@ -32,11 +32,11 @@
             android:src="@drawable/do_something_logo"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
-            android:id="@+id/phone"
+            android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/padding_small"
-            android:hint="@string/change_phone_hint"/>
+            android:hint="@string/change_email_hint"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomButton
             android:id="@+id/confirm"
