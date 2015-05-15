@@ -89,7 +89,7 @@
             android:background="#ffffff"
             android:paddingTop="@dimen/slanted_padding_50">
 
-        <include layout="@layout/lightening_button"/>
+        <include layout="@layout/lightning_button"/>
 
         </FrameLayout>
 

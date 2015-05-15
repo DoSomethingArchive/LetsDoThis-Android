@@ -51,7 +51,7 @@
             android:paddingRight="@dimen/padding_small"
             android:gravity="bottom"
             android:textColor="@color/gray"
-            app:typeface="brandon_medium"
+            app:typeface="brandon_bold"
             android:layout_alignParentRight="true"
             tools:text="Timestamp"
             android:id="@+id/timestamp"/>
