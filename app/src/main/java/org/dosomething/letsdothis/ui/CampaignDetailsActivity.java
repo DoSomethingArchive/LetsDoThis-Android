@@ -18,9 +18,11 @@ import android.widget.Toast;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.data.Kudo;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.tasks.CampaignDetailsTask;
 import org.dosomething.letsdothis.tasks.IndividualCampaignReportBackList;
+import org.dosomething.letsdothis.tasks.SubmitKudosTask;
 import org.dosomething.letsdothis.ui.adapters.CampaignDetailsAdapter;
 
 import java.io.File;
@@ -67,7 +69,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        adapter = new CampaignDetailsAdapter(this);
+        adapter = new CampaignDetailsAdapter(this, getResources());
 
         recyclerView.setAdapter(adapter);
 
@@ -138,6 +140,13 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         {
             startActivity(PublicProfileActivity.getLaunchIntent(this));
         }
+    }
+
+    @Override
+    public void onKudoClicked(ReportBack reportBack, Kudo kudo)
+    {
+        //fixme get drupal id
+        TaskQueue.loadQueueDefault(this).execute(new SubmitKudosTask(kudo.id, reportBack.id, null));
     }
 
     @Override
@@ -240,6 +249,12 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         currentPage = task.page;
         List<ReportBack> reportBacks = task.reportBacks;
         adapter.addAll(reportBacks);
+    }
 
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(SubmitKudosTask task)
+    {
+        //fixme handle refreshing reportbacks
+        Toast.makeText(this, "kudos submitted", Toast.LENGTH_SHORT).show();
     }
 }
