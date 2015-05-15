@@ -37,16 +37,18 @@
         android:paddingLeft="@dimen/padding_medium"
         android:paddingRight="@dimen/padding_medium"
         android:layout_above="@+id/call_to_action"
+        android:gravity="center"
         tool:text="title"/>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:id="@+id/call_to_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textAppearance="?android:textAppearanceLarge"
         android:textColor="@color/white"
         android:textSize="@dimen/text_33"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/image_container"
+        android:gravity="center"
         android:paddingLeft="@dimen/padding_medium"
         android:paddingRight="@dimen/padding_medium"
         android:layout_marginBottom="@dimen/padding_large"
@@ -55,11 +57,13 @@
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:id="@+id/problemFact"
-        android:paddingLeft="@dimen/padding_medium"
-        android:paddingRight="@dimen/padding_medium"
-        android:textSize="@dimen/text_33"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/padding_small"
+        android:paddingRight="@dimen/padding_small"
+        android:paddingTop="@dimen/padding_small"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/text_33"
         android:layout_below="@+id/image_container"
         tool:text="problem fact"/>
 
@@ -68,33 +72,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="50dp"
-        android:paddingLeft="@dimen/padding_medium"
-        android:paddingRight="@dimen/padding_medium"
-        android:paddingBottom="@dimen/padding_medium"
+        android:paddingTop="@dimen/padding_xlarge"
+        android:paddingLeft="@dimen/padding_small"
+        android:paddingRight="@dimen/padding_small"
+        android:paddingBottom="@dimen/padding_small"
         android:background="@color/web_orange"
         android:layout_below="@+id/problemFact">
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:paddingLeft="@dimen/padding_medium"
             android:paddingRight="@dimen/padding_medium"
+            android:paddingBottom="@dimen/padding_small"
             app:typeface="brandon_bold"
             android:textAllCaps="true"
             android:layout_gravity="center"
             android:textColor="@color/white"
             android:textSize="@dimen/text_36"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_below="@+id/image_container"
-            tool:text="Do that dance"/>
+            android:text="@string/beep_noise"/>
 
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:id="@+id/solutionCopy"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_33"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_33"
             tool:text="solution copy"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
@@ -110,6 +115,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginTop="@dimen/padding_medium"
+        android:layout_marginBottom="@dimen/padding_medium"
         android:layout_below="@id/solutionWrapper">
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomButton
@@ -121,7 +128,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_margin="@dimen/padding_tiny"
+            android:layout_marginLeft="@dimen/padding_tiny"
+            android:layout_marginRight="@dimen/padding_tiny"
             android:text="prove it"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomButton
@@ -133,7 +141,8 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_tiny"
+            android:layout_marginLeft="@dimen/padding_tiny"
+            android:layout_marginRight="@dimen/padding_tiny"
             android:text="@string/invite_friends"/>
     </LinearLayout>
 

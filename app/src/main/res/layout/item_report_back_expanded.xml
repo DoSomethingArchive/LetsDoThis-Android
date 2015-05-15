@@ -69,7 +69,6 @@
             android:layout_margin="@dimen/padding_small"
             android:layout_alignBottom="@+id/image"
             android:layout_alignParentRight="true"/>
-
     </RelativeLayout>
 
     <!--FIXME get real kudos resources-->
