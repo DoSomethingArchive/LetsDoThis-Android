@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.data.Kudo;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.ui.views.SlantedBackgroundDrawable;
 import org.dosomething.letsdothis.utils.TimeUtils;
@@ -80,6 +81,8 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         void inviteClicked();
 
         void onUserClicked(String id);
+
+        void onKudoClicked(ReportBack reportBack, Kudo kudo);
     }
 
     @Override
@@ -175,7 +178,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         else if(getItemViewType(position) == VIEW_TYPE_REPORT_BACK)
         {
             final ReportBack reportBack = (ReportBack) dataSet.get(position);
-            ReportBackViewHolder reportBackViewHolder = (ReportBackViewHolder) holder;
+            final ReportBackViewHolder reportBackViewHolder = (ReportBackViewHolder) holder;
 
             //FIXME get real avatar
             reportBackViewHolder.avatar.setOnClickListener(new View.OnClickListener()
@@ -212,6 +215,21 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     }
                 }
             });
+
+            // is there a better way to do this?
+            int count = reportBackViewHolder.kudosBar.getChildCount();
+            for(int i = 0; i < count; i++)
+            {
+                View kudoView = reportBackViewHolder.kudosBar.getChildAt(i);
+                kudoView.setOnClickListener(new KudoClickListener(i)
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        detailsAdapterClickListener.onKudoClicked(reportBack, kudo);
+                    }
+                });
+            }
 
             reportBackViewHolder.kudosBar.setVisibility(selected
                                                                 ? View.VISIBLE
@@ -288,7 +306,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         protected TextView  timestamp;
         protected TextView  caption;
         protected ImageView kudosToggle;
-        protected View      kudosBar;
+        protected ViewGroup      kudosBar;
 
         public ReportBackViewHolder(View view)
         {
@@ -300,7 +318,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.caption = (TextView) view.findViewById(R.id.caption);
             this.kudosToggle = (ImageView) view.findViewById(R.id.kudos_toggle);
             this.kudosToggle.setVisibility(View.VISIBLE);
-            this.kudosBar = view.findViewById(R.id.kudos_bar);
+            this.kudosBar = (ViewGroup) view.findViewById(R.id.kudos_bar);
         }
     }
 
