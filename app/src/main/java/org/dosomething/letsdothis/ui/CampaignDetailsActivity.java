@@ -67,7 +67,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        adapter = new CampaignDetailsAdapter(this);
+        adapter = new CampaignDetailsAdapter(this, getResources());
 
         recyclerView.setAdapter(adapter);
 
