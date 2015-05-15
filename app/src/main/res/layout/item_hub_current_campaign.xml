@@ -49,20 +49,20 @@
     </LinearLayout>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+        android:id="@+id/call_to_action"
         tool:text="Call to action"
         android:textColor="@android:color/black"
         android:paddingLeft="@dimen/padding_small"
         android:paddingRight="@dimen/padding_small"
         android:paddingBottom="@dimen/padding_medium"
-        android:id="@+id/call_to_action"
         android:layout_below="@+id/title_and_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <LinearLayout
+        android:id="@+id/action_buttons"
         android:layout_below="@id/call_to_action"
         android:orientation="horizontal"
-        android:id="@+id/action_buttons"
         android:paddingLeft="@dimen/padding_tiny"
         android:paddingRight="@dimen/padding_tiny"
         android:layout_width="match_parent"
