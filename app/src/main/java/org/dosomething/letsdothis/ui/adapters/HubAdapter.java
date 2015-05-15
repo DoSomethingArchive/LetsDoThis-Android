@@ -41,10 +41,11 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private ArrayList<Object> hubList = new ArrayList<>();
-    private User user;
+    private User                    user;
     private HubAdapterClickListener hubAdapterClickListener;
+    private boolean isPublic = false;
 
-    public HubAdapter(User user, HubAdapterClickListener hubAdapterClickListener)
+    public HubAdapter(User user, HubAdapterClickListener hubAdapterClickListener, boolean isPublic)
     {
         super();
         this.user = user;
@@ -53,13 +54,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         hubList.add(CURRENTLY_DOING);
         hubList.add(BEEN_THERE_DONE_GOOD);
         this.hubList.add(0, new PlaceHolder());
-    }
-
-    public interface HubAdapterClickListener
-    {
-        void groupClicked(int campaignId, String userId);
-
-        void onProveShareClicked(Campaign campaign);
+        this.isPublic = isPublic;
     }
 
     @Override
@@ -70,32 +65,27 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             case VIEW_TYPE_SECTION_TITLE:
                 View sectionLayout = LayoutInflater.from(parent.getContext())
-                                                   .inflate(R.layout.item_campaign_footer, parent,
-                                                            false);
+                        .inflate(R.layout.item_campaign_footer, parent, false);
                 return new SectionTitleViewHolder((TextView) sectionLayout);
             case VIEW_TYPE_PROFILE:
                 View profileLayout = LayoutInflater.from(parent.getContext())
-                                                   .inflate(R.layout.item_hub_profile, parent,
-                                                            false);
+                        .inflate(R.layout.item_hub_profile, parent, false);
                 return new ProfileViewHolder(profileLayout);
             case VIEW_TYPE_CURRENT_CAMPAIGN:
                 View currentLayout = LayoutInflater.from(parent.getContext())
-                                                   .inflate(R.layout.item_hub_current_campaign,
-                                                            parent, false);
+                        .inflate(R.layout.item_hub_current_campaign, parent, false);
                 return new CurrentCampaignViewHolder(currentLayout);
             case VIEW_TYPE_PAST_CAMPAIGN:
                 View pastLayout = LayoutInflater.from(parent.getContext())
-                                                .inflate(R.layout.item_hub_past_campaign, parent,
-                                                         false);
+                        .inflate(R.layout.item_hub_past_campaign, parent, false);
                 return new PastCampaignViewHolder(pastLayout);
             case VIEW_TYPE_EXPIRE:
                 View expireLayout = LayoutInflater.from(parent.getContext())
-                                                  .inflate(R.layout.item_hub_expire, parent, false);
+                        .inflate(R.layout.item_hub_expire, parent, false);
                 return new ExpireViewHolder(expireLayout);
             case VIEW_TYPE_PLACEHOLDER:
                 View placeholderLayout = LayoutInflater.from(parent.getContext())
-                                                       .inflate(R.layout.item_placeholder, parent,
-                                                                false);
+                        .inflate(R.layout.item_placeholder, parent, false);
                 return new PlaceholderViewHolder(placeholderLayout);
             default:
                 return null;
@@ -115,6 +105,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             User user = (User) hubList.get(position);
             ProfileViewHolder profileViewHolder = (ProfileViewHolder) holder;
+
             profileViewHolder.name
                     .setText(String.format("%s %s.", user.first_name, user.last_name.charAt(0)));
         }
@@ -126,10 +117,15 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             currentCampaignViewHolder.callToAction.setText(campaign.callToAction);
             currentCampaignViewHolder.count.setText(campaign.count);
 
+            if(isPublic)
+            {
+                currentCampaignViewHolder.actionButtons.setVisibility(View.GONE);
+            }
+
             Context context = currentCampaignViewHolder.image.getContext();
             int height = context.getResources().getDimensionPixelSize(R.dimen.campaign_height);
             Picasso.with(context).load(campaign.imagePath).resize(0, height)
-                   .into(currentCampaignViewHolder.image);
+                    .into(currentCampaignViewHolder.image);
 
             int size = campaign.group.size();
 
@@ -141,9 +137,20 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     hubAdapterClickListener.onProveShareClicked(campaign);
                 }
             });
+
+            currentCampaignViewHolder.invite.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    hubAdapterClickListener.onInviteClicked(campaign);
+                }
+            });
+
             if(size > 0)
             {
-                int friendSize = context.getResources().getDimensionPixelSize(R.dimen.friend_avatar);
+                int friendSize = context.getResources()
+                        .getDimensionPixelSize(R.dimen.friend_avatar);
                 currentCampaignViewHolder.friends.setVisibility(View.VISIBLE);
                 currentCampaignViewHolder.friendsCount.setText(Integer.toString(size));
                 currentCampaignViewHolder.friendsCount.setOnClickListener(new View.OnClickListener()
@@ -157,13 +164,24 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 for(int i = 0; i < 4; i++)
                 {
-                    FrameLayout childAt = (FrameLayout) currentCampaignViewHolder.friendsContainer.getChildAt(i);
+                    FrameLayout childAt = (FrameLayout) currentCampaignViewHolder.friendsContainer
+                            .getChildAt(i);
+
                     ImageView imageView = (ImageView) childAt.getChildAt(0);
 
                     if(campaign.group.size() > i)
                     {
-                        Picasso.with(context).load(campaign.group.get(i).avatarPath)
-                               .resize(friendSize, 0).into(imageView);
+                        User friend = campaign.group.get(i);
+                        Picasso.with(context).load(friend.avatarPath)
+                                .resize(friendSize, 0).into(imageView);
+                        childAt.setOnClickListener(new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View view)
+                            {
+                                hubAdapterClickListener.friendClicked(user.id);
+                            }
+                        });
                     }
                     else
                     {
@@ -183,7 +201,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             Context context = pastCampaignViewHolder.image.getContext();
             int height = context.getResources().getDimensionPixelSize(R.dimen.campaign_height);
             Picasso.with(context).load(campaign.imagePath).resize(0, height)
-                   .into(pastCampaignViewHolder.image);
+                    .into(pastCampaignViewHolder.image);
 
             ColorMatrix cm = new ColorMatrix();
             cm.setSaturation(0);
@@ -262,9 +280,12 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     {
         //        campaign.startTime  //FIXME get real expiration time
 
-        Long l = TimeUtils.getSampleExpirationTime();
-        int i = hubList.indexOf(CURRENTLY_DOING);
-        hubList.add(i + 1, l);
+        if(!isPublic)
+        {
+            Long l = TimeUtils.getSampleExpirationTime();
+            int i = hubList.indexOf(CURRENTLY_DOING);
+            hubList.add(i + 1, l);
+        }
     }
 
     public void addPastCampaign(List<Campaign> objects)
@@ -303,6 +324,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         protected final LinearLayout friendsContainer;
         protected final Button       proveShare;
         protected final Button       invite;
+        protected final View         actionButtons;
 
         public CurrentCampaignViewHolder(View itemView)
         {
@@ -316,6 +338,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             friendsContainer = (LinearLayout) itemView.findViewById(R.id.friends_container);
             proveShare = (Button) itemView.findViewById(R.id.prove_share);
             invite = (Button) itemView.findViewById(R.id.invite);
+            actionButtons = itemView.findViewById(R.id.action_buttons);
         }
     }
 
@@ -365,5 +388,16 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public static class PlaceHolder
     {
+    }
+
+    public interface HubAdapterClickListener
+    {
+        void friendClicked(String friendId);
+
+        void groupClicked(int campaignId, String userId);
+
+        void onProveShareClicked(Campaign campaign);
+
+        void onInviteClicked(Campaign campaign);
     }
 }

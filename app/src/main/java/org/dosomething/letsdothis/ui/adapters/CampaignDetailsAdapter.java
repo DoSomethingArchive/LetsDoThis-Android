@@ -1,6 +1,5 @@
 package org.dosomething.letsdothis.ui.adapters;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
@@ -43,8 +42,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private ArrayList<Object> dataSet = new ArrayList<>();
     private DetailsAdapterClickListener detailsAdapterClickListener;
     private Campaign                    currentCampaign;
-    private Uri selectedImageUri;
-    private int selectedPosition = -1;
+    private int selectedPosition = - 1;
 
     public CampaignDetailsAdapter(DetailsAdapterClickListener detailsAdapterClickListener, Resources resources)
     {
@@ -78,6 +76,11 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     {
         dataSet.addAll(reportBacks);
         notifyItemRangeInserted(dataSet.size() - reportBacks.size(), dataSet.size() - 1);
+    }
+
+    public Campaign getCampaign()
+    {
+        return currentCampaign;
     }
 
     public interface DetailsAdapterClickListener
