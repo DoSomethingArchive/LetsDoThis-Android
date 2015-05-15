@@ -1,6 +1,7 @@
 package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -52,9 +53,16 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
     private void initPager()
     {
         extraList = new ArrayList<>();
-        extraList.add(new IntroFragment.FragmentExtraHolder(true, "intro 1 text", null));
-        extraList.add(new IntroFragment.FragmentExtraHolder(false, "intro 2 text", null));
-        extraList.add(new IntroFragment.FragmentExtraHolder(true, "intro 3 text", null));
+        Resources resources = getResources();
+        extraList.add(new IntroFragment.FragmentExtraHolder(true,
+                                                            resources.getString(R.string.intro1),
+                                                            null));
+        extraList.add(new IntroFragment.FragmentExtraHolder(false,
+                                                            resources.getString(R.string.intro2),
+                                                            null));
+        extraList.add(new IntroFragment.FragmentExtraHolder(true,
+                                                            resources.getString(R.string.intro3),
+                                                            null));
         extraList.add(new IntroFragment.FragmentExtraHolder(true, null, null));
 
         pager = (ViewPager) findViewById(R.id.pager);

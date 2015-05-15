@@ -11,12 +11,10 @@
     <string name="people_doing_stuff">People doing stuff</string>
     <string name="phone_email">Phone Number or Email</string>
     <string name="password">Password</string>
-    <string name="footer_invite_code">If you received a code from a friend, put it here to join
-        their group right away.
-    </string>
+    <string name="footer_invite_code">Invited to this app by a friend? Just enter that invite code here!</string>
     <string name="invite_code_opt">Invite Code (optional)</string>
     <string name="sign_in">Sign in</string>
-    <string name="show_me_how">Show Me How</string>
+    <string name="show_me_how">Get Started</string>
     <string name="register">Register</string>
     <string name="create_account">Create Account</string>
     <string name="birthday">Birthday (mm/dd/yyyy)</string>
@@ -27,9 +25,7 @@
     <string name="share_photo">Share Photo</string>
     <string name="friends">Friends</string>
     <string name="fb_connect">FB Connect</string>
-    <string name="desc_login_reg">Create an account to save your\n activities and group up with
-        friends.
-    </string>
+    <string name="desc_login_reg">Let\’s make this official. Create an account to track your activities.</string>
     <string name="settings">Settings</string>
     <string name="rate">Rate Let\'s Do This</string>
     <string name="people_doing_it">People Doing It</string>
@@ -48,7 +44,7 @@
     <string name="share_invite">I want you to join the %1$s campaign with me, here\'s the code: %2$s.</string>
     <string name="done">Done</string>
     <string name="error_code_length">An invite code should be 15 characters long!</string>
-    <string name="tell_us">Tell us about yourself!</string>
+    <string name="tell_us">Let\'s get friendly.</string>
     <string name="footer_register">Have a DoSomething.org account? Sign in</string>
     <string name="prove_it">Prove It</string>
     <string name="desc_rewards">Invite your friends to get rewards copy. There are multiple
@@ -73,5 +69,14 @@
     </string>
     <string name="footer_campaign_invite">Inviting more friends means more fun!\nPlus you can get
         awesome rewards.
+    </string>
+    <string name="intro1">Get un-bored: Discover new things to do each month, based on your
+        interests. (Bonus: all of these ideas lead to some social good!)
+    </string>
+    <string name="intro2">Get social: Use exclusive invite codes to invite your friends to do an
+        action with you.
+    </string>
+    <string name="intro3">Get kudos: Submit your photo to show how baller you are and get kudos from
+        other users.
     </string>
 </resources>
