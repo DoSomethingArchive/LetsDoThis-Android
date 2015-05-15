@@ -60,6 +60,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         void groupClicked(int campaignId, String userId);
 
         void onProveShareClicked(Campaign campaign);
+
+        void onInviteClicked(Campaign campaign);
     }
 
     @Override
@@ -141,6 +143,16 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     hubAdapterClickListener.onProveShareClicked(campaign);
                 }
             });
+
+            currentCampaignViewHolder.invite.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    hubAdapterClickListener.onInviteClicked(campaign);
+                }
+            });
+
             if(size > 0)
             {
                 int friendSize = context.getResources().getDimensionPixelSize(R.dimen.friend_avatar);

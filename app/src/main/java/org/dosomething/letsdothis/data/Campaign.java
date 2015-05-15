@@ -17,5 +17,7 @@ public class Campaign
     public String solutionSupport;
     public String problemFact;
     public String count;
-    public List<User> group = new ArrayList<>();
+    public List<User> group  = new ArrayList<>();
+    //FIXME invite code will come from the user's campaign data
+    public Invite     invite = new Invite();
 }
