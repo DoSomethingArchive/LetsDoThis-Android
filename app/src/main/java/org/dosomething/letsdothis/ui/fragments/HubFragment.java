@@ -27,6 +27,7 @@ import org.dosomething.letsdothis.tasks.GetPastUserCampaignTask;
 import org.dosomething.letsdothis.ui.CampaignInviteActivity;
 import org.dosomething.letsdothis.ui.GroupActivity;
 import org.dosomething.letsdothis.ui.PhotoCropActivity;
+import org.dosomething.letsdothis.ui.PublicProfileActivity;
 import org.dosomething.letsdothis.ui.SettingsActivity;
 import org.dosomething.letsdothis.ui.UserListActivity;
 import org.dosomething.letsdothis.ui.UserProfileActivity;
@@ -48,14 +49,21 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final  String TAG            = HubFragment.class.getSimpleName();
     private static final int    SELECT_PICTURE = 55;
+    public static final  String PUBLIC_PROFILE = "PUBLIC_PROFILE";
 
+    //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private HubAdapter         adapter;
     private SetToolbarListener setToolbarListener;
     private Uri                imageUri;
 
-    public static HubFragment newInstance()
+    public static HubFragment newInstance(boolean isPublic)
     {
-        return new HubFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(PUBLIC_PROFILE, isPublic);
+        HubFragment fragment = new HubFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
     }
 
     @Override
@@ -78,19 +86,21 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
         EventBusExt.getDefault().register(this);
         String currentUserId = AppPrefs.getInstance(getActivity()).getCurrentUserId();
         TaskQueue.loadQueueDefault(getActivity())
-                 .execute(new GetCurrentUserCampaignTask(currentUserId));
+                .execute(new GetCurrentUserCampaignTask(currentUserId));
         TaskQueue.loadQueueDefault(getActivity())
-                 .execute(new GetPastUserCampaignTask(currentUserId));
+                .execute(new GetPastUserCampaignTask(currentUserId));
 
         View rootView = inflater
                 .inflate(R.layout.activity_fragment_quickreturn_recycler, container, false);
         recycleView = (RecyclerView) rootView.findViewById(R.id.recycler);
+
 
         toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
         TextView title = (TextView) rootView.findViewById(R.id.toolbar_title);
         toolbar.setTitle("");
         title.setText(getString(R.string.app_name));
         setToolbarListener.setToolbar(toolbar);
+
 
         return rootView;
     }
@@ -109,13 +119,21 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
         super.onActivityCreated(savedInstanceState);
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
 
+        //FIXME get real user
         User user = new User(null, "firstName", "lastName", "birthday");
-        adapter = new HubAdapter(user, this);
+        user.id =             AppPrefs.getInstance(getActivity()).getCurrentUserId();
+
+        boolean isPublic = getArguments().getBoolean(PUBLIC_PROFILE);
+        if(isPublic)
+        {
+            user.first_name = "public";
+        }
+
+        adapter = new HubAdapter(user, this, isPublic);
         recyclerView.setAdapter(adapter);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
     }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
@@ -160,6 +178,12 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
         {
             adapter.addPastCampaign(task.campaignList);
         }
+    }
+
+    @Override
+    public void friendClicked(String friendId)
+    {
+        startActivity(PublicProfileActivity.getLaunchIntent(getActivity()));
     }
 
     @Override
@@ -229,9 +253,9 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
         pickIntent.setType("image/*");
 
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File externalFile = new File(getActivity().getExternalFilesDir(
-                Environment.DIRECTORY_PICTURES),
-                                     "report_back" + System.currentTimeMillis() + ".jpg");
+        File externalFile = new File(
+                getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                "report_back" + System.currentTimeMillis() + ".jpg");
         imageUri = Uri.fromFile(externalFile);
         if(BuildConfig.DEBUG)
         {
@@ -249,7 +273,6 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
 
     public interface SetToolbarListener
     {
-         abstract void setToolbar(Toolbar toolbar);
-
+         void setToolbar(Toolbar toolbar);
     }
 }
