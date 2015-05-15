@@ -18,7 +18,7 @@ import co.touchlab.android.threading.tasks.TaskQueue;
  */
 public class LoginActivity extends BaseActivity
 {
-    private static final String TAG        = LoginActivity.class.getSimpleName();
+    private static final String TAG = LoginActivity.class.getSimpleName();
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private EditText phoneEmail;
@@ -37,6 +37,7 @@ public class LoginActivity extends BaseActivity
         setContentView(R.layout.activity_login);
 
         initLoginListener();
+        initLightning();
 
         findViewById(R.id.register).setOnClickListener(new View.OnClickListener()
         {
@@ -72,7 +73,6 @@ public class LoginActivity extends BaseActivity
         });
 
     }
-
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(LoginTask task)
