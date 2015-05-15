@@ -11,6 +11,9 @@
         android:layout_height="wrap_content"
         style="@style/SignInText"
         android:layout_marginTop="@dimen/padding_large"
+        android:paddingLeft="@dimen/padding_large"
+        android:paddingRight="@dimen/padding_large"
+        android:gravity="center"
         android:text="@string/desc_login_reg"/>
 
 
