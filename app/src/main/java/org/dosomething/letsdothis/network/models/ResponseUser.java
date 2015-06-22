@@ -7,22 +7,27 @@ import org.dosomething.letsdothis.data.User;
 public class ResponseUser
 {
 
-    String email;
-    String mobile;
-    String first_name;
-    String last_name;
-    String _id;
-    String birthdate;
+    public Wrapper data;
+
+    public static class Wrapper
+    {
+        String email;
+        String mobile;
+        String first_name;
+        String last_name;
+        String _id;
+        String birthdate;
+    }
 
     public static User getUser(ResponseUser response)
     {
         User user = new User();
-        user.email = response.email;
-        user.mobile = response.mobile;
-        user.first_name = response.first_name;
-        user.last_name = response.last_name;
-        user.id = response._id;
-        user.birthdate = response.birthdate;
+        user.email = response.data.email;
+        user.mobile = response.data.mobile;
+        user.first_name = response.data.first_name;
+        user.last_name = response.data.last_name;
+        user.id = response.data._id;
+        user.birthdate = response.data.birthdate;
         return user;
     }
 

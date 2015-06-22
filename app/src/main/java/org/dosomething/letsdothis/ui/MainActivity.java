@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
@@ -44,6 +45,9 @@ public class MainActivity extends BaseActivity implements HubFragment.SetToolbar
 
     private void initBottomBarNav()
     {
+        final View drawer = findViewById(R.id.drawer);
+        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         actions = findViewById(R.id.actions);
         actions.setSelected(true);
         actions.setOnClickListener(new View.OnClickListener()
@@ -54,6 +58,7 @@ public class MainActivity extends BaseActivity implements HubFragment.SetToolbar
                 if(! actions.isSelected())
                 {
                     replaceCurrentFragment(ActionsFragment.newInstance(), ActionsFragment.TAG);
+                    drawerLayout.closeDrawer(drawer);
                 }
             }
         });
@@ -67,6 +72,7 @@ public class MainActivity extends BaseActivity implements HubFragment.SetToolbar
                 if(! hub.isSelected())
                 {
                     replaceCurrentFragment(HubFragment.newInstance(false), HubFragment.TAG);
+                    drawerLayout.closeDrawer(drawer);
                 }
             }
         });
@@ -80,6 +86,7 @@ public class MainActivity extends BaseActivity implements HubFragment.SetToolbar
                 if(! invites.isSelected())
                 {
                     replaceCurrentFragment(InvitesFragment.newInstance(), InvitesFragment.TAG);
+                    drawerLayout.closeDrawer(drawer);
                 }
             }
         });
@@ -92,16 +99,31 @@ public class MainActivity extends BaseActivity implements HubFragment.SetToolbar
             {
                 if(! notifications.isSelected())
                 {
-                    replaceCurrentFragment(NotificationsFragment.newInstance(), NotificationsFragment.TAG);
+                    replaceCurrentFragment(NotificationsFragment.newInstance(),
+                                           NotificationsFragment.TAG);
+                    drawerLayout.closeDrawer(drawer);
                 }
             }
         });
+
+        View setting = findViewById(R.id.setting);
+        setting.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(SettingsActivity.getLaunchIntent(MainActivity.this));
+                drawerLayout.closeDrawer(drawer);
+            }
+        });
+
+
     }
 
     private void replaceCurrentFragment(Fragment fragment, String tag)
     {
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, tag)
-                                   .commit();
+                .commit();
         getSupportFragmentManager().executePendingTransactions();
         updateNavBar();
     }
