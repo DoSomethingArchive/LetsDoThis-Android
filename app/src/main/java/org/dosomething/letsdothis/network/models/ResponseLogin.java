@@ -9,11 +9,14 @@ public class ResponseLogin
     public static class Wrapper
     {
         public String email;
-        public String phone;
+        public String mobile;
         public String created_at;
         public String updated_at;
         public String _id;
         public String session_token;
+        public String first_name;
+        public String last_name;
+        public String birthday;
     }
 
 

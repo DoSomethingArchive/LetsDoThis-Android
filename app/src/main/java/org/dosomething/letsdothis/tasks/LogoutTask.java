@@ -18,17 +18,16 @@ public class LogoutTask extends BaseNetworkErrorHandlerTask
     @Override
     protected void run(Context context) throws Throwable
     {
-        AppPrefs.getInstance(context).logout();
         LDTApplication.loginManager.logOut();
         EventBusExt.getDefault().post(this);
-
 
         Response response = NetworkHelper.getNorthstarAPIService()
                                        .logout(AppPrefs.getInstance(context).getSessionToken());
 
         if(response != null && response.getStatus() == HttpURLConnection.HTTP_OK)
         {
-            //MARKME we can potentially do some sort of check later or keep the session token if it fails
+            AppPrefs.getInstance(context).logout();
+            //FIXME switch to using persisted task
         }
 
     }
@@ -36,6 +35,6 @@ public class LogoutTask extends BaseNetworkErrorHandlerTask
     @Override
     protected boolean handleError(Context context, Throwable throwable)
     {
-        return false;
+        return true;
     }
 }
