@@ -37,6 +37,7 @@
     <string name="change_photo">Change Photo</string>
     <string name="receive_notifications">Receive Notifications</string>
     <string name="change_email">Change Email</string>
+    <string name="change_number">Change Number</string>
     <string name="change_password">Change Password</string>
     <string name="password_hint">********</string>
     <string name="logout">Log Out</string>
@@ -75,4 +76,9 @@
     <string name="footer_campaign_invite">Inviting more friends means more fun!\nPlus you can get
         awesome rewards.
     </string>
+    <string name="change_phone_hint">Enter a new phone number</string>
+    <string name="change_email_hint">Enter a new email</string>
+    <string name="change_password_old_hint">Enter your old password</string>
+    <string name="change_password1_hint">Enter the new password</string>
+    <string name="change_password2_hint">Re-enter the new password</string>
 </resources>

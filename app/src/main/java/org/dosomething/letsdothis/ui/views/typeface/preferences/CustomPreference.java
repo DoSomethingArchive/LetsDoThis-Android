@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
+import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.views.typeface.CustomTypefaceSpan;
 import org.dosomething.letsdothis.ui.views.typeface.TypefaceManager;
 import org.jetbrains.annotations.NotNull;
@@ -57,6 +58,5 @@ public class CustomPreference extends Preference
         titleView.setTypeface(TypefaceManager.obtainTypeface(getContext(), TypefaceManager.BRANDON_REGULAR));
         TextView summaryView = (TextView) view.findViewById(android.R.id.summary);
         summaryView.setTypeface(TypefaceManager.obtainTypeface(getContext(), TypefaceManager.BRANDON_REGULAR));
-
     }
 }
