@@ -9,12 +9,19 @@ import android.widget.TextView;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.LogoutTask;
+import org.dosomething.letsdothis.ui.fragments.SettingsFragment;
 
 /**
  * Created by izzyoji :) on 4/29/15.
  */
 public class SettingsActivity extends BaseActivity
 {
+
+    public static Intent getLaunchIntent(Context context)
+    {
+        return new Intent(context, SettingsActivity.class);
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
@@ -27,25 +34,23 @@ public class SettingsActivity extends BaseActivity
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, SettingsFragment.newInstance()).commit();
     }
 
-    public static Intent getLaunchIntent(Context context)
-    {
-        return new Intent(context, SettingsActivity.class);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch(item.getItemId())
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item)
         {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+            switch(item.getItemId())
+            {
+                case android.R.id.home:
+                    onBackPressed();
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
         }
-    }
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(LogoutTask task)
@@ -53,4 +58,17 @@ public class SettingsActivity extends BaseActivity
         sendBroadcast(new Intent(BaseActivity.LOGOUT_SUCCESS));
         startActivity(RegisterLoginActivity.getLaunchIntent(this));
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        if(getFragmentManager().getBackStackEntryCount() > 0)
+        {
+            getFragmentManager().popBackStack();
+            return;
+        }
+
+        super.onBackPressed();
+    }
+
 }

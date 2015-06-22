@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory
+        android:title="@string/notifications">
+        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomSwitchPreference
+            android:defaultValue="true"
+            android:enabled="true"
+            android:key="setting_0"
+            android:title="setting_0"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomSwitchPreference
+            android:defaultValue="true"
+            android:enabled="true"
+            android:key="setting_1"
+            android:title="setting_1"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomSwitchPreference
+            android:defaultValue="true"
+            android:enabled="true"
+            android:key="setting_2"
+            android:title="setting_2"/>
+    </org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory>
+
+</PreferenceScreen>

@@ -4,12 +4,17 @@ package org.dosomething.letsdothis.network.models;
  */
 public class ResponseLogin
 {
-    public String email;
-    public String phone;
-    public String created_at;
-    public String updated_at;
-    public String _id;
-    public String session_token;
+    public Wrapper data;
+
+    public static class Wrapper
+    {
+        public String email;
+        public String phone;
+        public String created_at;
+        public String updated_at;
+        public String _id;
+        public String session_token;
+    }
 
 
     //    email: "cooldude6",

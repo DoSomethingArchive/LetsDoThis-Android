@@ -32,13 +32,11 @@ public class LoginTask extends BaseRegistrationTask
         if(matchesEmail(phoneEmail))
         {
             response = NetworkHelper.getNorthstarAPIService().loginWithEmail(phoneEmail, password);
-
             user = new User(phoneEmail, null, null);
         }
         else
         {
             response = NetworkHelper.getNorthstarAPIService().loginWithMobile(phoneEmail, password);
-
             user = new User(null, phoneEmail, null);
         }
 
@@ -49,10 +47,10 @@ public class LoginTask extends BaseRegistrationTask
     {
         if(response != null)
         {
-            if(response._id != null)
+            if(response.data._id != null)
             {
-                user.id = response._id;
-                AppPrefs.getInstance(context).setSessionToken(response.session_token);
+                user.id = response.data._id;
+                AppPrefs.getInstance(context).setSessionToken(response.data.session_token);
                 loginUser(context, user);
 
                 TaskQueue.loadQueueDefault(context).execute(new GetUserTask(user.id));
