@@ -1,80 +1,25 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context=".MainActivity"
-                android:orientation="vertical"
-                tools:ignore="MergeRootFrame">
+<android.support.v4.widget.DrawerLayout
+    android:id="@+id/drawer_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/bottom_nav"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_gravity="bottom"
-        android:orientation="horizontal"
-        android:background="@color/nav_bar"
-        android:layout_height="@dimen/height_nav_bar"
-        android:layout_alignParentBottom="true">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".MainActivity"
+        tools:ignore="MergeRootFrame">
 
 
-        <LinearLayout
-            android:id="@+id/actions"
-            style="@style/NavButtonHolder">
-            <ImageView
-                style="@style/NavButtonImage"
-                android:src="@drawable/ic_actions"/>
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-                style="@style/NavButtonText"
-                android:text="@string/actions"/>
-        </LinearLayout>
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
+    </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/hub"
-            style="@style/NavButtonHolder">
-            <ImageView
-                style="@style/NavButtonImage"
-                android:src="@drawable/ic_hub"/>
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-                style="@style/NavButtonText"
-                android:text="@string/hub"/>
-        </LinearLayout>
+    <include layout="@layout/drawer"/>
 
-        <LinearLayout
-            android:id="@+id/invites"
-            style="@style/NavButtonHolder">
-            <ImageView
-                style="@style/NavButtonImage"
-                android:src="@drawable/ic_invites"/>
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-                style="@style/NavButtonText"
-                android:text="@string/invites"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/notifications"
-            style="@style/NavButtonHolder">
-            <ImageView
-                style="@style/NavButtonImage"
-                android:src="@drawable/ic_notifications"/>
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-                style="@style/NavButtonText"
-                android:text="@string/notifications"/>
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_above="@id/bottom_nav"
-        android:background="@android:color/darker_gray"/>
-
-    <FrameLayout
-        android:id="@+id/container"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@+id/divider"/>
-
-
-</RelativeLayout>
+</android.support.v4.widget.DrawerLayout>
