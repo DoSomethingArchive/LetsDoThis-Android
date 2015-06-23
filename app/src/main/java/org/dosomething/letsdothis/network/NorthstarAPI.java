@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.network;
+import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 import org.dosomething.letsdothis.network.models.ResponseRegister;
@@ -28,7 +29,9 @@ import retrofit.mime.TypedInput;
 public interface NorthstarAPI
 {
 
-    public static final String BASE_URL = "https://api.dosomething.org/v1/";
+    public static final String BASE_URL = BuildConfig.DEBUG
+            ? "http://northstar-qa.dosomething.org"
+            : "http://northstar.dosomething.org";
 
     @FormUrlEncoded
     @POST("/login")
