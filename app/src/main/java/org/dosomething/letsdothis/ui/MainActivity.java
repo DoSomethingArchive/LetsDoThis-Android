@@ -40,10 +40,11 @@ public class MainActivity extends BaseActivity implements HubFragment.SetToolbar
                     .commit();
         }
 
-        initBottomBarNav();
+        initDrawer();
     }
 
-    private void initBottomBarNav()
+    //TODO the drawer should have a list view, then we won't need all this logic
+    private void initDrawer()
     {
         final View drawer = findViewById(R.id.drawer);
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
