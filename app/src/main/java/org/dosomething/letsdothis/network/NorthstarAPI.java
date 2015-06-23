@@ -59,7 +59,7 @@ public interface NorthstarAPI
     ResponseUser[] userProfile(@Path("id") String id) throws NetworkException;
 
     @GET("/users/drupal_id/{id}")
-    ResponseUser[] userProfileWithDrupalId(@Path("id") String id) throws NetworkException;
+    ResponseUser userProfileWithDrupalId(@Path("id") String id) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @PUT("/users/{id}")
