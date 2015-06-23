@@ -4,6 +4,7 @@ import android.content.Context;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.ResponseRegister;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
@@ -52,9 +53,15 @@ public class RegisterTask extends BaseRegistrationTask
     {
         if(response != null)
         {
-            if(response._id != null)
+            if(response.data._id != null)
             {
-                user.id = response._id;
+                user.id = response.data._id;
+                user.email = response.data.email;
+                user.birthdate = response.data.birthday;
+                user.first_name = response.data.first_name;
+                user.last_name = response.data.last_name;
+
+                AppPrefs.getInstance(context).setSessionToken(response.data.session_token);
                 loginUser(context, user);
                 //FIXME: need to get the session token here
             }

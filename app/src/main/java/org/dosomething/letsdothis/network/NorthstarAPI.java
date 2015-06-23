@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.network;
+import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 import org.dosomething.letsdothis.network.models.ResponseRegister;
@@ -28,7 +29,9 @@ import retrofit.mime.TypedInput;
 public interface NorthstarAPI
 {
 
-    public static final String BASE_URL = "https://api.dosomething.org/v1/";
+    public static final String BASE_URL = BuildConfig.DEBUG
+            ? "http://northstar-qa.dosomething.org/v1"
+            : "http://northstar.dosomething.org/v1";
 
     @FormUrlEncoded
     @POST("/login")
@@ -41,12 +44,12 @@ public interface NorthstarAPI
             "password") String password) throws NetworkException;
 
     @Headers("Content-Type: application/json")
-    @POST("/users")
+    @POST("/users?create_drupal_user=1")
     ResponseRegister registerWithEmail(@Body User user) throws NetworkException;
 
     @Headers("Content-Type: application/json")
-    @POST("/users")
-    ResponseRegister registerWithMobile(@Body User json) throws NetworkException;
+    @POST("/users?create_drupal_user=1")
+    ResponseRegister registerWithMobile(@Body User user) throws NetworkException;
 
     @GET("/users")
     ResponseUserList userList(@Query("page") int page, @Query(
@@ -56,7 +59,7 @@ public interface NorthstarAPI
     ResponseUser[] userProfile(@Path("id") String id) throws NetworkException;
 
     @GET("/users/drupal_id/{id}")
-    ResponseUser[] userProfileWithDrupalId(@Path("id") String id) throws NetworkException;
+    ResponseUser userProfileWithDrupalId(@Path("id") String id) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @PUT("/users/{id}")
