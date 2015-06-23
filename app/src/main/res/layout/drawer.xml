@@ -5,7 +5,6 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
                 android:background="@color/white"
-                android:clickable="true"
                 android:divider="@android:color/transparent"
                 android:dividerHeight="0dp">
 
@@ -41,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="setting"
+            android:text="@string/settings"
             android:textColor="@color/dark_gray"/>
     </LinearLayout>
 
@@ -75,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:text="notification"
+                android:text="@string/notifications"
                 android:textColor="@color/dark_gray"/>
         </LinearLayout>
 
@@ -94,7 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:text="notification"
+                android:text="@string/hub"
                 android:textColor="@color/dark_gray"/>
         </LinearLayout>
         <LinearLayout
@@ -112,7 +111,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:text="notification"
+                android:text="@string/invites"
                 android:textColor="@color/dark_gray"/>
         </LinearLayout>
         <LinearLayout
@@ -130,7 +129,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:text="notification"
+                android:text="@string/notifications"
                 android:textColor="@color/dark_gray"/>
         </LinearLayout>
 
