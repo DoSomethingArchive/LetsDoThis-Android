@@ -4,9 +4,20 @@ package org.dosomething.letsdothis.network.models;
  */
 public class ResponseRegister
 {
-    public String created_at;
-    public String _id;
+    public Wrapper data;
 
-//    created_at: 2000-01-01T00:00:00Z,
-//    _id: some sort of hash value
+    public static class Wrapper
+    {
+        public String  _id;
+        public String  email;
+        public String  birthday;
+        public String  first_name;
+        public String  last_name;
+        public Integer drupal_id;
+        public String  session_token;
+        public String  updated_at;
+        public String  created_at;
+        //    created_at: 2000-01-01T00:00:00Z,
+        //    _id: some sort of hash value
+    }
 }

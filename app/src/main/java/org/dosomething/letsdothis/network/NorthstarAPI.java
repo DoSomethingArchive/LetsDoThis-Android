@@ -30,8 +30,8 @@ public interface NorthstarAPI
 {
 
     public static final String BASE_URL = BuildConfig.DEBUG
-            ? "http://northstar-qa.dosomething.org"
-            : "http://northstar.dosomething.org";
+            ? "http://northstar-qa.dosomething.org/v1"
+            : "http://northstar.dosomething.org/v1";
 
     @FormUrlEncoded
     @POST("/login")
@@ -44,12 +44,12 @@ public interface NorthstarAPI
             "password") String password) throws NetworkException;
 
     @Headers("Content-Type: application/json")
-    @POST("/users")
+    @POST("/users?create_drupal_user=1")
     ResponseRegister registerWithEmail(@Body User user) throws NetworkException;
 
     @Headers("Content-Type: application/json")
-    @POST("/users")
-    ResponseRegister registerWithMobile(@Body User json) throws NetworkException;
+    @POST("/users?create_drupal_user=1")
+    ResponseRegister registerWithMobile(@Body User user) throws NetworkException;
 
     @GET("/users")
     ResponseUserList userList(@Query("page") int page, @Query(
