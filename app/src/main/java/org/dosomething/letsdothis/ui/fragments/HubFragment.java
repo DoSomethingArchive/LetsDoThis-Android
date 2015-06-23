@@ -135,33 +135,6 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
         recyclerView.setLayoutManager(layoutManager);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-    {
-        inflater.inflate(R.menu.fragment_hub, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch(item.getItemId())
-        {
-            case R.id.settings:
-                startActivity(SettingsActivity.getLaunchIntent(getActivity()));
-                break;
-            case R.id.user_list:
-                startActivity(UserListActivity.getLaunchIntent(getActivity()));
-                break;
-            case R.id.edit_user:
-                startActivity(UserUpdateActivity.getLaunchIntent(getActivity()));
-                break;
-            case R.id.one_user:
-                startActivity(UserProfileActivity.getLaunchIntent(getActivity()));
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(GetCurrentUserCampaignTask task)
     {
