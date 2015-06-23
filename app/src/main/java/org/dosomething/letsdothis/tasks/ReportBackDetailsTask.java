@@ -31,9 +31,9 @@ public class ReportBackDetailsTask extends BaseNetworkErrorHandlerTask
         reportBack = ResponseReportBack.getReportBack(response);
 
 
-        ResponseUser[] responseUser = NetworkHelper.getNorthstarAPIService()
+        ResponseUser responseUser = NetworkHelper.getNorthstarAPIService()
                                                    .userProfileWithDrupalId(reportBack.user.id);
-        user = ResponseUser.getUser(responseUser[0]);
+        user = ResponseUser.getUser(responseUser);
     }
 
     @Override
