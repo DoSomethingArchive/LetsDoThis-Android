@@ -36,7 +36,7 @@ public class NetworkHelper
             @Override
             public void intercept(RequestFacade request)
             {
-                request.addHeader("X-DS-Application-Id", "android");
+                request.addHeader("X-DS-Application-Id", "456");
                 request.addHeader("X-DS-REST-API-Key",
                                   LDTApplication.getContext().getString(R.string.api_key));
             }
