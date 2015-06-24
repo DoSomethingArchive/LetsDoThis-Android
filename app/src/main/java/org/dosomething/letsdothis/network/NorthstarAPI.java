@@ -1,4 +1,6 @@
 package org.dosomething.letsdothis.network;
+import android.net.Uri;
+
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
@@ -17,10 +19,13 @@ import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.Headers;
+import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.PUT;
+import retrofit.http.Part;
 import retrofit.http.Path;
 import retrofit.http.Query;
+import retrofit.mime.TypedFile;
 import retrofit.mime.TypedInput;
 
 /**
@@ -56,7 +61,7 @@ public interface NorthstarAPI
             "limit") int limit) throws NetworkException;
 
     @GET("/users/_id/{id}")
-    ResponseUser[] userProfile(@Path("id") String id) throws NetworkException;
+    ResponseUser userProfile(@Path("id") String id) throws NetworkException;
 
     @GET("/users/drupal_id/{id}")
     ResponseUser userProfileWithDrupalId(@Path("id") String id) throws NetworkException;
@@ -104,5 +109,7 @@ public interface NorthstarAPI
             "sat_math") int satMath, @Query("sat_verbal") int satVerbal, @Query(
             "sat_writing") int satWriting) throws NetworkException;
 
-
+    @Multipart
+    @POST("/users/{id}/avatar")
+    public Response uploadAvatar(@Path("id") String id, @Part("photo") TypedFile file) throws NetworkException;
 }

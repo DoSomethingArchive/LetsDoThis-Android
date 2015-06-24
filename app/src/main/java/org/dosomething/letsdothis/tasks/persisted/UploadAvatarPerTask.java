@@ -1,0 +1,57 @@
+package org.dosomething.letsdothis.tasks.persisted;
+import android.content.Context;
+
+import com.j256.ormlite.dao.Dao;
+
+import org.dosomething.letsdothis.data.DatabaseHelper;
+import org.dosomething.letsdothis.data.User;
+import org.dosomething.letsdothis.network.NetworkHelper;
+
+import java.io.File;
+
+import co.touchlab.android.threading.eventbus.EventBusExt;
+import co.touchlab.android.threading.tasks.Task;
+import retrofit.mime.TypedFile;
+
+/**
+ * Created by toidiu on 4/16/15.
+ */
+public class UploadAvatarPerTask extends Task
+{
+    private String filePath;
+    private String userId;
+    public  User   user;
+
+    public UploadAvatarPerTask(String id, String filePath)
+    {
+        this.userId = id;
+        this.filePath = filePath;
+    }
+
+    @Override
+    protected void run(Context context) throws Throwable
+    {
+        File file = new File(filePath);
+        Dao<User, String> userDao = DatabaseHelper.getInstance(context).getUserDao();
+        user = userDao.queryForId(userId);
+        user.avatarPath = file.getAbsolutePath();
+        userDao.createOrUpdate(user);
+        EventBusExt.getDefault().post(this);
+
+        TypedFile typedFile = new TypedFile("multipart/form-data", file);
+        NetworkHelper.getNorthstarAPIService().uploadAvatar(userId, typedFile);
+    }
+
+    @Override
+    protected boolean handleError(Context context, Throwable e)
+    {
+        return false;
+    }
+
+    @Override
+    protected void onComplete(Context context)
+    {
+        EventBusExt.getDefault().post(this);
+        super.onComplete(context);
+    }
+}
