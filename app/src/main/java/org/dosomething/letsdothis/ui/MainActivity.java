@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import org.dosomething.letsdothis.R;
@@ -117,8 +119,6 @@ public class MainActivity extends BaseActivity implements HubFragment.SetToolbar
                 drawerLayout.closeDrawer(drawer);
             }
         });
-
-
     }
 
     private void replaceCurrentFragment(Fragment fragment, String tag)
@@ -145,6 +145,21 @@ public class MainActivity extends BaseActivity implements HubFragment.SetToolbar
     public void setToolbar(Toolbar toolbar)
     {
         setSupportActionBar(toolbar);
+
+        //FIXME standardize the toolbar
+        final View drawer = findViewById(R.id.drawer);
+        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(
+                this,  drawerLayout, toolbar,
+                R.string.invite_code_opt, R.string.account
+        );
+
+
+        drawerLayout.setDrawerListener(mDrawerToggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        mDrawerToggle.syncState();
     }
 
 
