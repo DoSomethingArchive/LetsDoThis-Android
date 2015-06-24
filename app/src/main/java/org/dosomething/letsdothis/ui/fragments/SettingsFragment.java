@@ -1,21 +1,40 @@
 package org.dosomething.letsdothis.ui.fragments;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.provider.MediaStore;
+import android.util.Log;
 
+import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.tasks.persisted.UploadAvatarPerTask;
 import org.dosomething.letsdothis.ui.BaseActivity;
 import org.dosomething.letsdothis.ui.ChangeEmailActivity;
 import org.dosomething.letsdothis.ui.ChangeNumberActivity;
 import org.dosomething.letsdothis.ui.ChangePasswordActivity;
+import org.dosomething.letsdothis.utils.AppPrefs;
+
+import java.io.File;
+
+import co.touchlab.android.threading.tasks.TaskQueue;
 
 /**
  * Created by izzyoji :) on 4/29/15.
  */
 public class SettingsFragment extends PreferenceFragment implements ConfirmDialog.ConfirmListener
 {
+
+    //~=~=~=~=~=~=~=~=~=~=~=~=Constants
+    public static final int SELECT_PICTURE = 47539;
+    //~=~=~=~=~=~=~=~=~=~=~=~=Fields
+    private Uri imageUri;
+
 
     public static SettingsFragment newInstance()
     {
@@ -33,6 +52,7 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
         initChangeNotifications();
         initChangePassword();
         initChangePhone();
+        initChangePhoto();
     }
 
     private void initLogout()
@@ -47,6 +67,22 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                                 .newInstance(getString(R.string.prompt_logout));
                         confirmDialog.setListener(SettingsFragment.this);
                         confirmDialog.show(getFragmentManager(), ConfirmDialog.TAG);
+                        return true;
+                    }
+                });
+    }
+
+    private void initChangePhoto()
+    {
+        findPreference(getString(R.string.change_photo))
+                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
+                {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference)
+                    {
+
+                        choosePicture();
+                        //                        startActivity(ChangeNumberActivity.getLaunchIntent(getActivity()));
                         return true;
                     }
                 });
@@ -132,5 +168,92 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
         BaseActivity.logOutUser(getActivity());
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if(resultCode == Activity.RESULT_OK)
+        {
+            if(requestCode == SELECT_PICTURE)
+            {
+                final boolean isCamera;
+                if(data == null)
+                {
+                    isCamera = true;
+                }
+                else
+                {
+                    final String action = data.getAction();
+                    if(action == null)
+                    {
+                        isCamera = false;
+                    }
+                    else
+                    {
+                        isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    }
+                }
 
+                Uri selectedImageUri;
+                String realPathFromURI;
+                if(isCamera)
+                {
+                    selectedImageUri = imageUri;
+                    realPathFromURI = selectedImageUri.toString().replaceFirst("file://", "");
+                }
+                else
+                {
+                    selectedImageUri = data.getData();
+                    realPathFromURI = getRealPathFromURI(getActivity(), selectedImageUri);
+                }
+
+                String id = AppPrefs.getInstance(getActivity()).getCurrentUserId();
+                TaskQueue.loadQueueDefault(getActivity())
+                        .execute(new UploadAvatarPerTask(id, realPathFromURI));
+            }
+        }
+    }
+
+    public String getRealPathFromURI(Context context, Uri contentUri)
+    {
+        Cursor cursor = null;
+        try
+        {
+            String[] proj = {MediaStore.Images.Media.DATA};
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        }
+        finally
+        {
+            if(cursor != null)
+            {
+                cursor.close();
+            }
+        }
+    }
+
+    public void choosePicture()
+    {
+        Intent pickIntent = new Intent(Intent.ACTION_PICK,
+                                       android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setType("image/*");
+
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File externalFile = new File(
+                getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                "user_profile" + ".jpg");
+        imageUri = Uri.fromFile(externalFile);
+        if(BuildConfig.DEBUG)
+        {
+            Log.d("photo location", imageUri.toString());
+        }
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+
+        String pickTitle = getString(R.string.select_picture);
+        Intent chooserIntent = Intent.createChooser(takePhotoIntent, pickTitle);
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+
+        startActivityForResult(chooserIntent, SELECT_PICTURE);
+    }
 }

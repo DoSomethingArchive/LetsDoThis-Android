@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.User;
-import org.dosomething.letsdothis.tasks.DbGetUser;
+import org.dosomething.letsdothis.tasks.DbGetUserTask;
 import org.dosomething.letsdothis.tasks.UpdateUserTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
@@ -42,7 +42,7 @@ public class UserUpdateActivity extends BaseActivity
         initSubmitListener();
 
         String id = AppPrefs.getInstance(this).getCurrentUserId();
-        TaskQueue.loadQueueDefault(this).execute(new DbGetUser(id));
+        TaskQueue.loadQueueDefault(this).execute(new DbGetUserTask(id));
     }
 
     private void initSubmitListener()
@@ -87,7 +87,7 @@ public class UserUpdateActivity extends BaseActivity
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(DbGetUser task)
+    public void onEventMainThread(DbGetUserTask task)
     {
         if(task.user != null)
         {

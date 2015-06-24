@@ -11,9 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -21,17 +18,15 @@ import android.widget.TextView;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
-import org.dosomething.letsdothis.data.User;
+import org.dosomething.letsdothis.tasks.DbGetUserTask;
 import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignTask;
 import org.dosomething.letsdothis.tasks.GetPastUserCampaignTask;
+import org.dosomething.letsdothis.tasks.GetUserTask;
+import org.dosomething.letsdothis.tasks.persisted.UploadAvatarPerTask;
 import org.dosomething.letsdothis.ui.CampaignInviteActivity;
 import org.dosomething.letsdothis.ui.GroupActivity;
 import org.dosomething.letsdothis.ui.PhotoCropActivity;
 import org.dosomething.letsdothis.ui.PublicProfileActivity;
-import org.dosomething.letsdothis.ui.SettingsActivity;
-import org.dosomething.letsdothis.ui.UserListActivity;
-import org.dosomething.letsdothis.ui.UserProfileActivity;
-import org.dosomething.letsdothis.ui.UserUpdateActivity;
 import org.dosomething.letsdothis.ui.adapters.HubAdapter;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
@@ -83,7 +78,6 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        EventBusExt.getDefault().register(this);
         String currentUserId = AppPrefs.getInstance(getActivity()).getCurrentUserId();
         TaskQueue.loadQueueDefault(getActivity())
                 .execute(new GetCurrentUserCampaignTask(currentUserId));
@@ -94,13 +88,11 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
                 .inflate(R.layout.activity_fragment_quickreturn_recycler, container, false);
         recycleView = (RecyclerView) rootView.findViewById(R.id.recycler);
 
-
         toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
         TextView title = (TextView) rootView.findViewById(R.id.toolbar_title);
         toolbar.setTitle("");
         title.setText(getString(R.string.app_name));
         setToolbarListener.setToolbar(toolbar);
-
 
         return rootView;
     }
@@ -109,8 +101,26 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
     public void onStop()
     {
         super.onStop();
-        //FIXME I don't think this is the right place for this
         EventBusExt.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onResume()
+    {
+        EventBusExt.getDefault().register(this);
+        super.onResume();
+
+        boolean isPublic = getArguments().getBoolean(PUBLIC_PROFILE);
+        if(isPublic)
+        {
+            TaskQueue.loadQueueDefault(getActivity()).execute(
+                    new GetUserTask(AppPrefs.getInstance(getActivity()).getCurrentUserId()));
+        }
+        else
+        {
+            TaskQueue.loadQueueDefault(getActivity()).execute(
+                    new DbGetUserTask(AppPrefs.getInstance(getActivity()).getCurrentUserId()));
+        }
     }
 
     @Override
@@ -119,38 +129,11 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
         super.onActivityCreated(savedInstanceState);
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
 
-        //FIXME get real user
-        User user = new User(null, "firstName", "lastName", "birthday");
-        user.id =             AppPrefs.getInstance(getActivity()).getCurrentUserId();
-
         boolean isPublic = getArguments().getBoolean(PUBLIC_PROFILE);
-        if(isPublic)
-        {
-            user.first_name = "public";
-        }
-
-        adapter = new HubAdapter(user, this, isPublic);
+        adapter = new HubAdapter(this, isPublic);
         recyclerView.setAdapter(adapter);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(GetCurrentUserCampaignTask task)
-    {
-        if(! task.campaignList.isEmpty())
-        {
-            adapter.addCurrentCampaign(task.campaignList);
-        }
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(GetPastUserCampaignTask task)
-    {
-        if(! task.campaignList.isEmpty())
-        {
-            adapter.addPastCampaign(task.campaignList);
-        }
     }
 
     @Override
@@ -174,7 +157,8 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
     @Override
     public void onInviteClicked(Campaign campaign)
     {
-        startActivity(CampaignInviteActivity.getLaunchIntent(getActivity(), campaign.title, campaign.invite.code));
+        startActivity(CampaignInviteActivity.getLaunchIntent(getActivity(), campaign.title,
+                                                             campaign.invite.code));
     }
 
     @Override
@@ -243,9 +227,44 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
         startActivityForResult(chooserIntent, SELECT_PICTURE);
     }
 
-
     public interface SetToolbarListener
     {
-         void setToolbar(Toolbar toolbar);
+        void setToolbar(Toolbar toolbar);
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(GetCurrentUserCampaignTask task)
+    {
+        if(! task.campaignList.isEmpty())
+        {
+            adapter.addCurrentCampaign(task.campaignList);
+        }
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(GetUserTask task)
+    {
+        adapter.addUser(task.user);
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(DbGetUserTask task)
+    {
+        adapter.addUser(task.user);
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(UploadAvatarPerTask task)
+    {
+        adapter.addUser(task.user);
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(GetPastUserCampaignTask task)
+    {
+        if(! task.campaignList.isEmpty())
+        {
+            adapter.addPastCampaign(task.campaignList);
+        }
     }
 }

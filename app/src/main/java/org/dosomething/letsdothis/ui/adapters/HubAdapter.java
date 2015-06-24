@@ -45,16 +45,30 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private HubAdapterClickListener hubAdapterClickListener;
     private boolean isPublic = false;
 
-    public HubAdapter(User user, HubAdapterClickListener hubAdapterClickListener, boolean isPublic)
+    public HubAdapter(/*User user,*/ HubAdapterClickListener hubAdapterClickListener, boolean isPublic)
     {
         super();
-        this.user = user;
+        //        this.user = user;
         this.hubAdapterClickListener = hubAdapterClickListener;
-        this.hubList.add(user);
+        //        this.hubList.add(user);
         hubList.add(CURRENTLY_DOING);
         hubList.add(BEEN_THERE_DONE_GOOD);
         this.hubList.add(0, new PlaceHolder());
         this.isPublic = isPublic;
+    }
+
+    public void addUser(User user)
+    {
+        this.user = user;
+        if(hubList.get(1) instanceof User)
+        {
+            hubList.set(1, user);
+        }
+        else
+        {
+            hubList.add(1, user);
+        }
+        notifyDataSetChanged();
     }
 
     @Override
@@ -105,6 +119,11 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             User user = (User) hubList.get(position);
             ProfileViewHolder profileViewHolder = (ProfileViewHolder) holder;
+
+            String f = "file:" + user.avatarPath;
+            Picasso.with(((ProfileViewHolder) holder).userImage.getContext()).load(f)
+                    .resizeDimen(R.dimen.hub_avatar_height, R.dimen.hub_avatar_height)
+                    .into(profileViewHolder.userImage);
 
             profileViewHolder.name
                     .setText(String.format("%s %s.", user.first_name, user.last_name.charAt(0)));
@@ -172,8 +191,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     if(campaign.group.size() > i)
                     {
                         User friend = campaign.group.get(i);
-                        Picasso.with(context).load(friend.avatarPath)
-                                .resize(friendSize, 0).into(imageView);
+                        Picasso.with(context).load(friend.avatarPath).resize(friendSize, 0)
+                                .into(imageView);
                         childAt.setOnClickListener(new View.OnClickListener()
                         {
                             @Override
@@ -280,7 +299,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     {
         //        campaign.startTime  //FIXME get real expiration time
 
-        if(!isPublic)
+        if(! isPublic)
         {
             Long l = TimeUtils.getSampleExpirationTime();
             int i = hubList.indexOf(CURRENTLY_DOING);

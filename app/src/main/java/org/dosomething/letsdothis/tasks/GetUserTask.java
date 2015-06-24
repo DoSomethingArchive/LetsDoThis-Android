@@ -25,8 +25,8 @@ public class GetUserTask extends BaseNetworkErrorHandlerTask
     protected void run(Context context) throws Throwable
     {
 
-        ResponseUser[] response = NetworkHelper.getNorthstarAPIService().userProfile(id);
-        user = ResponseUser.getUser(response[0]);
+        ResponseUser response = NetworkHelper.getNorthstarAPIService().userProfile(id);
+        user = ResponseUser.getUser(response);
 
         DatabaseHelper.getInstance(context).getUserDao().createOrUpdate(user);
     }
