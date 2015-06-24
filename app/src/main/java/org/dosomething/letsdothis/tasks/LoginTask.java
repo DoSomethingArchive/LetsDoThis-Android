@@ -50,6 +50,7 @@ public class LoginTask extends BaseRegistrationTask
         {
             if(response.data._id != null)
             {
+                //FIXME should we get back a user avatar??
                 user.id = response.data._id;
                 user.email = response.data.email;
                 user.mobile = response.data.mobile;
