@@ -124,7 +124,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             Picasso.with(((ProfileViewHolder) holder).userImage.getContext()).load(user.avatarPath)
                     .resizeDimen(R.dimen.hub_avatar_height, R.dimen.hub_avatar_height)
                     .into(profileViewHolder.userImage);
-            Log.d("-p-p-p-p-pfffff", user.avatarPath);
+//            Log.d("-p-p-p-p-pfffff", user.avatarPath);
 
 
             profileViewHolder.name
