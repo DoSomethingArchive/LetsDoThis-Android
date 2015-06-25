@@ -71,7 +71,6 @@
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
 
-    <!--FIXME get real kudos resources-->
     <include layout="@layout/kudos"/>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
