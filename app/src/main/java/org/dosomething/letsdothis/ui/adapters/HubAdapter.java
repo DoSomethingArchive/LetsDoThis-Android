@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -120,10 +121,11 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             User user = (User) hubList.get(position);
             ProfileViewHolder profileViewHolder = (ProfileViewHolder) holder;
 
-            String f = "file:" + user.avatarPath;
-            Picasso.with(((ProfileViewHolder) holder).userImage.getContext()).load(f)
+            Picasso.with(((ProfileViewHolder) holder).userImage.getContext()).load(user.avatarPath)
                     .resizeDimen(R.dimen.hub_avatar_height, R.dimen.hub_avatar_height)
                     .into(profileViewHolder.userImage);
+            Log.d("-p-p-p-p-pfffff", user.avatarPath);
+
 
             profileViewHolder.name
                     .setText(String.format("%s %s.", user.first_name, user.last_name.charAt(0)));
@@ -191,8 +193,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     if(campaign.group.size() > i)
                     {
                         User friend = campaign.group.get(i);
-                        Picasso.with(context).load(friend.avatarPath).resize(friendSize, 0)
-                                .into(imageView);
+                        Picasso.with(context).load(friend.avatarPath).resize(friendSize, 0).into(imageView);
                         childAt.setOnClickListener(new View.OnClickListener()
                         {
                             @Override

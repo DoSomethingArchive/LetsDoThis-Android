@@ -57,6 +57,7 @@ public class LoginTask extends BaseRegistrationTask
                 user.first_name = response.data.first_name;
                 user.last_name = response.data.last_name;
                 user.birthdate = response.data.birthday;
+                user.avatarPath = response.data.avatar;
                 AppPrefs.getInstance(context).setSessionToken(response.data.session_token);
                 loginUser(context, user);
 
