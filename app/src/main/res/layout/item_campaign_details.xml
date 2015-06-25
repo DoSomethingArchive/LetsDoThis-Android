@@ -91,7 +91,7 @@
             android:textColor="@color/white"
             android:textSize="@dimen/text_36"
             android:layout_below="@+id/image_container"
-            android:text="@string/beep_noise"/>
+            android:text="@string/do_something_about_it"/>
 
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView

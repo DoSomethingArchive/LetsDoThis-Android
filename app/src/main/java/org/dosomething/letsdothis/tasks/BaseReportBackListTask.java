@@ -31,6 +31,8 @@ public abstract class BaseReportBackListTask extends BaseNetworkErrorHandlerTask
     {
         ResponseReportBackList response = NetworkHelper.getDoSomethingAPIService()
                                                        .reportBackList(campaigns, 20, false, page);
+        //an issue was created for the server so that an empty array will be returned if empty, not an error
+        //letting it crash for now
         totalPages = response.pagination.total_pages;
         reportBacks = ResponseReportBackList.getReportBacks(response);
     }
