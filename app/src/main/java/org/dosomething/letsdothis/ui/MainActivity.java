@@ -8,22 +8,26 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.fragments.ActionsFragment;
-import org.dosomething.letsdothis.ui.fragments.HubFragment;
 import org.dosomething.letsdothis.ui.fragments.InvitesFragment;
 import org.dosomething.letsdothis.ui.fragments.NotificationsFragment;
 
 
-public class MainActivity extends BaseActivity implements HubFragment.SetToolbarListener
+import static org.dosomething.letsdothis.ui.fragments.HubFragment.TAG;
+import static org.dosomething.letsdothis.ui.fragments.HubFragment.newInstance;
+
+
+public class MainActivity extends BaseActivity implements NotificationsFragment.SetTitleListener
 {
-    private View actions;
-    private View hub;
-    private View invites;
-    private View notifications;
+    private View     actions;
+    private View     hub;
+    private View     invites;
+    private View     notifications;
+    private TextView title;
 
     public static Intent getLaunchIntent(Context context)
     {
@@ -42,7 +46,25 @@ public class MainActivity extends BaseActivity implements HubFragment.SetToolbar
                     .commit();
         }
 
+        initToolbar();
         initDrawer();
+    }
+
+    private void initToolbar()
+    {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        title = (TextView) findViewById(R.id.toolbar_title);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+
+        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                                                                        R.string.invite_code_opt,
+                                                                        R.string.account);
+        drawerLayout.setDrawerListener(mDrawerToggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        mDrawerToggle.syncState();
     }
 
     //TODO the drawer should have a list view, then we won't need all this logic
@@ -74,7 +96,7 @@ public class MainActivity extends BaseActivity implements HubFragment.SetToolbar
             {
                 if(! hub.isSelected())
                 {
-                    replaceCurrentFragment(HubFragment.newInstance(false), HubFragment.TAG);
+                    replaceCurrentFragment(newInstance(false), TAG);
                     drawerLayout.closeDrawer(drawer);
                 }
             }
@@ -136,30 +158,14 @@ public class MainActivity extends BaseActivity implements HubFragment.SetToolbar
 
         actions.setSelected(TextUtils.equals(ActionsFragment.TAG, currentFragTag));
         notifications.setSelected(TextUtils.equals(NotificationsFragment.TAG, currentFragTag));
-        hub.setSelected(TextUtils.equals(HubFragment.TAG, currentFragTag));
+        hub.setSelected(TextUtils.equals(TAG, currentFragTag));
         invites.setSelected(TextUtils.equals(InvitesFragment.TAG, currentFragTag));
-
     }
 
     @Override
-    public void setToolbar(Toolbar toolbar)
+    public void setTitle(String title)
     {
-        setSupportActionBar(toolbar);
-
-        //FIXME standardize the toolbar
-        final View drawer = findViewById(R.id.drawer);
-        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(
-                this,  drawerLayout, toolbar,
-                R.string.invite_code_opt, R.string.account
-        );
-
-
-        drawerLayout.setDrawerListener(mDrawerToggle);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        mDrawerToggle.syncState();
+        this.title.setText(title);
     }
 
 

@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.ui.fragments;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Invite;
 import org.dosomething.letsdothis.ui.adapters.InvitesAdapter;
+import org.dosomething.letsdothis.ui.fragments.NotificationsFragment.SetTitleListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,8 @@ import java.util.List;
 public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAdapterClickListener
 {
     public static final String TAG = InvitesFragment.class.getSimpleName();
-    private InvitesAdapter adapter;
+    private InvitesAdapter                         adapter;
+    private SetTitleListener titleListener;
 
     public static InvitesFragment newInstance()
     {
@@ -33,7 +36,14 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.activity_fragment_toolbar_recycler, container, false);
+        return inflater.inflate(R.layout.fragment_toolbar_recycler, container, false);
+    }
+
+    @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+        titleListener = (SetTitleListener) getActivity();
     }
 
     @Override
@@ -48,6 +58,7 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
+        titleListener.setTitle("Invites");
     }
 
     private List<Invite> generateSampleData()

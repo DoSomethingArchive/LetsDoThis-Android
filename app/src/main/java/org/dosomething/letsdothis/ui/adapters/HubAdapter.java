@@ -30,7 +30,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final int    VIEW_TYPE_PLACEHOLDER      = - 1;
     public static final int    VIEW_TYPE_PROFILE          = 0;
     public static final int    VIEW_TYPE_SECTION_TITLE    = 1;
     public static final int    VIEW_TYPE_CURRENT_CAMPAIGN = 2;
@@ -53,14 +52,12 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.hubList.add(user);
         hubList.add(CURRENTLY_DOING);
         hubList.add(BEEN_THERE_DONE_GOOD);
-        this.hubList.add(0, new PlaceHolder());
         this.isPublic = isPublic;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
-
         switch(viewType)
         {
             case VIEW_TYPE_SECTION_TITLE:
@@ -83,10 +80,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 View expireLayout = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_hub_expire, parent, false);
                 return new ExpireViewHolder(expireLayout);
-            case VIEW_TYPE_PLACEHOLDER:
-                View placeholderLayout = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_placeholder, parent, false);
-                return new PlaceholderViewHolder(placeholderLayout);
             default:
                 return null;
         }
@@ -260,10 +253,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             return VIEW_TYPE_EXPIRE;
         }
-        else if(currentObject instanceof PlaceHolder)
-        {
-            return VIEW_TYPE_PLACEHOLDER;
-        }
         return 0;
     }
 
@@ -374,20 +363,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             hoursLabel = (TextView) itemView.findViewById(R.id.hours_label);
             minutesLabel = (TextView) itemView.findViewById(R.id.minutes_label);
         }
-    }
-
-
-    public static class PlaceholderViewHolder extends RecyclerView.ViewHolder
-    {
-        public PlaceholderViewHolder(View itemView)
-        {
-            super(itemView);
-        }
-    }
-
-
-    public static class PlaceHolder
-    {
     }
 
     public interface HubAdapterClickListener

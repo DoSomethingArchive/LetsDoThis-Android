@@ -2,15 +2,15 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.fragments.HubFragment;
+import org.dosomething.letsdothis.ui.fragments.NotificationsFragment;
 
 /**
  * Created by toidiu on 5/13/15.
  */
-public class PublicProfileActivity extends BaseActivity implements HubFragment.SetToolbarListener
+public class PublicProfileActivity extends BaseActivity implements NotificationsFragment.SetTitleListener
 {
 
     public static Intent getLaunchIntent(Context context)
@@ -31,10 +31,9 @@ public class PublicProfileActivity extends BaseActivity implements HubFragment.S
         }
     }
 
-
     @Override
-    public void setToolbar(Toolbar toolbar)
+    public void setTitle(String title)
     {
-        setSupportActionBar(toolbar);
+        //dummy interface because we reuse hub fragment for public profile also
     }
 }
