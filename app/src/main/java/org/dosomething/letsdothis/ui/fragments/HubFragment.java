@@ -245,21 +245,24 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
     public void onEventMainThread(GetUserTask task)
     {
         adapter.addUser(task.user);
-        Log.d("-p-p-p-p-pllllllll", task.user.avatarPath);
+        if(task.user != null)
+            Log.d("-p-p-p-p-pllllllll", task.user.avatarPath);
     }
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(DbGetUserTask task)
     {
         adapter.addUser(task.user);
-        Log.d("-p-p-p-p-poooooo", task.user.avatarPath);
+//        if(task.user!=null)
+//        Log.d("-p-p-p-p-poooooo", task.user.avatarPath);
     }
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(UploadAvatarPerTask task)
     {
         adapter.addUser(task.user);
-        Log.d("-p-p-p-p-p" ,task.user.avatarPath);
+        if(task.user != null)
+            Log.d("-p-p-p-p-p" ,task.user.avatarPath);
     }
 
     @SuppressWarnings("UnusedDeclaration")
