@@ -3,6 +3,7 @@ import android.net.Uri;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.data.User;
+import org.dosomething.letsdothis.network.models.ResponseAvatar;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 import org.dosomething.letsdothis.network.models.ResponseRegister;
 import org.dosomething.letsdothis.network.models.ResponseUser;
@@ -111,5 +112,5 @@ public interface NorthstarAPI
 
     @Multipart
     @POST("/users/{id}/avatar")
-    public Response uploadAvatar(@Path("id") String id, @Part("photo") TypedFile file) throws NetworkException;
+    public ResponseAvatar uploadAvatar(@Path("id") String id, @Part("photo") TypedFile file) throws NetworkException;
 }

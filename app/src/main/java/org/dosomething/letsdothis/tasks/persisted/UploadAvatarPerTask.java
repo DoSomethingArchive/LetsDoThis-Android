@@ -1,11 +1,13 @@
 package org.dosomething.letsdothis.tasks.persisted;
 import android.content.Context;
+import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
 
 import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.NetworkHelper;
+import org.dosomething.letsdothis.network.models.ResponseAvatar;
 
 import java.io.File;
 
@@ -34,12 +36,17 @@ public class UploadAvatarPerTask extends Task
         File file = new File(filePath);
         Dao<User, String> userDao = DatabaseHelper.getInstance(context).getUserDao();
         user = userDao.queryForId(userId);
-        user.avatarPath = file.getAbsolutePath();
+        user.avatarPath = "file:" + filePath;
+        Log.d("-p-p-p-p-pkkkkk", user.avatarPath);
+
         userDao.createOrUpdate(user);
         EventBusExt.getDefault().post(this);
 
         TypedFile typedFile = new TypedFile("multipart/form-data", file);
-        NetworkHelper.getNorthstarAPIService().uploadAvatar(userId, typedFile);
+        ResponseAvatar response = NetworkHelper.getNorthstarAPIService()
+                .uploadAvatar(userId, typedFile);
+        user.avatarPath = response.data.url;
+        userDao.createOrUpdate(user);
     }
 
     @Override
@@ -51,7 +58,7 @@ public class UploadAvatarPerTask extends Task
     @Override
     protected void onComplete(Context context)
     {
-        EventBusExt.getDefault().post(this);
+//        EventBusExt.getDefault().post(this);
         super.onComplete(context);
     }
 }
