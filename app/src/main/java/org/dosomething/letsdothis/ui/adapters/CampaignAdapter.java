@@ -3,6 +3,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,11 +29,12 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 {
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final int VIEW_TYPE_CAMPAIGN          = 0;
-    public static final int VIEW_TYPE_CAMPAIGN_EXPANDED = 1;
-    public static final int VIEW_TYPE_CAMPAIGN_SMALL    = 2;
-    public static final int VIEW_TYPE_CAMPAIGN_FOOTER   = 3;
-    public static final int VIEW_TYPE_REPORT_BACK       = 4;
+    public static final int    VIEW_TYPE_CAMPAIGN          = 0;
+    public static final int    VIEW_TYPE_CAMPAIGN_EXPANDED = 1;
+    public static final int    VIEW_TYPE_CAMPAIGN_SMALL    = 2;
+    public static final int    VIEW_TYPE_CAMPAIGN_FOOTER   = 3;
+    public static final int    VIEW_TYPE_REPORT_BACK       = 4;
+    public static final String PLACEHOLDER                 = "placeholder";
 
     private final int shadowColor;
     private final int slantHeight;
@@ -42,7 +44,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private ArrayList<Object> dataSet = new ArrayList<>();
     private CampaignAdapterClickListener campaignAdapterClickListener;
-    private int                          selectedPosition = - 1;
+    private int selectedPosition = - 1;
 
     public interface CampaignAdapterClickListener
     {
@@ -55,10 +57,9 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         void onScrolledToBottom();
     }
 
-    public CampaignAdapter(List<Campaign> campaigns, CampaignAdapterClickListener campaignAdapterClickListener, Resources resources)
+    public CampaignAdapter(CampaignAdapterClickListener campaignAdapterClickListener, Resources resources)
     {
         super();
-        this.dataSet.addAll(campaigns);
         this.campaignAdapterClickListener = campaignAdapterClickListener;
         shadowColor = resources.getColor(R.color.black_10);
         slantHeight = resources.getDimensionPixelSize(R.dimen.height_xxtiny);
@@ -78,19 +79,22 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 return new SectionTitleViewHolder((TextView) footerLayout);
             case VIEW_TYPE_REPORT_BACK:
                 View reportBackLayout = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_report_back_square, parent, false);
+                                                      .inflate(R.layout.item_report_back_square,
+                                                               parent, false);
                 return new ReportBackViewHolder((ReportBackImageView) reportBackLayout);
             case VIEW_TYPE_CAMPAIGN_EXPANDED:
                 View bigLayout = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_campaign_large, parent, false);
+                                               .inflate(R.layout.item_campaign_large, parent,
+                                                        false);
                 return new ExpandedCampaignViewHolder(bigLayout);
             case VIEW_TYPE_CAMPAIGN_SMALL:
                 View smallLayout = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_campaign_small, parent, false);
+                                                 .inflate(R.layout.item_campaign_small, parent,
+                                                          false);
                 return new CampaignViewHolder(smallLayout);
             default:
                 View normalLayout = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_campaign, parent, false);
+                                                  .inflate(R.layout.item_campaign, parent, false);
                 return new CampaignViewHolder(normalLayout);
 
         }
@@ -110,8 +114,11 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             CampaignViewHolder campaignViewHolder = (CampaignViewHolder) holder;
             campaignViewHolder.title.setText(campaign.title);
             campaignViewHolder.callToAction.setText(campaign.callToAction);
-            Picasso.with(campaignViewHolder.imageView.getContext()).load(campaign.imagePath)
-                    .into(campaignViewHolder.imageView);
+            if(!TextUtils.isEmpty(campaign.imagePath))
+            {
+                Picasso.with(campaignViewHolder.imageView.getContext()).load(campaign.imagePath)
+                       .into(campaignViewHolder.imageView);
+            }
             campaignViewHolder.root.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -130,7 +137,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             campaignViewHolder.title.setText(campaign.title);
             campaignViewHolder.callToAction.setText(campaign.callToAction);
             Picasso.with(campaignViewHolder.imageView.getContext()).load(campaign.imagePath)
-                    .into(campaignViewHolder.imageView);
+                   .into(campaignViewHolder.imageView);
             campaignViewHolder.root.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -151,7 +158,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             expandedCampaignViewHolder.title.setText(campaign.title);
             expandedCampaignViewHolder.callToAction.setText(campaign.callToAction);
             Picasso.with(context).load(campaign.imagePath)
-                    .into(expandedCampaignViewHolder.imageView);
+                   .into(expandedCampaignViewHolder.imageView);
             expandedCampaignViewHolder.imageView.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -167,16 +174,16 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                                                                  slantHeight,
                                                                                  widthOvershoot,
                                                                                  heightShadowOvershoot);
-            expandedCampaignViewHolder.slantedBg
-                    .setBackground(background);
-            expandedCampaignViewHolder.campaignDetailsWrapper.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    campaignAdapterClickListener.onCampaignClicked(campaign.id);
-                }
-            });
+            expandedCampaignViewHolder.slantedBg.setBackground(background);
+            expandedCampaignViewHolder.campaignDetailsWrapper
+                    .setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            campaignAdapterClickListener.onCampaignClicked(campaign.id);
+                        }
+                    });
 
             expandedCampaignViewHolder.problemFact.setText(campaign.problemFact);
 
@@ -202,7 +209,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ReportBackViewHolder reportBackViewHolder = (ReportBackViewHolder) holder;
 
             Picasso.with(reportBackViewHolder.root.getContext()).load(reportBack.getImagePath())
-                    .into(reportBackViewHolder.root);
+                   .into(reportBackViewHolder.root);
 
             reportBackViewHolder.root.setOnClickListener(new View.OnClickListener()
             {
@@ -217,8 +224,8 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         {
             SectionTitleViewHolder sectionTitleViewHolder = (SectionTitleViewHolder) holder;
             sectionTitleViewHolder.textView.setText(sectionTitleViewHolder.textView.getContext()
-                                                            .getString(
-                                                                    R.string.people_doing_stuff));
+                                                                                   .getString(
+                                                                                           R.string.people_doing_stuff));
         }
 
 
@@ -265,6 +272,25 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyItemRangeInserted(dataSet.size() - objects.size(), dataSet.size() - 1);
     }
 
+    public void setCampaigns(List<Campaign> campaigns)
+    {
+        int indexOfPlaceHolder = dataSet.indexOf(PLACEHOLDER);
+        if(indexOfPlaceHolder == - 1)
+        {
+            dataSet.addAll(campaigns);
+            dataSet.add(PLACEHOLDER);
+        }
+        else
+        {
+            for(int i = 0, length = Math.min(dataSet.size(), indexOfPlaceHolder); i < length; i++)
+            {
+                dataSet.remove(i);
+            }
+            dataSet.addAll(0, campaigns);
+        }
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount()
     {
@@ -292,13 +318,13 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     {
         private TextView problemFact;
         private View     campaignDetailsWrapper;
-        public  TextView days;
-        public  TextView hours;
-        public  TextView minutes;
-        public  TextView daysLabel;
-        public  TextView hoursLabel;
-        public  TextView minutesLabel;
-        private final View slantedBg;
+        private TextView days;
+        private TextView hours;
+        private TextView minutes;
+        private TextView daysLabel;
+        private TextView hoursLabel;
+        private TextView minutesLabel;
+        private View     slantedBg;
 
         public ExpandedCampaignViewHolder(View itemView)
         {
