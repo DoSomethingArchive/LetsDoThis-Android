@@ -9,7 +9,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.TextView;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.fragments.ActionsFragment;
@@ -23,11 +22,11 @@ import static org.dosomething.letsdothis.ui.fragments.HubFragment.newInstance;
 
 public class MainActivity extends BaseActivity implements NotificationsFragment.SetTitleListener
 {
-    private View     actions;
-    private View     hub;
-    private View     invites;
-    private View     notifications;
-    private TextView title;
+    private View    actions;
+    private View    hub;
+    private View    invites;
+    private View    notifications;
+    private Toolbar toolbar;
 
     public static Intent getLaunchIntent(Context context)
     {
@@ -52,9 +51,9 @@ public class MainActivity extends BaseActivity implements NotificationsFragment.
 
     private void initToolbar()
     {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        title = (TextView) findViewById(R.id.toolbar_title);
-        toolbar.setTitle("");
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //        title = (TextView) findViewById(R.id.toolbar_title);
+        toolbar.setTitle("asdfasd");
         setSupportActionBar(toolbar);
 
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -165,7 +164,8 @@ public class MainActivity extends BaseActivity implements NotificationsFragment.
     @Override
     public void setTitle(String title)
     {
-        this.title.setText(title);
+        toolbar.setTitle(title);
+        //        this.title.setText(title);
     }
 
 

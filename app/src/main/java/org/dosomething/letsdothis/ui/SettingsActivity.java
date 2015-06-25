@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.LogoutTask;
@@ -28,9 +27,7 @@ public class SettingsActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_settings);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        TextView title = (TextView) findViewById(R.id.toolbar_title);
-        toolbar.setTitle("");
-        title.setText(R.string.settings);
+        toolbar.setTitle(R.string.settings);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

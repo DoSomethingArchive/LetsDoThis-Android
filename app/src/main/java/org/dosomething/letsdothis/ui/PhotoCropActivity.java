@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.views.BitmapUtils;
@@ -63,10 +62,7 @@ public class PhotoCropActivity extends AppCompatActivity
         super.setContentView(R.layout.activity_crop_photo);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        TextView title = (TextView) findViewById(R.id.toolbar_title);
-        toolbar.setTitle("");
-        //FIXME get title of the report back
-        title.setText("get this from network");
+        toolbar.setTitle("get this from network");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

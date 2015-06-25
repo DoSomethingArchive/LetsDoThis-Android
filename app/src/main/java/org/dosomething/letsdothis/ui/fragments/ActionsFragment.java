@@ -5,19 +5,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.viewpagerindicator.TabPageIndicator;
 
 import org.dosomething.letsdothis.R;
-import org.dosomething.letsdothis.ui.adapters.NotificationAdapter;
 import org.dosomething.letsdothis.ui.fragments.NotificationsFragment.SetTitleListener;
-import org.dosomething.letsdothis.ui.views.DividerItemDecoration;
 import org.dosomething.letsdothis.ui.views.typeface.CustomTypefaceSpan;
 import org.dosomething.letsdothis.ui.views.typeface.TypefaceManager;
 import org.dosomething.letsdothis.utils.ViewUtils;
