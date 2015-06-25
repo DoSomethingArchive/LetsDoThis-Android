@@ -6,8 +6,6 @@ import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
-import co.touchlab.android.threading.eventbus.EventBusExt;
-
 /**
  * Created by toidiu on 4/16/15.
  */

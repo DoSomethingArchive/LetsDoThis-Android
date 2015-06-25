@@ -36,9 +36,9 @@ public class ReportBackDetailsActivity extends BaseActivity
     private TextView  timestamp;
     private TextView  caption;
     private TextView  name;
-    private TextView  toolbarTitle;
     private ViewGroup kudos;
     private boolean   listenersAdded;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,8 +52,7 @@ public class ReportBackDetailsActivity extends BaseActivity
         name = (TextView) findViewById(R.id.name);
         kudos = (ViewGroup) findViewById(R.id.kudos_bar);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
@@ -113,7 +112,7 @@ public class ReportBackDetailsActivity extends BaseActivity
             {
                 name.setText(reportBack.user.id);
             }
-            toolbarTitle.setText(reportBack.campaign.title);
+            toolbar.setTitle(reportBack.campaign.title);
 
             //FIXME add user's avatar
 
