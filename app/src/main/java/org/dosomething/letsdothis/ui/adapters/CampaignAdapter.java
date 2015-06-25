@@ -3,7 +3,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,17 +107,20 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             campaignAdapterClickListener.onScrolledToBottom();
         }
 
+        Resources resources = holder.itemView.getResources();
+        Context context = holder.itemView.getContext();
+
         if(getItemViewType(position) == VIEW_TYPE_CAMPAIGN)
         {
             final Campaign campaign = (Campaign) dataSet.get(position);
             CampaignViewHolder campaignViewHolder = (CampaignViewHolder) holder;
             campaignViewHolder.title.setText(campaign.title);
             campaignViewHolder.callToAction.setText(campaign.callToAction);
-            if(!TextUtils.isEmpty(campaign.imagePath))
-            {
-                Picasso.with(campaignViewHolder.imageView.getContext()).load(campaign.imagePath)
-                       .into(campaignViewHolder.imageView);
-            }
+
+            int height = resources.getDimensionPixelSize(R.dimen.campaign_height);
+            Picasso.with(context).load(campaign.imagePath).resize(0, height)
+                   .into(campaignViewHolder.imageView);
+
             campaignViewHolder.root.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -136,7 +138,9 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             CampaignViewHolder campaignViewHolder = (CampaignViewHolder) holder;
             campaignViewHolder.title.setText(campaign.title);
             campaignViewHolder.callToAction.setText(campaign.callToAction);
-            Picasso.with(campaignViewHolder.imageView.getContext()).load(campaign.imagePath)
+
+            int height = resources.getDimensionPixelSize(R.dimen.campaign_small_height);
+            Picasso.with(context).load(campaign.imagePath).resize(0, height)
                    .into(campaignViewHolder.imageView);
             campaignViewHolder.root.setOnClickListener(new View.OnClickListener()
             {
@@ -153,11 +157,12 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         {
             final Campaign campaign = (Campaign) dataSet.get(position);
             ExpandedCampaignViewHolder expandedCampaignViewHolder = (ExpandedCampaignViewHolder) holder;
-            Context context = expandedCampaignViewHolder.itemView.getContext();
 
             expandedCampaignViewHolder.title.setText(campaign.title);
             expandedCampaignViewHolder.callToAction.setText(campaign.callToAction);
-            Picasso.with(context).load(campaign.imagePath)
+
+            int height = resources.getDimensionPixelSize(R.dimen.campaign_height_expanded);
+            Picasso.with(context).load(campaign.imagePath).resize(0, height)
                    .into(expandedCampaignViewHolder.imageView);
             expandedCampaignViewHolder.imageView.setOnClickListener(new View.OnClickListener()
             {
@@ -195,7 +200,6 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             String minutes = timeUntilExpiration.get(2);
             expandedCampaignViewHolder.minutes.setText(minutes);
 
-            Resources resources = context.getResources();
             expandedCampaignViewHolder.daysLabel
                     .setText(resources.getQuantityString(R.plurals.days, Integer.parseInt(days)));
             expandedCampaignViewHolder.hoursLabel
@@ -208,8 +212,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             final ReportBack reportBack = (ReportBack) dataSet.get(position);
             ReportBackViewHolder reportBackViewHolder = (ReportBackViewHolder) holder;
 
-            Picasso.with(reportBackViewHolder.root.getContext()).load(reportBack.getImagePath())
-                   .into(reportBackViewHolder.root);
+            Picasso.with(context).load(reportBack.getImagePath()).into(reportBackViewHolder.root);
 
             reportBackViewHolder.root.setOnClickListener(new View.OnClickListener()
             {
@@ -223,9 +226,8 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         else if(getItemViewType(position) == VIEW_TYPE_CAMPAIGN_FOOTER)
         {
             SectionTitleViewHolder sectionTitleViewHolder = (SectionTitleViewHolder) holder;
-            sectionTitleViewHolder.textView.setText(sectionTitleViewHolder.textView.getContext()
-                                                                                   .getString(
-                                                                                           R.string.people_doing_stuff));
+            sectionTitleViewHolder.textView
+                    .setText(resources.getString(R.string.people_doing_stuff));
         }
 
 
