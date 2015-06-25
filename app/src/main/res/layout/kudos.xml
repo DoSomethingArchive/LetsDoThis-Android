@@ -18,7 +18,31 @@
             android:layout_width="@dimen/height_xxtiny"
             android:layout_height="@dimen/height_xxtiny"
             android:layout_margin="@dimen/padding_medium"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@drawable/kudos_crown"/>
+
+        <ImageView
+            android:layout_width="@dimen/height_xxtiny"
+            android:layout_height="@dimen/height_xxtiny"
+            android:layout_margin="@dimen/padding_medium"
+            android:src="@drawable/kudos_diamond"/>
+
+        <ImageView
+            android:layout_width="@dimen/height_xxtiny"
+            android:layout_height="@dimen/height_xxtiny"
+            android:layout_margin="@dimen/padding_medium"
+            android:src="@drawable/kudos_fire"/>
+
+        <ImageView
+            android:layout_width="@dimen/height_xxtiny"
+            android:layout_height="@dimen/height_xxtiny"
+            android:layout_margin="@dimen/padding_medium"
+            android:src="@drawable/kudos_heart"/>
+
+        <ImageView
+            android:layout_width="@dimen/height_xxtiny"
+            android:layout_height="@dimen/height_xxtiny"
+            android:layout_margin="@dimen/padding_medium"
+            android:src="@drawable/kudos"/>
 
         <ImageView
             android:layout_width="@dimen/height_xxtiny"
@@ -30,79 +54,32 @@
             android:layout_width="@dimen/height_xxtiny"
             android:layout_height="@dimen/height_xxtiny"
             android:layout_margin="@dimen/padding_medium"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@drawable/kudos_pizza"/>
 
         <ImageView
             android:layout_width="@dimen/height_xxtiny"
             android:layout_height="@dimen/height_xxtiny"
             android:layout_margin="@dimen/padding_medium"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@drawable/kudos_planet"/>
 
         <ImageView
             android:layout_width="@dimen/height_xxtiny"
             android:layout_height="@dimen/height_xxtiny"
             android:layout_margin="@dimen/padding_medium"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@drawable/kudos_poo"/>
 
         <ImageView
             android:layout_width="@dimen/height_xxtiny"
             android:layout_height="@dimen/height_xxtiny"
             android:layout_margin="@dimen/padding_medium"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@drawable/kudos_skull"/>
 
         <ImageView
             android:layout_width="@dimen/height_xxtiny"
             android:layout_height="@dimen/height_xxtiny"
             android:layout_margin="@dimen/padding_medium"
-            android:src="@mipmap/ic_launcher"/>
-
-        <ImageView
-            android:layout_width="@dimen/height_xxtiny"
-            android:layout_height="@dimen/height_xxtiny"
-            android:layout_margin="@dimen/padding_medium"
-            android:src="@mipmap/ic_launcher"/>
-
-        <ImageView
-            android:layout_width="@dimen/height_xxtiny"
-            android:layout_height="@dimen/height_xxtiny"
-            android:layout_margin="@dimen/padding_medium"
-            android:src="@mipmap/ic_launcher"/>
-
-        <ImageView
-            android:layout_width="@dimen/height_xxtiny"
-            android:layout_height="@dimen/height_xxtiny"
-            android:layout_margin="@dimen/padding_medium"
-            android:src="@mipmap/ic_launcher"/>
-
-        <ImageView
-            android:layout_width="@dimen/height_xxtiny"
-            android:layout_height="@dimen/height_xxtiny"
-            android:layout_margin="@dimen/padding_medium"
-            android:src="@mipmap/ic_launcher"/>
-
-        <ImageView
-            android:layout_width="@dimen/height_xxtiny"
-            android:layout_height="@dimen/height_xxtiny"
-            android:layout_margin="@dimen/padding_medium"
-            android:src="@mipmap/ic_launcher"/>
-
-        <ImageView
-            android:layout_width="@dimen/height_xxtiny"
-            android:layout_height="@dimen/height_xxtiny"
-            android:layout_margin="@dimen/padding_medium"
-            android:src="@mipmap/ic_launcher"/>
-
-        <ImageView
-            android:layout_width="@dimen/height_xxtiny"
-            android:layout_height="@dimen/height_xxtiny"
-            android:layout_margin="@dimen/padding_medium"
-            android:src="@mipmap/ic_launcher"/>
-
-        <ImageView
-            android:layout_width="@dimen/height_xxtiny"
-            android:layout_height="@dimen/height_xxtiny"
-            android:layout_margin="@dimen/padding_medium"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@drawable/kudos_trophy"/>
+        
     </LinearLayout>
 
 
