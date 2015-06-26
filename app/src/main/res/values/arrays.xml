@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="drawer_list">
-        <item>Actions</item>
-        <item>Hub</item>
-        <item>Invites</item>
-        <item>Notifications</item>
+        <item>@string/actions</item>
+        <item>@string/hub</item>
+        <item>@string/invites</item>
+        <item>@string/notifications</item>
     </string-array>
 </resources>
