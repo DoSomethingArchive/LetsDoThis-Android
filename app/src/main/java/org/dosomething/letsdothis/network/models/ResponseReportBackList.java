@@ -16,15 +16,7 @@ public class ResponseReportBackList
 
     public static List<ReportBack> getReportBacks(ResponseReportBackList response)
     {
-        //FIXME crashlytics
-        try
-        {
-            return new ArrayList<>(Arrays.asList(response.data));
-        }
-        catch(NullPointerException e)
-        {
-            return new ArrayList<>();
-        }
+        return new ArrayList<>(Arrays.asList(response.data));
     }
 
     public static class Pagination
