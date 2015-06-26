@@ -7,25 +7,23 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.ui.adapters.DrawerListAdapter;
 import org.dosomething.letsdothis.ui.fragments.ActionsFragment;
-import org.dosomething.letsdothis.ui.fragments.InvitesFragment;
+import org.dosomething.letsdothis.ui.fragments.HubFragment;
 import org.dosomething.letsdothis.ui.fragments.NotificationsFragment;
 
 
 import static org.dosomething.letsdothis.ui.fragments.HubFragment.TAG;
-import static org.dosomething.letsdothis.ui.fragments.HubFragment.newInstance;
 
 
 public class MainActivity extends BaseActivity implements NotificationsFragment.SetTitleListener
 {
-    private View    actions;
-    private View    hub;
-    private View    invites;
-    private View    notifications;
     private Toolbar toolbar;
 
     public static Intent getLaunchIntent(Context context)
@@ -52,7 +50,6 @@ public class MainActivity extends BaseActivity implements NotificationsFragment.
     private void initToolbar()
     {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //        title = (TextView) findViewById(R.id.toolbar_title);
         toolbar.setTitle("asdfasd");
         setSupportActionBar(toolbar);
 
@@ -71,62 +68,20 @@ public class MainActivity extends BaseActivity implements NotificationsFragment.
     {
         final View drawer = findViewById(R.id.drawer);
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final ListView listView = (ListView) findViewById(R.id.menu_list);
 
-        actions = findViewById(R.id.actions);
-        actions.setSelected(true);
-        actions.setOnClickListener(new View.OnClickListener()
+        final String[] list = getResources().getStringArray(R.array.drawer_list);
+        listView.setAdapter(new DrawerListAdapter(this, list));
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
-            public void onClick(View v)
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                if(! actions.isSelected())
-                {
-                    replaceCurrentFragment(ActionsFragment.newInstance(), ActionsFragment.TAG);
-                    drawerLayout.closeDrawer(drawer);
-                }
-            }
-        });
+                Toast.makeText(MainActivity.this, list[position], Toast.LENGTH_SHORT).show();
+                replaceCurrentFragment(HubFragment.newInstance(false), TAG);
 
-        hub = findViewById(R.id.hub);
-        hub.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                if(! hub.isSelected())
-                {
-                    replaceCurrentFragment(newInstance(false), TAG);
-                    drawerLayout.closeDrawer(drawer);
-                }
-            }
-        });
-
-        invites = findViewById(R.id.invites);
-        invites.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                if(! invites.isSelected())
-                {
-                    replaceCurrentFragment(InvitesFragment.newInstance(), InvitesFragment.TAG);
-                    drawerLayout.closeDrawer(drawer);
-                }
-            }
-        });
-
-        notifications = findViewById(R.id.notifications);
-        notifications.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                if(! notifications.isSelected())
-                {
-                    replaceCurrentFragment(NotificationsFragment.newInstance(),
-                                           NotificationsFragment.TAG);
-                    drawerLayout.closeDrawer(drawer);
-                }
+                drawerLayout.closeDrawer(drawer);
             }
         });
 
@@ -147,25 +102,11 @@ public class MainActivity extends BaseActivity implements NotificationsFragment.
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, tag)
                 .commit();
         getSupportFragmentManager().executePendingTransactions();
-        updateNavBar();
     }
 
-    private void updateNavBar()
-    {
-        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
-        String currentFragTag = currentFragment.getTag();
-
-        actions.setSelected(TextUtils.equals(ActionsFragment.TAG, currentFragTag));
-        notifications.setSelected(TextUtils.equals(NotificationsFragment.TAG, currentFragTag));
-        hub.setSelected(TextUtils.equals(TAG, currentFragTag));
-        invites.setSelected(TextUtils.equals(InvitesFragment.TAG, currentFragTag));
-    }
-
-    @Override
     public void setTitle(String title)
     {
         toolbar.setTitle(title);
-        //        this.title.setText(title);
     }
 
 
