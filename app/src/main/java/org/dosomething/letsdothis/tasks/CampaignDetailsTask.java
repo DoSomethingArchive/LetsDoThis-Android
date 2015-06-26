@@ -4,6 +4,7 @@ import android.content.Context;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.ResponseCampaign;
+import org.dosomething.letsdothis.network.models.ResponseCampaignWrapper;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
@@ -24,10 +25,9 @@ public class CampaignDetailsTask extends BaseNetworkErrorHandlerTask
     protected void run(Context context) throws Throwable
     {
         //FIXME sign up for this campaign
-        //NetworkHelper.getDoSomethingAPIService()
 
-        ResponseCampaign response = NetworkHelper.getDoSomethingAPIService().campaign(campaignId);
-        campaign = ResponseCampaign.getCampaign(response);
+        ResponseCampaignWrapper response = NetworkHelper.getDoSomethingAPIService().campaign(campaignId);
+        campaign = ResponseCampaign.getCampaign(response.data);
     }
 
     @Override
