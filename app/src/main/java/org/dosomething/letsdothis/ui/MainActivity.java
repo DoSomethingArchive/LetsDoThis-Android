@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -22,10 +23,6 @@ import org.dosomething.letsdothis.utils.AppPrefs;
 
 public class MainActivity extends BaseActivity implements NotificationsFragment.SetTitleListener
 {
-    public static final String ACTIONS = "Actions";
-    public static final String HUB     = "Hub";
-    public static final String INVITES = "Invites";
-    public static final String NOTIFICATIONS = "Notifications";
     private Toolbar toolbar;
 
     public static Intent getLaunchIntent(Context context)
@@ -80,21 +77,27 @@ public class MainActivity extends BaseActivity implements NotificationsFragment.
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                switch(list[position])
+                String positionString = list[position];
+                if(TextUtils.equals(positionString, getString(R.string.actions)))
                 {
-                    case ACTIONS:
-                        replaceCurrentFragment(ActionsFragment.newInstance(), ActionsFragment.TAG);
-                        break;
-                    case HUB:
-                        replaceCurrentFragment(HubFragment.newInstance(false), HubFragment.TAG);
-                        break;
-                    case INVITES:
-                        replaceCurrentFragment(InvitesFragment.newInstance(), InvitesFragment.TAG);
-                        break;
-                    case NOTIFICATIONS:
-                        replaceCurrentFragment(NotificationsFragment.newInstance(),
-                                               NotificationsFragment.TAG);
-                        break;
+                    replaceCurrentFragment(ActionsFragment.newInstance(), ActionsFragment.TAG);
+
+                }
+                else if(TextUtils.equals(positionString, getString(R.string.hub)))
+                {
+                    replaceCurrentFragment(HubFragment.newInstance(false), HubFragment.TAG);
+
+                }
+                else if(TextUtils.equals(positionString, getString(R.string.invites)))
+                {
+                    replaceCurrentFragment(InvitesFragment.newInstance(), InvitesFragment.TAG);
+
+                }
+                else if(TextUtils.equals(positionString, getString(R.string.notifications)))
+                {
+                    replaceCurrentFragment(NotificationsFragment.newInstance(),
+                                           NotificationsFragment.TAG);
+
                 }
                 drawerLayout.closeDrawer(drawer);
             }

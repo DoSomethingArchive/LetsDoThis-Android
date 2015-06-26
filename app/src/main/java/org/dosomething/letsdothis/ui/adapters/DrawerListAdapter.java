@@ -1,5 +1,7 @@
 package org.dosomething.letsdothis.ui.adapters;
 import android.content.Context;
+import android.content.res.Resources;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.dosomething.letsdothis.R;
-import org.dosomething.letsdothis.ui.MainActivity;
 
 /**
  * Created by toidiu on 6/25/15.
@@ -27,28 +28,32 @@ public class DrawerListAdapter extends ArrayAdapter<String>
         if(convertView == null)
         {
             convertView = LayoutInflater.from(getContext())
-                    .inflate(R.layout.drawer_list_item, parent, false);
+                                        .inflate(R.layout.drawer_list_item, parent, false);
         }
 
+        Resources resources = convertView.getResources();
         ImageView icon = (ImageView) convertView.findViewById(R.id.icon);
-        switch(getItem(position))
+
+        String positionString = getItem(position);
+        if(TextUtils.equals(positionString, resources.getString(R.string.actions)))
         {
-            case MainActivity.ACTIONS:
-                icon.setImageResource(R.drawable.ic_actions);
-                break;
-            case MainActivity.HUB:
-                icon.setImageResource(R.drawable.ic_hub);
-                break;
-            case MainActivity.INVITES:
-                icon.setImageResource(R.drawable.ic_invites);
-                break;
-            case MainActivity.NOTIFICATIONS:
-                icon.setImageResource(R.drawable.ic_notifications);
-                break;
+            icon.setImageResource(R.drawable.ic_actions);
+        }
+        else if(TextUtils.equals(positionString, resources.getString(R.string.hub)))
+        {
+            icon.setImageResource(R.drawable.ic_hub);
+        }
+        else if(TextUtils.equals(positionString, resources.getString(R.string.invites)))
+        {
+            icon.setImageResource(R.drawable.ic_invites);
+        }
+        else if(TextUtils.equals(positionString, resources.getString(R.string.notifications)))
+        {
+            icon.setImageResource(R.drawable.ic_notifications);
         }
 
         TextView text = (TextView) convertView.findViewById(R.id.text);
-        text.setText(getItem(position));
+        text.setText(positionString);
         return convertView;
     }
 }
