@@ -111,8 +111,7 @@ public class MainActivity extends BaseActivity implements NotificationsFragment.
             }
         });
 
-        boolean firstDrawer = AppPrefs.getInstance(this).isFirstDrawer();
-        if(firstDrawer)
+        if(AppPrefs.getInstance(this).isFirstDrawer())
         {
             AppPrefs.getInstance(this).setFirstDrawer();
             drawerLayout.openDrawer(drawer);
