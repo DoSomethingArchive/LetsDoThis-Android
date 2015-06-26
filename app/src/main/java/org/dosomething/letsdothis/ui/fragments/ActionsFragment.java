@@ -13,6 +13,7 @@ import com.viewpagerindicator.TabPageIndicator;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.fragments.NotificationsFragment.SetTitleListener;
+import org.dosomething.letsdothis.data.InterestGroup;
 import org.dosomething.letsdothis.ui.views.typeface.CustomTypefaceSpan;
 import org.dosomething.letsdothis.ui.views.typeface.TypefaceManager;
 import org.dosomething.letsdothis.utils.ViewUtils;
@@ -80,7 +81,7 @@ public class ActionsFragment extends Fragment
             @Override
             public CharSequence getPageTitle(int position)
             {
-                return CustomTypefaceSpan.format(getActivity(), "Interest: " + position,
+                return CustomTypefaceSpan.format(getActivity(), getString(InterestGroup.values()[position].nameResId),
                                                  TypefaceManager.BRANDON_BOLD);
             }
         });
