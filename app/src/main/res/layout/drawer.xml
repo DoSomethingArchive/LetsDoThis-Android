@@ -33,8 +33,8 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="@dimen/padding_medium"
-        android:layout_marginStart="@dimen/padding_medium"
+        android:paddingLeft="@dimen/padding_medium"
+        android:background="@drawable/drawer_bg"
         android:orientation="horizontal">
 
         <ImageView
@@ -49,7 +49,7 @@
             android:layout_marginLeft="@dimen/padding_medium"
             android:layout_marginStart="@dimen/padding_medium"
             android:text="@string/settings"
-            android:textColor="@color/dark_gray"
+            android:textColor="@color/drawer_text"
             app:typeface="brandon_bold"/>
     </LinearLayout>
 
@@ -60,96 +60,15 @@
         android:layout_above="@id/setting"
         android:background="@color/divider_gray"/>
 
-    <LinearLayout
+
+    <ListView
+        android:id="@+id/menu_list"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:layout_above="@+id/divider"
         android:layout_below="@+id/header"
-        android:layout_marginLeft="@dimen/padding_medium"
-        android:layout_marginStart="@dimen/padding_medium"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:id="@+id/actions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-
-                android:layout_gravity="center"
-                android:src="@drawable/ic_actions"/>
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="@string/actions"
-                android:textColor="@color/dark_gray"
-                app:typeface="brandon_bold"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/hub"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_hub"/>
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="@string/hub"
-                android:textColor="@color/dark_gray"
-                app:typeface="brandon_bold"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/invites"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_invites"/>
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="@string/invites"
-
-                android:textColor="@color/dark_gray"
-                app:typeface="brandon_bold"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/notifications"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_notifications"/>
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="@string/notifications"
-                android:textColor="@color/dark_gray"
-                app:typeface="brandon_bold"/>
-        </LinearLayout>
-
-    </LinearLayout>
-
+        android:layout_gravity="start"
+        android:background="#fff"
+        android:choiceMode="singleChoice"/>
 
 </RelativeLayout>
