@@ -22,7 +22,7 @@ public class ResponseUserList
     //        "data": [
     //            {
     //                "_id": "5480c950bffebc651c8b456f",
-    //                    "email": "test@dosomething.org",
+    //                    "email": "drawer_text@dosomething.org",
     //                ... the rest of this user data...
     //            },
     //            {
