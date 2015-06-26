@@ -54,7 +54,7 @@ public class RegisterLoginFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        AppPrefs.getInstance(getActivity()).setFirstRun(false);
+        AppPrefs.getInstance(getActivity()).setFirstIntro(false);
     }
 
     @Override
