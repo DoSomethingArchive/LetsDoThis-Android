@@ -52,7 +52,7 @@ public class LoginActivity extends BaseActivity
         if(BuildConfig.DEBUG)
         {
             phoneEmail.setText("touch@lab.co");
-            password.setText("drawer_text");
+            password.setText("test");
         }
     }
 

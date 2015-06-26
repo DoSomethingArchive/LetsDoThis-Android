@@ -8,7 +8,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -16,10 +15,8 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.adapters.DrawerListAdapter;
 import org.dosomething.letsdothis.ui.fragments.ActionsFragment;
 import org.dosomething.letsdothis.ui.fragments.HubFragment;
+import org.dosomething.letsdothis.ui.fragments.InvitesFragment;
 import org.dosomething.letsdothis.ui.fragments.NotificationsFragment;
-
-
-import static org.dosomething.letsdothis.ui.fragments.HubFragment.TAG;
 
 
 public class MainActivity extends BaseActivity implements NotificationsFragment.SetTitleListener
@@ -77,7 +74,22 @@ public class MainActivity extends BaseActivity implements NotificationsFragment.
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                replaceCurrentFragment(HubFragment.newInstance(false), TAG);
+                switch(position)
+                {
+                    case 0:
+                        replaceCurrentFragment(ActionsFragment.newInstance(), ActionsFragment.TAG);
+                        break;
+                    case 1:
+                        replaceCurrentFragment(HubFragment.newInstance(false), HubFragment.TAG);
+                        break;
+                    case 2:
+                        replaceCurrentFragment(InvitesFragment.newInstance(), InvitesFragment.TAG);
+                        break;
+                    case 3:
+                        replaceCurrentFragment(NotificationsFragment.newInstance(),
+                                               NotificationsFragment.TAG);
+                        break;
+                }
                 drawerLayout.closeDrawer(drawer);
             }
         });
