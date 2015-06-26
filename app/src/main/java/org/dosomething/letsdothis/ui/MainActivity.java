@@ -110,6 +110,10 @@ public class MainActivity extends BaseActivity implements NotificationsFragment.
         });
 
 
+        if(true)
+        {
+            drawerLayout.openDrawer(drawer);
+        }
     }
 
     private void replaceCurrentFragment(Fragment fragment, String tag)
