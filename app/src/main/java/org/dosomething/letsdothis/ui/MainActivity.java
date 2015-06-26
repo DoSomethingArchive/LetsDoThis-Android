@@ -8,9 +8,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.adapters.DrawerListAdapter;
@@ -50,7 +50,6 @@ public class MainActivity extends BaseActivity implements NotificationsFragment.
     private void initToolbar()
     {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("asdfasd");
         setSupportActionBar(toolbar);
 
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -63,7 +62,6 @@ public class MainActivity extends BaseActivity implements NotificationsFragment.
         mDrawerToggle.syncState();
     }
 
-    //TODO the drawer should have a list view, then we won't need all this logic
     private void initDrawer()
     {
         final View drawer = findViewById(R.id.drawer);
@@ -72,15 +70,14 @@ public class MainActivity extends BaseActivity implements NotificationsFragment.
 
         final String[] list = getResources().getStringArray(R.array.drawer_list);
         listView.setAdapter(new DrawerListAdapter(this, list));
+        listView.setItemChecked(0, true);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                Toast.makeText(MainActivity.this, list[position], Toast.LENGTH_SHORT).show();
                 replaceCurrentFragment(HubFragment.newInstance(false), TAG);
-
                 drawerLayout.closeDrawer(drawer);
             }
         });
@@ -95,6 +92,8 @@ public class MainActivity extends BaseActivity implements NotificationsFragment.
                 drawerLayout.closeDrawer(drawer);
             }
         });
+
+
     }
 
     private void replaceCurrentFragment(Fragment fragment, String tag)
