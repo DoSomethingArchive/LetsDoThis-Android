@@ -21,6 +21,10 @@ import org.dosomething.letsdothis.ui.fragments.NotificationsFragment;
 
 public class MainActivity extends BaseActivity implements NotificationsFragment.SetTitleListener
 {
+    public static final String ACTIONS = "Actions";
+    public static final String HUB     = "Hub";
+    public static final String INVITES = "Invites";
+    public static final String NOTIFICATIONS = "Notifications";
     private Toolbar toolbar;
 
     public static Intent getLaunchIntent(Context context)
@@ -61,11 +65,11 @@ public class MainActivity extends BaseActivity implements NotificationsFragment.
 
     private void initDrawer()
     {
+        final String[] list = getResources().getStringArray(R.array.drawer_list);
         final View drawer = findViewById(R.id.drawer);
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         final ListView listView = (ListView) findViewById(R.id.menu_list);
 
-        final String[] list = getResources().getStringArray(R.array.drawer_list);
         listView.setAdapter(new DrawerListAdapter(this, list));
         listView.setItemChecked(0, true);
 
@@ -74,18 +78,18 @@ public class MainActivity extends BaseActivity implements NotificationsFragment.
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                switch(position)
+                switch(list[position])
                 {
-                    case 0:
+                    case ACTIONS:
                         replaceCurrentFragment(ActionsFragment.newInstance(), ActionsFragment.TAG);
                         break;
-                    case 1:
+                    case HUB:
                         replaceCurrentFragment(HubFragment.newInstance(false), HubFragment.TAG);
                         break;
-                    case 2:
+                    case INVITES:
                         replaceCurrentFragment(InvitesFragment.newInstance(), InvitesFragment.TAG);
                         break;
-                    case 3:
+                    case NOTIFICATIONS:
                         replaceCurrentFragment(NotificationsFragment.newInstance(),
                                                NotificationsFragment.TAG);
                         break;
