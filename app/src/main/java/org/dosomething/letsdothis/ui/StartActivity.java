@@ -23,7 +23,7 @@ public class StartActivity extends BaseActivity
         {
             goToMain();
         }
-        else if(! AppPrefs.getInstance(this).isFirstRun())
+        else if(! AppPrefs.getInstance(this).isFirstIntro())
         {
             goToRegisterLogin();
         }

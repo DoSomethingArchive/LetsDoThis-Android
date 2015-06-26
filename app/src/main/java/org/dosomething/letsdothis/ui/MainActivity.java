@@ -17,6 +17,7 @@ import org.dosomething.letsdothis.ui.fragments.ActionsFragment;
 import org.dosomething.letsdothis.ui.fragments.HubFragment;
 import org.dosomething.letsdothis.ui.fragments.InvitesFragment;
 import org.dosomething.letsdothis.ui.fragments.NotificationsFragment;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 
 public class MainActivity extends BaseActivity implements NotificationsFragment.SetTitleListener
@@ -51,6 +52,7 @@ public class MainActivity extends BaseActivity implements NotificationsFragment.
     private void initToolbar()
     {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Actions");
         setSupportActionBar(toolbar);
 
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -109,9 +111,10 @@ public class MainActivity extends BaseActivity implements NotificationsFragment.
             }
         });
 
-
-        if(true)
+        boolean firstDrawer = AppPrefs.getInstance(this).isFirstDrawer();
+        if(firstDrawer)
         {
+            AppPrefs.getInstance(this).setFirstDrawer();
             drawerLayout.openDrawer(drawer);
         }
     }
