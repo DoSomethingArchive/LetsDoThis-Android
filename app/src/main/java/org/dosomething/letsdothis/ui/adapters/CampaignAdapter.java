@@ -42,7 +42,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private ArrayList<Object> dataSet = new ArrayList<>();
     private CampaignAdapterClickListener campaignAdapterClickListener;
-    private int                          selectedPosition = - 1;
+    private int selectedPosition = - 1;
 
     public interface CampaignAdapterClickListener
     {
@@ -73,8 +73,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         {
             case VIEW_TYPE_CAMPAIGN_FOOTER:
                 View footerLayout = LayoutInflater.from(parent.getContext())
-                                                  .inflate(R.layout.item_campaign_footer, parent,
-                                                           false);
+                        .inflate(R.layout.item_campaign_footer, parent, false);
                 return new SectionTitleViewHolder((TextView) footerLayout);
             case VIEW_TYPE_REPORT_BACK:
                 View reportBackLayout = LayoutInflater.from(parent.getContext())
@@ -167,16 +166,16 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                                                                  slantHeight,
                                                                                  widthOvershoot,
                                                                                  heightShadowOvershoot);
-            expandedCampaignViewHolder.slantedBg
-                    .setBackground(background);
-            expandedCampaignViewHolder.campaignDetailsWrapper.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    campaignAdapterClickListener.onCampaignClicked(campaign.id);
-                }
-            });
+            expandedCampaignViewHolder.slantedBg.setBackground(background);
+            expandedCampaignViewHolder.campaignDetailsWrapper
+                    .setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            campaignAdapterClickListener.onCampaignClicked(campaign.id);
+                        }
+                    });
 
             expandedCampaignViewHolder.problemFact.setText(campaign.problemFact);
 
@@ -195,6 +194,24 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .setText(resources.getQuantityString(R.plurals.hours, Integer.parseInt(hours)));
             expandedCampaignViewHolder.minutesLabel.setText(
                     resources.getQuantityString(R.plurals.minutes, Integer.parseInt(minutes)));
+
+            int dayInt = Integer.parseInt(days);
+            int hourInt = Integer.parseInt(hours);
+            expandedCampaignViewHolder.daysWrapper.setVisibility(View.GONE);
+            expandedCampaignViewHolder.hoursrWrapper.setVisibility(View.GONE);
+            expandedCampaignViewHolder.minWrapper.setVisibility(View.GONE);
+            if(dayInt > 0)
+            {
+                expandedCampaignViewHolder.daysWrapper.setVisibility(View.VISIBLE);
+            }
+            else if(hourInt > 0)
+            {
+                expandedCampaignViewHolder.hoursrWrapper.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                expandedCampaignViewHolder.minWrapper.setVisibility(View.VISIBLE);
+            }
         }
         else if(getItemViewType(position) == VIEW_TYPE_REPORT_BACK)
         {
@@ -290,19 +307,25 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public static class ExpandedCampaignViewHolder extends CampaignViewHolder
     {
-        private TextView problemFact;
-        private View     campaignDetailsWrapper;
-        public  TextView days;
-        public  TextView hours;
-        public  TextView minutes;
-        public  TextView daysLabel;
-        public  TextView hoursLabel;
-        public  TextView minutesLabel;
-        private final View slantedBg;
+        private         TextView problemFact;
+        private         View     campaignDetailsWrapper;
+        public          TextView days;
+        public          TextView hours;
+        public          TextView minutes;
+        public          TextView daysLabel;
+        public          TextView hoursLabel;
+        public          TextView minutesLabel;
+        private final   View     slantedBg;
+        protected final View     daysWrapper;
+        protected final View     hoursrWrapper;
+        protected final View     minWrapper;
 
         public ExpandedCampaignViewHolder(View itemView)
         {
             super(itemView);
+            daysWrapper = itemView.findViewById(R.id.days_wrapper);
+            hoursrWrapper = itemView.findViewById(R.id.hours_wrapper);
+            minWrapper = itemView.findViewById(R.id.min_wrapper);
             problemFact = (TextView) itemView.findViewById(R.id.problemFact);
             slantedBg = itemView.findViewById(R.id.slanted_bg);
             campaignDetailsWrapper = itemView.findViewById(R.id.campaign_details_wrapper);
