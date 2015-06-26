@@ -3,6 +3,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -118,8 +119,14 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             campaignViewHolder.callToAction.setText(campaign.callToAction);
 
             int height = resources.getDimensionPixelSize(R.dimen.campaign_height);
-            Picasso.with(context).load(campaign.imagePath).resize(0, height)
-                   .into(campaignViewHolder.imageView);
+
+            CharSequence tag = (CharSequence) campaignViewHolder.imageView.getTag();
+            if(!TextUtils.equals(campaign.imagePath, tag))
+            {
+                Picasso.with(context).load(campaign.imagePath).resize(0, height)
+                       .into(campaignViewHolder.imageView);
+                campaignViewHolder.imageView.setTag(campaign.imagePath);
+            }
 
             campaignViewHolder.root.setOnClickListener(new View.OnClickListener()
             {
@@ -135,14 +142,20 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if(getItemViewType(position) == VIEW_TYPE_CAMPAIGN_SMALL)
         {
             final Campaign campaign = (Campaign) dataSet.get(position);
-            CampaignViewHolder campaignViewHolder = (CampaignViewHolder) holder;
-            campaignViewHolder.title.setText(campaign.title);
-            campaignViewHolder.callToAction.setText(campaign.callToAction);
+            CampaignViewHolder smallCampaignViewHolder = (CampaignViewHolder) holder;
+            smallCampaignViewHolder.title.setText(campaign.title);
+            smallCampaignViewHolder.callToAction.setText(campaign.callToAction);
 
             int height = resources.getDimensionPixelSize(R.dimen.campaign_small_height);
-            Picasso.with(context).load(campaign.imagePath).resize(0, height)
-                   .into(campaignViewHolder.imageView);
-            campaignViewHolder.root.setOnClickListener(new View.OnClickListener()
+
+            CharSequence tag = (CharSequence) smallCampaignViewHolder.imageView.getTag();
+            if(!TextUtils.equals(campaign.imagePath, tag))
+            {
+                Picasso.with(context).load(campaign.imagePath).resize(0, height)
+                       .into(smallCampaignViewHolder.imageView);
+                smallCampaignViewHolder.imageView.setTag(campaign.imagePath);
+            }
+            smallCampaignViewHolder.root.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View v)
@@ -162,8 +175,15 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             expandedCampaignViewHolder.callToAction.setText(campaign.callToAction);
 
             int height = resources.getDimensionPixelSize(R.dimen.campaign_height_expanded);
-            Picasso.with(context).load(campaign.imagePath).resize(0, height)
-                   .into(expandedCampaignViewHolder.imageView);
+
+            CharSequence tag = (CharSequence) expandedCampaignViewHolder.imageView.getTag();
+
+            if(!TextUtils.equals(campaign.imagePath, tag))
+            {
+                Picasso.with(context).load(campaign.imagePath).resize(0, height)
+                       .into(expandedCampaignViewHolder.imageView);
+                expandedCampaignViewHolder.imageView.setTag(campaign.imagePath);
+            }
             expandedCampaignViewHolder.imageView.setOnClickListener(new View.OnClickListener()
             {
                 @Override
