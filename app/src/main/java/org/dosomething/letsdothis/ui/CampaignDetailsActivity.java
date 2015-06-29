@@ -134,7 +134,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         //FIXME
         if(BuildConfig.DEBUG)
         {
-            startActivity(PublicProfileActivity.getLaunchIntent(this));
+            startActivity(PublicProfileActivity.getLaunchIntent(this ,id));
         }
     }
 
