@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout android:id="@+id/drawer"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="304dp"
-                android:id="@+id/drawer"
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
                 android:background="@color/white"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="0dp">
+                android:clickable="true"
+                android:divider="@android:color/transparent" android:dividerHeight="0dp">
 
     <RelativeLayout
         android:id="@+id/header"
@@ -18,30 +19,38 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_margin="16dp"
             android:text="@string/app_name"
             android:textAllCaps="true"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:typeface="brandon_bold"/>
 
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/setting"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true"
+        android:paddingLeft="@dimen/padding_medium"
+        android:background="@drawable/drawer_bg"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="center"
-            android:src="@drawable/ic_actions"/>
+            android:src="@drawable/ic_settings"/>
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/padding_medium"
+            android:layout_marginStart="@dimen/padding_medium"
             android:text="@string/settings"
-            android:textColor="@color/dark_gray"/>
+            android:textColor="@color/drawer_text"
+            app:typeface="brandon_bold"/>
     </LinearLayout>
 
     <FrameLayout
@@ -49,91 +58,17 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_above="@id/setting"
-        android:background="@color/gray"/>
+        android:background="@color/divider_gray"/>
 
-    <LinearLayout
+
+    <ListView
+        android:id="@+id/menu_list"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:layout_above="@+id/divider"
         android:layout_below="@+id/header"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:id="@+id/actions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-
-                android:layout_gravity="center"
-                android:src="@drawable/ic_actions"/>
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="@string/actions"
-                android:textColor="@color/dark_gray"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/hub"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_hub"/>
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="@string/hub"
-                android:textColor="@color/dark_gray"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/invites"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_invites"/>
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="@string/invites"
-                android:textColor="@color/dark_gray"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/notifications"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_notifications"/>
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="@string/notifications"
-                android:textColor="@color/dark_gray"/>
-        </LinearLayout>
-
-    </LinearLayout>
-
+        android:layout_gravity="start"
+        android:background="#fff"
+        android:choiceMode="singleChoice"/>
 
 </RelativeLayout>

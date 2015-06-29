@@ -2,7 +2,6 @@ package org.dosomething.letsdothis.ui.views.typeface.preferences;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.preference.CheckBoxPreference;
 import android.preference.SwitchPreference;
 import android.util.AttributeSet;
 import android.view.View;
