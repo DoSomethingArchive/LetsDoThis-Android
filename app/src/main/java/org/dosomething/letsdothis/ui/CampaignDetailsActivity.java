@@ -125,17 +125,14 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     public void inviteClicked()
     {
         Campaign campaign = adapter.getCampaign();
-        startActivity(CampaignInviteActivity.getLaunchIntent(this, campaign.title, campaign.invite.code));
+        startActivity(
+                CampaignInviteActivity.getLaunchIntent(this, campaign.title, campaign.invite.code));
     }
 
     @Override
     public void onUserClicked(String id)
     {
-        //FIXME
-        if(BuildConfig.DEBUG)
-        {
-            startActivity(PublicProfileActivity.getLaunchIntent(this ,id));
-        }
+        startActivity(PublicProfileActivity.getLaunchIntent(this, id));
     }
 
     @Override
@@ -194,9 +191,8 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
                 }
 
                 //FIXME--------------
-//                adapter.refreshTestImage(selectedImageUri);
-                startActivity(
-                        PhotoCropActivity.getLaunchIntent(this, selectedImageUri.toString()));
+                //                adapter.refreshTestImage(selectedImageUri);
+                startActivity(PhotoCropActivity.getLaunchIntent(this, selectedImageUri.toString()));
             }
         }
     }
