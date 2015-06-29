@@ -1,4 +1,4 @@
-package org.dosomething.letsdothis.tasks.persisted;
+package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 import android.util.Log;
 
@@ -18,13 +18,13 @@ import retrofit.mime.TypedFile;
 /**
  * Created by toidiu on 4/16/15.
  */
-public class UploadAvatarPerTask extends Task
+public class UploadAvatarTask extends Task
 {
     private String filePath;
     private String userId;
     public  User   user;
 
-    public UploadAvatarPerTask(String id, String filePath)
+    public UploadAvatarTask(String id, String filePath)
     {
         this.userId = id;
         this.filePath = filePath;
@@ -37,7 +37,6 @@ public class UploadAvatarPerTask extends Task
         Dao<User, String> userDao = DatabaseHelper.getInstance(context).getUserDao();
         user = userDao.queryForId(userId);
         user.avatarPath = "file:" + filePath;
-        Log.d("-p-p-p-p-pkkkkk", user.avatarPath);
 
         userDao.createOrUpdate(user);
         EventBusExt.getDefault().post(this);

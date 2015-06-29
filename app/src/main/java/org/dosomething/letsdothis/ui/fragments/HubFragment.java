@@ -21,7 +21,7 @@ import org.dosomething.letsdothis.tasks.DbGetUserTask;
 import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignTask;
 import org.dosomething.letsdothis.tasks.GetPastUserCampaignTask;
 import org.dosomething.letsdothis.tasks.GetUserTask;
-import org.dosomething.letsdothis.tasks.persisted.UploadAvatarPerTask;
+import org.dosomething.letsdothis.tasks.UploadAvatarTask;
 import org.dosomething.letsdothis.ui.CampaignInviteActivity;
 import org.dosomething.letsdothis.ui.GroupActivity;
 import org.dosomething.letsdothis.ui.PhotoCropActivity;
@@ -234,7 +234,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(UploadAvatarPerTask task)
+    public void onEventMainThread(UploadAvatarTask task)
     {
         adapter.addUser(task.user);
     }
