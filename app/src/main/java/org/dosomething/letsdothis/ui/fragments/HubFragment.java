@@ -74,11 +74,6 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        String currentUserId = AppPrefs.getInstance(getActivity()).getCurrentUserId();
-        TaskQueue.loadQueueDefault(getActivity())
-                .execute(new GetCurrentUserCampaignTask(currentUserId));
-        TaskQueue.loadQueueDefault(getActivity())
-                .execute(new GetPastUserCampaignTask(currentUserId));
         return inflater.inflate(R.layout.fragment_toolbar_recycler, container, false);
     }
 
@@ -87,25 +82,28 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     {
         super.onAttach(activity);
         titleListener = (SetTitleListener) getActivity();
+        String currentUserId = AppPrefs.getInstance(getActivity()).getCurrentUserId();
+        TaskQueue.loadQueueDefault(getActivity())
+                .execute(new GetCurrentUserCampaignTask(currentUserId));
+        TaskQueue.loadQueueDefault(getActivity())
+                .execute(new GetPastUserCampaignTask(currentUserId));
     }
 
     @Override
-    public void onStop()
+    public void onPause()
     {
-        super.onStop();
+        super.onPause();
         EventBusExt.getDefault().unregister(this);
-    }
-
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-        EventBusExt.getDefault().register(this);
     }
 
     @Override
     public void onResume()
     {
+        if(! EventBusExt.getDefault().isRegistered(this))
+        {
+            EventBusExt.getDefault().register(this);
+        }
+
         titleListener.setTitle("Hub");
         super.onResume();
 
@@ -132,15 +130,6 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(GetCurrentUserCampaignTask task)
-    {
-        if(! task.campaignList.isEmpty())
-        {
-            adapter.addCurrentCampaign(task.campaignList);
-        }
     }
 
     @Override
@@ -225,6 +214,15 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
                 startActivity(PhotoCropActivity
                                       .getLaunchIntent(getActivity(), selectedImageUri.toString()));
             }
+        }
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(GetCurrentUserCampaignTask task)
+    {
+        if(! task.campaignList.isEmpty())
+        {
+            adapter.addCurrentCampaign(task.campaignList);
         }
     }
 
