@@ -51,6 +51,8 @@
     <string name="error_code_length">An invite code should be 15 characters long!</string>
     <string name="tell_us">Tell us about yourself!</string>
     <string name="footer_register">Have a DoSomething.org account? Sign in</string>
+    <string name="footer_forgot_pw">Forgot Password</string>
+    <string name="forgot_pw_link">https://www.dosomething.org/user/password</string>
     <string name="prove_it">Prove It</string>
     <string name="desc_rewards">Invite your friends to get rewards copy. There are multiple
         sentences in this paragraph body.
