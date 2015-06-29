@@ -1,9 +1,7 @@
 package org.dosomething.letsdothis.network;
 import org.dosomething.letsdothis.BuildConfig;
-import org.dosomething.letsdothis.network.models.RequestCampaignSignup;
 import org.dosomething.letsdothis.network.models.RequestKudo;
 import org.dosomething.letsdothis.network.models.ResponseCampaignList;
-import org.dosomething.letsdothis.network.models.ResponseCampaignSignUp;
 import org.dosomething.letsdothis.network.models.ResponseCampaignWrapper;
 import org.dosomething.letsdothis.network.models.ResponseReportBack;
 import org.dosomething.letsdothis.network.models.ResponseReportBackList;
@@ -11,7 +9,6 @@ import org.dosomething.letsdothis.network.models.ResponseReportBackList;
 import co.touchlab.android.threading.errorcontrol.NetworkException;
 import retrofit.http.Body;
 import retrofit.http.GET;
-import retrofit.http.Header;
 import retrofit.http.Headers;
 import retrofit.http.POST;
 import retrofit.http.Path;
@@ -49,7 +46,4 @@ public interface DoSomethingAPI
     @GET("/campaigns.json?mobile_app=1")
     ResponseCampaignList campaignList(@Query("term_ids")int interestGroupId);
 
-    @Headers("Content-Type: application/json")
-    @POST("/user/campaigns/{id}/signup")
-    ResponseCampaignSignUp campaignSignUp(@Body RequestCampaignSignup requestCampaignSignup, @Path("id") int id, @Header("Session") String sessionToken);
 }
