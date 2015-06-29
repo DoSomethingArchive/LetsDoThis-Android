@@ -11,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 
+import co.touchlab.android.threading.tasks.TaskQueue;
+
 /**
  * Created by toidiu on 1/18/15.
  */
@@ -28,6 +30,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
     private DatabaseHelper(Context context)
     {
         super(context, DATABASE_FILE_NAME, null, VERSION);
+    }
+
+    public static TaskQueue defaultDatabaseQueue(Context context)
+    {
+        return TaskQueue.loadQueue(context, "database");
     }
 
     @NotNull

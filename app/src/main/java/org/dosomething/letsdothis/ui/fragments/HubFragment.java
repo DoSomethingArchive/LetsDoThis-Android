@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.tasks.DbGetUserTask;
 import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignTask;
 import org.dosomething.letsdothis.tasks.GetPastUserCampaignTask;
@@ -109,7 +110,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         }
         else
         {
-            TaskQueue.loadQueueDefault(getActivity()).execute(
+            DatabaseHelper.defaultDatabaseQueue(getActivity()).execute(
                     new DbGetUserTask(AppPrefs.getInstance(getActivity()).getCurrentUserId()));
         }
     }
