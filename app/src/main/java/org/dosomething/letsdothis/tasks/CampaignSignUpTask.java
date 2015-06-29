@@ -1,7 +1,7 @@
 package org.dosomething.letsdothis.tasks;
 import android.content.Context;
-import android.util.Log;
 
+import org.dosomething.letsdothis.data.CampaignActions;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.RequestCampaignSignup;
 import org.dosomething.letsdothis.network.models.ResponseCampaignSignUp;
@@ -31,12 +31,19 @@ public class CampaignSignUpTask extends Task
     @Override
     protected void run(Context context) throws Throwable
     {
-        String sessionToken = AppPrefs.getInstance(context).getSessionToken();
-        RequestCampaignSignup requestCampaignSignup = new RequestCampaignSignup();
-        ResponseCampaignSignUp response = NetworkHelper.getDoSomethingAPIService()
-                                                       .campaignSignUp(requestCampaignSignup,
-                                                                       campaignId, sessionToken);
-        Log.d("boo", String.valueOf(ResponseCampaignSignUp.getSignUpId(response)));
+        if(CampaignActions.queryForId(context, campaignId) == null)
+        {
+            String sessionToken = AppPrefs.getInstance(context).getSessionToken();
+            RequestCampaignSignup requestCampaignSignup = new RequestCampaignSignup();
+            ResponseCampaignSignUp response = NetworkHelper.getNorthstarAPIService()
+                                                           .campaignSignUp(requestCampaignSignup,
+                                                                           campaignId, sessionToken);
+            CampaignActions campaignActions = new CampaignActions();
+            campaignActions.campaignId = campaignId;
+            campaignActions.signUpId = ResponseCampaignSignUp.getSignUpId(response);
+            CampaignActions.save(context, campaignActions);
+        }
+
     }
 
     @Override
