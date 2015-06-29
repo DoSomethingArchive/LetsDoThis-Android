@@ -1,17 +1,16 @@
 package org.dosomething.letsdothis.ui.fragments;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Notification;
-import org.dosomething.letsdothis.ui.MainActivity;
 import org.dosomething.letsdothis.ui.adapters.NotificationAdapter;
 import org.dosomething.letsdothis.ui.views.DividerItemDecoration;
 
@@ -25,6 +24,7 @@ public class NotificationsFragment extends Fragment
 {
 
     public static final String TAG = NotificationsFragment.class.getSimpleName();
+    private SetTitleListener titleListener;
 
     public static NotificationsFragment newInstance()
     {
@@ -35,7 +35,14 @@ public class NotificationsFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.activity_fragment_toolbar_recycler, container, false);
+        return inflater.inflate(R.layout.fragment_toolbar_recycler, container, false);
+    }
+
+    @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+        titleListener = (SetTitleListener) getActivity();
     }
 
     @Override
@@ -48,6 +55,8 @@ public class NotificationsFragment extends Fragment
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        titleListener.setTitle("Notifications");
     }
 
     private List<Object> generateSampleData()
@@ -66,4 +75,8 @@ public class NotificationsFragment extends Fragment
         return notifications;
     }
 
+    public interface SetTitleListener
+    {
+        void setTitle(String title);
+    }
 }

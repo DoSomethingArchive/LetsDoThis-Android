@@ -20,7 +20,6 @@ import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.FbUser;
-import org.dosomething.letsdothis.tasks.BaseRegistrationTask;
 import org.dosomething.letsdothis.ui.LoginActivity;
 import org.dosomething.letsdothis.ui.RegisterActivity;
 import org.dosomething.letsdothis.utils.AppPrefs;
@@ -55,7 +54,7 @@ public class RegisterLoginFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        AppPrefs.getInstance(getActivity()).setFirstRun(false);
+        AppPrefs.getInstance(getActivity()).setFirstIntro(false);
     }
 
     @Override

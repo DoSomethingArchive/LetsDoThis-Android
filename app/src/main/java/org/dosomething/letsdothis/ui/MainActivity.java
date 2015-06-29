@@ -5,23 +5,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.ui.adapters.DrawerListAdapter;
 import org.dosomething.letsdothis.ui.fragments.ActionsFragment;
 import org.dosomething.letsdothis.ui.fragments.HubFragment;
 import org.dosomething.letsdothis.ui.fragments.InvitesFragment;
 import org.dosomething.letsdothis.ui.fragments.NotificationsFragment;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 
-public class MainActivity extends BaseActivity implements HubFragment.SetToolbarListener
+public class MainActivity extends BaseActivity implements NotificationsFragment.SetTitleListener
 {
-    private View actions;
-    private View hub;
-    private View invites;
-    private View notifications;
+    private Toolbar toolbar;
 
     public static Intent getLaunchIntent(Context context)
     {
@@ -40,70 +42,64 @@ public class MainActivity extends BaseActivity implements HubFragment.SetToolbar
                     .commit();
         }
 
+        initToolbar();
         initDrawer();
     }
 
-    //TODO the drawer should have a list view, then we won't need all this logic
+    private void initToolbar()
+    {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Actions");
+        setSupportActionBar(toolbar);
+
+        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                                                                        R.string.invite_code_opt,
+                                                                        R.string.account);
+        drawerLayout.setDrawerListener(mDrawerToggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        mDrawerToggle.syncState();
+    }
+
     private void initDrawer()
     {
+        final String[] list = getResources().getStringArray(R.array.drawer_list);
         final View drawer = findViewById(R.id.drawer);
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final ListView listView = (ListView) findViewById(R.id.menu_list);
 
-        actions = findViewById(R.id.actions);
-        actions.setSelected(true);
-        actions.setOnClickListener(new View.OnClickListener()
+        listView.setAdapter(new DrawerListAdapter(this, list));
+        listView.setItemChecked(0, true);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
-            public void onClick(View v)
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                if(! actions.isSelected())
+                String positionString = list[position];
+                if(TextUtils.equals(positionString, getString(R.string.actions)))
                 {
                     replaceCurrentFragment(ActionsFragment.newInstance(), ActionsFragment.TAG);
-                    drawerLayout.closeDrawer(drawer);
-                }
-            }
-        });
 
-        hub = findViewById(R.id.hub);
-        hub.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                if(! hub.isSelected())
+                }
+                else if(TextUtils.equals(positionString, getString(R.string.hub)))
                 {
                     replaceCurrentFragment(HubFragment.newInstance(false), HubFragment.TAG);
-                    drawerLayout.closeDrawer(drawer);
-                }
-            }
-        });
 
-        invites = findViewById(R.id.invites);
-        invites.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                if(! invites.isSelected())
+                }
+                else if(TextUtils.equals(positionString, getString(R.string.invites)))
                 {
                     replaceCurrentFragment(InvitesFragment.newInstance(), InvitesFragment.TAG);
-                    drawerLayout.closeDrawer(drawer);
-                }
-            }
-        });
 
-        notifications = findViewById(R.id.notifications);
-        notifications.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                if(! notifications.isSelected())
+                }
+                else if(TextUtils.equals(positionString, getString(R.string.notifications)))
                 {
                     replaceCurrentFragment(NotificationsFragment.newInstance(),
                                            NotificationsFragment.TAG);
-                    drawerLayout.closeDrawer(drawer);
+
                 }
+                drawerLayout.closeDrawer(drawer);
             }
         });
 
@@ -118,7 +114,11 @@ public class MainActivity extends BaseActivity implements HubFragment.SetToolbar
             }
         });
 
-
+        if(AppPrefs.getInstance(this).isFirstDrawer())
+        {
+            AppPrefs.getInstance(this).setFirstDrawer();
+            drawerLayout.openDrawer(drawer);
+        }
     }
 
     private void replaceCurrentFragment(Fragment fragment, String tag)
@@ -126,25 +126,11 @@ public class MainActivity extends BaseActivity implements HubFragment.SetToolbar
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, tag)
                 .commit();
         getSupportFragmentManager().executePendingTransactions();
-        updateNavBar();
     }
 
-    private void updateNavBar()
+    public void setTitle(String title)
     {
-        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
-        String currentFragTag = currentFragment.getTag();
-
-        actions.setSelected(TextUtils.equals(ActionsFragment.TAG, currentFragTag));
-        notifications.setSelected(TextUtils.equals(NotificationsFragment.TAG, currentFragTag));
-        hub.setSelected(TextUtils.equals(HubFragment.TAG, currentFragTag));
-        invites.setSelected(TextUtils.equals(InvitesFragment.TAG, currentFragTag));
-
-    }
-
-    @Override
-    public void setToolbar(Toolbar toolbar)
-    {
-        setSupportActionBar(toolbar);
+        toolbar.setTitle(title);
     }
 
 

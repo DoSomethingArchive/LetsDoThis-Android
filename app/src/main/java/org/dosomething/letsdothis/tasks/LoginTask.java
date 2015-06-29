@@ -10,7 +10,6 @@ import org.dosomething.letsdothis.utils.AppPrefs;
 import java.net.HttpURLConnection;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
-import co.touchlab.android.threading.tasks.TaskQueue;
 import retrofit.RetrofitError;
 
 /**

@@ -6,11 +6,15 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -27,6 +31,10 @@ import org.dosomething.letsdothis.ui.CampaignInviteActivity;
 import org.dosomething.letsdothis.ui.GroupActivity;
 import org.dosomething.letsdothis.ui.PhotoCropActivity;
 import org.dosomething.letsdothis.ui.PublicProfileActivity;
+import org.dosomething.letsdothis.ui.SettingsActivity;
+import org.dosomething.letsdothis.ui.UserListActivity;
+import org.dosomething.letsdothis.ui.UserProfileActivity;
+import org.dosomething.letsdothis.ui.UserUpdateActivity;
 import org.dosomething.letsdothis.ui.adapters.HubAdapter;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
@@ -35,10 +43,13 @@ import java.io.File;
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
 
+
+import static org.dosomething.letsdothis.ui.fragments.NotificationsFragment.SetTitleListener;
+
 /**
  * Created by izzyoji :) on 4/15/15.
  */
-public class HubFragment extends AbstractQuickReturnFragment implements HubAdapter.HubAdapterClickListener
+public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickListener
 {
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
@@ -47,9 +58,9 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
     public static final  String PUBLIC_PROFILE = "PUBLIC_PROFILE";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
-    private HubAdapter         adapter;
-    private SetToolbarListener setToolbarListener;
-    private Uri                imageUri;
+    private HubAdapter       adapter;
+    private Uri              imageUri;
+    private SetTitleListener titleListener;
 
     public static HubFragment newInstance(boolean isPublic)
     {
@@ -69,13 +80,6 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
     }
 
     @Override
-    public void onAttach(Activity activity)
-    {
-        super.onAttach(activity);
-        setToolbarListener = (SetToolbarListener) getActivity();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         String currentUserId = AppPrefs.getInstance(getActivity()).getCurrentUserId();
@@ -84,9 +88,8 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
         TaskQueue.loadQueueDefault(getActivity())
                 .execute(new GetPastUserCampaignTask(currentUserId));
 
-        View rootView = inflater
-                .inflate(R.layout.activity_fragment_quickreturn_recycler, container, false);
-        recycleView = (RecyclerView) rootView.findViewById(R.id.recycler);
+        return inflater.inflate(R.layout.fragment_toolbar_recycler, container, false);
+    }
 
         toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
         TextView title = (TextView) rootView.findViewById(R.id.toolbar_title);
@@ -98,11 +101,19 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
     }
 
     @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+        titleListener = (SetTitleListener) getActivity();
+    }
+    
+    @Override
     public void onStop()
     {
         super.onStop();
         EventBusExt.getDefault().unregister(this);
     }
+
 
     @Override
     public void onResume()
@@ -123,6 +134,7 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
         }
     }
 
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
@@ -134,6 +146,48 @@ public class HubFragment extends AbstractQuickReturnFragment implements HubAdapt
         recyclerView.setAdapter(adapter);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
+    }
+    
+    
+//    @Override
+//    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+//    {
+//        super.onActivityCreated(savedInstanceState);
+//        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
+//
+//        //FIXME get real user
+//        User user = new User(null, "firstName", "lastName", "birthday");
+//        user.id =             AppPrefs.getInstance(getActivity()).getCurrentUserId();
+//
+//        boolean isPublic = getArguments().getBoolean(PUBLIC_PROFILE);
+//        if(isPublic)
+//        {
+//            TaskQueue.loadQueueDefault(getActivity()).execute(
+//                    new GetUserTask(AppPrefs.getInstance(getActivity()).getCurrentUserId()));
+//        }
+//
+//        adapter = new HubAdapter(user, this, isPublic);
+//        recyclerView.setAdapter(adapter);
+//        layoutManager = new LinearLayoutManager(getActivity());
+//        recyclerView.setLayoutManager(layoutManager);
+//    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(GetCurrentUserCampaignTask task)
+    {
+        if(! task.campaignList.isEmpty())
+        {
+            adapter.addCurrentCampaign(task.campaignList);
+        }
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(GetPastUserCampaignTask task)
+    {
+        if(! task.campaignList.isEmpty())
+        {
+            adapter.addPastCampaign(task.campaignList);
+        }
     }
 
     @Override
