@@ -97,9 +97,15 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @Override
+    public void onStart()
+    {
+        super.onStart();
+        EventBusExt.getDefault().register(this);
+    }
+
+    @Override
     public void onResume()
     {
-        EventBusExt.getDefault().register(this);
         titleListener.setTitle("Hub");
         super.onResume();
 
