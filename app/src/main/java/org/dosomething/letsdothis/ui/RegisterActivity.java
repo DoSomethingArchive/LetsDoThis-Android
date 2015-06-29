@@ -148,7 +148,7 @@ public class RegisterActivity extends BaseActivity
                 }
                 if(BuildConfig.DEBUG)
                 {
-                    Log.d("test-----------", selectedImageUri.toString());
+                    Log.d("drawer_text-----------", selectedImageUri.toString());
                 }
 
                 Picasso.with(this).load(selectedImageUri)

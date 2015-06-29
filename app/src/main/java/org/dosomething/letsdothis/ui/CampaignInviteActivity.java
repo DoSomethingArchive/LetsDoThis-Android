@@ -34,9 +34,7 @@ public class CampaignInviteActivity extends BaseActivity
     private void initUI(final String campaignName, final String inviteCode)
     {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        TextView toolBarTitle = (TextView) findViewById(R.id.toolbar_title);
-        toolbar.setTitle("");
-        toolBarTitle.setText(R.string.app_name);
+        toolbar.setTitle("R.string.app_name");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

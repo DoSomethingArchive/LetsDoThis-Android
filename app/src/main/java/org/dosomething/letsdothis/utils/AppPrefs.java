@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import org.dosomething.letsdothis.R;
 import org.jetbrains.annotations.NotNull;
@@ -14,13 +13,14 @@ public class AppPrefs
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String CURRENT_USER_ID    = "CURRENT_USER_ID";
     public static final String USER_SESSION_TOKEN = "CURRENT_SESSION_TOKEN";
-    public static final String FIRST_RUN          = "FIRST_RUN";
+    public static final String FIRST_INTRO        = "FIRST_INTRO";
+    public static final String FIRST_DRAWER       = "FIRST_DRAWER";
     public static final String AVATAR_PATH        = "AVATAR_PATH";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
-    private static AppPrefs instance;
-    volatile private  Context context;
-    private SharedPreferences prefs;
+    private static   AppPrefs          instance;
+    volatile private Context           context;
+    private          SharedPreferences prefs;
 
     @NotNull
     public static synchronized AppPrefs getInstance(Context context)
@@ -38,7 +38,8 @@ public class AppPrefs
     private boolean getReceiveNotification()
     {
         boolean notification = prefs
-                .getBoolean(this.context.getResources().getString(R.string.receive_notifications), false);
+                .getBoolean(this.context.getResources().getString(R.string.receive_notifications),
+                            false);
         return notification;
     }
 
@@ -113,14 +114,24 @@ public class AppPrefs
         return getString(USER_SESSION_TOKEN, null);
     }
 
-    public void setFirstRun(boolean first)
+    public void setFirstIntro(boolean first)
     {
-        setBoolean(FIRST_RUN, first);
+        setBoolean(FIRST_INTRO, first);
     }
 
-    public boolean isFirstRun()
+    public boolean isFirstIntro()
     {
-        return getBoolean(FIRST_RUN, true);
+        return getBoolean(FIRST_INTRO, true);
+    }
+
+    public void setFirstDrawer()
+    {
+        setBoolean(FIRST_DRAWER, false);
+    }
+
+    public boolean isFirstDrawer()
+    {
+        return getBoolean(FIRST_DRAWER, true);
     }
 
     public void setAvatarPath(String path)
