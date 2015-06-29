@@ -85,7 +85,7 @@ public class MainActivity extends BaseActivity implements NotificationsFragment.
                 }
                 else if(TextUtils.equals(positionString, getString(R.string.hub)))
                 {
-                    replaceCurrentFragment(HubFragment.newInstance(false), HubFragment.TAG);
+                    replaceCurrentFragment(HubFragment.newInstance(null), HubFragment.TAG);
 
                 }
                 else if(TextUtils.equals(positionString, getString(R.string.invites)))

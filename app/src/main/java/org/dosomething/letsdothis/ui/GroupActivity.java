@@ -154,7 +154,7 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
     @Override
     public void onFriendClicked(String id)
     {
-        startActivity(PublicProfileActivity.getLaunchIntent(this));
+        startActivity(PublicProfileActivity.getLaunchIntent(this, id));
     }
 
     @SuppressWarnings("UnusedDeclaration")
