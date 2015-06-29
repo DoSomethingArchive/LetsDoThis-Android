@@ -13,7 +13,7 @@ import android.util.Log;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
-import org.dosomething.letsdothis.tasks.persisted.UploadAvatarPerTask;
+import org.dosomething.letsdothis.tasks.UploadAvatarTask;
 import org.dosomething.letsdothis.ui.BaseActivity;
 import org.dosomething.letsdothis.ui.ChangeEmailActivity;
 import org.dosomething.letsdothis.ui.ChangeNumberActivity;
@@ -208,7 +208,7 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
 
                 String id = AppPrefs.getInstance(getActivity()).getCurrentUserId();
                 TaskQueue.loadQueueDefault(getActivity())
-                        .execute(new UploadAvatarPerTask(id, realPathFromURI));
+                        .execute(new UploadAvatarTask(id, realPathFromURI));
             }
         }
     }
