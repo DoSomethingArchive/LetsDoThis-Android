@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -41,10 +40,8 @@ public class ReportBackUploadActivity extends AppCompatActivity
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        TextView title = (TextView) findViewById(R.id.toolbar_title);
-        toolbar.setTitle("");
+        toolbar.setTitle("get this from network");
         //FIXME get title of the report back
-        title.setText("get this from network");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

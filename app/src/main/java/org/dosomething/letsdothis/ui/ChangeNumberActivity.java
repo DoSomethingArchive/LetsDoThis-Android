@@ -4,12 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.User;
-import org.dosomething.letsdothis.tasks.LoginTask;
 import org.dosomething.letsdothis.tasks.UpdateUserTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
