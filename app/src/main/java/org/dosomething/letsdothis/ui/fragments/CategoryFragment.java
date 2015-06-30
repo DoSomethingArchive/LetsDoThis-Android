@@ -92,8 +92,8 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
         recyclerView.setLayoutManager(layoutManager);
 
         EventBusExt.getDefault().register(this);
-        TaskQueue.loadQueueDefault(getActivity())
-                 .execute(new InterestGroupCampaignListTask(InterestGroup.values()[position].id));
+//        TaskQueue.loadQueueDefault(getActivity())
+//                 .execute(new InterestGroupCampaignListTask(InterestGroup.values()[position].id));
 
     }
 
