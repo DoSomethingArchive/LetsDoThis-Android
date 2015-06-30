@@ -36,18 +36,18 @@ public class SettingsActivity extends BaseActivity
                 .replace(R.id.container, SettingsFragment.newInstance()).commit();
     }
 
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item)
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch(item.getItemId())
         {
-            switch(item.getItemId())
-            {
-                case android.R.id.home:
-                    onBackPressed();
-                    return true;
-                default:
-                    return super.onOptionsItemSelected(item);
-            }
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
+    }
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(LogoutTask task)
