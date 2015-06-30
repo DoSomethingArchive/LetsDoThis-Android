@@ -60,8 +60,9 @@
                     android:layout_marginRight="@dimen/padding_tiny"
                     android:layout_weight="1"
                     android:hint="@string/first_name"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"/>
+                    android:imeOptions="actionNext">
+                    <requestFocus/>
+                </org.dosomething.letsdothis.ui.views.typeface.CustomEditText>
 
                 <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
                     android:id="@+id/last_name"
@@ -70,8 +71,7 @@
                     android:layout_marginLeft="@dimen/padding_tiny"
                     android:layout_weight="1"
                     android:hint="@string/last_name"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"/>
+                    android:imeOptions="actionNext"/>
 
             </LinearLayout>
 
