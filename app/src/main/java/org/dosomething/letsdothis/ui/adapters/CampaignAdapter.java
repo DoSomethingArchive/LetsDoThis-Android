@@ -299,12 +299,6 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    public void addItem(Object o)
-    {
-        dataSet.add(o);
-        notifyItemInserted(dataSet.size() - 1);
-    }
-
     public void addAll(List<ReportBack> objects)
     {
         dataSet.addAll(objects);

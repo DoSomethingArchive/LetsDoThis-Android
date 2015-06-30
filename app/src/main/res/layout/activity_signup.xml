@@ -60,6 +60,7 @@
                     android:layout_marginRight="@dimen/padding_tiny"
                     android:layout_weight="1"
                     android:hint="@string/first_name"
+                    android:imeOptions="actionNext"
                     android:inputType="text"/>
 
                 <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
@@ -68,17 +69,27 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/padding_tiny"
                     android:layout_weight="1"
-                    android:hint="@string/last_name"/>
+                    android:hint="@string/last_name"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"/>
 
             </LinearLayout>
 
+            <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_small"
+                android:layout_marginRight="@dimen/padding_small"
+                android:layout_marginTop="@dimen/padding_small"
+                android:hint="@string/email"/>
 
             <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
-                android:id="@+id/phone_email"
+                android:id="@+id/phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/padding_small"
-                android:hint="@string/phone_email"/>
+                android:hint="@string/phone"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -94,6 +105,7 @@
                     android:layout_marginRight="@dimen/padding_tiny"
                     android:layout_weight="2"
                     android:hint="@string/password"
+                    android:imeOptions="actionNext"
                     android:inputType="textPassword"/>
 
                 <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
@@ -103,10 +115,9 @@
                     android:layout_marginLeft="@dimen/padding_tiny"
                     android:layout_weight="1"
                     android:hint="@string/birthday"
+                    android:imeOptions="actionNext"
                     android:inputType="date"/>
-
             </LinearLayout>
-
 
             <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
                 android:layout_width="match_parent"
@@ -117,16 +128,42 @@
                 android:text="@string/footer_invite_code"
                 android:textColor="@color/white"/>
 
-            <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
-                android:id="@+id/invite"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/padding_small"
                 android:layout_marginLeft="@dimen/padding_small"
                 android:layout_marginRight="@dimen/padding_small"
-                android:layout_marginTop="10dp"
-                android:hint="@string/invite_code_opt"/>
+                android:layout_marginTop="@dimen/padding_small"
+                android:orientation="horizontal">
 
+                <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
+                    android:id="@+id/invite"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/padding_small"
+                    android:layout_marginRight="@dimen/padding_small"
+                    android:layout_weight="1"
+                    android:hint="@string/invite_code_opt1"
+                    android:imeOptions="actionNext"/>
+
+                <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
+                    android:id="@+id/invite2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/padding_small"
+                    android:layout_marginRight="@dimen/padding_small"
+                    android:layout_weight="1"
+                    android:hint="@string/invite_code_opt2"
+                    android:imeOptions="actionNext"/>
+
+                <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
+                    android:id="@+id/invite3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/padding_small"
+                    android:layout_weight="1"
+                    android:hint="@string/invite_code_opt3"/>
+            </LinearLayout>
 
             <org.dosomething.letsdothis.ui.views.typeface.CustomButton
                 android:id="@+id/register"
@@ -145,7 +182,6 @@
                 android:padding="@dimen/padding_small"
                 android:text="@string/footer_register"
                 android:textColor="@color/white"/>
-
         </LinearLayout>
     </ScrollView>
 
