@@ -46,7 +46,9 @@
     <string name="join_group">Join a friend\'s group with a code</string>
     <string name="my_codes">My Codes</string>
     <string name="invite_using">Invite using</string>
-    <string name="share_invite">I want you to join the %1$s campaign with me, here\'s the code: %2$s.</string>
+    <string name="share_invite">I want you to join the %1$s campaign with me, here\'s the code:
+        %2$s.
+    </string>
     <string name="done">Done</string>
     <string name="error_code_length">An invite code should be 15 characters long!</string>
     <string name="tell_us">Tell us about yourself!</string>
@@ -87,4 +89,8 @@
     <string name="interest_1">B</string>
     <string name="interest_2">C</string>
     <string name="interest_3">D</string>
+    <string name="notification_kudos">notification_kudos</string>
+    <string name="notification_friend">notification_friend</string>
+    <string name="notification_campaign">notification_campaign</string>
+    <string name="notification_pref">Notification Preferences</string>
 </resources>
