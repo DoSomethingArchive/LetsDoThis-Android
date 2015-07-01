@@ -13,19 +13,30 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
  */
 public class GetUserTask extends BaseNetworkErrorHandlerTask
 {
-    private final String id;
-    public        User   user;
+    private final String  id;
+    private final boolean isDrupalId;
+    public        User    user;
 
-    public GetUserTask(String id)
+    public GetUserTask(String id, boolean isDrupalId)
     {
         this.id = id;
+        this.isDrupalId = isDrupalId;
     }
 
     @Override
     protected void run(Context context) throws Throwable
     {
 
-        ResponseUser response = NetworkHelper.getNorthstarAPIService().userProfile(id);
+        ResponseUser response;
+        if(isDrupalId)
+        {
+            response = NetworkHelper.getNorthstarAPIService()
+                    .userProfileWithDrupalId(id);
+        }
+        else
+        {
+            response = NetworkHelper.getNorthstarAPIService().userProfile(id);
+        }
         user = ResponseUser.getUser(response);
 
         DatabaseHelper.getInstance(context).getUserDao().createOrUpdate(user);

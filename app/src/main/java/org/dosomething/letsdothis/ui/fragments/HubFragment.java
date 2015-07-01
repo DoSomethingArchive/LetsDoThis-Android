@@ -110,7 +110,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         String publicId = getArguments().getString(EXTRA_ID, null);
         if(publicId != null)
         {
-            TaskQueue.loadQueueDefault(getActivity()).execute(new GetUserTask(publicId));
+            TaskQueue.loadQueueDefault(getActivity()).execute(new GetUserTask(publicId, true));
         }
         else
         {

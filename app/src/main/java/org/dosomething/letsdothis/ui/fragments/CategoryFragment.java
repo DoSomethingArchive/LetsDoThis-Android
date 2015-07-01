@@ -34,7 +34,7 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 public class CategoryFragment extends Fragment implements CampaignAdapter.CampaignAdapterClickListener
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final String KEY_POSITION = "position";
+    public static final String KEY_POSITION = "pagerPosition";
     public static final int    FIRST_PAGE   = 1;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
@@ -133,7 +133,7 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(InterestReportBackListTask task)
     {
-        if(task.position == position)
+        if(task.pagerPosition == position)
         {
             totalPages = task.totalPages;
             currentPage = task.page;
