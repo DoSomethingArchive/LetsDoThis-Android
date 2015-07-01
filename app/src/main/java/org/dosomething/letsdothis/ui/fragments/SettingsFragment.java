@@ -15,7 +15,7 @@ import org.dosomething.letsdothis.ui.BaseActivity;
 public class SettingsFragment extends PreferenceFragment implements ConfirmDialog.ConfirmListener
 {
 
-    private NotificationsFragment.SetTitleListener setTitleListener;
+    private SetTitleListener setTitleListener;
 
     public static SettingsFragment newInstance()
     {
@@ -37,7 +37,7 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
     public void onAttach(Activity activity)
     {
         super.onAttach(activity);
-        setTitleListener = (NotificationsFragment.SetTitleListener) getActivity();
+        setTitleListener = (SetTitleListener) getActivity();
     }
 
     @Override
