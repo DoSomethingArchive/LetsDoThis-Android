@@ -2,9 +2,10 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.User;
@@ -34,6 +35,24 @@ public class ChangeEmailActivity extends BaseActivity
         setContentView(R.layout.activity_change_email);
 
         intiChangeListener();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Change Email");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch(item.getItemId())
+        {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void intiChangeListener()

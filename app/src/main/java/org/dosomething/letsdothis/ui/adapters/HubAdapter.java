@@ -30,7 +30,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final int    VIEW_TYPE_PLACEHOLDER      = - 1;
     public static final int    VIEW_TYPE_PROFILE          = 0;
     public static final int    VIEW_TYPE_SECTION_TITLE    = 1;
     public static final int    VIEW_TYPE_CURRENT_CAMPAIGN = 2;
@@ -53,14 +52,12 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.hubList.add(user);
         hubList.add(CURRENTLY_DOING);
         hubList.add(BEEN_THERE_DONE_GOOD);
-        this.hubList.add(0, new PlaceHolder());
         this.isPublic = isPublic;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
-
         switch(viewType)
         {
             case VIEW_TYPE_SECTION_TITLE:
@@ -83,10 +80,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 View expireLayout = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_hub_expire, parent, false);
                 return new ExpireViewHolder(expireLayout);
-            case VIEW_TYPE_PLACEHOLDER:
-                View placeholderLayout = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_placeholder, parent, false);
-                return new PlaceholderViewHolder(placeholderLayout);
             default:
                 return null;
         }
@@ -172,8 +165,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     if(campaign.group.size() > i)
                     {
                         User friend = campaign.group.get(i);
-                        Picasso.with(context).load(friend.avatarPath)
-                                .resize(friendSize, 0).into(imageView);
+                        Picasso.with(context).load(friend.avatarPath).resize(friendSize, 0)
+                                .into(imageView);
                         childAt.setOnClickListener(new View.OnClickListener()
                         {
                             @Override
@@ -222,12 +215,30 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             String minutes = timeUntilExpiration.get(2);
             expireViewHolder.minutes.setText(minutes);
             Resources resources = expireViewHolder.itemView.getContext().getResources();
-            expireViewHolder.daysLabel
-                    .setText(resources.getQuantityString(R.plurals.days, Integer.parseInt(days)));
-            expireViewHolder.hoursLabel
-                    .setText(resources.getQuantityString(R.plurals.hours, Integer.parseInt(hours)));
-            expireViewHolder.minutesLabel.setText(
-                    resources.getQuantityString(R.plurals.minutes, Integer.parseInt(minutes)));
+
+            int dayInt = Integer.parseInt(days);
+            int hourInt = Integer.parseInt(hours);
+                expireViewHolder.daysLabel
+                        .setText(resources.getQuantityString(R.plurals.days, dayInt));
+                expireViewHolder.hoursLabel
+                        .setText(resources.getQuantityString(R.plurals.hours, hourInt));
+                expireViewHolder.minutesLabel.setText(
+                        resources.getQuantityString(R.plurals.minutes, Integer.parseInt(minutes)));
+            expireViewHolder.daysWrapper.setVisibility(View.GONE);
+            expireViewHolder.hoursrWrapper.setVisibility(View.GONE);
+            expireViewHolder.minWrapper.setVisibility(View.GONE);
+            if(dayInt > 0)
+            {
+                expireViewHolder.daysWrapper.setVisibility(View.VISIBLE);
+            }
+            else if(hourInt > 0)
+            {
+                expireViewHolder.hoursrWrapper.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                expireViewHolder.minWrapper.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -260,10 +271,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             return VIEW_TYPE_EXPIRE;
         }
-        else if(currentObject instanceof PlaceHolder)
-        {
-            return VIEW_TYPE_PLACEHOLDER;
-        }
         return 0;
     }
 
@@ -280,7 +287,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     {
         //        campaign.startTime  //FIXME get real expiration time
 
-        if(!isPublic)
+        if(! isPublic)
         {
             Long l = TimeUtils.getSampleExpirationTime();
             int i = hubList.indexOf(CURRENTLY_DOING);
@@ -363,10 +370,16 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         protected final TextView daysLabel;
         protected final TextView hoursLabel;
         protected final TextView minutesLabel;
+        protected final View     daysWrapper;
+        protected final View     hoursrWrapper;
+        protected final View     minWrapper;
 
         public ExpireViewHolder(View itemView)
         {
             super(itemView);
+            daysWrapper = itemView.findViewById(R.id.days_wrapper);
+            hoursrWrapper = itemView.findViewById(R.id.hours_wrapper);
+            minWrapper = itemView.findViewById(R.id.min_wrapper);
             days = (TextView) itemView.findViewById(R.id.days);
             hours = (TextView) itemView.findViewById(R.id.hours);
             minutes = (TextView) itemView.findViewById(R.id.min);
@@ -374,20 +387,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             hoursLabel = (TextView) itemView.findViewById(R.id.hours_label);
             minutesLabel = (TextView) itemView.findViewById(R.id.minutes_label);
         }
-    }
-
-
-    public static class PlaceholderViewHolder extends RecyclerView.ViewHolder
-    {
-        public PlaceholderViewHolder(View itemView)
-        {
-            super(itemView);
-        }
-    }
-
-
-    public static class PlaceHolder
-    {
     }
 
     public interface HubAdapterClickListener

@@ -2,7 +2,6 @@ package org.dosomething.letsdothis;
 import android.app.Application;
 import android.content.Context;
 
-import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 

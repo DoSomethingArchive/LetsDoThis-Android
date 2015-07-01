@@ -7,7 +7,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
-import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.views.typeface.CustomTypefaceSpan;
 import org.dosomething.letsdothis.ui.views.typeface.TypefaceManager;
 import org.jetbrains.annotations.NotNull;
