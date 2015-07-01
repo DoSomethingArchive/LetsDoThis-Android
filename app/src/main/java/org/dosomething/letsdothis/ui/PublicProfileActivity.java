@@ -7,12 +7,12 @@ import android.view.MenuItem;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.fragments.HubFragment;
-import org.dosomething.letsdothis.ui.fragments.NotificationsFragment;
+import org.dosomething.letsdothis.ui.fragments.SetTitleListener;
 
 /**
  * Created by toidiu on 5/13/15.
  */
-public class PublicProfileActivity extends BaseActivity implements NotificationsFragment.SetTitleListener
+public class PublicProfileActivity extends BaseActivity implements SetTitleListener
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String EXTRA_ID = "id";

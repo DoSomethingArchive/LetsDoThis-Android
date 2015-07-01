@@ -14,7 +14,7 @@ import org.dosomething.letsdothis.R;
 public class NotificationSettingsFragment extends PreferenceFragment
 {
 
-    private NotificationsFragment.SetTitleListener setTitleListener;
+    private SetTitleListener setTitleListener;
 
     public static NotificationSettingsFragment newInstance()
     {
@@ -33,7 +33,7 @@ public class NotificationSettingsFragment extends PreferenceFragment
     public void onAttach(Activity activity)
     {
         super.onAttach(activity);
-        setTitleListener = (NotificationsFragment.SetTitleListener) getActivity();
+        setTitleListener = (SetTitleListener) getActivity();
     }
 
     @Override

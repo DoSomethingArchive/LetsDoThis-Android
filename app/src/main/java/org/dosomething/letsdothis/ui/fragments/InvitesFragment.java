@@ -14,7 +14,6 @@ import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Invite;
 import org.dosomething.letsdothis.ui.adapters.InvitesAdapter;
-import org.dosomething.letsdothis.ui.fragments.NotificationsFragment.SetTitleListener;
 
 import java.util.ArrayList;
 import java.util.List;
