@@ -121,10 +121,14 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }
 
 
-            String displayName = user.first_name + " ";
-            displayName += user.last_name.length() > 0
-                    ? user.last_name.charAt(0) + "."
-                    : "";
+            String first = user.first_name;
+            String last = "";
+            if(user.last_name != null && user.last_name.length() > 0)
+            {
+                last = user.last_name.charAt(0) + ".";
+            }
+
+            String displayName = String.format("%s %s", first, last);
             profileViewHolder.name.setText(displayName);
         }
         else if(getItemViewType(position) == VIEW_TYPE_CURRENT_CAMPAIGN)
