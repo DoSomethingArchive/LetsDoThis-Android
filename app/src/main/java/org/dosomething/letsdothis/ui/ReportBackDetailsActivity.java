@@ -35,6 +35,7 @@ public class ReportBackDetailsActivity extends BaseActivity
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private ImageView image;
     private TextView  timestamp;
+    private TextView  title;
     private TextView  caption;
     private TextView  name;
     private ViewGroup kudos;
@@ -49,6 +50,7 @@ public class ReportBackDetailsActivity extends BaseActivity
 
         image = (ImageView) findViewById(R.id.image);
         timestamp = (TextView) findViewById(R.id.timestamp);
+        title = (TextView) findViewById(R.id.title);
         caption = (TextView) findViewById(R.id.caption);
         name = (TextView) findViewById(R.id.name);
         kudos = (ViewGroup) findViewById(R.id.kudos_bar);
@@ -100,6 +102,15 @@ public class ReportBackDetailsActivity extends BaseActivity
             Picasso.with(this).load(reportBack.getImagePath()).resize(image.getWidth(), 0)
                    .into(image);
             timestamp.setText(TimeUtils.getTimeSince(this, reportBack.createdAt * 1000));
+            title.setText(reportBack.campaign.title);
+            title.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    startActivity(CampaignDetailsActivity.getLaunchIntent(ReportBackDetailsActivity.this, reportBack.campaign.id));
+                }
+            });
             caption.setText(reportBack.caption);
             if(user != null)
             {

@@ -10,6 +10,8 @@
         <item name="colorPrimary">@color/web_orange</item>
         <item name="colorPrimaryDark">@color/dark_orange</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="android:scrollbarSize">4dp</item>
+
     </style>
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
