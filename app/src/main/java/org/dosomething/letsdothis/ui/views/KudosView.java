@@ -55,7 +55,14 @@ public class KudosView extends LinearLayout
         this.countNum = countNum;
         if(countNum > 0)
         {
-            count.setText(Integer.toString(countNum));
+            if(countNum > 99)
+            {
+                count.setText(R.string.max_kudos);
+            }
+            else
+            {
+                count.setText(Integer.toString(countNum));
+            }
             count.setVisibility(VISIBLE);
         }
         else

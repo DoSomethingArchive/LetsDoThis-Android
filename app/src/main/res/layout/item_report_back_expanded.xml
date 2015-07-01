@@ -76,6 +76,18 @@
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        tools:text="Campaign Title"
+        android:paddingLeft="@dimen/padding_small"
+        android:paddingRight="@dimen/padding_small"
+        android:paddingTop="@dimen/padding_tiny"
+        android:paddingBottom="@dimen/padding_tiny"
+        android:textColor="@color/cerulean_1"
+        app:typeface="brandon_bold"
+        android:id="@+id/title"/>
+
+    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         tools:text="Caption"
         android:paddingLeft="@dimen/padding_small"
         android:paddingRight="@dimen/padding_small"
