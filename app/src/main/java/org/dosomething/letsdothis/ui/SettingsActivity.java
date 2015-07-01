@@ -8,13 +8,16 @@ import android.view.MenuItem;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.LogoutTask;
+import org.dosomething.letsdothis.ui.fragments.NotificationsFragment;
 import org.dosomething.letsdothis.ui.fragments.SettingsFragment;
 
 /**
  * Created by izzyoji :) on 4/29/15.
  */
-public class SettingsActivity extends BaseActivity
+public class SettingsActivity extends BaseActivity implements NotificationsFragment.SetTitleListener
 {
+
+    private Toolbar toolbar;
 
     public static Intent getLaunchIntent(Context context)
     {
@@ -26,9 +29,8 @@ public class SettingsActivity extends BaseActivity
     {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_settings);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.settings);
-
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -68,4 +70,9 @@ public class SettingsActivity extends BaseActivity
         super.onBackPressed();
     }
 
+    @Override
+    public void setTitle(String title)
+    {
+        toolbar.setTitle(title);
+    }
 }
