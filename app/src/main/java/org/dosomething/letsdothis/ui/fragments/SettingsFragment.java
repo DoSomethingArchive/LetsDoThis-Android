@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.SwitchPreference;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.BaseActivity;
@@ -30,7 +31,7 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
 
         initRate();
         initLogout();
-        initChangeNotifications();
+        initNotificationsPrefs();
     }
 
     @Override
@@ -64,20 +65,40 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                 });
     }
 
-    private void initChangeNotifications()
+    private void initNotificationsPrefs()
     {
+        Preference receiveNotifs = findPreference(getString(R.string.receive_notifications));
+        updateChangeNotifsPref((SwitchPreference) receiveNotifs);
+        receiveNotifs.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
+        {
+            @Override
+            public boolean onPreferenceClick(Preference preference)
+            {
+
+                updateChangeNotifsPref((SwitchPreference) preference);
+                return true;
+            }
+        });
+
         findPreference(getString(R.string.change_notifications_prefs))
                 .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
                 {
                     @Override
                     public boolean onPreferenceClick(Preference preference)
                     {
-                        getFragmentManager().beginTransaction()
-                                .replace(R.id.container, new NotificationSettingsFragment())
-                                .addToBackStack(null).commit();
+                        getFragmentManager().beginTransaction().replace(R.id.container,
+                                                                        new NotificationSettingsFragment())
+                                            .addToBackStack(null).commit();
                         return true;
                     }
                 });
+    }
+
+
+    private void updateChangeNotifsPref(SwitchPreference preference)
+    {
+        boolean checked = preference.isChecked();
+        findPreference(getString(R.string.change_notifications_prefs)).setEnabled(checked);
     }
 
     private void initRate()
