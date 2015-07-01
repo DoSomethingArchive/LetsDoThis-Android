@@ -3,8 +3,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.util.TypedValue;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 
 /**

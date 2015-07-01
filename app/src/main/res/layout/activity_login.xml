@@ -87,6 +87,15 @@
             android:padding="@dimen/padding_small"
             android:text="@string/footer_login"
             android:textColor="@color/white"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/forgot_pw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/padding_small"
+            android:text="@string/footer_forgot_pw"
+            android:textColor="@color/white"/>
     </LinearLayout>
 
 </RelativeLayout>

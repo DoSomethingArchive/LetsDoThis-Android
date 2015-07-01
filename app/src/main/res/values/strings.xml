@@ -46,11 +46,15 @@
     <string name="join_group">Join a friend\'s group with a code</string>
     <string name="my_codes">My Codes</string>
     <string name="invite_using">Invite using</string>
-    <string name="share_invite">I want you to join the %1$s campaign with me, here\'s the code: %2$s.</string>
+    <string name="share_invite">I want you to join the %1$s campaign with me, here\'s the code:
+        %2$s.
+    </string>
     <string name="done">Done</string>
     <string name="error_code_length">An invite code should be 15 characters long!</string>
     <string name="tell_us">Tell us about yourself!</string>
     <string name="footer_register">Have a DoSomething.org account? Sign in</string>
+    <string name="footer_forgot_pw">Forgot Password</string>
+    <string name="forgot_pw_link">https://www.dosomething.org/user/password</string>
     <string name="prove_it">Prove It</string>
     <string name="desc_rewards">Invite your friends to get rewards copy. There are multiple
         sentences in this paragraph body.
@@ -66,7 +70,7 @@
     <string name="ok">Ok</string>
     <string name="prompt_logout">Are you sure you want to log out?</string>
     <string name="cancel">Cancel</string>
-    <string name="beep_noise">Fuck that noise</string>
+    <string name="do_something_about_it">Do Something About It</string>
     <string name="share_code">Share Code</string>
     <string name="desc_campaign_invite">When a friend uses your code, they join your action group.
         You can rock %s together and unlock rewards as a group.
@@ -81,4 +85,12 @@
     <string name="change_password_old_hint">Enter your old password</string>
     <string name="change_password1_hint">Enter the new password</string>
     <string name="change_password2_hint">Re-enter the new password</string>
+    <string name="interest_0">A</string>
+    <string name="interest_1">B</string>
+    <string name="interest_2">C</string>
+    <string name="interest_3">D</string>
+    <string name="notification_kudos">notification_kudos</string>
+    <string name="notification_friend">notification_friend</string>
+    <string name="notification_campaign">notification_campaign</string>
+    <string name="notification_pref">Notification Preferences</string>
 </resources>

@@ -1,6 +1,8 @@
 package org.dosomething.letsdothis.network;
 import org.dosomething.letsdothis.BuildConfig;
-import org.dosomething.letsdothis.network.models.ResponseCampaign;
+import org.dosomething.letsdothis.network.models.RequestKudo;
+import org.dosomething.letsdothis.network.models.ResponseCampaignList;
+import org.dosomething.letsdothis.network.models.ResponseCampaignWrapper;
 import org.dosomething.letsdothis.network.models.ResponseReportBack;
 import org.dosomething.letsdothis.network.models.ResponseReportBackList;
 
@@ -16,13 +18,13 @@ import retrofit.http.Query;
 public interface DoSomethingAPI
 {
 
-    public static final String BASE_URL = BuildConfig.DEBUG
+   String BASE_URL = BuildConfig.DEBUG
         ? "http://staging.beta.dosomething.org/api/v1/"
         : "https://www.dosomething.org/api/v1/";
 
     @Headers("Content-Type: application/json")
-    @GET("/content/{id}.json")
-    ResponseCampaign campaign(@Path("id") int id) throws NetworkException;
+    @GET("/campaigns/{id}.json")
+    ResponseCampaignWrapper campaign(@Path("id") int id) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @GET("/reportback-items.json?status=approved")
@@ -34,4 +36,7 @@ public interface DoSomethingAPI
     @GET("/reportback-items/{id}.json")
     ResponseReportBack reportBack(@Path("id") int id) throws NetworkException;
 
+    @Headers("Content-Type: application/json")
+    @GET("/campaigns.json?mobile_app=1")
+    ResponseCampaignList campaignList(@Query("term_ids")int interestGroupId);
 }
