@@ -75,8 +75,4 @@ public class NotificationsFragment extends Fragment
         return notifications;
     }
 
-    public interface SetTitleListener
-    {
-        void setTitle(String title);
-    }
 }

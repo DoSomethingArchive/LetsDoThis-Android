@@ -112,6 +112,7 @@
                 app:typeface="brandon_bold"/>
 
             <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+                android:id="@+id/forgot_pw"
                 style="@style/IntroButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
