@@ -33,15 +33,21 @@
             android:text="@string/register"
             app:typeface="brandon_bold"/>
 
-        <com.facebook.login.widget.LoginButton
+        <org.dosomething.letsdothis.ui.views.typeface.CustomButton
             android:id="@+id/fb_connect"
-            android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="@dimen/padding_small"
             android:layout_marginLeft="@dimen/height_xxlarge"
             android:layout_marginRight="@dimen/height_xxlarge"
-            android:background="@drawable/bg_fb_rounded"/>
+            android:background="@drawable/bg_fb_rounded"
+            android:drawableLeft="@drawable/ic_fb"
+            android:drawablePadding="3dp"
+            android:text="Log in with Facebook"
+
+            android:textAllCaps="false"
+            android:textSize="15sp"
+            app:typeface="brandon_bold"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomButton
             android:id="@+id/login"
