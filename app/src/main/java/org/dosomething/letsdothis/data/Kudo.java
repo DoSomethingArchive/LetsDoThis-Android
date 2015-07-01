@@ -24,7 +24,7 @@ public enum Kudo
             : 1275, R.drawable.kudos),
     KUDOS06("lightbulb", BuildConfig.DEBUG
             ? 643
-            : 1276, 0),
+            : 1276, R.drawable.kudos_lightbulb),
     KUDOS07("pizza", BuildConfig.DEBUG
             ? 644
             : 1277, R.drawable.kudos_pizza),
@@ -41,11 +41,11 @@ public enum Kudo
             ? 648
             : 1281, R.drawable.kudos_trophy);
 
-    public  String name;
-    public  int    id;
-    private int    imageResId;
+    public String name;
+    public int    id;
+    public int    imageResId;
 
-    private Kudo(String name, int id, int imageResId)
+    Kudo(String name, int id, int imageResId)
     {
         this.name = name;
         this.id = id;
