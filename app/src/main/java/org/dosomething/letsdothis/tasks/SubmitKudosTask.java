@@ -29,7 +29,7 @@ public class SubmitKudosTask extends BaseNetworkErrorHandlerTask
         requestKudo.reportback_item_id = String.valueOf(reportBackId);
         requestKudo.user_id = userId;
 
-//        NetworkHelper.getDoSomethingAPIService().submitKudos(requestKudo);
+//        NetworkHelper.getNorthstarAPIService().submitKudos(requestKudo, AppPrefs.getInstance(context).getSessionToken());
     }
 
     @Override

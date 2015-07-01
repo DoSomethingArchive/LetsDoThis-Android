@@ -12,13 +12,14 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.data.Kudo;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.ReportBackDetailsTask;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
-import org.dosomething.letsdothis.ui.adapters.KudoClickListener;
+import org.dosomething.letsdothis.ui.views.KudosView;
+import org.dosomething.letsdothis.utils.AppPrefs;
 import org.dosomething.letsdothis.utils.TimeUtils;
 
 import co.touchlab.android.threading.tasks.TaskQueue;
@@ -85,10 +86,6 @@ public class ReportBackDetailsActivity extends BaseActivity
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(SubmitKudosTask task)
     {
-        if(BuildConfig.DEBUG)
-        {
-            Toast.makeText(this, "kudos submitted", Toast.LENGTH_SHORT).show();
-        }
         TaskQueue.loadQueueDefault(this).execute(
                 new ReportBackDetailsTask(getIntent().getIntExtra(EXTRA_REPORT_BACK_ID, - 1)));
     }
@@ -102,7 +99,7 @@ public class ReportBackDetailsActivity extends BaseActivity
             User user = task.user;
 
             Picasso.with(this).load(reportBack.getImagePath()).resize(image.getWidth(), 0)
-                    .into(image);
+                   .into(image);
             timestamp.setText(TimeUtils.getTimeSince(this, reportBack.createdAt * 1000));
             caption.setText(reportBack.caption);
             if(user != null)
@@ -117,22 +114,43 @@ public class ReportBackDetailsActivity extends BaseActivity
 
             //FIXME add user's avatar
 
-            if(!listenersAdded)
+            if(! listenersAdded)
             {
                 listenersAdded = true;
                 int count = kudos.getChildCount();
                 for(int i = 0; i < count; i++)
                 {
-                    View kudoView = kudos.getChildAt(i);
-                    kudoView.setOnClickListener(new KudoClickListener(i)
+                    final KudosView kudoView = (KudosView) kudos.getChildAt(i);
+                    kudoView.setOnClickListener(new View.OnClickListener()
                     {
                         @Override
                         public void onClick(View v)
                         {
+                            Context context = ReportBackDetailsActivity.this;
 
-                            //fixme get drupal id
-                            TaskQueue.loadQueueDefault(ReportBackDetailsActivity.this)
-                                     .execute(new SubmitKudosTask(kudo.id, reportBack.id, null));
+                            boolean selected = kudoView.isSelected();
+                            kudoView.setSelected(! selected);
+                            int countNum = kudoView.getCountNum();
+                            kudoView.setCountNum(! selected
+                                                         ? countNum + 1
+                                                         : countNum - 1);
+                            Kudo kudo = kudoView.getKudos();
+
+                            if(!selected)
+                            {
+                                Toast.makeText(context, "add " + kudo.name, Toast.LENGTH_SHORT).show();
+                                TaskQueue.loadQueueDefault(context).execute(
+                                        new SubmitKudosTask(kudo.id, reportBack.id,
+                                                            AppPrefs.getInstance(
+                                                                    context)
+                                                                    .getCurrentUserId()));
+                            }
+                            else
+                            {
+                                Toast.makeText(context, "remove " + kudo.name, Toast.LENGTH_SHORT).show();
+                            }
+
+
 
                         }
                     });

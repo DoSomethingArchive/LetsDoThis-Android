@@ -1,8 +1,10 @@
 package org.dosomething.letsdothis.network;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.data.User;
+import org.dosomething.letsdothis.network.models.RequestKudo;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 import org.dosomething.letsdothis.network.models.ResponseRegister;
+import org.dosomething.letsdothis.network.models.ResponseReportBack;
 import org.dosomething.letsdothis.network.models.ResponseUser;
 import org.dosomething.letsdothis.network.models.ResponseUserList;
 import org.dosomething.letsdothis.network.models.ResponseUserUpdate;
@@ -67,6 +69,10 @@ public interface NorthstarAPI
 
     @POST("/logout")
     public Response logout(@Header("Session") String sessionToken) throws NetworkException;
+
+    @Headers("Content-Type: application/json")
+    @POST("/kudos.json")
+    ResponseReportBack submitKudos(@Body RequestKudo requestKudo, @Header("Session") String sessionToken) throws NetworkException;
 
     //-----------NOT DONE
     //-----------NOT DONE
