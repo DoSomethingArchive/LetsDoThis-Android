@@ -8,9 +8,13 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
  */
 public class InterestReportBackListTask extends BaseReportBackListTask
 {
+
+    public final int pagerPosition;
+
     public InterestReportBackListTask(int position, String campaigns, int page)
     {
-        super(position, campaigns, page);
+        super(campaigns, page);
+        this.pagerPosition = position;
     }
 
     @Override

@@ -109,7 +109,7 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
                 if(BuildConfig.DEBUG)
                 {
                     Log.d("--",
-                          "position " + position + " px " + positionOffsetPixels + " width " + measuredWidth + " translateX " + translateX);
+                          "pagerPosition " + position + " px " + positionOffsetPixels + " width " + measuredWidth + " translateX " + translateX);
                 }
             }
 

@@ -207,7 +207,7 @@ public class PhotoSortrView extends View implements MultiTouchController.MultiTo
     }
 
     /**
-     * Get the current position and scale of the selected image. Called whenever a drag starts or is reset.
+     * Get the current pagerPosition and scale of the selected image. Called whenever a drag starts or is reset.
      */
     public void getPositionAndScale(MultiTouchEntity img, MultiTouchController.PositionAndScale objPosAndScaleOut)
     {
@@ -220,7 +220,7 @@ public class PhotoSortrView extends View implements MultiTouchController.MultiTo
     }
 
     /**
-     * Set the position and scale of the dragged/stretched image.
+     * Set the pagerPosition and scale of the dragged/stretched image.
      */
     public boolean setPositionAndScale(MultiTouchEntity img, MultiTouchController.PositionAndScale newImgPosAndScale, MultiTouchController.PointInfo touchPoint)
     {
