@@ -43,10 +43,9 @@
             android:background="@drawable/bg_fb_rounded"
             android:drawableLeft="@drawable/ic_fb"
             android:drawablePadding="3dp"
-            android:text="Log in with Facebook"
-
+            android:text="@string/log_in_with_facebook"
             android:textAllCaps="false"
-            android:textSize="15sp"
+            android:textSize="@dimen/text_36"
             app:typeface="brandon_bold"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomButton

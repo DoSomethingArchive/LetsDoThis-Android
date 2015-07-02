@@ -14,7 +14,6 @@ import com.facebook.login.LoginManager;
 import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.BuildConfig;
-import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.FbUser;
 import org.dosomething.letsdothis.tasks.RegisterTask;
@@ -245,6 +244,9 @@ public class RegisterActivity extends BaseActivity
             lastName.setText(fbUser.last_name);
             email.setText(fbUser.email);
             birthday.setText(fbUser.birthday);
+
+            findViewById(R.id.fbContainer).setVisibility(View.VISIBLE);
+            findViewById(R.id.avatarContainer).setVisibility(View.GONE);
         }
     }
 
