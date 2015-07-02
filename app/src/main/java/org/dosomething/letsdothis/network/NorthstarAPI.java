@@ -71,7 +71,7 @@ public interface NorthstarAPI
     public Response logout(@Header("Session") String sessionToken) throws NetworkException;
 
     @Headers("Content-Type: application/json")
-    @POST("/kudos.json")
+    @POST("/kudos")
     ResponseReportBack submitKudos(@Body RequestKudo requestKudo, @Header("Session") String sessionToken) throws NetworkException;
 
     //-----------NOT DONE

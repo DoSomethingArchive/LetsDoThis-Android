@@ -6,13 +6,15 @@
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_margin="@dimen/padding_small"
+        android:layout_marginLeft="@dimen/padding_small"
+        android:layout_marginRight="@dimen/padding_small"
+        android:layout_marginTop="@dimen/padding_medium"
         tools:src="@drawable/kudos"
         android:id="@+id/image"/>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
         tools:text="4"
         android:gravity="center"
         android:textColor="@color/kudos_text"

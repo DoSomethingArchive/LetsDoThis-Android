@@ -60,7 +60,7 @@
     <dimen name="space_14">14dp</dimen>
     <dimen name="space_35">35dp</dimen>
     <dimen name="space_50">50dp</dimen>
-    <dimen name="kudos_bar">85dp</dimen>
+    <dimen name="kudos_bar">90dp</dimen>
     <dimen name="kudos">44dp</dimen>
     <dimen name="login_intro_h">80dp</dimen>
     <dimen name="login_intro_w">100dp</dimen>

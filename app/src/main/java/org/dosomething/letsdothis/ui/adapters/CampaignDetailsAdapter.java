@@ -333,6 +333,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.kudosToggle = (ImageView) view.findViewById(R.id.kudos_toggle);
             this.kudosToggle.setVisibility(View.VISIBLE);
             this.kudosBar = (ViewGroup) view.findViewById(R.id.kudos_bar);
+            view.findViewById(R.id.title).setVisibility(View.GONE);
         }
     }
 

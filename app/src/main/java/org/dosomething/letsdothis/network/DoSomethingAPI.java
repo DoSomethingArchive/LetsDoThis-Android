@@ -1,6 +1,5 @@
 package org.dosomething.letsdothis.network;
 import org.dosomething.letsdothis.BuildConfig;
-import org.dosomething.letsdothis.network.models.RequestKudo;
 import org.dosomething.letsdothis.network.models.ResponseCampaignList;
 import org.dosomething.letsdothis.network.models.ResponseCampaignWrapper;
 import org.dosomething.letsdothis.network.models.ResponseReportBack;
