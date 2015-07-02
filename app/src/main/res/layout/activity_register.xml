@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent" android:layout_height="match_parent"
                 android:background="@color/web_orange">
 
     <ImageView
@@ -25,26 +25,67 @@
             android:focusableInTouchMode="true"
             android:orientation="vertical">
 
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            <LinearLayout
+                android:id="@+id/avatarContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/padding_small"
-                android:text="@string/tell_us"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_33"/>
+                tools:visibility="gone">
 
-            <org.dosomething.letsdothis.ui.views.CircleImageView
-                android:id="@+id/avatar"
-                android:layout_width="@dimen/avatar"
-                android:layout_height="@dimen/avatar"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="@dimen/padding_medium"
-                android:src="@drawable/ic_action_add"
-                app:background_color="@color/porcelain"
-                app:border_color="@color/white"
-                app:border_width="@dimen/padding_tiny"
-                app:draw_border="true"/>
+                <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/padding_small"
+                    android:text="@string/tell_us"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_33"/>
+
+                <org.dosomething.letsdothis.ui.views.CircleImageView
+                    android:id="@+id/avatar"
+                    android:layout_width="@dimen/avatar"
+                    android:layout_height="@dimen/avatar"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="@dimen/padding_medium"
+                    android:src="@drawable/ic_action_add"
+                    app:background_color="@color/porcelain"
+                    app:border_color="@color/white"
+                    app:border_width="@dimen/padding_tiny"
+                    app:draw_border="true"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/fbContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/fb_logo"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="@dimen/padding_wedge"/>
+
+                <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/padding_small"
+                    android:layout_marginBottom="@dimen/padding_xlarge"
+                    android:text="@string/confirm_fb"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_33"/>
+
+
+
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
