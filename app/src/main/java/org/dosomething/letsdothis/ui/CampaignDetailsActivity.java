@@ -141,8 +141,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     @Override
     public void onKudoClicked(ReportBack reportBack, Kudo kudo)
     {
-        //fixme get drupal id
-        TaskQueue.loadQueueDefault(this).execute(new SubmitKudosTask(kudo.id, reportBack.id, null));
+        TaskQueue.loadQueueDefault(this).execute(new SubmitKudosTask(kudo.id, reportBack.id));
     }
 
     @Override

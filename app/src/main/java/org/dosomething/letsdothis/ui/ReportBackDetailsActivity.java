@@ -19,7 +19,6 @@ import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.ReportBackDetailsTask;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
 import org.dosomething.letsdothis.ui.views.KudosView;
-import org.dosomething.letsdothis.utils.AppPrefs;
 import org.dosomething.letsdothis.utils.TimeUtils;
 
 import co.touchlab.android.threading.tasks.TaskQueue;
@@ -150,17 +149,12 @@ public class ReportBackDetailsActivity extends BaseActivity
                             {
                                 Toast.makeText(context, "add " + kudo.name, Toast.LENGTH_SHORT).show();
                                 TaskQueue.loadQueueDefault(context).execute(
-                                        new SubmitKudosTask(kudo.id, reportBack.id,
-                                                            AppPrefs.getInstance(
-                                                                    context)
-                                                                    .getCurrentUserId()));
+                                        new SubmitKudosTask(kudo.id, reportBack.id));
                             }
                             else
                             {
                                 Toast.makeText(context, "remove " + kudo.name, Toast.LENGTH_SHORT).show();
                             }
-
-
 
                         }
                     });

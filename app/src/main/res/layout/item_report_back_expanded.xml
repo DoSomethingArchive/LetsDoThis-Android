@@ -56,7 +56,6 @@
             tools:text="Timestamp"
             android:id="@+id/timestamp"/>
 
-        <!--FIXME get real kudos resources-->
         <org.dosomething.letsdothis.ui.views.CircleImageView
             android:layout_width="@dimen/kudos"
             android:layout_height="@dimen/kudos"
@@ -70,6 +69,8 @@
             android:layout_alignBottom="@+id/image"
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
+
+    <include layout="@layout/drop_shadow"/>
 
     <include layout="@layout/kudos"/>
 
