@@ -227,7 +227,6 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             expandedCampaignViewHolder.minutesLabel
                     .setText(resources.getQuantityString(R.plurals.minutes, minInt));
 
-
             expandedCampaignViewHolder.expire_label.setVisibility(View.VISIBLE);
             expandedCampaignViewHolder.expired.setVisibility(View.GONE);
             expandedCampaignViewHolder.daysWrapper.setVisibility(View.GONE);
