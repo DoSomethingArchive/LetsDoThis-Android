@@ -18,6 +18,19 @@
         android:orientation="horizontal">
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/expired_already"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/padding_small"
+            android:layout_weight="1"
+            android:text="@string/expired_already"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/text_30"
+            app:typeface="brandon_bold"
+            tool:visibility="visible"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/expire_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/padding_small"
@@ -26,8 +39,8 @@
             android:textAllCaps="true"
             android:textColor="@color/gray"
             android:textSize="@dimen/text_36"
-            app:typeface="brandon_bold"/>
-
+            app:typeface="brandon_bold"
+            tool:visibility="gone"/>
 
         <LinearLayout
             android:id="@+id/days_wrapper"
@@ -44,7 +57,6 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="@dimen/padding_tiny"
                 android:textColor="@color/dark_gray"
-
                 android:textSize="@dimen/text_33"
                 app:typeface="brandon_bold"
                 tool:text="30"/>
@@ -105,7 +117,8 @@
                 android:textColor="@color/dark_gray"
                 android:textSize="@dimen/text_33"
                 app:typeface="brandon_bold"
-                tool:text="30"/>
+                tool:text="30"
+                tool:visibility="gone"/>
             <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
                 android:id="@+id/minutes_label"
                 android:layout_width="wrap_content"
@@ -113,7 +126,8 @@
                 android:textColor="@color/dark_gray"
                 android:textSize="@dimen/text_33"
                 app:typeface="brandon_bold"
-                tool:text="Minutes"/>
+                tool:text="Minutes"
+                tool:visibility="gone"/>
         </LinearLayout>
 
     </LinearLayout>
