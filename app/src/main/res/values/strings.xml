@@ -93,4 +93,5 @@
     <string name="notification_friend">notification_friend</string>
     <string name="notification_campaign">notification_campaign</string>
     <string name="notification_pref">Notification Preferences</string>
+    <string name="expired_already">This action is expired. Refresh for new actions!</string>
 </resources>

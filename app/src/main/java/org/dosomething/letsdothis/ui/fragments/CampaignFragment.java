@@ -31,7 +31,7 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 /**
  * Created by izzyoji :) on 4/14/15.
  */
-public class CategoryFragment extends Fragment implements CampaignAdapter.CampaignAdapterClickListener
+public class CampaignFragment extends Fragment implements CampaignAdapter.CampaignAdapterClickListener
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String KEY_POSITION = "position";
@@ -47,13 +47,13 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
     private int             totalPages;
     private ArrayList<Integer> campaignIds = new ArrayList<>();
 
-    public static CategoryFragment newInstance(int position)
+    public static CampaignFragment newInstance(int position)
     {
         Bundle args = new Bundle();
         args.putInt(KEY_POSITION, position);
-        CategoryFragment categoryFragment = new CategoryFragment();
-        categoryFragment.setArguments(args);
-        return categoryFragment;
+        CampaignFragment campaignFragment = new CampaignFragment();
+        campaignFragment.setArguments(args);
+        return campaignFragment;
     }
 
     @Override
