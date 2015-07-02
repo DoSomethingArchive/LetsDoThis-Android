@@ -10,16 +10,21 @@
     <string name="stop_being_bored">Stop being bored</string>
     <string name="people_doing_stuff">People doing stuff</string>
     <string name="phone_email">Phone Number or Email</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone Number (Optional)</string>
     <string name="password">Password</string>
     <string name="footer_invite_code">If you received a code from a friend, put it here to join
-        their group right away.
+        their group right away (Optional).
     </string>
     <string name="invite_code_opt">Invite Code (optional)</string>
+    <string name="invite_code_opt1">Enter</string>
+    <string name="invite_code_opt2">Code</string>
+    <string name="invite_code_opt3">Here</string>
     <string name="sign_in">Sign in</string>
     <string name="show_me_how">Show Me How</string>
     <string name="register">Register</string>
     <string name="create_account">Create Account</string>
-    <string name="birthday">Birthday (mm/dd/yyyy)</string>
+    <string name="birthday">Birthday</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="expires_in">Expires in</string>
@@ -89,9 +94,12 @@
     <string name="interest_1">B</string>
     <string name="interest_2">C</string>
     <string name="interest_3">D</string>
+    <string name="forgot_pw">Forgot Password?</string>
     <string name="notification_kudos">notification_kudos</string>
     <string name="notification_friend">notification_friend</string>
     <string name="notification_campaign">notification_campaign</string>
     <string name="notification_pref">Notification Preferences</string>
     <string name="expired_already">This action is expired. Refresh for new actions!</string>
+    <string name="log_in_with_facebook">Log in with Facebook</string>
+    <string name="confirm_fb">Confirm your Facebook details</string>
 </resources>
