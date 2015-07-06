@@ -125,7 +125,8 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     public void inviteClicked()
     {
         Campaign campaign = adapter.getCampaign();
-        startActivity(CampaignInviteActivity.getLaunchIntent(this, campaign.title, campaign.invite.code));
+        startActivity(
+                CampaignInviteActivity.getLaunchIntent(this, campaign.title, campaign.invite.code));
     }
 
     @Override
@@ -193,10 +194,19 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
                     Log.d("asdf-----------", selectedImageUri.toString());
                 }
 
-                //FIXME--------------
-//                adapter.refreshTestImage(selectedImageUri);
-                startActivity(
-                        PhotoCropActivity.getLaunchIntent(this, selectedImageUri.toString()));
+                startActivityForResult(PhotoCropActivity
+                                               .getLaunchIntent(this, selectedImageUri.toString(),
+                                                                adapter.getCampaign().title,
+                                                                adapter.getCampaign().id),
+                                       PhotoCropActivity.RESULT_CODE);
+            }
+            else if(requestCode == PhotoCropActivity.RESULT_CODE)
+            {
+                String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
+                startActivity(ReportBackUploadActivity
+                                      .getLaunchIntent(this, filePath, adapter.getCampaign().title,
+                                                       adapter.getCampaign().id));
+                finish();
             }
         }
     }

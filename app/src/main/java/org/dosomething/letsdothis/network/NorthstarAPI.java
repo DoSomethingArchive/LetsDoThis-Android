@@ -1,6 +1,7 @@
 package org.dosomething.letsdothis.network;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.data.User;
+import org.dosomething.letsdothis.network.models.RequestReportback;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 import org.dosomething.letsdothis.network.models.ResponseRegister;
 import org.dosomething.letsdothis.network.models.ResponseUser;
@@ -15,6 +16,7 @@ import retrofit.http.Body;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
+import retrofit.http.HEAD;
 import retrofit.http.Header;
 import retrofit.http.Headers;
 import retrofit.http.POST;
@@ -67,6 +69,10 @@ public interface NorthstarAPI
 
     @POST("/logout")
     public Response logout(@Header("Session") String sessionToken) throws NetworkException;
+
+    @Headers("Content-Type: application/json")
+    @POST("/user/campaigns/{nid}/reportback")
+    Response submitReportback(@Header("Session") String sessionToken, @Body RequestReportback requestreportback, @Path("nid") int id) throws NetworkException;
 
     //-----------NOT DONE
     //-----------NOT DONE
