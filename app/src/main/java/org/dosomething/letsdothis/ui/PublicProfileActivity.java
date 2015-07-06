@@ -17,10 +17,12 @@ public class PublicProfileActivity extends BaseActivity implements SetTitleListe
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String EXTRA_ID = "id";
     private Toolbar toolbar;
-    
-    public static Intent getLaunchIntent(Context context)
+
+    public static Intent getLaunchIntent(Context context, String id)
     {
-        return new Intent(context, PublicProfileActivity.class);
+        Intent intent = new Intent(context, PublicProfileActivity.class);
+        intent.putExtra(EXTRA_ID, id);
+        return intent;
     }
 
     @Override
@@ -29,10 +31,11 @@ public class PublicProfileActivity extends BaseActivity implements SetTitleListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_container);
 
+        String id = getIntent().getStringExtra(EXTRA_ID);
         if(savedInstanceState == null)
         {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, HubFragment.newInstance(true), HubFragment.TAG).commit();
+                    .add(R.id.container, HubFragment.newInstance(id), HubFragment.TAG).commit();
         }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -59,6 +62,5 @@ public class PublicProfileActivity extends BaseActivity implements SetTitleListe
     public void setTitle(String title)
     {
         //        toolbar.setTitle(title); PLACEHOLDER IN PUBLIC HUB
-
     }
 }
