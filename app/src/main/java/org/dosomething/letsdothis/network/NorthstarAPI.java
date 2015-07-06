@@ -2,6 +2,8 @@ package org.dosomething.letsdothis.network;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.models.ParseInstallationRequest;
+import org.dosomething.letsdothis.network.models.RequestCampaignSignup;
+import org.dosomething.letsdothis.network.models.ResponseCampaignSignUp;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 import org.dosomething.letsdothis.network.models.ResponseRegister;
 import org.dosomething.letsdothis.network.models.ResponseUser;
@@ -28,7 +30,7 @@ import retrofit.mime.TypedInput;
 public interface NorthstarAPI
 {
 
-    public static final String BASE_URL = BuildConfig.DEBUG
+    String BASE_URL = BuildConfig.DEBUG
             ? "http://northstar-qa.dosomething.org/v1"
             : "http://northstar.dosomething.org/v1";
 
@@ -66,6 +68,10 @@ public interface NorthstarAPI
 
     @POST("/logout")
     Response logout(@Header("Session") String sessionToken) throws NetworkException;
+
+    @Headers("Content-Type: application/json")
+    @POST("/user/campaigns/{id}/signup")
+    ResponseCampaignSignUp campaignSignUp(@Body RequestCampaignSignup requestCampaignSignup, @Path("id") int id, @Header("Session") String sessionToken);
 
     @Headers("Content-Type: application/json")
     @PUT("/users/{id}")
