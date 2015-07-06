@@ -17,9 +17,12 @@ import android.view.ViewGroup;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
-import org.dosomething.letsdothis.data.User;
+import org.dosomething.letsdothis.data.DatabaseHelper;
+import org.dosomething.letsdothis.tasks.DbGetUserTask;
 import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignTask;
 import org.dosomething.letsdothis.tasks.GetPastUserCampaignTask;
+import org.dosomething.letsdothis.tasks.GetUserTask;
+import org.dosomething.letsdothis.tasks.UploadAvatarTask;
 import org.dosomething.letsdothis.ui.CampaignInviteActivity;
 import org.dosomething.letsdothis.ui.GroupActivity;
 import org.dosomething.letsdothis.ui.PhotoCropActivity;
@@ -41,17 +44,17 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final  String TAG            = HubFragment.class.getSimpleName();
     private static final int    SELECT_PICTURE = 55;
-    public static final  String PUBLIC_PROFILE = "PUBLIC_PROFILE";
+    public static final  String EXTRA_ID       = "id";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private HubAdapter       adapter;
     private Uri              imageUri;
     private SetTitleListener titleListener;
 
-    public static HubFragment newInstance(boolean isPublic)
+    public static HubFragment newInstance(String id)
     {
         Bundle bundle = new Bundle();
-        bundle.putBoolean(PUBLIC_PROFILE, isPublic);
+        bundle.putString(EXTRA_ID, id);
         HubFragment fragment = new HubFragment();
         fragment.setArguments(bundle);
 
@@ -68,13 +71,6 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        EventBusExt.getDefault().register(this);
-        String currentUserId = AppPrefs.getInstance(getActivity()).getCurrentUserId();
-        TaskQueue.loadQueueDefault(getActivity())
-                .execute(new GetCurrentUserCampaignTask(currentUserId));
-        TaskQueue.loadQueueDefault(getActivity())
-                .execute(new GetPastUserCampaignTask(currentUserId));
-
         return inflater.inflate(R.layout.fragment_toolbar_recycler, container, false);
     }
 
@@ -83,14 +79,41 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     {
         super.onAttach(activity);
         titleListener = (SetTitleListener) getActivity();
+        String currentUserId = AppPrefs.getInstance(getActivity()).getCurrentUserId();
+        TaskQueue.loadQueueDefault(getActivity())
+                .execute(new GetCurrentUserCampaignTask(currentUserId));
+        TaskQueue.loadQueueDefault(getActivity())
+                .execute(new GetPastUserCampaignTask(currentUserId));
     }
 
     @Override
-    public void onStop()
+    public void onPause()
     {
-        super.onStop();
-        //FIXME I don't think this is the right place for this
+        super.onPause();
         EventBusExt.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onResume()
+    {
+        if(! EventBusExt.getDefault().isRegistered(this))
+        {
+            EventBusExt.getDefault().register(this);
+        }
+
+        titleListener.setTitle("Hub");
+        super.onResume();
+
+        String publicId = getArguments().getString(EXTRA_ID, null);
+        if(publicId != null)
+        {
+            TaskQueue.loadQueueDefault(getActivity()).execute(new GetUserTask(publicId, true));
+        }
+        else
+        {
+            DatabaseHelper.defaultDatabaseQueue(getActivity()).execute(
+                    new DbGetUserTask(AppPrefs.getInstance(getActivity()).getCurrentUserId()));
+        }
     }
 
     @Override
@@ -99,45 +122,17 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         super.onActivityCreated(savedInstanceState);
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
 
-        //FIXME get real user
-        User user = new User(null, "firstName", "lastName", "birthday");
-        user.id = AppPrefs.getInstance(getActivity()).getCurrentUserId();
-
-        boolean isPublic = getArguments().getBoolean(PUBLIC_PROFILE);
-        if(isPublic)
-        {
-            user.first_name = "public";
-        }
-
-        adapter = new HubAdapter(user, this, isPublic);
+        String publicId = getArguments().getString(EXTRA_ID, null);
+        adapter = new HubAdapter(this, publicId != null);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        titleListener.setTitle("Hub");
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(GetCurrentUserCampaignTask task)
-    {
-        if(! task.campaignList.isEmpty())
-        {
-            adapter.addCurrentCampaign(task.campaignList);
-        }
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(GetPastUserCampaignTask task)
-    {
-        if(! task.campaignList.isEmpty())
-        {
-            adapter.addPastCampaign(task.campaignList);
-        }
     }
 
     @Override
     public void friendClicked(String friendId)
     {
-        startActivity(PublicProfileActivity.getLaunchIntent(getActivity()));
+        startActivity(PublicProfileActivity.getLaunchIntent(getActivity(), friendId));
     }
 
     @Override
@@ -149,7 +144,26 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     @Override
     public void onProveShareClicked(Campaign campaign)
     {
-        choosePicture();
+        Intent pickIntent = new Intent(Intent.ACTION_PICK,
+                                       android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setType("image/*");
+
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File externalFile = new File(
+                getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                "report_back" + System.currentTimeMillis() + ".jpg");
+        imageUri = Uri.fromFile(externalFile);
+        if(BuildConfig.DEBUG)
+        {
+            Log.d("photo location", imageUri.toString());
+        }
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+
+        String pickTitle = getString(R.string.select_picture);
+        Intent chooserIntent = Intent.createChooser(takePhotoIntent, pickTitle);
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+
+        startActivityForResult(chooserIntent, SELECT_PICTURE);
     }
 
     @Override
@@ -201,30 +215,39 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         }
     }
 
-
-    public void choosePicture()
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(GetCurrentUserCampaignTask task)
     {
-        Intent pickIntent = new Intent(Intent.ACTION_PICK,
-                                       android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        pickIntent.setType("image/*");
-
-        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File externalFile = new File(
-                getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                "report_back" + System.currentTimeMillis() + ".jpg");
-        imageUri = Uri.fromFile(externalFile);
-        if(BuildConfig.DEBUG)
+        if(! task.campaignList.isEmpty())
         {
-            Log.d("photo location", imageUri.toString());
+            adapter.addCurrentCampaign(task.campaignList);
         }
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-
-        String pickTitle = getString(R.string.select_picture);
-        Intent chooserIntent = Intent.createChooser(takePhotoIntent, pickTitle);
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
-
-        startActivityForResult(chooserIntent, SELECT_PICTURE);
     }
 
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(GetUserTask task)
+    {
+        adapter.addUser(task.user);
+    }
 
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(DbGetUserTask task)
+    {
+        adapter.addUser(task.user);
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(UploadAvatarTask task)
+    {
+        adapter.addUser(task.user);
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(GetPastUserCampaignTask task)
+    {
+        if(! task.campaignList.isEmpty())
+        {
+            adapter.addPastCampaign(task.campaignList);
+        }
+    }
 }

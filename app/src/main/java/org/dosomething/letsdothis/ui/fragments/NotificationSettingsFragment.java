@@ -1,6 +1,5 @@
 package org.dosomething.letsdothis.ui.fragments;
 import android.app.Activity;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -45,9 +44,8 @@ public class NotificationSettingsFragment extends PreferenceFragment
 
     private void initChangeNotifications()
     {
-        Resources res = getResources();
 
-        findPreference(res.getString(R.string.notification_kudos))
+        findPreference(getString(R.string.notification_kudos))
                 .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
                 {
                     @Override
@@ -58,7 +56,7 @@ public class NotificationSettingsFragment extends PreferenceFragment
                         return true;
                     }
                 });
-        findPreference(res.getString(R.string.notification_campaign))
+        findPreference(getString(R.string.notification_campaign))
                 .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
                 {
                     @Override
@@ -69,7 +67,7 @@ public class NotificationSettingsFragment extends PreferenceFragment
                         return true;
                     }
                 });
-        findPreference(res.getString(R.string.notification_friend))
+        findPreference(getString(R.string.notification_friend))
                 .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
                 {
                     @Override
