@@ -2,8 +2,12 @@ package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 import android.util.Patterns;
 
+import com.parse.ParseInstallation;
+
 import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.User;
+import org.dosomething.letsdothis.network.NetworkHelper;
+import org.dosomething.letsdothis.network.models.ParseInstallationRequest;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 /**
@@ -26,6 +30,17 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
     {
         DatabaseHelper.getInstance(context).getUserDao().createOrUpdate(user);
         AppPrefs.getInstance(context).setCurrentUserId(user.id);
+
+        ParseInstallation currentInstallation = ParseInstallation.getCurrentInstallation();
+        currentInstallation.put("user_id", "user_" + user.id);
+        currentInstallation.saveInBackground();
+        String parseInstallation = currentInstallation.getInstallationId();
+
+        NetworkHelper.getNorthstarAPIService()
+                     .setParseInstallationId(AppPrefs.getInstance(context).getCurrentUserId(),
+                                             new ParseInstallationRequest(parseInstallation));
+
+
     }
 
     @Override
