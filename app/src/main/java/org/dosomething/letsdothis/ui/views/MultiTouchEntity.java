@@ -94,7 +94,7 @@ public abstract class MultiTouchEntity implements Serializable
     }
 
     /**
-     * Set the position and scale of an image in screen coordinates
+     * Set the pagerPosition and scale of an image in screen coordinates
      */
     public boolean setPos (MultiTouchController.PositionAndScale newImgPosAndScale) {
 
@@ -168,7 +168,7 @@ public abstract class MultiTouchEntity implements Serializable
     }
 
     /**
-     * Set the position and scale of an image in screen coordinates
+     * Set the pagerPosition and scale of an image in screen coordinates
      */
     protected boolean setPos(float centerX, float centerY,
                              float scaleX, float scaleY, float angle) {
