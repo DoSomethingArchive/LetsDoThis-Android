@@ -4,7 +4,10 @@ import android.content.Context;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.RequestReportback;
 import org.dosomething.letsdothis.network.models.ResponseReportbackSubmit;
+import org.dosomething.letsdothis.network.models.ResponseSubmitReportBack;
 import org.dosomething.letsdothis.utils.AppPrefs;
+
+import java.util.Date;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import retrofit.client.Response;
@@ -28,31 +31,10 @@ public class ReportbackUploadTask extends BaseNetworkErrorHandlerTask
     protected void run(Context context) throws Throwable
     {
         req.file = "test";
-
-/*signup
-curl -X POST \
--H "X-DS-Application-Id: 456" \
--H "X-DS-REST-API-Key: abc4324" \
--H "Content-Type: application/json" \
--H "Accept: application/json" \
--H "Session: bzBQSEFWZlJ4ZWJZWjBuSkhya2d6NkNBVEFkWWVEOG95YmdNcVF0R2YzMD0=" \
--d '{"source": "android", "group": 123}' \
-https://northstar-qa.dosomething.org/v1/user/campaigns/1261/signup
-*/
-/*submit
-curl -X POST \
--H "X-DS-Application-Id: 456" \
--H "X-DS-REST-API-Key: abc4324" \
--H "Content-Type: application/json" \
--H "Accept: application/json" \
--H "Session: bzBQSEFWZlJ4ZWJZWjBuSkhya2d6NkNBVEFkWWVEOG95YmdNcVF0R2YzMD0=" \
--d '{"quantity": "100", "why_participated": "because!", "caption": "my photo caption!", "file": "A huge base64 encoded string"}' \
-https://northstar-qa.dosomething.org/v1/user/campaigns/1261/reportback
-*/
+        req.why_participated = "Doing something!";
         String sessionToken = AppPrefs.getInstance(context).getSessionToken();
-        Response response = NetworkHelper.getNorthstarAPIService()
+        ResponseSubmitReportBack response = NetworkHelper.getNorthstarAPIService()
                 .submitReportback(sessionToken, req, campaignId);
-        String s = response.toString();
     }
 
     @Override
