@@ -44,15 +44,28 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private HubAdapterClickListener hubAdapterClickListener;
     private boolean isPublic = false;
 
-    public HubAdapter(User user, HubAdapterClickListener hubAdapterClickListener, boolean isPublic)
+    public HubAdapter(HubAdapterClickListener hubAdapterClickListener, boolean isPublic)
     {
         super();
-        this.user = user;
         this.hubAdapterClickListener = hubAdapterClickListener;
-        this.hubList.add(user);
+        addUser(new User(null, "", "", null));
         hubList.add(CURRENTLY_DOING);
         hubList.add(BEEN_THERE_DONE_GOOD);
         this.isPublic = isPublic;
+    }
+
+    public void addUser(User user)
+    {
+        this.user = user;
+        if(! hubList.isEmpty() && hubList.get(0) instanceof User)
+        {
+            hubList.set(0, user);
+        }
+        else
+        {
+            hubList.add(0, user);
+        }
+        notifyDataSetChanged();
     }
 
     @Override
@@ -99,8 +112,24 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             User user = (User) hubList.get(position);
             ProfileViewHolder profileViewHolder = (ProfileViewHolder) holder;
 
-            profileViewHolder.name
-                    .setText(String.format("%s %s.", user.first_name, user.last_name.charAt(0)));
+            if(user != null && user.avatarPath != null)
+            {
+                Picasso.with(((ProfileViewHolder) holder).userImage.getContext())
+                        .load(user.avatarPath)
+                        .resizeDimen(R.dimen.hub_avatar_height, R.dimen.hub_avatar_height)
+                        .into(profileViewHolder.userImage);
+            }
+
+
+            String first = user.first_name;
+            String last = "";
+            if(user.last_name != null && user.last_name.length() > 0)
+            {
+                last = user.last_name.charAt(0) + ".";
+            }
+
+            String displayName = String.format("%s %s", first, last);
+            profileViewHolder.name.setText(displayName);
         }
         else if(getItemViewType(position) == VIEW_TYPE_CURRENT_CAMPAIGN)
         {
@@ -218,12 +247,11 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             int dayInt = Integer.parseInt(days);
             int hourInt = Integer.parseInt(hours);
-                expireViewHolder.daysLabel
-                        .setText(resources.getQuantityString(R.plurals.days, dayInt));
-                expireViewHolder.hoursLabel
-                        .setText(resources.getQuantityString(R.plurals.hours, hourInt));
-                expireViewHolder.minutesLabel.setText(
-                        resources.getQuantityString(R.plurals.minutes, Integer.parseInt(minutes)));
+            expireViewHolder.daysLabel.setText(resources.getQuantityString(R.plurals.days, dayInt));
+            expireViewHolder.hoursLabel
+                    .setText(resources.getQuantityString(R.plurals.hours, hourInt));
+            expireViewHolder.minutesLabel.setText(
+                    resources.getQuantityString(R.plurals.minutes, Integer.parseInt(minutes)));
             expireViewHolder.daysWrapper.setVisibility(View.GONE);
             expireViewHolder.hoursrWrapper.setVisibility(View.GONE);
             expireViewHolder.minWrapper.setVisibility(View.GONE);

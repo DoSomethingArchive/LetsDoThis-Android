@@ -62,7 +62,7 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
             TaskQueue.loadQueueDefault(this)
                      .execute(new CampaignGroupDetailsTask(campaignId, userId));
             TaskQueue.loadQueueDefault(this).execute(
-                    new IndividualCampaignReportBackList(- 1, Integer.toString(campaignId),
+                    new IndividualCampaignReportBackList(Integer.toString(campaignId),
                                                          currentPage));
         }
 
@@ -129,8 +129,7 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
                 Toast.makeText(this, "get more data", Toast.LENGTH_SHORT).show();
             }
             String campaigns = Integer.toString(getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1));
-            IndividualCampaignReportBackList task = new IndividualCampaignReportBackList(- 1,
-                                                                                         campaigns,
+            IndividualCampaignReportBackList task = new IndividualCampaignReportBackList(campaigns,
                                                                                          currentPage + 1);
             TaskQueue.loadQueueDefault(this).execute(task);
         }
@@ -154,7 +153,7 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
     @Override
     public void onFriendClicked(String id)
     {
-        startActivity(PublicProfileActivity.getLaunchIntent(this));
+        startActivity(PublicProfileActivity.getLaunchIntent(this, id));
     }
 
     @SuppressWarnings("UnusedDeclaration")
