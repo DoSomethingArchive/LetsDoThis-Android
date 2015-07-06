@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import com.viewpagerindicator.TabPageIndicator;
 
 import org.dosomething.letsdothis.R;
-import org.dosomething.letsdothis.ui.fragments.NotificationsFragment.SetTitleListener;
 import org.dosomething.letsdothis.data.InterestGroup;
 import org.dosomething.letsdothis.ui.views.typeface.CustomTypefaceSpan;
 import org.dosomething.letsdothis.ui.views.typeface.TypefaceManager;

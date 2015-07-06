@@ -26,7 +26,6 @@ public class InterestGroupCampaignListTask extends BaseNetworkErrorHandlerTask
     @Override
     protected void run(Context context) throws Throwable
     {
-
         ResponseCampaignList response = NetworkHelper.getDoSomethingAPIService().campaignList(interestGroupId);
         campaigns = ResponseCampaignList.getCampaigns(response);
     }

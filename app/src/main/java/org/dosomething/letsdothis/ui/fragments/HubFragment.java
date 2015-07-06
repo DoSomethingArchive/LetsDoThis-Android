@@ -35,9 +35,6 @@ import java.io.File;
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
 
-
-import static org.dosomething.letsdothis.ui.fragments.NotificationsFragment.SetTitleListener;
-
 /**
  * Created by izzyoji :) on 4/15/15.
  */

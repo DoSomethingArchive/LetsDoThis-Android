@@ -4,6 +4,8 @@ import android.net.Uri;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.models.ResponseAvatar;
+import org.dosomething.letsdothis.network.models.RequestCampaignSignup;
+import org.dosomething.letsdothis.network.models.ResponseCampaignSignUp;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 import org.dosomething.letsdothis.network.models.ResponseRegister;
 import org.dosomething.letsdothis.network.models.ResponseUser;
@@ -73,6 +75,10 @@ public interface NorthstarAPI
 
     @POST("/logout")
     public Response logout(@Header("Session") String sessionToken) throws NetworkException;
+
+    @Headers("Content-Type: application/json")
+    @POST("/user/campaigns/{id}/signup")
+    ResponseCampaignSignUp campaignSignUp(@Body RequestCampaignSignup requestCampaignSignup, @Path("id") int id, @Header("Session") String sessionToken);
 
     //-----------NOT DONE
     //-----------NOT DONE

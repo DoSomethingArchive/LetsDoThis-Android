@@ -18,10 +18,11 @@ import org.dosomething.letsdothis.ui.fragments.ActionsFragment;
 import org.dosomething.letsdothis.ui.fragments.HubFragment;
 import org.dosomething.letsdothis.ui.fragments.InvitesFragment;
 import org.dosomething.letsdothis.ui.fragments.NotificationsFragment;
+import org.dosomething.letsdothis.ui.fragments.SetTitleListener;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 
-public class MainActivity extends BaseActivity implements NotificationsFragment.SetTitleListener
+public class MainActivity extends BaseActivity implements SetTitleListener
 {
     private Toolbar toolbar;
 
@@ -54,7 +55,7 @@ public class MainActivity extends BaseActivity implements NotificationsFragment.
 
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
-                                                                        R.string.invite_code_opt,
+                                                                        R.string.invite_code_opt1,
                                                                         R.string.account);
         drawerLayout.setDrawerListener(mDrawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
