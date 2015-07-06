@@ -17,6 +17,7 @@ public class ResponseLogin
         public String first_name;
         public String last_name;
         public String birthday;
+        public String avatar;
     }
 
 
