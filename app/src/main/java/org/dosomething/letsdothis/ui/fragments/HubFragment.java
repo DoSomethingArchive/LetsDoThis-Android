@@ -194,8 +194,9 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
                     selectedImageUri = data.getData();
                 }
 
+                //FIXME should be for result
                 startActivity(PhotoCropActivity
-                                      .getLaunchIntent(getActivity(), selectedImageUri.toString()));
+                                      .getLaunchIntent(getActivity(), selectedImageUri.toString(), "Share Photo", null));
             }
         }
     }
