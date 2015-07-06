@@ -16,13 +16,9 @@ public class PublicProfileActivity extends BaseActivity implements SetTitleListe
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String EXTRA_ID = "id";
+    private Toolbar toolbar;
 
     public static Intent getLaunchIntent(Context context, String id)
-    //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final String EXTRA_ID = "id";
-    private Toolbar toolbar;
-    
-    public static Intent getLaunchIntent(Context context)
     {
         Intent intent = new Intent(context, PublicProfileActivity.class);
         intent.putExtra(EXTRA_ID, id);
@@ -66,6 +62,5 @@ public class PublicProfileActivity extends BaseActivity implements SetTitleListe
     public void setTitle(String title)
     {
         //        toolbar.setTitle(title); PLACEHOLDER IN PUBLIC HUB
-
     }
 }
