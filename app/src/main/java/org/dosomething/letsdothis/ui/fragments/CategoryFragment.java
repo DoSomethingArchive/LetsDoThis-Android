@@ -15,6 +15,7 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.InterestGroup;
 import org.dosomething.letsdothis.data.ReportBack;
+import org.dosomething.letsdothis.tasks.CampaignSignUpTask;
 import org.dosomething.letsdothis.tasks.InterestGroupCampaignListTask;
 import org.dosomething.letsdothis.tasks.InterestReportBackListTask;
 import org.dosomething.letsdothis.ui.CampaignDetailsActivity;
@@ -100,6 +101,7 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
     @Override
     public void onCampaignClicked(int campaignId)
     {
+        TaskQueue.loadQueueDefault(getActivity()).execute(new CampaignSignUpTask(campaignId));
         startActivity(CampaignDetailsActivity.getLaunchIntent(getActivity(), campaignId));
     }
 
