@@ -23,14 +23,14 @@ public class MultiTouchController<T> {
     /**
      * The biggest possible abs val of the change in x or y between multitouch
      * events (larger dx/dy events are ignored) -- helps eliminate jumps in
-     * pointer position on finger 2 up/down.
+     * pointer pagerPosition on finger 2 up/down.
      */
     private static final float MAX_MULTITOUCH_POS_JUMP_SIZE = 30.0f;
 
     /**
      * The biggest possible abs val of the change in multitouchWidth or
      * multitouchHeight between multitouch events (larger-jump events are ignored) --
-     * helps eliminate jumps in pointer position on finger 2 up/down.
+     * helps eliminate jumps in pointer pagerPosition on finger 2 up/down.
      */
     private static final float MAX_MULTITOUCH_DIM_JUMP_SIZE = 40.0f;
 
@@ -92,7 +92,7 @@ public class MultiTouchController<T> {
     /** The object being dragged/stretched */
     private T selectedObject = null;
 
-    /** Current position and scale of the dragged object */
+    /** Current pagerPosition and scale of the dragged object */
     private PositionAndScale mCurrXform = new PositionAndScale();
 
     /** Drag/pinch start time and time to ignore spurious events until
@@ -327,7 +327,7 @@ public class MultiTouchController<T> {
         if (selectedObject == null)
             return;
 
-        // Get selected object's current position and scale
+        // Get selected object's current pagerPosition and scale
         objectCanvas.getPositionAndScale(selectedObject, mCurrXform);
 
         // Figure out the object coords of the drag start point's screen coords.
@@ -347,13 +347,13 @@ public class MultiTouchController<T> {
     }
 
     /** Drag/stretch/rotate the selected object using the current touch
-     * position(s) relative to the anchor position(s). */
+     * pagerPosition(s) relative to the anchor pagerPosition(s). */
     private void performDragOrPinch() {
         // Don't do anything if we're not dragging anything
         if (selectedObject == null)
             return;
 
-        // Calc new position of dragged object
+        // Calc new pagerPosition of dragged object
         float currScale = !mCurrXform.updateScale ? 1.0f
             : mCurrXform.scale == 0.0f ? 1.0f : mCurrXform.scale;
         extractCurrPtInfo();
@@ -496,7 +496,7 @@ public class MultiTouchController<T> {
             } else if (mCurrPt.isMultiTouch()) {
                 // Point 1 was already down and point 2 was just placed down
                 mMode = MODE_PINCH;
-                // Restart the drag with the new drag position (that is at the
+                // Restart the drag with the new drag pagerPosition (that is at the
                 // midpoint between the touchpoints)
                 anchorAtThisPositionAndScale();
                 // Need to let events settle before moving things,
@@ -511,7 +511,7 @@ public class MultiTouchController<T> {
                     // Ignore the first few events if we just stopped stretching,
                     // because if finger 2 was kept down while
                     // finger 1 is lifted, then point 1 gets mapped to finger 2.
-                    // Restart the drag from the new position.
+                    // Restart the drag from the new pagerPosition.
                     anchorAtThisPositionAndScale();
                 } else {
                     // Keep dragging, move to new point
@@ -535,7 +535,7 @@ public class MultiTouchController<T> {
                 } else {
                     // Just dropped point 2, downgrade to a single-point drag
                     mMode = MODE_DRAG;
-                    // Restart the pinch with the single-finger position
+                    // Restart the pinch with the single-finger pagerPosition
                     anchorAtThisPositionAndScale();
                     // Ignore the first few events after the drop, in case we
                     // dropped finger 1 and left finger 2 down
@@ -565,7 +565,7 @@ public class MultiTouchController<T> {
                     // Events have not yet settled, reset
                     anchorAtThisPositionAndScale();
                 } else {
-                    // Stretch to new position and size
+                    // Stretch to new pagerPosition and size
                     performDragOrPinch();
                 }
             }
@@ -847,7 +847,7 @@ public class MultiTouchController<T> {
         private boolean updateScale, updateScaleXY, updateAngle;
 
         /**
-         * Set position and optionally scale, anisotropic scale, and/or angle.
+         * Set pagerPosition and optionally scale, anisotropic scale, and/or angle.
          * Where if the corresponding "update" flag is set to false, the field's
          * value will not be changed during a pinch operation. If the value is
          * not being updated *and* the value is not used by the client
@@ -872,7 +872,7 @@ public class MultiTouchController<T> {
             this.angle = angle;
         }
 
-        /** Set position and optionally scale, anisotropic scale, and/or angle,
+        /** Set pagerPosition and optionally scale, anisotropic scale, and/or angle,
          * without changing the "update" flags. */
         protected void set(float xOff, float yOff, float scale,
                 float scaleX, float scaleY, float angle) {
@@ -942,25 +942,25 @@ public class MultiTouchController<T> {
          * Get the screen coords of the dragged object's origin, and scale
          * multiplier to convert screen coords to obj coords. The job of this routine
          * is to call the .set() method on the passed PositionAndScale object to
-         * record the initial position and scale of the object (in object coordinates)
+         * record the initial pagerPosition and scale of the object (in object coordinates)
          * before any dragging/stretching takes place.
          *
          * @param obj
          *            The object being dragged/stretched.
          * @param objPosAndScaleOut
          *            Output parameter: You need to call objPosAndScaleOut.set()
-         *            to record the current position and scale of obj.
+         *            to record the current pagerPosition and scale of obj.
          */
         public void getPositionAndScale(T obj, PositionAndScale objPosAndScaleOut);
 
         /**
-         * Callback to update the position and scale (in object coords) of the
+         * Callback to update the pagerPosition and scale (in object coords) of the
          * currently-dragged object.
          *
          * @param obj
          *            The object being dragged/stretched.
          * @param newObjPosAndScale
-         *            The new position and scale of the object, in object
+         *            The new pagerPosition and scale of the object, in object
          *            coordinates. Use this to move/resize the object before returning.
          * @param touchPoint
          *            Info about the current touch point, including multitouch
@@ -969,8 +969,8 @@ public class MultiTouchController<T> {
          *            keep any fields of touchPoint, you must copy them before the method
          *            body exits.)
          * @return true
-         *            if setting the position and scale of the object was successful,
-         *            or false if the position or scale parameters are out of range
+         *            if setting the pagerPosition and scale of the object was successful,
+         *            or false if the pagerPosition or scale parameters are out of range
          *            for this object.
          */
         public boolean setPositionAndScale(T obj, PositionAndScale newObjPosAndScale, PointInfo touchPoint);

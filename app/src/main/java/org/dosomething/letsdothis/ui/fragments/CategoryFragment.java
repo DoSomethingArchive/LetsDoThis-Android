@@ -15,6 +15,7 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.InterestGroup;
 import org.dosomething.letsdothis.data.ReportBack;
+import org.dosomething.letsdothis.tasks.CampaignSignUpTask;
 import org.dosomething.letsdothis.tasks.InterestGroupCampaignListTask;
 import org.dosomething.letsdothis.tasks.InterestReportBackListTask;
 import org.dosomething.letsdothis.ui.CampaignDetailsActivity;
@@ -34,7 +35,7 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 public class CategoryFragment extends Fragment implements CampaignAdapter.CampaignAdapterClickListener
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final String KEY_POSITION = "position";
+    public static final String KEY_POSITION = "pagerPosition";
     public static final int    FIRST_PAGE   = 1;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
@@ -100,6 +101,7 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
     @Override
     public void onCampaignClicked(int campaignId)
     {
+        TaskQueue.loadQueueDefault(getActivity()).execute(new CampaignSignUpTask(campaignId));
         startActivity(CampaignDetailsActivity.getLaunchIntent(getActivity(), campaignId));
     }
 
@@ -133,7 +135,7 @@ public class CategoryFragment extends Fragment implements CampaignAdapter.Campai
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(InterestReportBackListTask task)
     {
-        if(task.position == position)
+        if(task.pagerPosition == position)
         {
             totalPages = task.totalPages;
             currentPage = task.page;

@@ -56,31 +56,28 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_quickreturn_recycler);
+        EventBusExt.getDefault().register(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
         toolbar.setTitle("");
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
         adapter = new CampaignDetailsAdapter(this, getResources());
-
         recyclerView.setAdapter(adapter);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-
         recyclerView.setLayoutManager(layoutManager);
 
-        EventBusExt.getDefault().register(this);
 
         int campaignId = getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1);
         if(campaignId != - 1)
         {
             TaskQueue.loadQueueDefault(this).execute(new CampaignDetailsTask(campaignId));
             TaskQueue.loadQueueDefault(this).execute(
-                    new IndividualCampaignReportBackList(- 1, Integer.toString(campaignId),
+                    new IndividualCampaignReportBackList(Integer.toString(campaignId),
                                                          currentPage));
         }
     }
@@ -108,8 +105,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
                 Toast.makeText(this, "get more data", Toast.LENGTH_SHORT).show();
             }
             String campaigns = Integer.toString(getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1));
-            IndividualCampaignReportBackList task = new IndividualCampaignReportBackList(- 1,
-                                                                                         campaigns,
+            IndividualCampaignReportBackList task = new IndividualCampaignReportBackList(campaigns,
                                                                                          currentPage + 1);
             TaskQueue.loadQueueDefault(this).execute(task);
         }
@@ -125,18 +121,13 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     public void inviteClicked()
     {
         Campaign campaign = adapter.getCampaign();
-        startActivity(
-                CampaignInviteActivity.getLaunchIntent(this, campaign.title, campaign.invite.code));
+        startActivity(CampaignInviteActivity.getLaunchIntent(this, campaign.title, campaign.invite.code));
     }
 
     @Override
     public void onUserClicked(String id)
     {
-        //FIXME
-        if(BuildConfig.DEBUG)
-        {
-            startActivity(PublicProfileActivity.getLaunchIntent(this));
-        }
+        startActivity(PublicProfileActivity.getLaunchIntent(this, id));
     }
 
     @Override

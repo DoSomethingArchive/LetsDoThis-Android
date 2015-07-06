@@ -13,7 +13,7 @@ import co.touchlab.android.threading.tasks.Task;
 /**
  * Created by izzyoji :) on 6/23/15.
  */
-public class InterestGroupCampaignListTask extends Task
+public class InterestGroupCampaignListTask extends BaseNetworkErrorHandlerTask
 {
     public int            interestGroupId;
     public List<Campaign> campaigns;
@@ -33,6 +33,7 @@ public class InterestGroupCampaignListTask extends Task
     @Override
     protected boolean handleError(Context context, Throwable throwable)
     {
+        super.handleError(context, throwable);
         return false;
     }
 
