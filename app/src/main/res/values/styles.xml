@@ -73,7 +73,7 @@
 
     <style name="IntroButton" parent="PrimaryButton">
         <item name="android:background">@drawable/bg_white_rounded_rect</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/cerulean_1</item>
     </style>
 
     <style name="DialogButton" parent="Widget.AppCompat.Button">
