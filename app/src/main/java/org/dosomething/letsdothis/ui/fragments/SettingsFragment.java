@@ -53,16 +53,9 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
 
         initRate();
         initLogout();
-        initChangeEmail();
         initChangeNotifications();
-        initChangePassword();
-        initChangeEmail();
-        initChangeNotifications();
-        initChangePassword();
-        initChangePhone();
         initNotificationsPrefs();
         initChangePhoto();
-        initChangePhone();
     }
 
     @Override
@@ -107,48 +100,6 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
 
                         choosePicture();
                         //                        startActivity(ChangeNumberActivity.getLaunchIntent(getActivity()));
-                        return true;
-                    }
-                });
-    }
-    
-    private void initChangePhone()
-    {
-        findPreference(getString(R.string.change_number))
-                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
-                {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference)
-                    {
-                        startActivity(ChangeNumberActivity.getLaunchIntent(getActivity()));
-                        return true;
-                    }
-                });
-    }
-
-    private void initChangeEmail()
-    {
-        findPreference(getString(R.string.change_email))
-                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
-                {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference)
-                    {
-                        startActivity(ChangeEmailActivity.getLaunchIntent(getActivity()));
-                        return true;
-                    }
-                });
-    }
-
-    private void initChangePassword()
-    {
-        findPreference(getString(R.string.change_password))
-                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
-                {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference)
-                    {
-                        startActivity(ChangePasswordActivity.getLaunchIntent(getActivity()));
                         return true;
                     }
                 });
