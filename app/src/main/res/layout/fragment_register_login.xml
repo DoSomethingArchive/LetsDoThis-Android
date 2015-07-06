@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tool:background="#faaf00">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            style="@style/SignInText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_xlarge"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:text="@string/desc_login_reg"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+            android:id="@+id/register"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="@dimen/padding_small"
+            android:layout_marginLeft="@dimen/height_xxlarge"
+            android:layout_marginRight="@dimen/height_xxlarge"
+            android:text="@string/register"
+            app:typeface="brandon_bold"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+            android:id="@+id/fb_connect"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="@dimen/padding_small"
+            android:layout_marginLeft="@dimen/height_xxlarge"
+            android:layout_marginRight="@dimen/height_xxlarge"
+            android:background="@drawable/bg_fb_rounded"
+            android:drawableLeft="@drawable/ic_fb"
+            android:drawablePadding="3dp"
+            android:text="@string/log_in_with_facebook"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_36"
+            app:typeface="brandon_bold"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+            android:id="@+id/login"
+            style="@style/IntroButton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="@dimen/height_xxlarge"
+            android:layout_marginRight="@dimen/height_xxlarge"
+            android:text="@string/sign_in"
+            app:typeface="brandon_bold"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

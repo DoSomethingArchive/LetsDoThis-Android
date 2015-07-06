@@ -1,6 +1,8 @@
 package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
+import com.facebook.login.LoginManager;
+
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.utils.AppPrefs;
@@ -18,7 +20,7 @@ public class LogoutTask extends BaseNetworkErrorHandlerTask
     protected void run(Context context) throws Throwable
     {
         //FIXME switch to using persisted task
-        LDTApplication.loginManager.logOut();
+        LoginManager.getInstance().logOut();
         EventBusExt.getDefault().post(this);
 
         sessionToken = AppPrefs.getInstance(context).getSessionToken();
