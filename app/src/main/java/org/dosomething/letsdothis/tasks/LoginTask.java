@@ -49,12 +49,14 @@ public class LoginTask extends BaseRegistrationTask
         {
             if(response.data._id != null)
             {
+                //FIXME should we get back a user avatar??
                 user.id = response.data._id;
                 user.email = response.data.email;
                 user.mobile = response.data.mobile;
                 user.first_name = response.data.first_name;
                 user.last_name = response.data.last_name;
                 user.birthdate = response.data.birthday;
+                user.avatarPath = response.data.avatar;
                 AppPrefs.getInstance(context).setSessionToken(response.data.session_token);
                 loginUser(context, user);
 

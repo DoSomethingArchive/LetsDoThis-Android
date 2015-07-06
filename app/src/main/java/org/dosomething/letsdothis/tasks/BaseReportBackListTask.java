@@ -14,14 +14,12 @@ public abstract class BaseReportBackListTask extends BaseNetworkErrorHandlerTask
 {
 
     public  List<ReportBack> reportBacks;
-    public  int              position;
     private String           campaigns;
     public  int              page;
     public  int              totalPages;
 
-    public BaseReportBackListTask(int position, String campaigns, int page)
+    public BaseReportBackListTask( String campaigns, int page)
     {
-        this.position = position;
         this.campaigns = campaigns;
         this.page = page;
     }

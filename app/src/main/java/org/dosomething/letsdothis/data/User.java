@@ -27,6 +27,7 @@ public class User
     //DON'T STORE PASSWORD IN DATABASE
     public String password;
 
+    @DatabaseField
     public String avatarPath;
 
     public User()
