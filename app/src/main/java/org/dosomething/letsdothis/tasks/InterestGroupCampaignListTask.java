@@ -26,7 +26,6 @@ public class InterestGroupCampaignListTask extends Task
     @Override
     protected void run(Context context) throws Throwable
     {
-
         ResponseCampaignList response = NetworkHelper.getDoSomethingAPIService().campaignList(interestGroupId);
         campaigns = ResponseCampaignList.getCampaigns(response);
     }
