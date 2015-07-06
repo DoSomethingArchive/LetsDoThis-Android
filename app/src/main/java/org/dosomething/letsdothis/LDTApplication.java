@@ -11,7 +11,6 @@ import com.facebook.login.LoginManager;
 public class LDTApplication extends Application
 {
     public static Context      context;
-    public static LoginManager loginManager;
 
     @Override
     public void onCreate()
@@ -20,7 +19,6 @@ public class LDTApplication extends Application
         context = this;
 
         FacebookSdk.sdkInitialize(getApplicationContext());
-        loginManager = LoginManager.getInstance();
     }
 
 

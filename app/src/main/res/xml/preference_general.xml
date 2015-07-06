@@ -12,21 +12,21 @@
             android:key="@string/change_photo"
             android:title="@string/change_photo"/>
 
-        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference
-            android:enabled="true"
-            android:key="@string/change_email"
-            android:title="@string/change_email"/>
+        <!--<org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference-->
+            <!--android:enabled="true"-->
+            <!--android:key="@string/change_email"-->
+            <!--android:title="@string/change_email"/>-->
 
-        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference
-            android:enabled="true"
-            android:key="@string/change_number"
-            android:title="@string/change_number"/>
+        <!--<org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference-->
+            <!--android:enabled="true"-->
+            <!--android:key="@string/change_number"-->
+            <!--android:title="@string/change_number"/>-->
 
-        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference
-            android:defaultValue="@string/password_hint"
-            android:enabled="true"
-            android:key="@string/change_password"
-            android:title="@string/change_password"/>
+        <!--<org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference-->
+            <!--android:defaultValue="@string/password_hint"-->
+            <!--android:enabled="true"-->
+            <!--android:key="@string/change_password"-->
+            <!--android:title="@string/change_password"/>-->
 
         <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference
             android:key="@string/logout"

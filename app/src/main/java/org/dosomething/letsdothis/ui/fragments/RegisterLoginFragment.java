@@ -13,6 +13,7 @@ import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.gson.Gson;
 
@@ -60,7 +61,7 @@ public class RegisterLoginFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.fragment_register, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_register_login, container, false);
         initAppNavigation(rootView);
         initFbConnect(rootView);
 
@@ -97,67 +98,65 @@ public class RegisterLoginFragment extends Fragment
     {
         if(Profile.getCurrentProfile() != null)
         {
-            LDTApplication.loginManager.logOut();
+            LoginManager.getInstance().logOut();
         }
 
         callbackManager = CallbackManager.Factory.create();
-        rootView.findViewById(R.id.fb_connect).setOnClickListener(new View.OnClickListener()
+        LoginManager.getInstance()
+                .registerCallback(callbackManager, new FacebookCallback<LoginResult>()
+                {
+                    @Override
+                    public void onSuccess(LoginResult loginResult)
+                    {
+                        final GraphRequest request = GraphRequest
+                                .newMeRequest(loginResult.getAccessToken(),
+                                              new GraphRequest.GraphJSONObjectCallback()
+                                              {
+                                                  @Override
+                                                  public void onCompleted(JSONObject object, GraphResponse response)
+                                                  {
+                                                      if(response.getError() == null)
+                                                      {
+                                                          FbUser user = new Gson().fromJson(
+                                                                  response.getRawResponse(),
+                                                                  FbUser.class);
+                                                          startRegisterActivity(user);
+                                                      }
+                                                  }
+                                              });
+                        Bundle parameters = new Bundle();
+                        parameters.putString("fields", "id,email, birthday, first_name, last_name");
+                        request.setParameters(parameters);
+                        request.executeAsync();
+                    }
 
+                    @Override
+                    public void onCancel()
+                    {
+                        if(BuildConfig.DEBUG)
+                        {
+                            Toast.makeText(getActivity(), "Cancel", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(FacebookException e)
+                    {
+                        if(BuildConfig.DEBUG)
+                        {
+                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    }
+                });
+
+        rootView.findViewById(R.id.fb_connect).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                LDTApplication.loginManager
-                        .registerCallback(callbackManager, new FacebookCallback<LoginResult>()
-                        {
-                            @Override
-                            public void onSuccess(LoginResult loginResult)
-                            {
-                                final GraphRequest request = GraphRequest
-                                        .newMeRequest(loginResult.getAccessToken(),
-                                                      new GraphRequest.GraphJSONObjectCallback()
-                                                      {
-                                                          @Override
-                                                          public void onCompleted(JSONObject object, GraphResponse response)
-                                                          {
-                                                              if(response.getError() == null)
-                                                              {
-                                                                  FbUser user = new Gson().fromJson(
-                                                                          response.getRawResponse(),
-                                                                          FbUser.class);
-                                                                  startRegisterActivity(user);
-                                                              }
-                                                          }
-                                                      });
-                                Bundle parameters = new Bundle();
-                                parameters.putString("fields",
-                                                     "id,email, birthday, first_name, last_name");
-                                request.setParameters(parameters);
-                                request.executeAsync();
-                            }
-
-                            @Override
-                            public void onCancel()
-                            {
-                                if(BuildConfig.DEBUG)
-                                {
-                                    Toast.makeText(getActivity(), "Cancel", Toast.LENGTH_SHORT)
-                                            .show();
-                                }
-                            }
-
-                            @Override
-                            public void onError(FacebookException e)
-                            {
-                                if(BuildConfig.DEBUG)
-                                {
-                                    Toast.makeText(getActivity(), e.getMessage(),
-                                                   Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-
-                LDTApplication.loginManager.logInWithReadPermissions(getActivity(), FB_PERMISSIONS);
+                LoginManager.getInstance()
+                        .logInWithReadPermissions(RegisterLoginFragment.this, FB_PERMISSIONS);
             }
         });
     }
