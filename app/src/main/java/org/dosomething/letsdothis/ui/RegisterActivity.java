@@ -10,10 +10,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.BuildConfig;
-import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.FbUser;
 import org.dosomething.letsdothis.tasks.RegisterTask;
@@ -41,7 +41,7 @@ public class RegisterActivity extends BaseActivity
     private static final String TAG            = RegisterActivity.class.getSimpleName();
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
-    private EditText  phoneEmail;
+    private EditText  email;
     private EditText  password;
     private EditText  firstName;
     private EditText  lastName;
@@ -62,7 +62,7 @@ public class RegisterActivity extends BaseActivity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
+        setContentView(R.layout.activity_register);
         initLightning();
 
         FbUser fbUser = (FbUser) getIntent().getSerializableExtra(FB_USER);
@@ -213,7 +213,7 @@ public class RegisterActivity extends BaseActivity
 
     private void initRegisterListener()
     {
-        phoneEmail = (EditText) findViewById(R.id.phone_email);
+        email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
         firstName = (EditText) findViewById(R.id.first_name);
         lastName = (EditText) findViewById(R.id.last_name);
@@ -224,14 +224,14 @@ public class RegisterActivity extends BaseActivity
             @Override
             public void onClick(View view)
             {
-                String phoneEmailtext = phoneEmail.getText().toString();
+                String emailText = email.getText().toString();
                 String passtext = password.getText().toString();
                 String firsttext = firstName.getText().toString();
                 String lasttext = lastName.getText().toString();
                 String birthtext = birthday.getText().toString();
 
                 TaskQueue.loadQueueDefault(RegisterActivity.this).execute(
-                        new RegisterTask(phoneEmailtext, passtext, firsttext, lasttext, birthtext));
+                        new RegisterTask(emailText, passtext, firsttext, lasttext, birthtext));
             }
         });
     }
@@ -242,15 +242,18 @@ public class RegisterActivity extends BaseActivity
         {
             firstName.setText(fbUser.first_name);
             lastName.setText(fbUser.last_name);
-            phoneEmail.setText(fbUser.email);
+            email.setText(fbUser.email);
             birthday.setText(fbUser.birthday);
+
+            findViewById(R.id.fbContainer).setVisibility(View.VISIBLE);
+            findViewById(R.id.avatarContainer).setVisibility(View.GONE);
         }
     }
 
     @Override
     public void onBackPressed()
     {
-        LDTApplication.loginManager.logOut();
+        LoginManager.getInstance().logOut();
         super.onBackPressed();
     }
 
