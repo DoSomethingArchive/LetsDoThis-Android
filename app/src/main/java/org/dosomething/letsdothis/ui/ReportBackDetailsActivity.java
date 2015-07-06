@@ -115,7 +115,6 @@ public class ReportBackDetailsActivity extends BaseActivity
             toolbar.setTitle(reportBack.campaign.title);
 
             //FIXME add user's avatar
-
             if(!listenersAdded)
             {
                 listenersAdded = true;

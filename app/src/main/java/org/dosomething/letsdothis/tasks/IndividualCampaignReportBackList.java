@@ -8,9 +8,9 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
  */
 public class IndividualCampaignReportBackList extends BaseReportBackListTask
 {
-    public IndividualCampaignReportBackList(int position, String campaigns, int page)
+    public IndividualCampaignReportBackList(String campaigns, int page)
     {
-        super(position, campaigns, page);
+        super(campaigns, page);
     }
 
     @Override

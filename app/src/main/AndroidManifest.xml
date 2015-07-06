@@ -79,19 +79,7 @@
                   android:screenOrientation="portrait"
                   android:configChanges="orientation|keyboardHidden"/>
 
-        <activity android:name=".ui.UserProfileActivity"
-                  android:screenOrientation="portrait"
-                  android:configChanges="orientation|keyboardHidden"/>
-
-        <activity android:name=".ui.UserListActivity"
-                  android:screenOrientation="portrait"
-                  android:configChanges="orientation|keyboardHidden"/>
-
         <activity android:name=".ui.MainActivity"
-                  android:screenOrientation="portrait"
-                  android:configChanges="orientation|keyboardHidden"/>
-
-        <activity android:name=".ui.UserUpdateActivity"
                   android:screenOrientation="portrait"
                   android:configChanges="orientation|keyboardHidden"/>
 
