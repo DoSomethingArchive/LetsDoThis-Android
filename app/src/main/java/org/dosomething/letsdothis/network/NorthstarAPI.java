@@ -3,11 +3,13 @@ import android.net.Uri;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.data.User;
+import org.dosomething.letsdothis.network.models.RequestReportback;
 import org.dosomething.letsdothis.network.models.ResponseAvatar;
 import org.dosomething.letsdothis.network.models.RequestCampaignSignup;
 import org.dosomething.letsdothis.network.models.ResponseCampaignSignUp;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 import org.dosomething.letsdothis.network.models.ResponseRegister;
+import org.dosomething.letsdothis.network.models.ResponseSubmitReportBack;
 import org.dosomething.letsdothis.network.models.ResponseUser;
 import org.dosomething.letsdothis.network.models.ResponseUserList;
 import org.dosomething.letsdothis.network.models.ResponseUserUpdate;
@@ -20,6 +22,7 @@ import retrofit.http.Body;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
+import retrofit.http.HEAD;
 import retrofit.http.Header;
 import retrofit.http.Headers;
 import retrofit.http.Multipart;
@@ -75,6 +78,10 @@ public interface NorthstarAPI
 
     @POST("/logout")
     public Response logout(@Header("Session") String sessionToken) throws NetworkException;
+
+    @Headers("Content-Type: application/json")
+    @POST("/user/campaigns/{nid}/reportback")
+    ResponseSubmitReportBack submitReportback(@Header("Session") String sessionToken, @Body RequestReportback requestreportback, @Path("nid") int id) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @POST("/user/campaigns/{id}/signup")
