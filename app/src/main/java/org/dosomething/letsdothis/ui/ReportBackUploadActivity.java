@@ -28,15 +28,15 @@ import co.touchlab.android.threading.tasks.TaskQueue;
  */
 public class ReportBackUploadActivity extends AppCompatActivity
 {
-    public static final  String CROPPED_SQUARE = "CROPPED_SQUARE";
-    public static final  String EXTRA_TITLE    = "EXTRA_TITLE";
-    private static final String EXTRA_CAM_ID   = "EXTRA_CAM_ID";
+    public static final  String FILE_PATH    = "FILE_PATH";
+    public static final  String EXTRA_TITLE  = "EXTRA_TITLE";
+    private static final String EXTRA_CAM_ID = "EXTRA_CAM_ID";
     private int campaignId;
 
-    public static Intent getLaunchIntent(Context context, String cropedSquare, String title, int id)
+    public static Intent getLaunchIntent(Context context, String filePath, String title, int id)
     {
         Intent intent = new Intent(context, ReportBackUploadActivity.class);
-        intent.putExtra(CROPPED_SQUARE, cropedSquare);
+        intent.putExtra(FILE_PATH, filePath);
         intent.putExtra(EXTRA_TITLE, title);
         intent.putExtra(EXTRA_CAM_ID, id);
         return intent;
@@ -59,7 +59,7 @@ public class ReportBackUploadActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        String croppedImage = getIntent().getStringExtra(CROPPED_SQUARE);
+        String croppedImage = getIntent().getStringExtra(FILE_PATH);
         initView(croppedImage);
     }
 
@@ -90,23 +90,29 @@ public class ReportBackUploadActivity extends AppCompatActivity
             {
                 RequestReportback req = new RequestReportback();
                 req.caption = caption.getText().toString();
-                req.why_participated = "";
-                int i = 0;
+                if(req.caption.equals(""))
+                {
+                    Toast.makeText(ReportBackUploadActivity.this, "Please enter a valid caption.",
+                                   Toast.LENGTH_SHORT).show();
+                }
                 try
                 {
-                    i = Integer.parseInt(number.getText().toString());
+                    Integer.parseInt(number.getText().toString());
                 }
                 catch(NumberFormatException e)
                 {
-                    Toast.makeText(ReportBackUploadActivity.this, "Enter a valid number.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ReportBackUploadActivity.this, "Enter a valid number.",
+                                   Toast.LENGTH_SHORT).show();
                     return;
                 }
                 req.quantity = number.getText().toString();
                 req.uid = AppPrefs.getInstance(ReportBackUploadActivity.this).getCurrentUserId();
 
+                String croppedImage = getIntent().getStringExtra(FILE_PATH);
                 TaskQueue.loadQueueDefault(ReportBackUploadActivity.this)
                         .execute(new ReportbackUploadTask(req, campaignId));
-//                finish();
+
+                finish();
             }
         });
     }

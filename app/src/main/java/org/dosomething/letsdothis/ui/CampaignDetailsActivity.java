@@ -197,7 +197,6 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
                 startActivity(ReportBackUploadActivity
                                       .getLaunchIntent(this, filePath, adapter.getCampaign().title,
                                                        adapter.getCampaign().id));
-                finish();
             }
         }
     }
