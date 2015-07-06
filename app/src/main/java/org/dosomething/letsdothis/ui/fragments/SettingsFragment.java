@@ -1,6 +1,7 @@
 package org.dosomething.letsdothis.ui.fragments;
 import android.app.Activity;
 import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -10,6 +11,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.preference.SwitchPreference;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
@@ -36,10 +38,13 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
     private Uri imageUri;
 
 
+    private SetTitleListener setTitleListener;
+
     public static SettingsFragment newInstance()
     {
         return new SettingsFragment();
     }
+
 
     public void onCreate(Bundle savedInstanceState)
     {
@@ -51,8 +56,27 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
         initChangeEmail();
         initChangeNotifications();
         initChangePassword();
+        initChangeEmail();
+        initChangeNotifications();
+        initChangePassword();
         initChangePhone();
+        initNotificationsPrefs();
         initChangePhoto();
+        initChangePhone();
+    }
+
+    @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+        setTitleListener = (SetTitleListener) getActivity();
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        setTitleListener.setTitle(getResources().getString(R.string.settings));
     }
 
     private void initLogout()
@@ -71,7 +95,7 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                     }
                 });
     }
-
+    
     private void initChangePhoto()
     {
         findPreference(getString(R.string.change_photo))
@@ -87,7 +111,7 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                     }
                 });
     }
-
+    
     private void initChangePhone()
     {
         findPreference(getString(R.string.change_number))
@@ -129,6 +153,43 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                     }
                 });
     }
+
+    private void initNotificationsPrefs()
+    {
+        Preference receiveNotifs = findPreference(getString(R.string.receive_notifications));
+        updateChangeNotifsPref((SwitchPreference) receiveNotifs);
+        receiveNotifs.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
+        {
+            @Override
+            public boolean onPreferenceClick(Preference preference)
+            {
+
+                updateChangeNotifsPref((SwitchPreference) preference);
+                return true;
+            }
+        });
+
+        findPreference(getString(R.string.change_notifications_prefs))
+                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
+                {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference)
+                    {
+                        getFragmentManager().beginTransaction().replace(R.id.container,
+                                                                        new NotificationSettingsFragment())
+                                .addToBackStack(null).commit();
+                        return true;
+                    }
+                });
+    }
+
+
+    private void updateChangeNotifsPref(SwitchPreference preference)
+    {
+        boolean checked = preference.isChecked();
+        findPreference(getString(R.string.change_notifications_prefs)).setEnabled(checked);
+    }
+
 
     private void initChangeNotifications()
     {
