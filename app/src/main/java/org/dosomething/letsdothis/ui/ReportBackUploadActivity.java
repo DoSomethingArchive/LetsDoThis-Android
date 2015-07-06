@@ -72,6 +72,11 @@ public class ReportBackUploadActivity extends AppCompatActivity
 
         final EditText caption = (EditText) findViewById(R.id.caption);
         final EditText number = (EditText) findViewById(R.id.number);
+        if(BuildConfig.DEBUG)
+        {
+            caption.setText("test");
+            number.setText("8");
+        }
         //FIXME-get actual data
         number.setHint("this is the hint");
 
