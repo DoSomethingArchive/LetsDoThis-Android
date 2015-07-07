@@ -215,7 +215,9 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
 
                 //FIXME should be for result
                 startActivity(PhotoCropActivity
-                                      .getLaunchIntent(this, selectedImageUri.toString(), adapter.getCampaign().title, adapter.getCampaign().id));
+                                      .getResultIntent(this, selectedImageUri.toString(),
+                                                       adapter.getCampaign().title,
+                                                       adapter.getCampaign().id));
             }
         }
     }

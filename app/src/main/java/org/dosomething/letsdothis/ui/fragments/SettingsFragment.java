@@ -99,7 +99,7 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                     {
 
                         choosePicture();
-                        //                        startActivity(ChangeNumberActivity.getLaunchIntent(getActivity()));
+                        //                        startActivity(ChangeNumberActivity.getResultIntent(getActivity()));
                         return true;
                     }
                 });
