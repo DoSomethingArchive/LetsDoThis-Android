@@ -21,13 +21,12 @@
             android:id="@+id/expired_already"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/padding_small"
-            android:layout_weight="1"
+            android:padding="@dimen/padding_small"
             android:text="@string/expired_already"
             android:textColor="@color/gray"
             android:textSize="@dimen/text_30"
-            app:typeface="brandon_bold"
-            tool:visibility="visible"/>
+            android:visibility="gone"
+            app:typeface="brandon_bold"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:id="@+id/expire_label"
@@ -44,12 +43,12 @@
 
         <LinearLayout
             android:id="@+id/days_wrapper"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:orientation="horizontal">
 
             <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
                 android:id="@+id/days"
@@ -73,12 +72,13 @@
 
         <LinearLayout
             android:id="@+id/hours_wrapper"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:visibility="gone">
+            tool:visibility="gone">
 
             <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
                 android:id="@+id/hours"
@@ -101,13 +101,13 @@
 
         <LinearLayout
             android:id="@+id/min_wrapper"
+            tool:visibility="visible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:visibility="visible"
-            tool:visibility="visible">
+            android:visibility="visible">
 
             <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
                 android:id="@+id/min"
