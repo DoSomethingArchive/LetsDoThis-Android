@@ -10,12 +10,12 @@ import co.touchlab.android.threading.tasks.Task;
 /**
  * Created by toidiu on 4/17/15.
  */
-public class DbGetUser extends Task
+public class DbGetUserTask extends Task
 {
     private final String id;
     public        User   user;
 
-    public DbGetUser(String id)
+    public DbGetUserTask(String id)
     {
         this.id = id;
     }

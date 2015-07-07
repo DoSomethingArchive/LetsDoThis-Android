@@ -11,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 
+import co.touchlab.android.threading.tasks.TaskQueue;
+
 /**
  * Created by toidiu on 1/18/15.
  */
@@ -23,11 +25,16 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private static DatabaseHelper instance;
     // @reminder Ordering matters, create foreign key dependant classes later
-    private final Class[] tableClasses = new Class[] {User.class};
+    private final Class[] tableClasses = new Class[] {User.class, CampaignActions.class};
 
     private DatabaseHelper(Context context)
     {
         super(context, DATABASE_FILE_NAME, null, VERSION);
+    }
+
+    public static TaskQueue defaultDatabaseQueue(Context context)
+    {
+        return TaskQueue.loadQueue(context, "database");
     }
 
     @NotNull
