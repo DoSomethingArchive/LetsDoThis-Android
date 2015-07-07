@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.ReportBack;
@@ -59,6 +60,8 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         void onReportBackClicked(int reportBackId);
 
         void onScrolledToBottom();
+
+        void onCampaignRefresh();
     }
 
     public CampaignAdapter(CampaignAdapterClickListener campaignAdapterClickListener, Resources resources)
@@ -256,19 +259,20 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             });
 
-            final SlantedBackgroundDrawable background = new SlantedBackgroundDrawable(false, Color.WHITE,
-                                                                                 shadowColor,
-                                                                                 slantHeight,
-                                                                                 widthOvershoot,
-                                                                                 heightShadowOvershoot);
+            final SlantedBackgroundDrawable background = new SlantedBackgroundDrawable(false,
+                                                                                       Color.WHITE,
+                                                                                       shadowColor,
+                                                                                       slantHeight,
+                                                                                       widthOvershoot,
+                                                                                       heightShadowOvershoot);
             viewHolder.slantedBg.setBackground(background);
             viewHolder.refreshCopy.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View v)
                 {
-                    //FIXME refresh
-                    Toast.makeText(viewHolder.expired.getContext(), "need to refresh the campaign list", Toast.LENGTH_SHORT).show();
+                    campaignAdapterClickListener.onCampaignRefresh();
+                    //FIXME show progress bar
                 }
             });
 

@@ -93,9 +93,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         recyclerView.setLayoutManager(layoutManager);
 
         EventBusExt.getDefault().register(this);
-        TaskQueue.loadQueueDefault(getActivity())
-                 .execute(new InterestGroupCampaignListTask(InterestGroup.values()[position].id));
-
+        onCampaignRefresh();
     }
 
     @Override
@@ -130,6 +128,13 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
                     .join(campaignIds, ","), currentPage + 1);
             TaskQueue.loadQueueDefault(getActivity()).execute(task);
         }
+    }
+
+    @Override
+    public void onCampaignRefresh()
+    {
+        TaskQueue.loadQueueDefault(getActivity())
+                .execute(new InterestGroupCampaignListTask(InterestGroup.values()[position].id));
     }
 
     @SuppressWarnings("UnusedDeclaration")
