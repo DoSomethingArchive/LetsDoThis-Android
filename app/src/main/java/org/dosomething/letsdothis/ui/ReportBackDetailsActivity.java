@@ -3,9 +3,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +22,8 @@ import org.dosomething.letsdothis.tasks.ReportBackDetailsTask;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
 import org.dosomething.letsdothis.ui.views.KudosView;
 import org.dosomething.letsdothis.utils.TimeUtils;
+
+import java.util.Map;
 
 import co.touchlab.android.threading.tasks.TaskQueue;
 
@@ -38,8 +42,7 @@ public class ReportBackDetailsActivity extends BaseActivity
     private TextView  caption;
     private TextView  name;
     private ViewGroup kudos;
-    private boolean   listenersAdded;
-    private Toolbar toolbar;
+    private Toolbar   toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -107,13 +110,18 @@ public class ReportBackDetailsActivity extends BaseActivity
                 @Override
                 public void onClick(View v)
                 {
-                    startActivity(CampaignDetailsActivity.getLaunchIntent(ReportBackDetailsActivity.this, reportBack.campaign.id));
+                    startActivity(CampaignDetailsActivity
+                                          .getLaunchIntent(ReportBackDetailsActivity.this,
+                                                           reportBack.campaign.id));
                 }
             });
             caption.setText(reportBack.caption);
-            if(user != null)
+            if(user != null && ! TextUtils.isEmpty(user.first_name))
             {
-                name.setText(String.format("%s %s.", user.first_name, user.last_name.charAt(0)));
+                String formattedName = TextUtils.isEmpty(user.last_name)
+                        ? user.first_name
+                        : String.format("%s %s.", user.first_name, user.last_name.charAt(0));
+                name.setText(formattedName);
             }
             else
             {
@@ -123,43 +131,38 @@ public class ReportBackDetailsActivity extends BaseActivity
 
             //FIXME add user's avatar
 
-            if(! listenersAdded)
+            int i = 0;
+            for(Map.Entry<Kudo, Integer> entry : task.kudosMap.entrySet())
             {
-                listenersAdded = true;
-                int count = kudos.getChildCount();
-                for(int i = 0; i < count; i++)
+                final KudosView kudoView = (KudosView) kudos.getChildAt(i);
+                kudoView.setKudos(entry.getKey());
+                kudoView.setCountNum(entry.getValue());
+                kudoView.setOnClickListener(new View.OnClickListener()
                 {
-                    final KudosView kudoView = (KudosView) kudos.getChildAt(i);
-                    kudoView.setOnClickListener(new View.OnClickListener()
+                    @Override
+                    public void onClick(View v)
                     {
-                        @Override
-                        public void onClick(View v)
+                        Context context = ReportBackDetailsActivity.this;
+                        boolean selected = kudoView.isSelected();
+
+                        if(! selected)
                         {
-                            Context context = ReportBackDetailsActivity.this;
-
-                            boolean selected = kudoView.isSelected();
-                            kudoView.setSelected(! selected);
+                            kudoView.setSelected(true);
                             int countNum = kudoView.getCountNum();
-                            kudoView.setCountNum(! selected
-                                                         ? countNum + 1
-                                                         : countNum - 1);
+                            kudoView.setCountNum(countNum + 1);
                             Kudo kudo = kudoView.getKudos();
-
-                            if(!selected)
-                            {
-                                Toast.makeText(context, "add " + kudo.name, Toast.LENGTH_SHORT).show();
-                                TaskQueue.loadQueueDefault(context).execute(
-                                        new SubmitKudosTask(kudo.id, reportBack.id));
-                            }
-                            else
-                            {
-                                Toast.makeText(context, "remove " + kudo.name, Toast.LENGTH_SHORT).show();
-                            }
-
+                            //                                TaskQueue.loadQueueDefault(context).execute(
+                            //                                        new SubmitKudosTask(kudo.id, reportBack.id));
+                            kudoView.getImage().startAnimation(
+                                    AnimationUtils.loadAnimation(context, R.anim.scale_bounce));
                         }
-                    });
-                }
+
+                    }
+                });
+
+                i++;
             }
+
 
         }
         else

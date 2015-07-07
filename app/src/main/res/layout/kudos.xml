@@ -18,70 +18,47 @@
 
         <org.dosomething.letsdothis.ui.views.KudosView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:count="9"
-            app:kudos="@integer/crown"/>
+            android:layout_height="wrap_content"/>
 
         <org.dosomething.letsdothis.ui.views.KudosView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:count="0"
-            app:kudos="@integer/diamond"/>
+            android:layout_height="wrap_content"/>
 
         <org.dosomething.letsdothis.ui.views.KudosView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:count="99"
-            app:kudos="@integer/fire"/>
+            android:layout_height="wrap_content"/>
 
         <org.dosomething.letsdothis.ui.views.KudosView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:count="3"
-            app:selected="true"
-            app:kudos="@integer/heart"/>
+            android:layout_height="wrap_content"/>
 
         <org.dosomething.letsdothis.ui.views.KudosView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:count="3"
-            app:kudos="@integer/kudos"/>
+            android:layout_height="wrap_content"/>
 
         <org.dosomething.letsdothis.ui.views.KudosView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:count="3"
-            app:kudos="@integer/lightbulb"/>
+            android:layout_height="wrap_content"/>
 
         <org.dosomething.letsdothis.ui.views.KudosView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:count="3"
-            app:kudos="@integer/pizza"/>
+            android:layout_height="wrap_content"/>
 
         <org.dosomething.letsdothis.ui.views.KudosView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:count="3"
-            app:kudos="@integer/planet"/>
+            android:layout_height="wrap_content"/>
 
         <org.dosomething.letsdothis.ui.views.KudosView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:count="3"
-            app:kudos="@integer/poo"/>
+            android:layout_height="wrap_content"/>
 
         <org.dosomething.letsdothis.ui.views.KudosView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:count="3"
-            app:kudos="@integer/skull"/>
+            android:layout_height="wrap_content"/>
 
         <org.dosomething.letsdothis.ui.views.KudosView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:count="3"
-            app:kudos="@integer/trophy"/>
+            android:layout_height="wrap_content"/>
         
     </LinearLayout>
 

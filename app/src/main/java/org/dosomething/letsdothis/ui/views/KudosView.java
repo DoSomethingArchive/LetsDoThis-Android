@@ -20,7 +20,6 @@ public class KudosView extends LinearLayout
     private ImageView image;
     private int       countNum;
     private Kudo      kudos;
-    private boolean   selected;
 
     public KudosView(Context context)
     {
@@ -90,21 +89,41 @@ public class KudosView extends LinearLayout
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.KudosView, 0, 0);
 
         countNum = a.getInt(R.styleable.KudosView_count, 0);
-        kudos = Kudo.values()[a.getInt(R.styleable.KudosView_kudos, R.integer.kudos)];
-        selected = a.getBoolean(R.styleable.KudosView_selected, false);
+        int kudosOrdinal = a.getInt(R.styleable.KudosView_kudos, - 1);
+        if(kudosOrdinal != -1)
+        {
+            kudos = Kudo.values()[kudosOrdinal];
+        }
+        boolean selected = a.getBoolean(R.styleable.KudosView_selected, false);
 
         a.recycle();
 
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.item_kudos, this, true);
+        setBackgroundResource(R.drawable.bg_kudos);
 
         count = (TextView) getChildAt(1);
         setCountNum(countNum);
         setSelected(selected);
 
         image = (ImageView) getChildAt(0);
-        image.setImageResource(kudos.imageResId);
+        if(kudos != null)
+        {
+            image.setImageResource(kudos.imageResId);
+        }
 
+    }
+
+    public ImageView getImage()
+    {
+        return image;
+    }
+
+    public void setKudos(Kudo kudo)
+    {
+        this.kudos = kudo;
+        image.setImageResource(kudos.imageResId);
+        setSelected(kudo.selected);
     }
 }
