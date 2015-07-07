@@ -208,9 +208,27 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
                     selectedImageUri = data.getData();
                 }
 
-                //FIXME should be for result
-                startActivity(PhotoCropActivity
-                                      .getLaunchIntent(getActivity(), selectedImageUri.toString(), "Share Photo", null));
+                startActivityForResult(PhotoCropActivity.getResultIntent(getActivity(),
+                                                                         selectedImageUri
+                                                                                 .toString(),
+                                                                         "Share Photo", null),
+                                       PhotoCropActivity.RESULT_CODE);
+            }
+            else if(requestCode == PhotoCropActivity.RESULT_CODE)
+            {
+                String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
+                //FIXME---------------------- doesnt actually send image
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+
+                shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,  "asdf");
+                shareIntent.putExtra(android.content.Intent.EXTRA_TEXT,  "asfsadfsadfdsafdsa");
+                shareIntent.putExtra(Intent.EXTRA_TITLE, "55555");
+
+                shareIntent.setType("image/*");
+                Uri uri = Uri.fromFile(new File(filePath));
+                shareIntent.putExtra(Intent.EXTRA_STREAM, uri.toString());
+                startActivity(Intent.createChooser(shareIntent, "Share image"));
+
             }
         }
     }

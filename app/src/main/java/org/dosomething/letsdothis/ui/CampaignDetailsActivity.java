@@ -186,7 +186,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
                 }
 
                 startActivityForResult(PhotoCropActivity
-                                               .getLaunchIntent(this, selectedImageUri.toString(),
+                                               .getResultIntent(this, selectedImageUri.toString(),
                                                                 adapter.getCampaign().title,
                                                                 adapter.getCampaign().id),
                                        PhotoCropActivity.RESULT_CODE);

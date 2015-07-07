@@ -53,7 +53,7 @@ public class PhotoCropActivity extends AppCompatActivity
     private FrameLayout    transparency;
     private int            imageWidth;
 
-    public static Intent getLaunchIntent(Context context, String path, String title, Integer campaignId)
+    public static Intent getResultIntent(Context context, String path, String title, Integer campaignId)
     {
         Intent intent = new Intent(context, PhotoCropActivity.class);
         intent.putExtra(IMAGE_PATH, path);
