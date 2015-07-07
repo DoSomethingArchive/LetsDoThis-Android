@@ -5,7 +5,7 @@ import org.dosomething.letsdothis.R;
 /**
  * Created by izzyoji :) on 5/15/15.
  */
-public enum Kudo
+public enum Kudos
 {
     crown(BuildConfig.DEBUG
                   ? 638
@@ -43,9 +43,8 @@ public enum Kudo
 
     public int     id;
     public int     imageResId;
-    public boolean selected;
 
-    Kudo(int id, int imageResId)
+    Kudos(int id, int imageResId)
     {
         this.id = id;
         this.imageResId = imageResId;
