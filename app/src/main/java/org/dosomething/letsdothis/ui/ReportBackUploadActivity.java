@@ -14,14 +14,13 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.BuildConfig;
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.network.models.RequestReportback;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.io.File;
-
-import co.touchlab.android.threading.tasks.TaskQueue;
 
 /**
  * Created by toidiu on 5/8/15.
@@ -108,10 +107,9 @@ public class ReportBackUploadActivity extends AppCompatActivity
                 req.quantity = number.getText().toString();
                 req.uid = AppPrefs.getInstance(ReportBackUploadActivity.this).getCurrentUserId();
 
-                String croppedImage = getIntent().getStringExtra(FILE_PATH);
-                TaskQueue.loadQueueDefault(ReportBackUploadActivity.this)
-                        .execute(new ReportbackUploadTask(req, campaignId));
-
+                String filePath = getIntent().getStringExtra(FILE_PATH);
+                ReportbackUploadTask
+                        .uploadReport(LDTApplication.getContext(), req, campaignId, filePath);
                 finish();
             }
         });
