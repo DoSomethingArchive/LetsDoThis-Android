@@ -1,14 +1,7 @@
-package org.dosomething.letsdothis.data;
-import android.content.Context;
+package org.dosomething.letsdothis.data;import com.google.gson.annotations.SerializedName;
 
-import com.google.gson.annotations.SerializedName;
-
-import org.dosomething.letsdothis.utils.AppPrefs;
-
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * Created by izzyoji :) on 4/23/15.
@@ -23,49 +16,53 @@ public class ReportBack
     public Media     media;
     public User      user;
     public KudosData kudos;
+    public boolean   kudosed;
 
     public String getImagePath()
     {
         return media.uri;
     }
 
-    public LinkedHashMap<Kudo, Integer> getSanitizedKudosMap(Context context)
+    public ArrayList<KudosMeta> getSanitizedKudosList(int drupalId)
     {
-        LinkedHashMap<Kudo, Integer> sortedMap = new LinkedHashMap<>();
+        ArrayList<KudosMeta> sortedList = new ArrayList<>();
         if(kudos == null)
         {
-            for(Kudo kudo : Kudo.values())
+            for(Kudos kudos : Kudos.values())
             {
-                sortedMap.put(kudo, 0);
+                KudosMeta meta = new KudosMeta(kudos);
+                meta.kudos = kudos;
+                sortedList.add(meta);
             }
         }
         else
         {
-            TreeMap<Integer, Kudo> map = new TreeMap<>(Collections.reverseOrder());
             for(ReportBack.KudosData.KudosWrapper kudosWrapper : kudos.data)
             {
-                Kudo kudo = kudosWrapper.term.getKudo();
-                kudo.selected = kudosWrapper.kudos_items.selectedByMe(AppPrefs.getInstance(context).getCurrentUserId());
-                map.put(kudosWrapper.kudos_items.total, kudo);
-            }
-
-
-            for(Map.Entry<Integer, Kudo> entry : map.entrySet())
-            {
-                sortedMap.put(entry.getValue(), entry.getKey());
-            }
-
-            for(Kudo kudo : Kudo.values())
-            {
-                if(!sortedMap.containsKey(kudo))
+                Kudos kudos = kudosWrapper.term.getKudo();
+                int total = kudosWrapper.kudos_items.total;
+                boolean selected = kudosWrapper.kudos_items.selectedByMe(String.valueOf(drupalId));
+                KudosMeta meta = new KudosMeta(kudos, total, selected);
+                if(selected)
                 {
-                    sortedMap.put(kudo, 0);
+                    kudosed = true;
+                }
+                sortedList.add(meta);
+            }
+
+            Collections.sort(sortedList);
+
+            for(Kudos kudos : Kudos.values())
+            {
+                KudosMeta meta = new KudosMeta(kudos);
+                if(!sortedList.contains(meta))
+                {
+                    sortedList.add(meta);
                 }
             }
         }
 
-
-        return sortedMap;
+        return sortedList;
     }
 
     private static class Media
@@ -88,9 +85,9 @@ public class ReportBack
                 private int    id;
                 private String name;
 
-                public Kudo getKudo()
+                public Kudos getKudo()
                 {
-                    return Kudo.valueOf(name);
+                    return Kudos.valueOf(name);
                 }
             }
 
@@ -108,7 +105,6 @@ public class ReportBack
                 {
                     for(KudosItem kudosItem : data)
                     {
-                        //i think these are drupal id's ;(
                         if(kudosItem.user.id.equals(userId))
                         {
                             return true;

@@ -15,15 +15,17 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.R;
-import org.dosomething.letsdothis.data.Kudo;
+import org.dosomething.letsdothis.data.Kudos;
+import org.dosomething.letsdothis.data.KudosMeta;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.ReportBackDetailsTask;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
 import org.dosomething.letsdothis.ui.views.KudosView;
+import org.dosomething.letsdothis.utils.AppPrefs;
 import org.dosomething.letsdothis.utils.TimeUtils;
 
-import java.util.Map;
+import java.util.ArrayList;
 
 import co.touchlab.android.threading.tasks.TaskQueue;
 
@@ -131,12 +133,13 @@ public class ReportBackDetailsActivity extends BaseActivity
 
             //FIXME add user's avatar
 
-            int i = 0;
-            for(Map.Entry<Kudo, Integer> entry : task.kudosMap.entrySet())
+            int drupalId = AppPrefs.getInstance(this).getCurrentDrupalId();
+            ArrayList<KudosMeta> sanitizedKudosList = reportBack.getSanitizedKudosList(drupalId);
+            for(int i = 0, size = sanitizedKudosList.size(); i < size; i++)
             {
                 final KudosView kudoView = (KudosView) kudos.getChildAt(i);
-                kudoView.setKudos(entry.getKey());
-                kudoView.setCountNum(entry.getValue());
+                KudosMeta kudosMeta = sanitizedKudosList.get(i);
+                kudoView.setKudos(kudosMeta);
                 kudoView.setOnClickListener(new View.OnClickListener()
                 {
                     @Override
@@ -145,14 +148,14 @@ public class ReportBackDetailsActivity extends BaseActivity
                         Context context = ReportBackDetailsActivity.this;
                         boolean selected = kudoView.isSelected();
 
-                        if(! selected)
+                        if(! selected && !reportBack.kudosed)
                         {
                             kudoView.setSelected(true);
                             int countNum = kudoView.getCountNum();
                             kudoView.setCountNum(countNum + 1);
-                            Kudo kudo = kudoView.getKudos();
-                            //                                TaskQueue.loadQueueDefault(context).execute(
-                            //                                        new SubmitKudosTask(kudo.id, reportBack.id));
+                            Kudos kudos = kudoView.getKudos();
+                            TaskQueue.loadQueueDefault(context)
+                                     .execute(new SubmitKudosTask(kudos.id, reportBack.id));
                             kudoView.getImage().startAnimation(
                                     AnimationUtils.loadAnimation(context, R.anim.scale_bounce));
                         }
@@ -160,7 +163,6 @@ public class ReportBackDetailsActivity extends BaseActivity
                     }
                 });
 
-                i++;
             }
 
 

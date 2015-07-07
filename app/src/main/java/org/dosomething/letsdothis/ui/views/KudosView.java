@@ -9,7 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.dosomething.letsdothis.R;
-import org.dosomething.letsdothis.data.Kudo;
+import org.dosomething.letsdothis.data.Kudos;
+import org.dosomething.letsdothis.data.KudosMeta;
 
 /**
  * Created by izzyoji :) on 6/30/15.
@@ -19,7 +20,7 @@ public class KudosView extends LinearLayout
     private TextView  count;
     private ImageView image;
     private int       countNum;
-    private Kudo      kudos;
+    private Kudos     kudos;
 
     public KudosView(Context context)
     {
@@ -70,14 +71,14 @@ public class KudosView extends LinearLayout
         }
     }
 
-    public Kudo getKudos()
+    public Kudos getKudos()
     {
         return kudos;
     }
 
     public void setKudos(int kudosOrdinal)
     {
-        this.kudos = Kudo.values()[kudosOrdinal];
+        this.kudos = Kudos.values()[kudosOrdinal];
         image.setImageResource(kudos.imageResId);
     }
 
@@ -92,7 +93,7 @@ public class KudosView extends LinearLayout
         int kudosOrdinal = a.getInt(R.styleable.KudosView_kudos, - 1);
         if(kudosOrdinal != -1)
         {
-            kudos = Kudo.values()[kudosOrdinal];
+            kudos = Kudos.values()[kudosOrdinal];
         }
         boolean selected = a.getBoolean(R.styleable.KudosView_selected, false);
 
@@ -120,10 +121,11 @@ public class KudosView extends LinearLayout
         return image;
     }
 
-    public void setKudos(Kudo kudo)
+    public void setKudos(KudosMeta kudosMeta)
     {
-        this.kudos = kudo;
+        this.kudos = kudosMeta.kudos;
         image.setImageResource(kudos.imageResId);
-        setSelected(kudo.selected);
+        setSelected(kudosMeta.selected);
+        setCountNum(kudosMeta.total);
     }
 }
