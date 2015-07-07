@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
@@ -218,6 +219,10 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
             {
                 String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
                 //FIXME---------------------- doesnt actually send image
+                if(BuildConfig.DEBUG)
+                {
+                    Toast.makeText(getActivity(), "do stuff", Toast.LENGTH_SHORT).show();
+                }
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
 
                 shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,  "asdf");
