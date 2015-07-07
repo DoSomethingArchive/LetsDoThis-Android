@@ -55,7 +55,7 @@ public class MainActivity extends BaseActivity implements SetTitleListener
 
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
-                                                                        R.string.invite_code_opt,
+                                                                        R.string.invite_code_opt1,
                                                                         R.string.account);
         drawerLayout.setDrawerListener(mDrawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -86,7 +86,7 @@ public class MainActivity extends BaseActivity implements SetTitleListener
                 }
                 else if(TextUtils.equals(positionString, getString(R.string.hub)))
                 {
-                    replaceCurrentFragment(HubFragment.newInstance(false), HubFragment.TAG);
+                    replaceCurrentFragment(HubFragment.newInstance(null), HubFragment.TAG);
 
                 }
                 else if(TextUtils.equals(positionString, getString(R.string.invites)))

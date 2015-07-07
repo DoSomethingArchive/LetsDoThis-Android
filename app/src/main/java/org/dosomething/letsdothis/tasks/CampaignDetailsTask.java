@@ -24,7 +24,6 @@ public class CampaignDetailsTask extends BaseNetworkErrorHandlerTask
     @Override
     protected void run(Context context) throws Throwable
     {
-        //FIXME sign up for this campaign
 
         ResponseCampaignWrapper response = NetworkHelper.getDoSomethingAPIService().campaign(campaignId);
         campaign = ResponseCampaign.getCampaign(response.data);
