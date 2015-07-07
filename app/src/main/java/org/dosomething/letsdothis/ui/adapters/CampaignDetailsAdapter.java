@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.ui.adapters;
+import android.content.Context;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -6,24 +7,25 @@ import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.BuildConfig;
-import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.Kudo;
 import org.dosomething.letsdothis.data.ReportBack;
+import org.dosomething.letsdothis.ui.views.KudosView;
 import org.dosomething.letsdothis.ui.views.SlantedBackgroundDrawable;
 import org.dosomething.letsdothis.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by izzyoji :) on 4/30/15.
@@ -206,7 +208,8 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 }
             });
 
-            Picasso.with(reportBackViewHolder.imageView.getContext()).
+            final Context context = reportBackViewHolder.itemView.getContext();
+            Picasso.with(context).
                     load(reportBack.getImagePath()).into(reportBackViewHolder.imageView);
 
             reportBackViewHolder.name.setText(reportBack.user.id);
@@ -232,19 +235,31 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 }
             });
 
-            // is there a better way to do this?
-            int count = reportBackViewHolder.kudosBar.getChildCount();
-            for(int i = 0; i < count; i++)
+            // is there a better way to do this? probably dropping a lot of frames here
+            int i = 0;
+            for(Map.Entry<Kudo, Integer> entry: reportBack.getSanitizedKudosMap(context).entrySet())
             {
-                View kudoView = reportBackViewHolder.kudosBar.getChildAt(i);
-                kudoView.setOnClickListener(new KudoClickListener(i)
+                final KudosView kudoView = (KudosView) reportBackViewHolder.kudosBar.getChildAt(i);
+                kudoView.setKudos(entry.getKey());
+                kudoView.setCountNum(entry.getValue());
+                kudoView.setOnClickListener(new View.OnClickListener()
                 {
                     @Override
                     public void onClick(View v)
                     {
-                        detailsAdapterClickListener.onKudoClicked(reportBack, kudo);
+                        Kudo kudo = kudoView.getKudos();
+                        if(!kudo.selected)
+                        {
+                            detailsAdapterClickListener.onKudoClicked(reportBack, kudo);
+
+                            kudoView.getImage().startAnimation(
+                                    AnimationUtils.loadAnimation(context, R.anim.scale_bounce));
+                        }
+
                     }
                 });
+
+                i++;
             }
 
             reportBackViewHolder.kudosBar.setVisibility(selected

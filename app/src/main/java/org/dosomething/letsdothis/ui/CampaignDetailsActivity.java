@@ -134,7 +134,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     @Override
     public void onKudoClicked(ReportBack reportBack, Kudo kudo)
     {
-        TaskQueue.loadQueueDefault(this).execute(new SubmitKudosTask(kudo.id, reportBack.id));
+//        TaskQueue.loadQueueDefault(this).execute(new SubmitKudosTask(kudo.id, reportBack.id));
     }
 
     @Override
