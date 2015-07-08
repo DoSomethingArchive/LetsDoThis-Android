@@ -257,7 +257,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if(dayInt > 0)
             {
                 viewHolder.daysWrapper.setVisibility(View.VISIBLE);
-                viewHolder.hours.setText(String.valueOf(hourInt));
+                viewHolder.days.setText(String.valueOf(dayInt));
             }
             else if(hourInt > 0)
             {
