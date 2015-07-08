@@ -224,12 +224,12 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
             else if(requestCode == PhotoCropActivity.RESULT_CODE)
             {
                 String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
-                //FIXME---------------------- do stuff
-                if(BuildConfig.DEBUG)
-                {
-                    Toast.makeText(this, "do stuff", Toast.LENGTH_SHORT).show();
-                }
+                Intent share = new Intent(Intent.ACTION_SEND);
 
+                share.setType("image/*");
+                Uri uri = Uri.fromFile(new File(filePath));
+                share.putExtra(Intent.EXTRA_STREAM, uri);
+                startActivity(share);
             }
         }
     }
