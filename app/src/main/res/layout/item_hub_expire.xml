@@ -38,12 +38,10 @@
             android:textAllCaps="true"
             android:textColor="@color/gray"
             android:textSize="@dimen/text_36"
-            app:typeface="brandon_bold"
-            tool:visibility="gone"/>
+            app:typeface="brandon_bold"/>
 
         <LinearLayout
             android:id="@+id/days_wrapper"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -65,14 +63,12 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/dark_gray"
                 android:textSize="@dimen/text_33"
-
                 app:typeface="brandon_bold"
                 tool:text="Days"/>
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/hours_wrapper"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -101,13 +97,12 @@
 
         <LinearLayout
             android:id="@+id/min_wrapper"
-            tool:visibility="visible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:visibility="visible">
+            tool:visibility="gone">
 
             <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
                 android:id="@+id/min"
@@ -117,8 +112,7 @@
                 android:textColor="@color/dark_gray"
                 android:textSize="@dimen/text_33"
                 app:typeface="brandon_bold"
-                tool:text="30"
-                tool:visibility="gone"/>
+                tool:text="30"/>
             <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
                 android:id="@+id/minutes_label"
                 android:layout_width="wrap_content"
@@ -126,8 +120,7 @@
                 android:textColor="@color/dark_gray"
                 android:textSize="@dimen/text_33"
                 app:typeface="brandon_bold"
-                tool:text="Minutes"
-                tool:visibility="gone"/>
+                tool:text="Minutes"/>
         </LinearLayout>
 
     </LinearLayout>
