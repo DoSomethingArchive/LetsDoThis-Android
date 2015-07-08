@@ -73,13 +73,12 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-
         int campaignId = getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1);
         if(campaignId != - 1)
         {
             TaskQueue.loadQueueDefault(this).execute(new CampaignDetailsTask(campaignId));
-            TaskQueue.loadQueueDefault(this)
-                    .execute(new IndividualCampaignReportBackList(Integer.toString(campaignId),
+            TaskQueue.loadQueueDefault(this).execute(
+                    new IndividualCampaignReportBackList(Integer.toString(campaignId),
                                                          currentPage));
         }
     }
@@ -123,7 +122,8 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     public void inviteClicked()
     {
         Campaign campaign = adapter.getCampaign();
-        startActivity(CampaignInviteActivity.getLaunchIntent(this, campaign.title, campaign.invite.code));
+        startActivity(
+                CampaignInviteActivity.getLaunchIntent(this, campaign.title, campaign.invite.code));
     }
 
     @Override
@@ -195,13 +195,25 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
             }
             else if(requestCode == PhotoCropActivity.RESULT_CODE)
             {
-                String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
-                String format = String
-                        .format(getString(R.string.reportback_upload_hint), rBInfo.noun,
-                                rBInfo.verb);
-                startActivity(ReportBackUploadActivity
-                                      .getLaunchIntent(this, filePath, adapter.getCampaign().title,
-                                                       adapter.getCampaign().id, format));
+                    String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
+                if(adapter.campaignIsDone)
+                {
+                    Intent share = new Intent(Intent.ACTION_SEND);
+                    share.setType("image/*");
+                    Uri uri = Uri.fromFile(new File(filePath));
+                    share.putExtra(Intent.EXTRA_STREAM, uri);
+                    startActivity(share);
+                }
+                else
+                {
+                    String format = String
+                            .format(getString(R.string.reportback_upload_hint), rBInfo.noun,
+                                    rBInfo.verb);
+                    startActivity(ReportBackUploadActivity.getLaunchIntent(this, filePath,
+                                                                           adapter.getCampaign().title,
+                                                                           adapter.getCampaign().id,
+                                                                           format));
+                }
             }
         }
     }
@@ -233,6 +245,8 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(CampaignDetailsTask task)
     {
+        adapter.campaignIsDone = task.campaignDone;
+
         if(task.campaign != null)
         {
             rBInfo = task.reportbackInfo;

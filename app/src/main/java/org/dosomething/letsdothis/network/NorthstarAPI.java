@@ -11,6 +11,7 @@ import org.dosomething.letsdothis.network.models.ResponseLogin;
 import org.dosomething.letsdothis.network.models.ResponseRegister;
 import org.dosomething.letsdothis.network.models.ResponseSubmitReportBack;
 import org.dosomething.letsdothis.network.models.ResponseUser;
+import org.dosomething.letsdothis.network.models.ResponseUserCampaign;
 import org.dosomething.letsdothis.network.models.ResponseUserList;
 import org.dosomething.letsdothis.network.models.ResponseUserUpdate;
 
@@ -89,7 +90,7 @@ public interface NorthstarAPI
 
     @Headers("Content-Type: application/json")
     @GET("/users/_id/{id}/campaigns")
-    Response getUserCampaigns(@Path("id") String id);
+    ResponseUserCampaign getUserCampaigns(@Path("id") String id);
 
     //-----------NOT DONE
     //-----------NOT DONE
