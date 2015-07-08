@@ -47,4 +47,8 @@ public interface DoSomethingAPI
     @Headers("Content-Type: application/json")
     @GET("/campaigns.json?mobile_app=1")
     ResponseCampaignList campaignList(@Query("term_ids")int interestGroupId) throws NetworkException;
+
+    @Headers("Content-Type: application/json")
+    @GET("/users/id/{id}/campaigns")
+    Response getUserCampaigns(@Path("id") String id);
 }
