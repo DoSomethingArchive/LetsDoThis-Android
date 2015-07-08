@@ -9,12 +9,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.BuildConfig;
-import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.Kudo;
@@ -35,11 +33,12 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public static final int VIEW_TYPE_CAMPAIGN_FOOTER = 1;
     public static final int VIEW_TYPE_REPORT_BACK     = 2;
 
-    private final int webOrange;
-    private final int shadowColor;
-    private final int slantHeight;
-    private final int widthOvershoot;
-    private final int heightShadowOvershoot;
+    private final int     webOrange;
+    private final int     shadowColor;
+    private final int     slantHeight;
+    private final int     widthOvershoot;
+    private final int     heightShadowOvershoot;
+    public        boolean campaignIsDone;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private ArrayList<Object> dataSet = new ArrayList<>();
@@ -106,18 +105,15 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         {
             case VIEW_TYPE_CAMPAIGN_FOOTER:
                 View footerLayout = LayoutInflater.from(parent.getContext())
-                                                  .inflate(R.layout.item_campaign_footer, parent,
-                                                           false);
+                        .inflate(R.layout.item_campaign_footer, parent, false);
                 return new SectionTitleViewHolder((TextView) footerLayout);
             case VIEW_TYPE_REPORT_BACK:
                 View reportBackLayout = LayoutInflater.from(parent.getContext())
-                                                      .inflate(R.layout.item_report_back_expanded,
-                                                               parent, false);
+                        .inflate(R.layout.item_report_back_expanded, parent, false);
                 return new ReportBackViewHolder(reportBackLayout);
             default:
                 View campaignLayout = LayoutInflater.from(parent.getContext())
-                                                    .inflate(R.layout.item_campaign_details, parent,
-                                                             false);
+                        .inflate(R.layout.item_campaign_details, parent, false);
                 return new CampaignViewHolder(campaignLayout);
 
         }
@@ -136,12 +132,10 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             final Campaign campaign = (Campaign) dataSet.get(position);
             CampaignViewHolder campaignViewHolder = (CampaignViewHolder) holder;
 
-            int height = campaignViewHolder.imageView.getContext().getResources().getDimensionPixelSize(
-                    R.dimen.campaign_height_expanded);
-            Picasso.with(campaignViewHolder.imageView.getContext())
-                   .load(campaign.imagePath)
-                   .resize(0, height)
-                   .into(campaignViewHolder.imageView);
+            Resources res = campaignViewHolder.imageView.getContext().getResources();
+            int height = res.getDimensionPixelSize(R.dimen.campaign_height_expanded);
+            Picasso.with(campaignViewHolder.imageView.getContext()).load(campaign.imagePath)
+                    .resize(0, height).into(campaignViewHolder.imageView);
             campaignViewHolder.title.setText(campaign.title);
             campaignViewHolder.callToAction.setText(campaign.callToAction);
             campaignViewHolder.problemFact.setText(campaign.problemFact.replaceAll("\\r\\n", ""));
@@ -172,7 +166,10 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                                                                                  widthOvershoot,
                                                                                  heightShadowOvershoot);
             campaignViewHolder.solutionWrapper.setBackground(background);
-
+            if(campaignIsDone)
+            {
+                campaignViewHolder.proveShare.setText(res.getString(R.string.share_photo));
+            }
             campaignViewHolder.proveShare.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -181,6 +178,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     detailsAdapterClickListener.proveShareClicked();
                 }
             });
+
 
             campaignViewHolder.invite.setOnClickListener(new View.OnClickListener()
             {
@@ -255,8 +253,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         {
             SectionTitleViewHolder sectionTitleViewHolder = (SectionTitleViewHolder) holder;
             sectionTitleViewHolder.textView.setText(sectionTitleViewHolder.textView.getContext()
-                                                                                   .getString(
-                                                                                           R.string.people_doing_it));
+                                                            .getString(R.string.people_doing_it));
         }
 
     }
@@ -322,7 +319,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         protected TextView  timestamp;
         protected TextView  caption;
         protected ImageView kudosToggle;
-        protected ViewGroup      kudosBar;
+        protected ViewGroup kudosBar;
 
         public ReportBackViewHolder(View view)
         {
