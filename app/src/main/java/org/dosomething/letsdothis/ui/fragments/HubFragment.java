@@ -157,7 +157,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         {
             Log.d("photo location", imageUri.toString());
         }
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        //        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
 
         String pickTitle = getString(R.string.select_picture);
         Intent chooserIntent = Intent.createChooser(takePhotoIntent, pickTitle);
@@ -208,8 +208,21 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
                     selectedImageUri = data.getData();
                 }
 
-                startActivity(PhotoCropActivity
-                                      .getLaunchIntent(getActivity(), selectedImageUri.toString()));
+                startActivityForResult(PhotoCropActivity.getResultIntent(getActivity(),
+                                                                         selectedImageUri
+                                                                                 .toString(),
+                                                                         "Share Photo", null),
+                                       PhotoCropActivity.RESULT_CODE);
+            }
+            else if(requestCode == PhotoCropActivity.RESULT_CODE)
+            {
+                String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
+                Intent share = new Intent(Intent.ACTION_SEND);
+
+                share.setType("image/*");
+                Uri uri = Uri.fromFile(new File(filePath));
+                share.putExtra(Intent.EXTRA_STREAM, uri);
+                startActivity(share);
             }
         }
     }

@@ -11,8 +11,8 @@ public class ReportBack
     @SerializedName("created_at")
     public long     createdAt;
     public String   caption;
-    public Media      media;
-    public User      user;
+    public Media    media;
+    public User     user;
 
     public String getImagePath()
     {
