@@ -18,6 +18,7 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.Kudo;
 import org.dosomething.letsdothis.data.ReportBack;
+import org.dosomething.letsdothis.network.models.ResponseCampaign;
 import org.dosomething.letsdothis.tasks.CampaignDetailsTask;
 import org.dosomething.letsdothis.tasks.IndividualCampaignReportBackList;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
@@ -44,6 +45,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     private CampaignDetailsAdapter adapter;
     private int                    totalPages;
     private int currentPage = 1;
+    private ResponseCampaign.ReportBackInfo rBInfo;
 
     public static Intent getLaunchIntent(Context context, int campaignId)
     {
@@ -76,8 +78,8 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         if(campaignId != - 1)
         {
             TaskQueue.loadQueueDefault(this).execute(new CampaignDetailsTask(campaignId));
-            TaskQueue.loadQueueDefault(this).execute(
-                    new IndividualCampaignReportBackList(Integer.toString(campaignId),
+            TaskQueue.loadQueueDefault(this)
+                    .execute(new IndividualCampaignReportBackList(Integer.toString(campaignId),
                                                          currentPage));
         }
     }
@@ -194,9 +196,12 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
             else if(requestCode == PhotoCropActivity.RESULT_CODE)
             {
                 String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
+                String format = String
+                        .format(getString(R.string.reportback_upload_hint), rBInfo.noun,
+                                rBInfo.verb);
                 startActivity(ReportBackUploadActivity
                                       .getLaunchIntent(this, filePath, adapter.getCampaign().title,
-                                                       adapter.getCampaign().id));
+                                                       adapter.getCampaign().id, format));
             }
         }
     }
@@ -230,6 +235,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     {
         if(task.campaign != null)
         {
+            rBInfo = task.reportbackInfo;
             adapter.updateCampaign(task.campaign);
         }
         else

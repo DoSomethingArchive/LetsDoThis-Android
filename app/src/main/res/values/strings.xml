@@ -100,5 +100,6 @@
     <string name="notification_campaign">notification_campaign</string>
     <string name="notification_pref">Notification Preferences</string>
     <string name="log_in_with_facebook">Log in with Facebook</string>
+    <string name="reportback_upload_hint">Number of %1$s %2$s.</string>
     <string name="confirm_fb">Confirm your Facebook details</string>
 </resources>
