@@ -88,7 +88,7 @@ public interface NorthstarAPI
     ResponseCampaignSignUp campaignSignUp(@Body RequestCampaignSignup requestCampaignSignup, @Path("id") int id, @Header("Session") String sessionToken);
 
     @Headers("Content-Type: application/json")
-    @GET("/users/id/{id}/campaigns")
+    @GET("/users/_id/{id}/campaigns")
     Response getUserCampaigns(@Path("id") String id);
 
     //-----------NOT DONE
