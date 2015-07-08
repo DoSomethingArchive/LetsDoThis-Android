@@ -35,8 +35,6 @@ public class CampaignDetailsTask extends BaseNetworkErrorHandlerTask
         reportbackInfo = response.data.getReportbackInfo();
 
         String currentUserId = AppPrefs.getInstance(context).getCurrentUserId();
-//        Response userCampaigns = NetworkHelper.getDoSomethingAPIService()
-//                .getUserCampaigns(currentUserId);
 
         this.userCampaigns = NetworkHelper.getNorthstarAPIService().getUserCampaigns(currentUserId);
         this.userCampaigns.toString();
