@@ -25,7 +25,7 @@
             android:layout_width="0dp"
             app:typeface="brandon_bold"
             android:layout_marginRight="@dimen/padding_tiny"
-            android:text="@string/prove_it"
+            android:text="@string/show_off"
             android:layout_height="wrap_content"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomButton

@@ -120,8 +120,8 @@
         android:layout_below="@id/solutionWrapper">
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomButton
-            style="@style/SecondaryButton"
             android:id="@+id/prove_share"
+            style="@style/SecondaryButton"
             app:typeface="brandon_bold"
             android:textAllCaps="true"
             android:textSize="@dimen/text_36"
@@ -130,7 +130,7 @@
             android:layout_weight="1"
             android:layout_marginLeft="@dimen/padding_tiny"
             android:layout_marginRight="@dimen/padding_tiny"
-            android:text="prove it"/>
+            android:text="@string/show_off"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomButton
             style="@style/PrimaryButton"
