@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import com.google.gson.annotations.SerializedName;
 
 import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.utils.ISO8601;
 
 import java.text.ParseException;
@@ -21,7 +22,6 @@ public class ResponseCampaign
     public ResponseFacts    facts;
     public ReportBackInfo   reportback_info;
     public ReportTiming     timing;
-
 
     public static Campaign getCampaign(ResponseCampaign response)
     {
@@ -178,7 +178,7 @@ public class ResponseCampaign
         }
     }
 
-    private class ReportBackInfo
+    public static class ReportBackInfo
     {
         public String copy;
         public String confirmation_message;

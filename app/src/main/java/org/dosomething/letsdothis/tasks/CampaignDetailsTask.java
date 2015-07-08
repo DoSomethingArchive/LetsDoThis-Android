@@ -15,6 +15,7 @@ public class CampaignDetailsTask extends BaseNetworkErrorHandlerTask
 {
     private final int      campaignId;
     public        Campaign campaign;
+    public ResponseCampaign.ReportBackInfo reportbackInfo;
 
     public CampaignDetailsTask(int campaignId)
     {
@@ -25,8 +26,10 @@ public class CampaignDetailsTask extends BaseNetworkErrorHandlerTask
     protected void run(Context context) throws Throwable
     {
 
-        ResponseCampaignWrapper response = NetworkHelper.getDoSomethingAPIService().campaign(campaignId);
+        ResponseCampaignWrapper response = NetworkHelper.getDoSomethingAPIService()
+                .campaign(campaignId);
         campaign = ResponseCampaign.getCampaign(response.data);
+        reportbackInfo = response.data.getReportbackInfo();
     }
 
     @Override

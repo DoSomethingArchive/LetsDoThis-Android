@@ -30,14 +30,16 @@ public class ReportBackUploadActivity extends AppCompatActivity
     public static final  String FILE_PATH    = "FILE_PATH";
     public static final  String EXTRA_TITLE  = "EXTRA_TITLE";
     private static final String EXTRA_CAM_ID = "EXTRA_CAM_ID";
+    private static final String EXTRA_COPY   = "EXTRA_COPY";
     private int campaignId;
 
-    public static Intent getLaunchIntent(Context context, String filePath, String title, int id)
+    public static Intent getLaunchIntent(Context context, String filePath, String title, int id, String copy)
     {
         Intent intent = new Intent(context, ReportBackUploadActivity.class);
         intent.putExtra(FILE_PATH, filePath);
         intent.putExtra(EXTRA_TITLE, title);
         intent.putExtra(EXTRA_CAM_ID, id);
+        intent.putExtra(EXTRA_COPY, copy);
         return intent;
     }
 
@@ -76,8 +78,7 @@ public class ReportBackUploadActivity extends AppCompatActivity
             caption.setText("test");
             number.setText("8");
         }
-        //FIXME-get actual data
-        number.setHint("this is the hint");
+        number.setHint(getIntent().getStringExtra(EXTRA_COPY));
 
 
         this.getWindow()
