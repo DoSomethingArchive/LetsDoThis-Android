@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -191,8 +192,10 @@ public class PhotoCropActivity extends AppCompatActivity
         if(mPhotoLoaded)
         {
             Bitmap bitmap = null;
-            File scaledAvatar = new File(getFilesDir(),
-                                         "squareReportBack_" + System.currentTimeMillis() + ".jpg");
+            File filesDir = new File(Environment.getExternalStorageDirectory(), "DoSomething");
+            filesDir.mkdirs();
+
+            File scaledAvatar = new File(filesDir, "share" + System.currentTimeMillis() + ".jpg");
 
             try
             {

@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
@@ -158,7 +157,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         {
             Log.d("photo location", imageUri.toString());
         }
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        //        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
 
         String pickTitle = getString(R.string.select_picture);
         Intent chooserIntent = Intent.createChooser(takePhotoIntent, pickTitle);
@@ -218,22 +217,12 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
             else if(requestCode == PhotoCropActivity.RESULT_CODE)
             {
                 String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
-                //FIXME---------------------- doesnt actually send image
-                if(BuildConfig.DEBUG)
-                {
-                    Toast.makeText(getActivity(), "do stuff", Toast.LENGTH_SHORT).show();
-                }
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                Intent share = new Intent(Intent.ACTION_SEND);
 
-                shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,  "asdf");
-                shareIntent.putExtra(android.content.Intent.EXTRA_TEXT,  "asfsadfsadfdsafdsa");
-                shareIntent.putExtra(Intent.EXTRA_TITLE, "55555");
-
-                shareIntent.setType("image/*");
+                share.setType("image/*");
                 Uri uri = Uri.fromFile(new File(filePath));
-                shareIntent.putExtra(Intent.EXTRA_STREAM, uri.toString());
-                startActivity(Intent.createChooser(shareIntent, "Share image"));
-
+                share.putExtra(Intent.EXTRA_STREAM, uri);
+                startActivity(share);
             }
         }
     }
