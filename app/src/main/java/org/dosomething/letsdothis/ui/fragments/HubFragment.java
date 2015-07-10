@@ -22,11 +22,14 @@ import org.dosomething.letsdothis.tasks.DbGetUserTask;
 import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignTask;
 import org.dosomething.letsdothis.tasks.GetPastUserCampaignTask;
 import org.dosomething.letsdothis.tasks.GetUserTask;
+import org.dosomething.letsdothis.tasks.RbShareDataTask;
+import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
 import org.dosomething.letsdothis.tasks.UploadAvatarTask;
 import org.dosomething.letsdothis.ui.CampaignInviteActivity;
 import org.dosomething.letsdothis.ui.GroupActivity;
 import org.dosomething.letsdothis.ui.PhotoCropActivity;
 import org.dosomething.letsdothis.ui.PublicProfileActivity;
+import org.dosomething.letsdothis.ui.ReportBackUploadActivity;
 import org.dosomething.letsdothis.ui.adapters.HubAdapter;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
@@ -34,6 +37,7 @@ import java.io.File;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
+import co.touchlab.android.threading.tasks.utils.TaskQueueHelper;
 
 /**
  * Created by izzyoji :) on 4/15/15.
@@ -93,13 +97,14 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     @Override
     public void onResume()
     {
+        super.onResume();
+
         if(! EventBusExt.getDefault().isRegistered(this))
         {
             EventBusExt.getDefault().register(this);
         }
 
         titleListener.setTitle("Hub");
-        super.onResume();
 
         String publicId = getArguments().getString(EXTRA_ID, null);
         if(publicId != null)
@@ -110,6 +115,12 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         {
             DatabaseHelper.defaultDatabaseQueue(getActivity()).execute(
                     new DbGetUserTask(AppPrefs.getInstance(getActivity()).getCurrentUserId()));
+        }
+
+        if(TaskQueueHelper
+                .hasTasksOfType(ReportbackUploadTask.getQueue(getActivity()), ReportbackUploadTask.class))
+        {
+            adapter.processingUpload();
         }
     }
 
@@ -139,7 +150,13 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @Override
-    public void onProveShareClicked(Campaign campaign)
+    public void onShareClicked(Campaign campaign)
+    {
+        TaskQueue.loadQueueDefault(getActivity()).execute(new RbShareDataTask(campaign));
+    }
+
+    @Override
+    public void onProveClicked(Campaign campaign)
     {
         Intent pickIntent = new Intent(Intent.ACTION_PICK,
                                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -213,11 +230,12 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
             else if(requestCode == PhotoCropActivity.RESULT_CODE)
             {
                 String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("image/*");
-                Uri uri = Uri.fromFile(new File(filePath));
-                share.putExtra(Intent.EXTRA_STREAM, uri);
-                startActivity(share);
+                String format = String
+                        .format(getString(R.string.reportback_upload_hint), "noun",
+                                "verb");
+                startActivity(ReportBackUploadActivity
+                                      .getLaunchIntent(getActivity(), filePath, adapter.getClickedCampaign().title,
+                                                       adapter.getClickedCampaign().id, format));
             }
         }
     }
@@ -239,6 +257,26 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         {
             adapter.addPastCampaign(task.pastCampaignList);
         }
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(RbShareDataTask task)
+    {
+        if(task.file != null && task.file.exists())
+        {
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("image/*");
+            Uri uri = Uri.fromFile(task.file);
+            share.putExtra(Intent.EXTRA_STREAM, uri);
+            startActivity(share);
+        }
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(ReportbackUploadTask task)
+    {
+        TaskQueue.loadQueueDefault(getActivity())
+                .execute(new GetCurrentUserCampaignTask());
     }
 
     @SuppressWarnings("UnusedDeclaration")
