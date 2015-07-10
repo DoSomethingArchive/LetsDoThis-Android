@@ -43,6 +43,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private User                    user;
     private HubAdapterClickListener hubAdapterClickListener;
     private boolean isPublic = false;
+    private Campaign clickedCampaign;
 
     public HubAdapter(HubAdapterClickListener hubAdapterClickListener, boolean isPublic)
     {
@@ -169,7 +170,16 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View v)
                 {
-                    hubAdapterClickListener.onProveShareClicked(campaign);
+                    if(campaign.showShare == Campaign.UploadShare.SHARE)
+                    {
+                        hubAdapterClickListener.onShareClicked(campaign);
+                        clickedCampaign = campaign;
+                    }
+                    else if(campaign.showShare == Campaign.UploadShare.SHOW_OFF)
+                    {
+                        hubAdapterClickListener.onProveClicked(campaign);
+                        clickedCampaign = campaign;
+                    }
                 }
             });
 
@@ -316,11 +326,32 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public void addCurrentCampaign(List<Campaign> objects)
     {
-        Campaign campaign = objects.get(0);
-        setExpirationView(campaign);
-        int i = hubList.indexOf(BEEN_THERE_DONE_GOOD);
-        hubList.addAll(i, objects);
-        notifyItemRangeInserted(hubList.size() - objects.size(), hubList.size() - 1);
+        if(hubList.isEmpty())
+        {
+            Campaign campaign = objects.get(0);
+            setExpirationView(campaign);
+            int i = hubList.indexOf(BEEN_THERE_DONE_GOOD);
+            hubList.addAll(i, objects);
+            notifyItemRangeInserted(hubList.size() - objects.size(), hubList.size() - 1);
+        }
+        else
+        {
+            for(int i=0, j = 2; i < objects.size(); i++)
+            {
+                Object o = hubList.get(j);
+                if(o instanceof Campaign)
+                {
+                    hubList.set(j, objects.get(i));
+                    j++;
+                }
+                else {
+                    hubList.add(j, objects.get(i));
+                    j++;
+                }
+            }
+
+            notifyItemRangeChanged(2, objects.size());
+        }
     }
 
     private void setExpirationView(Campaign campaign)
@@ -345,6 +376,28 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public int getItemCount()
     {
         return hubList.size();
+    }
+
+    public void processingUpload()
+    {
+        for(int i = 0; i < hubList.size(); i++)
+        {
+            Object o = hubList.get(i);
+            if(o instanceof Campaign)
+            {
+                Campaign campaign = (Campaign) o;
+                if(campaign.id == clickedCampaign.id)
+                {
+                    campaign.showShare = Campaign.UploadShare.UPLOADING;
+                    notifyItemChanged(i);
+                }
+            }
+        }
+    }
+
+    public Campaign getClickedCampaign()
+    {
+        return clickedCampaign;
     }
 
     public static class ProfileViewHolder extends RecyclerView.ViewHolder
@@ -435,7 +488,9 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         void groupClicked(int campaignId, String userId);
 
-        void onProveShareClicked(Campaign campaign);
+        void onShareClicked(Campaign campaign);
+
+        void onProveClicked(Campaign campaign);
 
         void onInviteClicked(Campaign campaign);
     }
