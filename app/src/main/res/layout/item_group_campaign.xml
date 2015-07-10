@@ -1,53 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:id="@+id/image_and_title"
-    android:layout_height="@dimen/campaign_height_expanded">
+    android:layout_height="wrap_content">
 
-    <ImageView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:id="@+id/image"
-        android:scaleType="centerCrop"
-        android:layout_height="match_parent"/>
+        android:layout_height="@dimen/campaign_height_expanded">
+        <ImageView
+            android:layout_width="match_parent"
+            android:id="@+id/image"
+            android:scaleType="centerCrop"
+            android:layout_height="@dimen/campaign_height_expanded"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/gradient_270"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/campaign_height_expanded"
+            android:background="@drawable/gradient_270"/>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:padding="@dimen/padding_medium"
-        android:orientation="vertical">
-
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:id="@+id/title"
-            tools:text="Title"
-            app:typeface="brandon_bold"
-            android:textAllCaps="true"
-            android:gravity="center"
-            android:textSize="@dimen/text_48"
-            android:textColor="@android:color/white"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            tools:text="Call to action"
-            android:textSize="@dimen/text_33"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:textColor="@android:color/white"
-            android:id="@+id/call_to_action"
+            android:layout_alignBottom="@+id/image"
+            android:layout_centerHorizontal="true"
+            android:padding="@dimen/padding_medium"
+            android:orientation="vertical">
+
+            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                android:id="@+id/title"
+                tools:text="Title"
+                app:typeface="brandon_bold"
+                android:textAllCaps="true"
+                android:gravity="center"
+                android:textSize="@dimen/text_48"
+                android:textColor="@android:color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                tools:text="Call to action"
+                android:textSize="@dimen/text_33"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:id="@+id/call_to_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:id="@+id/close"
+            android:padding="@dimen/padding_small"
+            android:src="@drawable/ic_exit"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
+    <include layout="@layout/drop_shadow"/>
 
-</RelativeLayout>
+</LinearLayout>
