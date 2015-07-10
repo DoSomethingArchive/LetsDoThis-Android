@@ -22,6 +22,7 @@ import org.dosomething.letsdothis.network.models.ResponseCampaign;
 import org.dosomething.letsdothis.tasks.CampaignDetailsTask;
 import org.dosomething.letsdothis.tasks.IndividualCampaignReportBackList;
 import org.dosomething.letsdothis.tasks.RbShareDataTask;
+import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
 import org.dosomething.letsdothis.ui.adapters.CampaignDetailsAdapter;
 
@@ -30,6 +31,7 @@ import java.util.List;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
+import co.touchlab.android.threading.tasks.utils.TaskQueueHelper;
 
 /**
  * Created by izzyoji :) on 4/17/15.
@@ -75,9 +77,20 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         recyclerView.setLayoutManager(layoutManager);
 
         int campaignId = getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1);
-        TaskQueue.loadQueueDefault(this).execute(new CampaignDetailsTask(campaignId));
+        refreshCampaign(campaignId);
         TaskQueue.loadQueueDefault(this).execute(
                 new IndividualCampaignReportBackList(Integer.toString(campaignId), currentPage));
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        if(TaskQueueHelper
+                .hasTasksOfType(ReportbackUploadTask.getQueue(this), ReportbackUploadTask.class))
+        {
+            adapter.processingUpload();
+        }
     }
 
     @Override
@@ -230,6 +243,17 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
 
         startActivityForResult(chooserIntent, SELECT_PICTURE);
+    }
+
+    private void refreshCampaign(int campaignId)
+    {
+        TaskQueue.loadQueueDefault(this).execute(new CampaignDetailsTask(campaignId));
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(ReportbackUploadTask task)
+    {
+        refreshCampaign(task.campaignId);
     }
 
     @SuppressWarnings("UnusedDeclaration")

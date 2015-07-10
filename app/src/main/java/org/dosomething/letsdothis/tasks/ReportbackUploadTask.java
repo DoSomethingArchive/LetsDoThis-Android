@@ -5,7 +5,6 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.RequestReportback;
 import org.dosomething.letsdothis.network.models.ResponseSubmitReportBack;
@@ -22,13 +21,17 @@ public class ReportbackUploadTask extends BaseNetworkErrorHandlerTask
 
     private final RequestReportback req;
     private final String            filePath;
-    private final int               campaignId;
+    public        int               campaignId;
 
+
+    public static TaskQueue getQueue(Context context)
+    {
+        return TaskQueue.loadQueue(context, "reportBack");
+    }
 
     public static void uploadReport(Context context, RequestReportback req, int campaignId, String filePath)
     {
-        TaskQueue.loadQueue(context, "reportBack")
-                .execute(new ReportbackUploadTask(req, campaignId, filePath));
+        getQueue(context).execute(new ReportbackUploadTask(req, campaignId, filePath));
     }
 
     private ReportbackUploadTask(RequestReportback req, int campaignId, String filePath)
@@ -61,9 +64,6 @@ public class ReportbackUploadTask extends BaseNetworkErrorHandlerTask
     protected void onComplete(Context context)
     {
         super.onComplete(context);
-        TaskQueue
-                .loadQueueDefault(LDTApplication.getContext()).execute(
-                new CampaignDetailsTask(campaignId));
         EventBusExt.getDefault().post(this);
     }
 

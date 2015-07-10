@@ -4,7 +4,6 @@ import android.text.TextUtils;
 import com.google.gson.annotations.SerializedName;
 
 import org.dosomething.letsdothis.data.Campaign;
-import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.utils.ISO8601;
 
 import java.text.ParseException;
@@ -32,11 +31,12 @@ public class ResponseCampaign
         campaign.startTime = getMillisFromString(response.getTiming().getHighSeason().start);
         campaign.endTime = getMillisFromString(response.getTiming().getHighSeason().end);
         campaign.imagePath = response.getCoverImage().getWrapper().getSizes().getLandscape()
-                                     .getUri();
+                .getUri();
         campaign.solutionCopy = response.getSolutions().getCopy().formatted;
         campaign.solutionSupport = response.getSolutions().getCopy().formatted;
         campaign.problemFact = response.getFacts().getProblem();
         campaign.count = "";//response.getCountString();
+        campaign.showShare = Campaign.UploadShare.SHOW_OFF;
 
         return campaign;
     }
