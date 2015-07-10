@@ -42,7 +42,6 @@ public class GetCurrentUserCampaignTask extends BaseNetworkErrorHandlerTask
             s += c.drupal_id + ",";
         }
 
-
         ResponseCampaignList responseCampaignList = NetworkHelper.getDoSomethingAPIService()
                 .campaignListByIds(s);
         List<Campaign> campaigns = ResponseCampaignList.getCampaigns(responseCampaignList);
@@ -55,7 +54,6 @@ public class GetCurrentUserCampaignTask extends BaseNetworkErrorHandlerTask
                 c.showShare = Campaign.UploadShare.SHARE;
                 campaigns.set(i, c);
             }
-
         }
 
         currentCampaignList.addAll(campaigns);
