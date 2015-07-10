@@ -18,7 +18,6 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.Kudo;
 import org.dosomething.letsdothis.data.ReportBack;
-import org.dosomething.letsdothis.network.models.ResponseCampaign;
 import org.dosomething.letsdothis.tasks.CampaignDetailsTask;
 import org.dosomething.letsdothis.tasks.IndividualCampaignReportBackList;
 import org.dosomething.letsdothis.tasks.RbShareDataTask;
@@ -48,7 +47,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     private CampaignDetailsAdapter adapter;
     private int                    totalPages;
     private int currentPage = 1;
-    private ResponseCampaign.ReportBackInfo rBInfo;
+    //    private ResponseCampaign.ReportBackInfo rBInfo;
 
     public static Intent getLaunchIntent(Context context, int campaignId)
     {
@@ -203,21 +202,23 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
                     Log.d("asdf-----------", selectedImageUri.toString());
                 }
 
+                Campaign clickedCampaign = adapter.getCampaign();
                 startActivityForResult(PhotoCropActivity
                                                .getResultIntent(this, selectedImageUri.toString(),
-                                                                adapter.getCampaign().title,
-                                                                adapter.getCampaign().id),
+                                                                clickedCampaign.title,
+                                                                clickedCampaign.id),
                                        PhotoCropActivity.RESULT_CODE);
             }
             else if(requestCode == PhotoCropActivity.RESULT_CODE)
             {
                 String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
+                Campaign clickedCampaign = adapter.getCampaign();
                 String format = String
-                        .format(getString(R.string.reportback_upload_hint), rBInfo.noun,
-                                rBInfo.verb);
+                        .format(getString(R.string.reportback_upload_hint), clickedCampaign.noun,
+                                clickedCampaign.verb);
                 startActivity(ReportBackUploadActivity
-                                      .getLaunchIntent(this, filePath, adapter.getCampaign().title,
-                                                       adapter.getCampaign().id, format));
+                                      .getLaunchIntent(this, filePath, clickedCampaign.title,
+                                                       clickedCampaign.id, format));
             }
         }
     }
@@ -261,7 +262,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     {
         if(task.campaign != null)
         {
-            rBInfo = task.reportbackInfo;
+            //            rBInfo = task.reportbackInfo;
             adapter.updateCampaign(task.campaign);
         }
         else
