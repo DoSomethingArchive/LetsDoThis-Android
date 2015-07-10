@@ -21,6 +21,8 @@ public class Campaign
     public List<User> group  = new ArrayList<>();
     //FIXME invite code will come from the user's campaign data
     public Invite     invite = new Invite();
+    public String noun;
+    public String verb;
 
     public static enum UploadShare
     {

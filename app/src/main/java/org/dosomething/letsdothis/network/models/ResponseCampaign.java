@@ -37,7 +37,8 @@ public class ResponseCampaign
         campaign.problemFact = response.getFacts().getProblem();
         campaign.count = "";//response.getCountString();
         campaign.showShare = Campaign.UploadShare.SHOW_OFF;
-
+        campaign.noun = response.reportback_info.noun;
+        campaign.verb = response.reportback_info.verb;
         return campaign;
     }
 

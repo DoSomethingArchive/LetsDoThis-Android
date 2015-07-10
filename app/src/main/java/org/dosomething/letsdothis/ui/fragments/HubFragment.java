@@ -230,12 +230,13 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
             else if(requestCode == PhotoCropActivity.RESULT_CODE)
             {
                 String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
+                Campaign clickedCampaign = adapter.getClickedCampaign();
                 String format = String
-                        .format(getString(R.string.reportback_upload_hint), "noun",
-                                "verb");
+                        .format(getString(R.string.reportback_upload_hint), clickedCampaign.noun,
+                                clickedCampaign.verb);
                 startActivity(ReportBackUploadActivity
-                                      .getLaunchIntent(getActivity(), filePath, adapter.getClickedCampaign().title,
-                                                       adapter.getClickedCampaign().id, format));
+                                      .getLaunchIntent(getActivity(), filePath, clickedCampaign.title,
+                                                       clickedCampaign.id, format));
             }
         }
     }
