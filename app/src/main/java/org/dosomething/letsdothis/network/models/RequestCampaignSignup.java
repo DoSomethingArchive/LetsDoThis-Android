@@ -5,5 +5,10 @@ package org.dosomething.letsdothis.network.models;
 public class RequestCampaignSignup
 {
     public String source = "android";
+    public Integer group;
 
+    public RequestCampaignSignup(Integer groupId)
+    {
+        group = groupId;
+    }
 }

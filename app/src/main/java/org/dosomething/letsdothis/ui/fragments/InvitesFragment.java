@@ -1,6 +1,8 @@
 package org.dosomething.letsdothis.ui.fragments;
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,13 +12,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import org.dosomething.letsdothis.BuildConfig;
+import com.google.gson.Gson;
+
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Invite;
+import org.dosomething.letsdothis.network.NetworkHelper;
+import org.dosomething.letsdothis.network.models.ResponseCampaignWrapper;
+import org.dosomething.letsdothis.network.models.ResponseGroup;
 import org.dosomething.letsdothis.ui.adapters.InvitesAdapter;
+import org.dosomething.letsdothis.utils.Hashery;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import co.touchlab.android.threading.errorcontrol.NetworkException;
+import retrofit.RetrofitError;
 
 /**
  * Created by izzyoji :) on 4/15/15.
@@ -24,8 +34,10 @@ import java.util.List;
 public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAdapterClickListener
 {
     public static final String TAG = InvitesFragment.class.getSimpleName();
-    private InvitesAdapter                         adapter;
-    private SetTitleListener titleListener;
+    private InvitesAdapter                        adapter;
+    private SetTitleListener                      titleListener;
+    private AsyncTask<Integer, Integer, String[]> searchForGroupAsyncTask;
+
 
     public static InvitesFragment newInstance()
     {
@@ -35,7 +47,7 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.fragment_toolbar_recycler, container, false);
+        return inflater.inflate(R.layout.fragment_recycler, container, false);
     }
 
     @Override
@@ -57,7 +69,7 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        titleListener.setTitle("Invites");
+        titleListener.setTitle(getString(R.string.invites));
     }
 
     private List<Invite> generateSampleData()
@@ -68,7 +80,7 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
             Invite invite = new Invite();
             invite.title = "Sample invite " + (i + 1);
             invite.details = "This campaign is so cool.";
-            invite.code = "555555";
+            invite.code = "Need Real Data";
             invites.add(invite);
         }
 
@@ -82,31 +94,89 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
     }
 
     @Override
-    public void onJoinClicked(String s)
+    public void onSearchClicked(String code)
     {
-        if(BuildConfig.DEBUG)
+
+        final int groupId = Hashery.getInstance(getActivity()).decode(code);
+        if(groupId == - 1)
         {
-            Toast.makeText(getActivity(), "Campaign joined", Toast.LENGTH_SHORT).show();
-            //FIXME: get real data
-            adapter.showJoinButton(false);
+            showErrorToast();
+            adapter.setButtonState(InvitesAdapter.BUTTON_STATE_SEARCH);
+        }
+        else
+        {
+            adapter.setButtonState(InvitesAdapter.BUTTON_STATE_CANCEL);
+            searchForGroupAsyncTask = new AsyncTask<Integer, Integer, String[]>()
+            {
+                @Override
+                protected String[] doInBackground(Integer... params)
+                {
+                    String[] responses = new String[2];
+                    try
+                    {
+                        SystemClock.sleep(1000);
+
+                        Gson gson = new Gson();
+
+                        ResponseGroup responseGroup = NetworkHelper.getNorthstarAPIService()
+                                                                   .group(params[0]);
+                        responses[0] = gson.toJson(responseGroup);
+
+                        ResponseCampaignWrapper responseCampaignWrapper = NetworkHelper
+                                .getDoSomethingAPIService()
+                                .campaign(responseGroup.data.campaign_id);
+                        responses[1] = gson.toJson(responseCampaignWrapper);
+
+                    }
+                    catch(RetrofitError | NetworkException e)
+                    {
+                        return null;
+                    }
+
+                    return responses;
+                }
+
+                @Override
+                protected void onPostExecute(String[] responses)
+                {
+                    super.onPostExecute(responses);
+                    if(! isCancelled())
+                    {
+                        if(responses == null)
+                        {
+                            showErrorToast();
+                            adapter.setButtonState(InvitesAdapter.BUTTON_STATE_GONE);
+                        }
+                        else
+                        {
+                            adapter.setButtonState(InvitesAdapter.BUTTON_STATE_GONE);
+                            JoinGroupDialogFragment joinGroupDialogFragment = JoinGroupDialogFragment
+                                    .newInstance(groupId, responses[0], responses[1]);
+                            joinGroupDialogFragment
+                                    .show(getChildFragmentManager(), JoinGroupDialogFragment.TAG);
+                        }
+                    }
+                }
+            };
+            searchForGroupAsyncTask.execute(groupId);
         }
     }
 
-    @Override
-    public void onCodeEntered(String code)
+    private void showErrorToast()
     {
-        if(BuildConfig.DEBUG)
+        Toast.makeText(getActivity(), "No campaign found!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCancelClicked()
+    {
+        if(searchForGroupAsyncTask != null && searchForGroupAsyncTask
+                .getStatus() == AsyncTask.Status.RUNNING)
         {
-            if(code.length() == 15)
-            {
-                //FIXME: get real data
-                adapter.showJoinButton(true);
-            }
-            else
-            {
-                Toast.makeText(getActivity(), getString(R.string.error_code_length), Toast.LENGTH_SHORT).show();
-            }
+            searchForGroupAsyncTask.cancel(true);
+            adapter.setButtonState(InvitesAdapter.BUTTON_STATE_GONE);
         }
     }
+
 }
 

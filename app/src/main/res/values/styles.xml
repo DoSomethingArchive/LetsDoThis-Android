@@ -64,6 +64,10 @@
         <item name="android:textSize">@dimen/text_36</item>
     </style>
 
+    <style name="TertiaryButton" parent="PrimaryButton">
+        <item name="android:background">@drawable/bg_gray_rounded_rect_filled</item>
+    </style>
+
     <style name="SecondaryButton" parent="PrimaryButton">
         <item name="android:background">@drawable/bg_cerulean_rounded_rect</item>
         <item name="android:textColor">@color/cerulean_1</item>
@@ -108,5 +112,40 @@
         <item name="android:padding">@dimen/padding_wedge</item>
     </style>
 
+    <style name="InviteCodeText">
+        <item name="android:textSize">@dimen/text_48</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLength">5</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:inputType">textCapWords</item>
+        <item name="android:textColorHint">@color/hint</item>
+        <item name="android:digits">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz</item>
+    </style>
+
+    <style name="slide_enter_exit">
+        <item name="android:windowEnterAnimation">@anim/slide_in_from_bot</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_to_bot</item>
+    </style>
+
+    <style name="dialog_slide" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowAnimationStyle">@style/slide_enter_exit</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowTitleStyle">@null</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowMinWidthMajor">@dimen/dialog_min_width_major</item>
+        <item name="android:windowMinWidthMinor">@dimen/dialog_min_width_minor</item>
+        <item name="android:buttonStyle">@style/PrimaryButton</item>
+    </style>
+
+    <item type="dimen" name="dialog_min_width_major">100%</item>
+    <item type="dimen" name="dialog_min_width_minor">100%</item>
 
 </resources>

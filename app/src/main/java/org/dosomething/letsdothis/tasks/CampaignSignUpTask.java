@@ -34,7 +34,7 @@ public class CampaignSignUpTask extends Task
         if(CampaignActions.queryForId(context, campaignId) == null)
         {
             String sessionToken = AppPrefs.getInstance(context).getSessionToken();
-            RequestCampaignSignup requestCampaignSignup = new RequestCampaignSignup();
+            RequestCampaignSignup requestCampaignSignup = new RequestCampaignSignup(null);
             ResponseCampaignSignUp response = NetworkHelper.getNorthstarAPIService()
                                                            .campaignSignUp(requestCampaignSignup,
                                                                            campaignId, sessionToken);
