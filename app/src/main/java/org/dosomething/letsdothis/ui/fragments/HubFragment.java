@@ -79,11 +79,8 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     {
         super.onAttach(activity);
         titleListener = (SetTitleListener) getActivity();
-        String currentUserId = AppPrefs.getInstance(getActivity()).getCurrentUserId();
         TaskQueue.loadQueueDefault(getActivity())
-                .execute(new GetCurrentUserCampaignTask(currentUserId));
-        TaskQueue.loadQueueDefault(getActivity())
-                .execute(new GetPastUserCampaignTask(currentUserId));
+                .execute(new GetCurrentUserCampaignTask());
     }
 
     @Override
@@ -157,7 +154,6 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         {
             Log.d("photo location", imageUri.toString());
         }
-        //        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
 
         String pickTitle = getString(R.string.select_picture);
         Intent chooserIntent = Intent.createChooser(takePhotoIntent, pickTitle);
@@ -169,8 +165,8 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     @Override
     public void onInviteClicked(Campaign campaign)
     {
-        startActivity(CampaignInviteActivity.getLaunchIntent(getActivity(), campaign.title,
-                                                             campaign.invite.code));
+        startActivity(CampaignInviteActivity
+                              .getLaunchIntent(getActivity(), campaign.title, campaign.invite.code));
     }
 
     @Override
@@ -218,7 +214,6 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
             {
                 String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
                 Intent share = new Intent(Intent.ACTION_SEND);
-
                 share.setType("image/*");
                 Uri uri = Uri.fromFile(new File(filePath));
                 share.putExtra(Intent.EXTRA_STREAM, uri);
@@ -230,9 +225,19 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(GetCurrentUserCampaignTask task)
     {
-        if(! task.campaignList.isEmpty())
+        if(! task.currentCampaignList.isEmpty())
         {
-            adapter.addCurrentCampaign(task.campaignList);
+            adapter.addCurrentCampaign(task.currentCampaignList);
+        }
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(GetPastUserCampaignTask task)
+    {
+        //FIXME this is a fake call
+        if(! task.pastCampaignList.isEmpty())
+        {
+            adapter.addPastCampaign(task.pastCampaignList);
         }
     }
 
@@ -254,12 +259,4 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         adapter.addUser(task.user);
     }
 
-    @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(GetPastUserCampaignTask task)
-    {
-        if(! task.campaignList.isEmpty())
-        {
-            adapter.addPastCampaign(task.campaignList);
-        }
-    }
 }

@@ -187,33 +187,46 @@ public class PhotoCropActivity extends AppCompatActivity
         transparency.setLayoutParams(layoutParams);
     }
 
-    public void saveReportBackImage(View save)
+    public void saveReportBackImage(View view)
     {
         if(mPhotoLoaded)
         {
-            Bitmap bitmap = null;
-            File filesDir = new File(Environment.getExternalStorageDirectory(), "DoSomething");
-            filesDir.mkdirs();
-
-            File scaledAvatar = new File(filesDir, "share" + System.currentTimeMillis() + ".jpg");
-
             try
             {
-                bitmap = photoCropView.takeSquareScreenshot(imageWidth);
+                Bitmap bitmap = photoCropView.takeSquareScreenshot(imageWidth);
+                File file = savePicture(bitmap);
 
-                FileOutputStream out = new FileOutputStream(scaledAvatar);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
-                out.close();
+                Intent intent = new Intent().putExtra(RESULT_FILE_PATH, file.getAbsolutePath());
+                setResult(RESULT_OK, intent);
+                finish();
             }
             catch(IOException e)
             {
                 throw new RuntimeException(e);
             }
-
-            Intent intent = new Intent().putExtra(RESULT_FILE_PATH, scaledAvatar.getAbsolutePath());
-            setResult(RESULT_OK, intent);
-            finish();
         }
+    }
+
+    public static File savePicture(Bitmap bitmap)
+    {
+        File filesDir = new File(Environment.getExternalStorageDirectory(), "DoSomething");
+        filesDir.mkdirs();
+
+        File scaledAvatar = new File(filesDir, "share" + System.currentTimeMillis() + ".jpg");
+
+        try
+        {
+
+            FileOutputStream out = new FileOutputStream(scaledAvatar);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
+            out.close();
+        }
+        catch(IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+
+        return scaledAvatar;
     }
 
     @Override

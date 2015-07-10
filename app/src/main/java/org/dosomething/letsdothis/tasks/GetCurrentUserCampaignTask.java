@@ -2,11 +2,13 @@ package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
 import org.dosomething.letsdothis.data.Campaign;
-import org.dosomething.letsdothis.data.User;
+import org.dosomething.letsdothis.network.NetworkHelper;
+import org.dosomething.letsdothis.network.models.ResponseCampaignList;
+import org.dosomething.letsdothis.network.models.ResponseUserCampaign;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
@@ -15,45 +17,49 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
  */
 public class GetCurrentUserCampaignTask extends BaseNetworkErrorHandlerTask
 {
-    private final String userId;
-    public List<Campaign> campaignList;
+    public List<Campaign> currentCampaignList;
 
-
-    public GetCurrentUserCampaignTask(String id)
+    public GetCurrentUserCampaignTask()
     {
-        this.userId = id;
     }
 
     @Override
     protected void run(Context context) throws Throwable
     {
-        campaignList = new ArrayList<>();
-        // FIXME eventually hook up the api to get user campaigns
+        currentCampaignList = new ArrayList<>();
+        ArrayList<Integer> doneCampaigns = new ArrayList<Integer>();
+        String currentUserId = AppPrefs.getInstance(context).getCurrentUserId();
+        ResponseUserCampaign userCampaigns = NetworkHelper.getNorthstarAPIService()
+                .getUserCampaigns(currentUserId);
 
-        makeFakeCurrentData();
-    }
-
-    private void makeFakeCurrentData()
-    {
-        Random rand = new Random();
-        for(int i = 0; i < 3; i++)
+        String s = "";
+        for(ResponseUserCampaign.Wrapper c : userCampaigns.data)
         {
-            Campaign campaign = new Campaign();
-            campaign.id = 15;
-            campaign.title = "Dog Days of Winter";
-            campaign.callToAction = "Plant flowers in your local parks.";
-            campaign.imagePath = "http://staging.beta.dosomething.org/sites/default/files/MommoGrams_hero_landscape.jpg";
-            campaign.count = "5 flowers planted";
-            int randomNum = rand.nextInt(11);
-            for (int j = 0; j <randomNum; j++)
+            if(c.reportback_data != null)
             {
-                User user = new User();
-                user.avatarPath = "http://awesomeish.com/wp-content/uploads/2013/01/Michael-Jordan.jpg";
-                campaign.group.add(user);
+                doneCampaigns.add(Integer.parseInt(c.drupal_id));
+            }
+            s += c.drupal_id + ",";
+        }
+
+
+        ResponseCampaignList responseCampaignList = NetworkHelper.getDoSomethingAPIService()
+                .campaignListByIds(s);
+        List<Campaign> campaigns = ResponseCampaignList.getCampaigns(responseCampaignList);
+
+        for(int i = 0; i < campaigns.size(); i++)
+        {
+            Campaign c = campaigns.get(i);
+            if(doneCampaigns.contains(c.id))
+            {
+                c.campaignIsDone = true;
+                campaigns.set(i, c);
             }
 
-            campaignList.add(campaign);
         }
+
+        currentCampaignList.addAll(campaigns);
+        //FIXME get friend group
     }
 
     @Override

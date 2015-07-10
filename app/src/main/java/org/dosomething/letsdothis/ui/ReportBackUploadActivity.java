@@ -17,10 +17,13 @@ import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.network.models.RequestReportback;
+import org.dosomething.letsdothis.tasks.CampaignDetailsTask;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.io.File;
+
+import co.touchlab.android.threading.tasks.TaskQueue;
 
 /**
  * Created by toidiu on 5/8/15.

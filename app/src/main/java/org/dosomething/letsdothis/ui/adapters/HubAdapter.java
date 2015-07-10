@@ -134,24 +134,32 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         else if(getItemViewType(position) == VIEW_TYPE_CURRENT_CAMPAIGN)
         {
             final Campaign campaign = (Campaign) hubList.get(position);
-            CurrentCampaignViewHolder currentCampaignViewHolder = (CurrentCampaignViewHolder) holder;
-            currentCampaignViewHolder.title.setText(campaign.title);
-            currentCampaignViewHolder.callToAction.setText(campaign.callToAction);
-            currentCampaignViewHolder.count.setText(campaign.count);
+            CurrentCampaignViewHolder viewHolder = (CurrentCampaignViewHolder) holder;
+            viewHolder.title.setText(campaign.title);
+            viewHolder.callToAction.setText(campaign.callToAction);
+            viewHolder.count.setText(campaign.count);
 
+            Resources res = viewHolder.title.getResources();
             if(isPublic)
             {
-                currentCampaignViewHolder.actionButtons.setVisibility(View.GONE);
+                viewHolder.actionButtons.setVisibility(View.GONE);
             }
 
-            Context context = currentCampaignViewHolder.image.getContext();
+            Context context = viewHolder.image.getContext();
             int height = context.getResources().getDimensionPixelSize(R.dimen.campaign_height);
-            Picasso.with(context).load(campaign.imagePath).resize(0, height)
-                    .into(currentCampaignViewHolder.image);
+            Picasso.with(context).load(campaign.imagePath).resize(0, height).into(viewHolder.image);
 
             int size = campaign.group.size();
 
-            currentCampaignViewHolder.proveShare.setOnClickListener(new View.OnClickListener()
+            if(campaign.campaignIsDone)
+            {
+                viewHolder.proveShare.setText(res.getString(R.string.share_photo));
+            }
+            else
+            {
+                viewHolder.proveShare.setText(res.getString(R.string.show_off));
+            }
+            viewHolder.proveShare.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View v)
@@ -160,7 +168,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }
             });
 
-            currentCampaignViewHolder.invite.setOnClickListener(new View.OnClickListener()
+            viewHolder.invite.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View v)
@@ -173,9 +181,9 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             {
                 int friendSize = context.getResources()
                         .getDimensionPixelSize(R.dimen.friend_avatar);
-                currentCampaignViewHolder.friends.setVisibility(View.VISIBLE);
-                currentCampaignViewHolder.friendsCount.setText(Integer.toString(size));
-                currentCampaignViewHolder.friendsCount.setOnClickListener(new View.OnClickListener()
+                viewHolder.friends.setVisibility(View.VISIBLE);
+                viewHolder.friendsCount.setText(Integer.toString(size));
+                viewHolder.friendsCount.setOnClickListener(new View.OnClickListener()
                 {
                     @Override
                     public void onClick(View v)
@@ -186,8 +194,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 for(int i = 0; i < 4; i++)
                 {
-                    FrameLayout childAt = (FrameLayout) currentCampaignViewHolder.friendsContainer
-                            .getChildAt(i);
+                    FrameLayout childAt = (FrameLayout) viewHolder.friendsContainer.getChildAt(i);
 
                     ImageView imageView = (ImageView) childAt.getChildAt(0);
 
@@ -213,7 +220,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }
             else
             {
-                currentCampaignViewHolder.friends.setVisibility(View.GONE);
+                viewHolder.friends.setVisibility(View.GONE);
             }
         }
         else if(getItemViewType(position) == VIEW_TYPE_PAST_CAMPAIGN)

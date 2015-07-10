@@ -30,6 +30,7 @@
     <string name="expires_in">Expires in</string>
     <string name="invite_friends">Invite Friends</string>
     <string name="share_photo">Share Photo</string>
+    <string name="show_off">Show Off</string>
     <string name="friends">Friends</string>
     <string name="fb_connect">FB Connect</string>
     <string name="desc_login_reg">Create an account to save your\n activities and group up with
@@ -60,7 +61,6 @@
     <string name="footer_register">Have a DoSomething.org account? Sign in</string>
     <string name="footer_forgot_pw">Forgot Password</string>
     <string name="forgot_pw_link">https://www.dosomething.org/user/password</string>
-    <string name="show_off">Show Off</string>
     <string name="desc_rewards">Invite your friends to get rewards copy. There are multiple
         sentences in this paragraph body.
     </string>

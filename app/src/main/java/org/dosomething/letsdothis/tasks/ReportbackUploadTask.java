@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.RequestReportback;
 import org.dosomething.letsdothis.network.models.ResponseSubmitReportBack;
@@ -60,6 +61,9 @@ public class ReportbackUploadTask extends BaseNetworkErrorHandlerTask
     protected void onComplete(Context context)
     {
         super.onComplete(context);
+        TaskQueue
+                .loadQueueDefault(LDTApplication.getContext()).execute(
+                new CampaignDetailsTask(campaignId));
         EventBusExt.getDefault().post(this);
     }
 

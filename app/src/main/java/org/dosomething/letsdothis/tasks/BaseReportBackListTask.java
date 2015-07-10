@@ -14,13 +14,13 @@ public abstract class BaseReportBackListTask extends BaseNetworkErrorHandlerTask
 {
 
     public  List<ReportBack> reportBacks;
-    private String           campaigns;
+    private String           campaignIds;
     public  int              page;
     public  int              totalPages;
 
-    public BaseReportBackListTask( String campaigns, int page)
+    public BaseReportBackListTask(String campaignId, int page)
     {
-        this.campaigns = campaigns;
+        this.campaignIds = campaignId;
         this.page = page;
     }
 
@@ -28,7 +28,7 @@ public abstract class BaseReportBackListTask extends BaseNetworkErrorHandlerTask
     protected void run(Context context) throws Throwable
     {
         ResponseReportBackList response = NetworkHelper.getDoSomethingAPIService()
-                                                       .reportBackList(campaigns, 20, false, page);
+                .reportBackList(campaignIds, 20, false, page);
         //an issue was created for the server so that an empty array will be returned if empty, not an error
         //letting it crash for now
         totalPages = response.pagination.total_pages;
