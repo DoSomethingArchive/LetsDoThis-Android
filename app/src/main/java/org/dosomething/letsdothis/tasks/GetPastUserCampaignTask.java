@@ -2,10 +2,15 @@ package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
 import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.network.NetworkHelper;
+import org.dosomething.letsdothis.network.models.ResponseCampaignList;
+import org.dosomething.letsdothis.network.models.ResponseUserCampaign;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import co.touchlab.android.threading.errorcontrol.NetworkException;
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
 /**
@@ -13,34 +18,38 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
  */
 public class GetPastUserCampaignTask extends BaseNetworkErrorHandlerTask
 {
-    private final String userId;
-    public List<Campaign> campaignList;
+    public List<Campaign> pastCampaignList;
 
-
-    public GetPastUserCampaignTask(String id)
+    public GetPastUserCampaignTask()
     {
-        this.userId = id;
     }
 
     @Override
     protected void run(Context context) throws Throwable
     {
-        campaignList = new ArrayList<>();
-        // FIXME eventually hook up the api to get user campaigns
+        //FIXME this is a fake call
 
-        makeFakeCurrentData();
+
+        makeFakeCall(context);
     }
 
-    private void makeFakeCurrentData()
+    private void makeFakeCall(Context context) throws NetworkException
     {
-        for(int i = 0; i < 3; i++)
+        pastCampaignList = new ArrayList<>();
+        String currentUserId = AppPrefs.getInstance(context).getCurrentUserId();
+        ResponseUserCampaign userCampaigns = NetworkHelper.getNorthstarAPIService()
+                .getUserCampaigns(currentUserId);
+        String s = "";
+        for(ResponseUserCampaign.Wrapper c : userCampaigns.data)
         {
-            Campaign campaign = new Campaign();
-            campaign.title = "Teens for Jeans";
-            campaign.imagePath = "http://staging.beta.dosomething.org/sites/default/files/images/Vamps_landscape_1.jpg";
-
-            campaignList.add(campaign);
+            s += c.drupal_id + ",";
         }
+
+        ResponseCampaignList responseCampaignList = NetworkHelper.getDoSomethingAPIService()
+                .campaignListByIds(s);
+        List<Campaign> campaigns = ResponseCampaignList.getCampaigns(responseCampaignList);
+
+        pastCampaignList.addAll(campaigns);
     }
 
     @Override

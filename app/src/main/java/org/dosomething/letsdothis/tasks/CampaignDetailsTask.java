@@ -18,7 +18,6 @@ public class CampaignDetailsTask extends BaseNetworkErrorHandlerTask
     private final int                             campaignId;
     public        Campaign                        campaign;
     public        ResponseCampaign.ReportBackInfo reportbackInfo;
-    public        boolean                         campaignDone;
 
     public CampaignDetailsTask(int campaignId)
     {
@@ -36,12 +35,11 @@ public class CampaignDetailsTask extends BaseNetworkErrorHandlerTask
         String currentUserId = AppPrefs.getInstance(context).getCurrentUserId();
         ResponseUserCampaign userCampaigns = NetworkHelper.getNorthstarAPIService()
                 .getUserCampaigns(currentUserId);
-
         for(ResponseUserCampaign.Wrapper c : userCampaigns.data)
         {
-            if(campaignId == Integer.parseInt(c.drupal_id))
+            if(c.reportback_data != null && campaignId == Integer.parseInt(c.drupal_id))
             {
-                campaignDone = true;
+                campaign.campaignIsDone = true;
                 return;
             }
         }

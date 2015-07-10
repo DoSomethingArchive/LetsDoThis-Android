@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.BuildConfig;
@@ -33,12 +34,11 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public static final int VIEW_TYPE_CAMPAIGN_FOOTER = 1;
     public static final int VIEW_TYPE_REPORT_BACK     = 2;
 
-    private final int     webOrange;
-    private final int     shadowColor;
-    private final int     slantHeight;
-    private final int     widthOvershoot;
-    private final int     heightShadowOvershoot;
-    public        boolean campaignIsDone;
+    private final int webOrange;
+    private final int shadowColor;
+    private final int slantHeight;
+    private final int widthOvershoot;
+    private final int heightShadowOvershoot;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private ArrayList<Object> dataSet = new ArrayList<>();
@@ -89,7 +89,9 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     {
         void onScrolledToBottom();
 
-        void proveShareClicked();
+        void proveClicked();
+
+        void shareClicked(Campaign campaign);
 
         void inviteClicked();
 
@@ -166,7 +168,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                                                                                  widthOvershoot,
                                                                                  heightShadowOvershoot);
             campaignViewHolder.solutionWrapper.setBackground(background);
-            if(campaignIsDone)
+            if(campaign.campaignIsDone)
             {
                 campaignViewHolder.proveShare.setText(res.getString(R.string.share_photo));
             }
@@ -175,7 +177,14 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 @Override
                 public void onClick(View v)
                 {
-                    detailsAdapterClickListener.proveShareClicked();
+                    if(campaign.campaignIsDone)
+                    {
+                        detailsAdapterClickListener.shareClicked(campaign);
+                    }
+                    else
+                    {
+                        detailsAdapterClickListener.proveClicked();
+                    }
                 }
             });
 

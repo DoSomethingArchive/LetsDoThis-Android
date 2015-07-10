@@ -21,6 +21,7 @@ import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.network.models.ResponseCampaign;
 import org.dosomething.letsdothis.tasks.CampaignDetailsTask;
 import org.dosomething.letsdothis.tasks.IndividualCampaignReportBackList;
+import org.dosomething.letsdothis.tasks.RbShareDataTask;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
 import org.dosomething.letsdothis.ui.adapters.CampaignDetailsAdapter;
 
@@ -74,13 +75,9 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         recyclerView.setLayoutManager(layoutManager);
 
         int campaignId = getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1);
-        if(campaignId != - 1)
-        {
-            TaskQueue.loadQueueDefault(this).execute(new CampaignDetailsTask(campaignId));
-            TaskQueue.loadQueueDefault(this).execute(
-                    new IndividualCampaignReportBackList(Integer.toString(campaignId),
-                                                         currentPage));
-        }
+        TaskQueue.loadQueueDefault(this).execute(new CampaignDetailsTask(campaignId));
+        TaskQueue.loadQueueDefault(this).execute(
+                new IndividualCampaignReportBackList(Integer.toString(campaignId), currentPage));
     }
 
     @Override
@@ -113,9 +110,15 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     }
 
     @Override
-    public void proveShareClicked()
+    public void proveClicked()
     {
         choosePicture();
+    }
+
+    @Override
+    public void shareClicked(Campaign campaign)
+    {
+        TaskQueue.loadQueueDefault(this).execute(new RbShareDataTask(campaign));
     }
 
     @Override
@@ -195,29 +198,16 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
             }
             else if(requestCode == PhotoCropActivity.RESULT_CODE)
             {
-                    String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
-                if(adapter.campaignIsDone)
-                {
-                    Intent share = new Intent(Intent.ACTION_SEND);
-                    share.setType("image/*");
-                    Uri uri = Uri.fromFile(new File(filePath));
-                    share.putExtra(Intent.EXTRA_STREAM, uri);
-                    startActivity(share);
-                }
-                else
-                {
-                    String format = String
-                            .format(getString(R.string.reportback_upload_hint), rBInfo.noun,
-                                    rBInfo.verb);
-                    startActivity(ReportBackUploadActivity.getLaunchIntent(this, filePath,
-                                                                           adapter.getCampaign().title,
-                                                                           adapter.getCampaign().id,
-                                                                           format));
-                }
+                String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
+                String format = String
+                        .format(getString(R.string.reportback_upload_hint), rBInfo.noun,
+                                rBInfo.verb);
+                startActivity(ReportBackUploadActivity
+                                      .getLaunchIntent(this, filePath, adapter.getCampaign().title,
+                                                       adapter.getCampaign().id, format));
             }
         }
     }
-
 
     public void choosePicture()
     {
@@ -245,8 +235,6 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(CampaignDetailsTask task)
     {
-        adapter.campaignIsDone = task.campaignDone;
-
         if(task.campaign != null)
         {
             rBInfo = task.reportbackInfo;
@@ -255,6 +243,19 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         else
         {
             Toast.makeText(this, "campaign data failed", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(RbShareDataTask task)
+    {
+        if(task.file != null && task.file.exists())
+        {
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("image/*");
+            Uri uri = Uri.fromFile(task.file);
+            share.putExtra(Intent.EXTRA_STREAM, uri);
+            startActivity(share);
         }
     }
 
