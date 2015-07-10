@@ -39,7 +39,7 @@ public class CampaignDetailsTask extends BaseNetworkErrorHandlerTask
         {
             if(c.reportback_data != null && campaignId == Integer.parseInt(c.drupal_id))
             {
-                campaign.campaignIsDone = true;
+                campaign.showShare = Campaign.UploadShare.SHARE;
                 return;
             }
         }

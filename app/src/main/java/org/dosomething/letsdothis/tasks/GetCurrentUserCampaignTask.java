@@ -52,7 +52,7 @@ public class GetCurrentUserCampaignTask extends BaseNetworkErrorHandlerTask
             Campaign c = campaigns.get(i);
             if(doneCampaigns.contains(c.id))
             {
-                c.campaignIsDone = true;
+                c.showShare = Campaign.UploadShare.SHARE;
                 campaigns.set(i, c);
             }
 

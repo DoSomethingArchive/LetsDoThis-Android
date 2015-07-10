@@ -151,14 +151,19 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             int size = campaign.group.size();
 
-            if(campaign.campaignIsDone)
+            if(campaign.showShare == Campaign.UploadShare.SHARE)
             {
                 viewHolder.proveShare.setText(res.getString(R.string.share_photo));
             }
-            else
+            else if(campaign.showShare == Campaign.UploadShare.SHOW_OFF)
             {
                 viewHolder.proveShare.setText(res.getString(R.string.show_off));
             }
+            else if(campaign.showShare == Campaign.UploadShare.UPLOADING)
+            {
+                viewHolder.proveShare.setText(res.getString(R.string.uploading));
+            }
+
             viewHolder.proveShare.setOnClickListener(new View.OnClickListener()
             {
                 @Override

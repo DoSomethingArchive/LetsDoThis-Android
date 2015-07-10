@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.BuildConfig;
@@ -59,19 +58,27 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     public void updateCampaign(Campaign campaign)
     {
-        if(currentCampaign == null)
+        if(dataSet.isEmpty())
         {
-            currentCampaign = campaign;
             dataSet.add(campaign);
             dataSet.add("footer item_placeholder");
             notifyItemInserted(0);
         }
         else
         {
-            currentCampaign = campaign;
-            dataSet.set(0, currentCampaign);
-            notifyItemChanged(0);
+            if(currentCampaign == null)
+            {
+                dataSet.add(0, campaign);
+                dataSet.add("footer item_placeholder");
+                notifyItemInserted(0);
+            }
+            else
+            {
+                dataSet.set(0, campaign);
+                notifyItemChanged(0);
+            }
         }
+        currentCampaign = campaign;
     }
 
     public void addAll(List<ReportBack> reportBacks)
@@ -83,6 +90,16 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public Campaign getCampaign()
     {
         return currentCampaign;
+    }
+
+    public void processingUpload()
+    {
+        if(currentCampaign != null)
+        {
+            currentCampaign.showShare = Campaign.UploadShare.UPLOADING;
+            dataSet.set(0, currentCampaign);
+            notifyItemChanged(0);
+        }
     }
 
     public interface DetailsAdapterClickListener
@@ -168,26 +185,34 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                                                                                  widthOvershoot,
                                                                                  heightShadowOvershoot);
             campaignViewHolder.solutionWrapper.setBackground(background);
-            if(campaign.campaignIsDone)
+            if(campaign.showShare == Campaign.UploadShare.SHARE)
             {
                 campaignViewHolder.proveShare.setText(res.getString(R.string.share_photo));
             }
+            else if(campaign.showShare == Campaign.UploadShare.UPLOADING)
+            {
+                campaignViewHolder.proveShare.setText(res.getString(R.string.uploading));
+            }
+            else if(campaign.showShare == Campaign.UploadShare.SHOW_OFF)
+            {
+                campaignViewHolder.proveShare.setText(res.getString(R.string.show_off));
+            }
+
             campaignViewHolder.proveShare.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View v)
                 {
-                    if(campaign.campaignIsDone)
+                    if(campaign.showShare == Campaign.UploadShare.SHARE)
                     {
                         detailsAdapterClickListener.shareClicked(campaign);
                     }
-                    else
+                    else if(campaign.showShare == Campaign.UploadShare.SHOW_OFF)
                     {
                         detailsAdapterClickListener.proveClicked();
                     }
                 }
             });
-
 
             campaignViewHolder.invite.setOnClickListener(new View.OnClickListener()
             {
