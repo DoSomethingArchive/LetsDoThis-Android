@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.ui.adapters;
+import android.content.Context;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -6,6 +7,7 @@ import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,13 +17,17 @@ import com.squareup.picasso.Picasso;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
-import org.dosomething.letsdothis.data.Kudo;
+import org.dosomething.letsdothis.data.Kudos;
+import org.dosomething.letsdothis.data.KudosMeta;
 import org.dosomething.letsdothis.data.ReportBack;
+import org.dosomething.letsdothis.ui.views.KudosView;
 import org.dosomething.letsdothis.ui.views.SlantedBackgroundDrawable;
 import org.dosomething.letsdothis.utils.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by izzyoji :) on 4/30/15.
@@ -38,17 +44,22 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private final int slantHeight;
     private final int widthOvershoot;
     private final int heightShadowOvershoot;
+    private final int drupalId;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private ArrayList<Object> dataSet = new ArrayList<>();
     private DetailsAdapterClickListener detailsAdapterClickListener;
-    private Campaign                    currentCampaign;
-    private int selectedPosition = - 1;
 
-    public CampaignDetailsAdapter(DetailsAdapterClickListener detailsAdapterClickListener, Resources resources)
+    private Campaign currentCampaign;
+    private int                    selectedPosition = - 1;
+    private Random                 random           = new Random();
+    private HashMap<Integer, Kudos> kudosedMap       = new HashMap<>();
+
+    public CampaignDetailsAdapter(DetailsAdapterClickListener detailsAdapterClickListener, Resources resources, int drupalId)
     {
         super();
         this.detailsAdapterClickListener = detailsAdapterClickListener;
+        this.drupalId = drupalId;
         webOrange = resources.getColor(R.color.web_orange);
         shadowColor = resources.getColor(R.color.black_10);
         slantHeight = resources.getDimensionPixelSize(R.dimen.height_xtiny);
@@ -94,7 +105,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         void onUserClicked(String id);
 
-        void onKudoClicked(ReportBack reportBack, Kudo kudo);
+        void onKudosClicked(ReportBack reportBack, Kudos kudos);
     }
 
     @Override
@@ -134,12 +145,11 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             final Campaign campaign = (Campaign) dataSet.get(position);
             CampaignViewHolder campaignViewHolder = (CampaignViewHolder) holder;
 
-            int height = campaignViewHolder.imageView.getContext().getResources().getDimensionPixelSize(
-                    R.dimen.campaign_height_expanded);
-            Picasso.with(campaignViewHolder.imageView.getContext())
-                   .load(campaign.imagePath)
-                   .resize(0, height)
-                   .into(campaignViewHolder.imageView);
+            int height = campaignViewHolder.imageView.getContext().getResources()
+                                                     .getDimensionPixelSize(
+                                                             R.dimen.campaign_height_expanded);
+            Picasso.with(campaignViewHolder.imageView.getContext()).load(campaign.imagePath)
+                   .resize(0, height).into(campaignViewHolder.imageView);
             campaignViewHolder.title.setText(campaign.title);
             campaignViewHolder.callToAction.setText(campaign.callToAction);
             campaignViewHolder.problemFact.setText(campaign.problemFact.replaceAll("\\r\\n", ""));
@@ -204,7 +214,8 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 }
             });
 
-            Picasso.with(reportBackViewHolder.imageView.getContext()).
+            final Context context = reportBackViewHolder.itemView.getContext();
+            Picasso.with(context).
                     load(reportBack.getImagePath()).into(reportBackViewHolder.imageView);
 
             reportBackViewHolder.name.setText(reportBack.user.id);
@@ -230,24 +241,70 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 }
             });
 
-            // is there a better way to do this?
-            int count = reportBackViewHolder.kudosBar.getChildCount();
-            for(int i = 0; i < count; i++)
+            ArrayList<KudosMeta> sanitizedKudosList = reportBack.getSanitizedKudosList(drupalId);
+            if(selected)
             {
-                View kudoView = reportBackViewHolder.kudosBar.getChildAt(i);
-                kudoView.setOnClickListener(new KudoClickListener(i)
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        detailsAdapterClickListener.onKudoClicked(reportBack, kudo);
-                    }
-                });
-            }
+                reportBackViewHolder.kudosToggle.setImageResource(R.drawable.ic_close_kudos);
+                reportBackViewHolder.kudosBar.setVisibility(View.VISIBLE);
 
-            reportBackViewHolder.kudosBar.setVisibility(selected
-                                                                ? View.VISIBLE
-                                                                : View.GONE);
+                // is there a better way to do this?
+                for(int i = 0, size = sanitizedKudosList.size(); i < size; i++)
+                {
+                    final KudosView kudoView = (KudosView) reportBackViewHolder.kudosBar
+                            .getChildAt(i);
+                    final KudosMeta kudosMeta = sanitizedKudosList.get(i);
+                    kudoView.setKudos(kudosMeta);
+                    if(kudosedMap.containsKey(reportBack.id))
+                    {
+                        Kudos mapKudos = kudosedMap.get(reportBack.id);
+                        if(mapKudos == kudosMeta.kudos)
+                        {
+                            kudoView.setSelected(true);
+                            kudoView.setCountNum(kudoView.getCountNum() + 1);
+                        }
+                    }
+
+                    kudoView.setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            Kudos kudos = kudoView.getKudos();
+                            if(! kudosMeta.selected && ! reportBack.kudosed)
+                            {
+                                reportBack.kudosed = true;
+                                detailsAdapterClickListener.onKudosClicked(reportBack, kudos);
+                                kudosedMap.put(reportBack.id, kudos);
+
+                                int updatedCount = kudoView.getCountNum() + 1;
+                                kudoView.setCountNum(updatedCount);
+                                kudoView.getImage().startAnimation(
+                                        AnimationUtils.loadAnimation(context, R.anim.scale_bounce));
+                            }
+
+                        }
+                    });
+
+                }
+
+            }
+            else
+            {
+                reportBackViewHolder.kudosBar.setVisibility(View.GONE);
+
+                //fun
+                if(sanitizedKudosList.get(0).total == 0)
+                {
+                    Kudos[] values = Kudos.values();
+                    reportBackViewHolder.kudosToggle
+                            .setImageResource(values[random.nextInt(values.length)].imageResId);
+                }
+                else
+                {
+                    reportBackViewHolder.kudosToggle
+                            .setImageResource(sanitizedKudosList.get(0).kudos.imageResId);
+                }
+            }
         }
         else if(getItemViewType(position) == VIEW_TYPE_CAMPAIGN_FOOTER)
         {
@@ -320,7 +377,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         protected TextView  timestamp;
         protected TextView  caption;
         protected ImageView kudosToggle;
-        protected ViewGroup      kudosBar;
+        protected ViewGroup kudosBar;
 
         public ReportBackViewHolder(View view)
         {
@@ -333,6 +390,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.kudosToggle = (ImageView) view.findViewById(R.id.kudos_toggle);
             this.kudosToggle.setVisibility(View.VISIBLE);
             this.kudosBar = (ViewGroup) view.findViewById(R.id.kudos_bar);
+            view.findViewById(R.id.title).setVisibility(View.GONE);
         }
     }
 

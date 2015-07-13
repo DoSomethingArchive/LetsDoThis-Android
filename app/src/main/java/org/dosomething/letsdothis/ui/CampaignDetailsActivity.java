@@ -16,12 +16,13 @@ import android.widget.Toast;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
-import org.dosomething.letsdothis.data.Kudo;
+import org.dosomething.letsdothis.data.Kudos;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.tasks.CampaignDetailsTask;
 import org.dosomething.letsdothis.tasks.IndividualCampaignReportBackList;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
 import org.dosomething.letsdothis.ui.adapters.CampaignDetailsAdapter;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.io.File;
 import java.util.List;
@@ -56,31 +57,28 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_quickreturn_recycler);
+        EventBusExt.getDefault().register(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
         toolbar.setTitle("");
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        adapter = new CampaignDetailsAdapter(this, getResources());
-
+        adapter = new CampaignDetailsAdapter(this, getResources(), AppPrefs.getInstance(this).getCurrentDrupalId());
         recyclerView.setAdapter(adapter);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-
         recyclerView.setLayoutManager(layoutManager);
 
-        EventBusExt.getDefault().register(this);
 
         int campaignId = getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1);
         if(campaignId != - 1)
         {
             TaskQueue.loadQueueDefault(this).execute(new CampaignDetailsTask(campaignId));
             TaskQueue.loadQueueDefault(this).execute(
-                    new IndividualCampaignReportBackList(- 1, Integer.toString(campaignId),
+                    new IndividualCampaignReportBackList(Integer.toString(campaignId),
                                                          currentPage));
         }
     }
@@ -108,8 +106,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
                 Toast.makeText(this, "get more data", Toast.LENGTH_SHORT).show();
             }
             String campaigns = Integer.toString(getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1));
-            IndividualCampaignReportBackList task = new IndividualCampaignReportBackList(- 1,
-                                                                                         campaigns,
+            IndividualCampaignReportBackList task = new IndividualCampaignReportBackList(campaigns,
                                                                                          currentPage + 1);
             TaskQueue.loadQueueDefault(this).execute(task);
         }
@@ -125,24 +122,20 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     public void inviteClicked()
     {
         Campaign campaign = adapter.getCampaign();
-        startActivity(CampaignInviteActivity.getLaunchIntent(this, campaign.title, campaign.invite.code));
+        startActivity(
+                CampaignInviteActivity.getLaunchIntent(this, campaign.title, campaign.invite.code));
     }
 
     @Override
     public void onUserClicked(String id)
     {
-        //FIXME
-        if(BuildConfig.DEBUG)
-        {
-            startActivity(PublicProfileActivity.getLaunchIntent(this));
-        }
+        startActivity(PublicProfileActivity.getLaunchIntent(this, id));
     }
 
     @Override
-    public void onKudoClicked(ReportBack reportBack, Kudo kudo)
+    public void onKudosClicked(ReportBack reportBack, Kudos kudos)
     {
-        //fixme get drupal id
-        TaskQueue.loadQueueDefault(this).execute(new SubmitKudosTask(kudo.id, reportBack.id, null));
+        TaskQueue.loadQueueDefault(this).execute(new SubmitKudosTask(kudos.id, reportBack.id));
     }
 
     @Override
@@ -194,9 +187,8 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
                 }
 
                 //FIXME--------------
-//                adapter.refreshTestImage(selectedImageUri);
-                startActivity(
-                        PhotoCropActivity.getLaunchIntent(this, selectedImageUri.toString()));
+                //                adapter.refreshTestImage(selectedImageUri);
+                startActivity(PhotoCropActivity.getLaunchIntent(this, selectedImageUri.toString()));
             }
         }
     }
@@ -245,12 +237,5 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         currentPage = task.page;
         List<ReportBack> reportBacks = task.reportBacks;
         adapter.addAll(reportBacks);
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(SubmitKudosTask task)
-    {
-        //fixme handle refreshing reportbacks
-        Toast.makeText(this, "kudos submitted", Toast.LENGTH_SHORT).show();
     }
 }

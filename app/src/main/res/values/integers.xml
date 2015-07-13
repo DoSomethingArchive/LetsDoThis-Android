@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="quick_anim">120</integer>
+    
+    <integer name="crown">0</integer>
+    <integer name="diamond">1</integer>
+    <integer name="fire">2</integer>
+    <integer name="heart">3</integer>
+    <integer name="kudos">4</integer>
+    <integer name="lightbulb">5</integer>
+    <integer name="pizza">6</integer>
+    <integer name="planet">7</integer>
+    <integer name="poo">8</integer>
+    <integer name="skull">9</integer>
+    <integer name="trophy">10</integer>
 </resources>

@@ -14,6 +14,8 @@ public class User
     @DatabaseField(id = true)
     public String id;
     @DatabaseField
+    public Integer drupalId;
+    @DatabaseField
     public String email;
     @DatabaseField
     public String mobile;
@@ -27,6 +29,7 @@ public class User
     //DON'T STORE PASSWORD IN DATABASE
     public String password;
 
+    @DatabaseField
     public String avatarPath;
 
     public User()
