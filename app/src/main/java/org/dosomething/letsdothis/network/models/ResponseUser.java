@@ -7,7 +7,7 @@ import org.dosomething.letsdothis.data.User;
 public class ResponseUser
 {
 
-    public Wrapper data;
+    public Wrapper data[];
 
     public static class Wrapper
     {
@@ -17,17 +17,19 @@ public class ResponseUser
         String last_name;
         String _id;
         String birthdate;
+        int drupal_id;
     }
 
     public static User getUser(ResponseUser response)
     {
         User user = new User();
-        user.email = response.data.email;
-        user.mobile = response.data.mobile;
-        user.first_name = response.data.first_name;
-        user.last_name = response.data.last_name;
-        user.id = response.data._id;
-        user.birthdate = response.data.birthdate;
+        user.email = response.data[0].email;
+        user.mobile = response.data[0].mobile;
+        user.first_name = response.data[0].first_name;
+        user.last_name = response.data[0].last_name;
+        user.id = response.data[0]._id;
+        user.birthdate = response.data[0].birthdate;
+        user.drupalId = response.data[0].drupal_id;
         return user;
     }
 

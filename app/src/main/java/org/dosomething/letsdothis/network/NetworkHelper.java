@@ -24,10 +24,10 @@ import retrofit.converter.GsonConverter;
  */
 public class NetworkHelper
 {
-    public static final String JSON_DATE_FORMAT_NORTHSTAR = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    public static final String JSON_DATE_FORMAT_NORTHSTAR    = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     public static final String JSON_DATE_FORMAT_DO_SOMETHING = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
-    public static final int    CONNECT_TIMEOUT            = 45;
-    public static final int    READ_TIMEOUT               = 30;
+    public static final int    CONNECT_TIMEOUT               = 45;
+    public static final int    READ_TIMEOUT                  = 30;
 
     public static RestAdapter.Builder getRequestAdapterBuilder()
     {
@@ -37,7 +37,9 @@ public class NetworkHelper
             @Override
             public void intercept(RequestFacade request)
             {
-                String id = BuildConfig.DEBUG ? "456" : "android";
+                String id = BuildConfig.DEBUG
+                        ? "456"
+                        : "android";
                 request.addHeader("X-DS-Application-Id", id);
                 request.addHeader("X-DS-REST-API-Key",
                                   LDTApplication.getContext().getString(R.string.api_key));
@@ -45,11 +47,10 @@ public class NetworkHelper
         };
 
         return new RestAdapter.Builder().setLogLevel(RestAdapter.LogLevel.FULL)
-                                        .setErrorHandler(new RetrofitErrorHandler()).setClient(
-                        new OkClient(makeTimeoutClient(READ_TIMEOUT, CONNECT_TIMEOUT)))
-                                        .setRequestInterceptor(requestInterceptor)
-                                        .setLogLevel(RestAdapter.LogLevel.FULL)
-                                        .setLog(new AndroidLog("LDTHttp"));
+                .setErrorHandler(new RetrofitErrorHandler())
+                .setClient(new OkClient(makeTimeoutClient(READ_TIMEOUT, CONNECT_TIMEOUT)))
+                .setRequestInterceptor(requestInterceptor).setLogLevel(RestAdapter.LogLevel.FULL)
+                .setLog(new AndroidLog("LDTHttp"));
     }
 
     public static class RetrofitErrorHandler implements ErrorHandler
@@ -80,8 +81,7 @@ public class NetworkHelper
         Gson gson = new GsonBuilder().setDateFormat(JSON_DATE_FORMAT_DO_SOMETHING).create();
         GsonConverter gsonConverter = new GsonConverter(gson);
         return getRequestAdapterBuilder().setConverter(gsonConverter)
-                                         .setEndpoint(DoSomethingAPI.BASE_URL).build()
-                                         .create(DoSomethingAPI.class);
+                .setEndpoint(DoSomethingAPI.BASE_URL).build().create(DoSomethingAPI.class);
     }
 
     public static NorthstarAPI getNorthstarAPIService()
@@ -89,8 +89,7 @@ public class NetworkHelper
         Gson gson = new GsonBuilder().setDateFormat(JSON_DATE_FORMAT_NORTHSTAR).create();
         GsonConverter gsonConverter = new GsonConverter(gson);
         return getRequestAdapterBuilder().setConverter(gsonConverter)
-                                         .setEndpoint(NorthstarAPI.BASE_URL).build()
-                                         .create(NorthstarAPI.class);
+                .setEndpoint(NorthstarAPI.BASE_URL).build().create(NorthstarAPI.class);
     }
 
 }
