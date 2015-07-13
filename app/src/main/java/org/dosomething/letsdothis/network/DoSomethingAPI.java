@@ -12,7 +12,6 @@ import retrofit.client.Response;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.Headers;
-import retrofit.http.POST;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
@@ -39,10 +38,6 @@ public interface DoSomethingAPI
     @Headers("Content-Type: application/json")
     @GET("/reportback-items/{id}.json")
     ResponseReportBack reportBack(@Path("id") int id) throws NetworkException;
-
-    @Headers("Content-Type: application/json")
-    @POST("/kudos.json")
-    ResponseReportBack submitKudos(@Body RequestKudo requestKudo) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @GET("/campaigns.json?mobile_app=1")

@@ -16,7 +16,7 @@ import android.widget.Toast;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
-import org.dosomething.letsdothis.data.Kudo;
+import org.dosomething.letsdothis.data.Kudos;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.tasks.CampaignDetailsTask;
 import org.dosomething.letsdothis.tasks.IndividualCampaignReportBackList;
@@ -24,6 +24,7 @@ import org.dosomething.letsdothis.tasks.RbShareDataTask;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
 import org.dosomething.letsdothis.ui.adapters.CampaignDetailsAdapter;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.io.File;
 import java.util.List;
@@ -70,7 +71,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
 
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        adapter = new CampaignDetailsAdapter(this, getResources());
+        adapter = new CampaignDetailsAdapter(this, getResources(), AppPrefs.getInstance(this).getCurrentDrupalId());
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -148,10 +149,9 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     }
 
     @Override
-    public void onKudoClicked(ReportBack reportBack, Kudo kudo)
+    public void onKudosClicked(ReportBack reportBack, Kudos kudos)
     {
-        //fixme get drupal id
-        TaskQueue.loadQueueDefault(this).execute(new SubmitKudosTask(kudo.id, reportBack.id, null));
+        TaskQueue.loadQueueDefault(this).execute(new SubmitKudosTask(kudos.id, reportBack.id));
     }
 
     @Override
@@ -291,12 +291,5 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         currentPage = task.page;
         List<ReportBack> reportBacks = task.reportBacks;
         adapter.addAll(reportBacks);
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(SubmitKudosTask task)
-    {
-        //fixme handle refreshing reportbacks
-        Toast.makeText(this, "kudos submitted", Toast.LENGTH_SHORT).show();
     }
 }

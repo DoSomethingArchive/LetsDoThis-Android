@@ -14,9 +14,9 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
  */
 public class ReportBackDetailsTask extends BaseNetworkErrorHandlerTask
 {
-    private final int        reportBackId;
-    public        ReportBack reportBack;
-    public        User       user;
+    private final int              reportBackId;
+    public        ReportBack       reportBack;
+    public        User             user;
 
     public ReportBackDetailsTask(int campaignId)
     {
@@ -30,9 +30,7 @@ public class ReportBackDetailsTask extends BaseNetworkErrorHandlerTask
                                                    .reportBack(reportBackId);
         reportBack = ResponseReportBack.getReportBack(response);
 
-
-        ResponseUser responseUser = NetworkHelper.getNorthstarAPIService()
-                                                   .userProfileWithDrupalId(reportBack.user.id);
+        ResponseUser responseUser = NetworkHelper.getNorthstarAPIService().userProfileWithDrupalId(reportBack.user.id);
         user = ResponseUser.getUser(responseUser);
     }
 
