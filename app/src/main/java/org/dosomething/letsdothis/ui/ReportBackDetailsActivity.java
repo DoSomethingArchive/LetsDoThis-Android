@@ -3,23 +3,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.data.Kudos;
+import org.dosomething.letsdothis.data.KudosMeta;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.ReportBackDetailsTask;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
-import org.dosomething.letsdothis.ui.adapters.KudoClickListener;
+import org.dosomething.letsdothis.ui.views.KudosView;
+import org.dosomething.letsdothis.utils.AppPrefs;
 import org.dosomething.letsdothis.utils.TimeUtils;
+
+import java.util.ArrayList;
 
 import co.touchlab.android.threading.tasks.TaskQueue;
 
@@ -34,11 +40,11 @@ public class ReportBackDetailsActivity extends BaseActivity
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private ImageView image;
     private TextView  timestamp;
+    private TextView  title;
     private TextView  caption;
     private TextView  name;
     private ViewGroup kudos;
-    private boolean   listenersAdded;
-    private Toolbar toolbar;
+    private Toolbar   toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -48,6 +54,7 @@ public class ReportBackDetailsActivity extends BaseActivity
 
         image = (ImageView) findViewById(R.id.image);
         timestamp = (TextView) findViewById(R.id.timestamp);
+        title = (TextView) findViewById(R.id.title);
         caption = (TextView) findViewById(R.id.caption);
         name = (TextView) findViewById(R.id.name);
         kudos = (ViewGroup) findViewById(R.id.kudos_bar);
@@ -84,10 +91,6 @@ public class ReportBackDetailsActivity extends BaseActivity
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(SubmitKudosTask task)
     {
-        if(BuildConfig.DEBUG)
-        {
-            Toast.makeText(this, "kudos submitted", Toast.LENGTH_SHORT).show();
-        }
         TaskQueue.loadQueueDefault(this).execute(
                 new ReportBackDetailsTask(getIntent().getIntExtra(EXTRA_REPORT_BACK_ID, - 1)));
     }
@@ -101,12 +104,26 @@ public class ReportBackDetailsActivity extends BaseActivity
             User user = task.user;
 
             Picasso.with(this).load(reportBack.getImagePath()).resize(image.getWidth(), 0)
-                    .into(image);
+                   .into(image);
             timestamp.setText(TimeUtils.getTimeSince(this, reportBack.createdAt * 1000));
-            caption.setText(reportBack.caption);
-            if(user != null)
+            title.setText(reportBack.campaign.title);
+            title.setOnClickListener(new View.OnClickListener()
             {
-                name.setText(String.format("%s %s.", user.first_name, user.last_name.charAt(0)));
+                @Override
+                public void onClick(View v)
+                {
+                    startActivity(CampaignDetailsActivity
+                                          .getLaunchIntent(ReportBackDetailsActivity.this,
+                                                           reportBack.campaign.id));
+                }
+            });
+            caption.setText(reportBack.caption);
+            if(user != null && ! TextUtils.isEmpty(user.first_name))
+            {
+                String formattedName = TextUtils.isEmpty(user.last_name)
+                        ? user.first_name
+                        : String.format("%s %s.", user.first_name, user.last_name.charAt(0));
+                name.setText(formattedName);
             }
             else
             {
@@ -115,27 +132,39 @@ public class ReportBackDetailsActivity extends BaseActivity
             toolbar.setTitle(reportBack.campaign.title);
 
             //FIXME add user's avatar
-            if(!listenersAdded)
+
+            int drupalId = AppPrefs.getInstance(this).getCurrentDrupalId();
+            ArrayList<KudosMeta> sanitizedKudosList = reportBack.getSanitizedKudosList(drupalId);
+            for(int i = 0, size = sanitizedKudosList.size(); i < size; i++)
             {
-                listenersAdded = true;
-                int count = kudos.getChildCount();
-                for(int i = 0; i < count; i++)
+                final KudosView kudoView = (KudosView) kudos.getChildAt(i);
+                KudosMeta kudosMeta = sanitizedKudosList.get(i);
+                kudoView.setKudos(kudosMeta);
+                kudoView.setOnClickListener(new View.OnClickListener()
                 {
-                    View kudoView = kudos.getChildAt(i);
-                    kudoView.setOnClickListener(new KudoClickListener(i)
+                    @Override
+                    public void onClick(View v)
                     {
-                        @Override
-                        public void onClick(View v)
+                        Context context = ReportBackDetailsActivity.this;
+                        boolean selected = kudoView.isSelected();
+
+                        if(! selected && !reportBack.kudosed)
                         {
-
-                            //fixme get drupal id
-                            TaskQueue.loadQueueDefault(ReportBackDetailsActivity.this)
-                                     .execute(new SubmitKudosTask(kudo.id, reportBack.id, null));
-
+                            kudoView.setSelected(true);
+                            int countNum = kudoView.getCountNum();
+                            kudoView.setCountNum(countNum + 1);
+                            Kudos kudos = kudoView.getKudos();
+                            TaskQueue.loadQueueDefault(context)
+                                     .execute(new SubmitKudosTask(kudos.id, reportBack.id));
+                            kudoView.getImage().startAnimation(
+                                    AnimationUtils.loadAnimation(context, R.anim.scale_bounce));
                         }
-                    });
-                }
+
+                    }
+                });
+
             }
+
 
         }
         else
