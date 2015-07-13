@@ -4,8 +4,6 @@ package org.dosomething.letsdothis.network.models;
  */
 public class RequestKudo
 {
-    public String reportback_item_id;
-    //note: this is the drupal_id
-    public String user_id;
-    public String[] term_ids;
+    public int reportback_item_id;
+    public int kudos_id;
 }

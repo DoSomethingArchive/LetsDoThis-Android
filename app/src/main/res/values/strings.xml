@@ -99,6 +99,7 @@
     <string name="notification_friend">notification_friend</string>
     <string name="notification_campaign">notification_campaign</string>
     <string name="notification_pref">Notification Preferences</string>
+    <string name="max_kudos">99+</string>
     <string name="log_in_with_facebook">Log in with Facebook</string>
     <string name="confirm_fb">Confirm your Facebook details</string>
 </resources>

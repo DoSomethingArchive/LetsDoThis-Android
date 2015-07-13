@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="KudosView">
+        <attr name="count" format="integer" localization="suggested" />
+        <attr name="selected" format="boolean"/>
+        <attr name="kudos"/>
+    </declare-styleable>
+
+    <!-- Changing the attribute must be reflected in the Kudo class -->
+    <attr name="kudos" format="enum">
+        <enum name="crown" value="0" />
+        <enum name="diamond" value="1" />
+        <enum name="fire" value="2" />
+        <enum name="heart" value="3" />
+        <enum name="kudos" value="4" />
+        <enum name="lightbulb" value="5" />
+        <enum name="pizza" value="6" />
+        <enum name="planet" value="7" />
+        <enum name="poo" value="8" />
+        <enum name="skull" value="9" />
+        <enum name="trophy" value="10" />
+    </attr>
+
+</resources>

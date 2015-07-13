@@ -12,6 +12,7 @@ public class AppPrefs
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String CURRENT_USER_ID    = "CURRENT_USER_ID";
+    public static final String CURRENT_DRUPAL_ID  = "CURRENT_DRUPAL_ID";
     public static final String USER_SESSION_TOKEN = "CURRENT_SESSION_TOKEN";
     public static final String FIRST_INTRO        = "FIRST_INTRO";
     public static final String FIRST_DRAWER       = "FIRST_DRAWER";
@@ -102,6 +103,16 @@ public class AppPrefs
     public String getCurrentUserId()
     {
         return getString(CURRENT_USER_ID, null);
+    }
+
+    public void setCurrentDrupalId(int drupalId)
+    {
+        setInt(CURRENT_DRUPAL_ID, drupalId);
+    }
+
+    public int getCurrentDrupalId()
+    {
+        return getInt(CURRENT_DRUPAL_ID, -1);
     }
 
     public void setSessionToken(String token)
