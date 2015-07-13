@@ -163,6 +163,8 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         pickIntent.setType("image/*");
 
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File filesDir = new F ile(Environment.getExternalStorageDirectory(), "DoSomething");
+
         File externalFile = new File(
                 getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
                 "report_back" + System.currentTimeMillis() + ".jpg");
