@@ -4,6 +4,7 @@ import android.text.format.DateUtils;
 
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.data.Campaign;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -97,5 +98,10 @@ public class TimeUtils
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         calendar.add(Calendar.MONTH, 1);
         return calendar.getTimeInMillis();
+    }
+
+    public static boolean isCampaignExpired(Campaign campaign)
+    {
+        return campaign.endTime < System.currentTimeMillis();
     }
 }
