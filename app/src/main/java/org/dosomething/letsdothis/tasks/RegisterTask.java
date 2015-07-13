@@ -56,6 +56,7 @@ public class RegisterTask extends BaseRegistrationTask
             if(response.data._id != null)
             {
                 user.id = response.data._id;
+                user.drupalId = response.data.drupal_id;
                 user.email = response.data.email;
                 user.birthdate = response.data.birthday;
                 user.first_name = response.data.first_name;

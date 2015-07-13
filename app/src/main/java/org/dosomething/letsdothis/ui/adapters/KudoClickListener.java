@@ -1,17 +1,17 @@
 package org.dosomething.letsdothis.ui.adapters;
 import android.view.View;
 
-import org.dosomething.letsdothis.data.Kudo;
+import org.dosomething.letsdothis.data.Kudos;
 
 /**
 * Created by izzyoji :) on 5/15/15.
 */
 public abstract class KudoClickListener implements View.OnClickListener
 {
-    protected Kudo kudo;
+    protected Kudos kudos;
 
     public KudoClickListener(int i)
     {
-        kudo = Kudo.values()[i];
+        kudos = Kudos.values()[i];
     }
 }

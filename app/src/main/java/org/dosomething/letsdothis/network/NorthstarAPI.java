@@ -1,14 +1,18 @@
 package org.dosomething.letsdothis.network;
+
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.models.RequestCampaignSignup;
 import org.dosomething.letsdothis.network.models.RequestReportback;
+import org.dosomething.letsdothis.network.models.ResponseAvatar;
+import org.dosomething.letsdothis.network.models.RequestKudo;
 import org.dosomething.letsdothis.network.models.ResponseAvatar;
 import org.dosomething.letsdothis.network.models.ResponseCampaignSignUp;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 import org.dosomething.letsdothis.network.models.ResponseRbData;
 import org.dosomething.letsdothis.network.models.ResponseRegister;
 import org.dosomething.letsdothis.network.models.ResponseSubmitReportBack;
+import org.dosomething.letsdothis.network.models.ResponseReportBack;
 import org.dosomething.letsdothis.network.models.ResponseUser;
 import org.dosomething.letsdothis.network.models.ResponseUserCampaign;
 import org.dosomething.letsdothis.network.models.ResponseUserList;
@@ -95,6 +99,14 @@ public interface NorthstarAPI
     @GET("/users/_id/{id}/campaigns")
     ResponseUserCampaign getUserCampaigns(@Path("id") String id);
 
+    @Headers("Content-Type: application/json")
+    @POST("/kudos")
+    ResponseReportBack submitKudos(@Body RequestKudo requestKudo, @Header("Session") String sessionToken) throws NetworkException;
+
+    @Multipart
+    @POST("/users/{id}/avatar")
+    public ResponseAvatar uploadAvatar(@Path("id") String id, @Part("photo") TypedFile file) throws NetworkException;
+
     //-----------NOT DONE
     //-----------NOT DONE
     //-----------NOT DONE
@@ -130,8 +142,5 @@ public interface NorthstarAPI
             "hs_gradyear") String hsGradYear, @Query("hs_name") String hsName, @Query(
             "sat_math") int satMath, @Query("sat_verbal") int satVerbal, @Query(
             "sat_writing") int satWriting) throws NetworkException;
-
-    @Multipart
-    @POST("/users/{id}/avatar")
-    public ResponseAvatar uploadAvatar(@Path("id") String id, @Part("photo") TypedFile file) throws NetworkException;
+    
 }
