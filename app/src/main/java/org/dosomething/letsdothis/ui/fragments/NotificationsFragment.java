@@ -60,7 +60,7 @@ public class NotificationsFragment extends Fragment
         NotificationAdapter adapter = new NotificationAdapter(generateSampleData());
         progress = (ProgressBar) getView().findViewById(R.id.progress);
         progress.getIndeterminateDrawable()
-                .setColorFilter(getResources().getColor(R.color.dark_orange),
+                .setColorFilter(getResources().getColor(R.color.cerulean_1),
                                 PorterDuff.Mode.SRC_IN);
 
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);

@@ -73,7 +73,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         position = getArguments().getInt(KEY_POSITION);
         progress = (ProgressBar) getView().findViewById(R.id.progress);
         progress.getIndeterminateDrawable()
-                .setColorFilter(getResources().getColor(R.color.dark_orange),
+                .setColorFilter(getResources().getColor(R.color.cerulean_1),
                                 PorterDuff.Mode.SRC_IN);
 
         recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
