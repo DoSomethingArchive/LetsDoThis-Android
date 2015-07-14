@@ -188,7 +188,7 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
             if(requestCode == SELECT_PICTURE)
             {
                 final boolean isCamera;
-                if(data == null)
+                if(data.getData() == null)
                 {
                     isCamera = true;
                 }
@@ -255,12 +255,12 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
         File externalFile = new File(
                 getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
                 "user_profile" + ".jpg");
-        imageUri = Uri.fromFile(externalFile);
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(externalFile));
+        imageUri = Uri.parse(externalFile.getAbsolutePath());
         if(BuildConfig.DEBUG)
         {
             Log.d("photo location", imageUri.toString());
         }
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
 
         String pickTitle = getString(R.string.select_picture);
         Intent chooserIntent = Intent.createChooser(takePhotoIntent, pickTitle);

@@ -99,12 +99,12 @@ public class RegisterActivity extends BaseActivity
 
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File externalFile = ViewUtils.getAvatarFile(this);
-        imageUri = Uri.fromFile(externalFile);
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(externalFile));
+        imageUri = Uri.parse(externalFile.getAbsolutePath());
         if(BuildConfig.DEBUG)
         {
             Log.d("photo location", imageUri.toString());
         }
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
 
         String pickTitle = getString(R.string.select_picture);
         Intent chooserIntent = Intent.createChooser(takePhotoIntent, pickTitle);
@@ -121,7 +121,7 @@ public class RegisterActivity extends BaseActivity
             if(requestCode == SELECT_PICTURE)
             {
                 final boolean isCamera;
-                if(data == null)
+                if(data.getData() == null)
                 {
                     isCamera = true;
                 }

@@ -47,7 +47,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final  String TAG            = HubFragment.class.getSimpleName();
-    private static final int    SELECT_PICTURE = 55;
+    private static final int    SELECT_PICTURE = 52345;
     public static final  String EXTRA_ID       = "id";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
@@ -163,12 +163,11 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         pickIntent.setType("image/*");
 
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File filesDir = new F ile(Environment.getExternalStorageDirectory(), "DoSomething");
-
-        File externalFile = new File(
-                getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                "report_back" + System.currentTimeMillis() + ".jpg");
-        imageUri = Uri.fromFile(externalFile);
+        File externalFile = new File(Environment.getExternalStorageDirectory(), "DoSomething");
+        externalFile.mkdirs();
+        File file = new File(externalFile, "reportBack" + System.currentTimeMillis() + ".jpg");
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+        imageUri = Uri.parse(file.getAbsolutePath());
         if(BuildConfig.DEBUG)
         {
             Log.d("photo location", imageUri.toString());
@@ -196,7 +195,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
             if(requestCode == SELECT_PICTURE)
             {
                 final boolean isCamera;
-                if(data == null)
+                if(data.getData() == null)
                 {
                     isCamera = true;
                 }
