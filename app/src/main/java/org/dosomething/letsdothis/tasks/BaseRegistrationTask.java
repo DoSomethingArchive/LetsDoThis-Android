@@ -26,6 +26,7 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
     {
         DatabaseHelper.getInstance(context).getUserDao().createOrUpdate(user);
         AppPrefs.getInstance(context).setCurrentUserId(user.id);
+        AppPrefs.getInstance(context).setCurrentDrupalId(user.drupalId);
     }
 
     @Override

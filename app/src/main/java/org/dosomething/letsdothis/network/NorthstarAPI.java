@@ -1,12 +1,15 @@
 package org.dosomething.letsdothis.network;
+import android.net.Uri;
+
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.data.User;
-import org.dosomething.letsdothis.network.models.RequestCampaignSignup;
 import org.dosomething.letsdothis.network.models.ResponseAvatar;
+import org.dosomething.letsdothis.network.models.RequestCampaignSignup;
 import org.dosomething.letsdothis.network.models.ResponseCampaignSignUp;
 import org.dosomething.letsdothis.network.models.ResponseGroup;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 import org.dosomething.letsdothis.network.models.ResponseRegister;
+import org.dosomething.letsdothis.network.models.ResponseReportBack;
 import org.dosomething.letsdothis.network.models.ResponseUser;
 import org.dosomething.letsdothis.network.models.ResponseUserList;
 import org.dosomething.letsdothis.network.models.ResponseUserUpdate;
@@ -81,6 +84,14 @@ public interface NorthstarAPI
 
     @GET("/signup-group/{groupId}")
     ResponseGroup group(@Path("groupId") int groupId);
+
+    @Headers("Content-Type: application/json")
+    @POST("/kudos")
+    ResponseReportBack submitKudos(@Body RequestKudo requestKudo, @Header("Session") String sessionToken) throws NetworkException;
+
+    @Multipart
+    @POST("/users/{id}/avatar")
+    public ResponseAvatar uploadAvatar(@Path("id") String id, @Part("photo") TypedFile file) throws NetworkException;
 
     //-----------NOT DONE
     //-----------NOT DONE

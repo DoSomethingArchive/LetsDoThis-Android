@@ -99,8 +99,11 @@
     <string name="notification_friend">notification_friend</string>
     <string name="notification_campaign">notification_campaign</string>
     <string name="notification_pref">Notification Preferences</string>
+    <string name="expired_already">This action is expired. Refresh for new actions!</string>
+    <string name="max_kudos">99+</string>
     <string name="log_in_with_facebook">Log in with Facebook</string>
     <string name="confirm_fb">Confirm your Facebook details</string>
+    <string name="refresh_copy">refresh copy</string>
     <string name="cancel_search">Cancel Search</string>
     <string name="search_for_group">Search For Group</string>
     <string name="join_this_group">Join This Group</string>
