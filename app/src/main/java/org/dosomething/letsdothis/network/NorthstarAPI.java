@@ -3,6 +3,7 @@ import android.net.Uri;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.data.User;
+import org.dosomething.letsdothis.network.models.RequestKudo;
 import org.dosomething.letsdothis.network.models.ResponseAvatar;
 import org.dosomething.letsdothis.network.models.RequestCampaignSignup;
 import org.dosomething.letsdothis.network.models.ResponseCampaignSignUp;
@@ -128,9 +129,5 @@ public interface NorthstarAPI
             "hs_gradyear") String hsGradYear, @Query("hs_name") String hsName, @Query(
             "sat_math") int satMath, @Query("sat_verbal") int satVerbal, @Query(
             "sat_writing") int satWriting) throws NetworkException;
-
-    @Multipart
-    @POST("/users/{id}/avatar")
-    public ResponseAvatar uploadAvatar(@Path("id") String id, @Part("photo") TypedFile file) throws NetworkException;
 
 }
