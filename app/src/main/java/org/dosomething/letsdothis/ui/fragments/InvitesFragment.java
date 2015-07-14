@@ -19,13 +19,13 @@ import org.dosomething.letsdothis.data.Invite;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.ResponseCampaignWrapper;
 import org.dosomething.letsdothis.network.models.ResponseGroup;
+import org.dosomething.letsdothis.tasks.InvitesTask;
 import org.dosomething.letsdothis.ui.adapters.InvitesAdapter;
 import org.dosomething.letsdothis.utils.Hashery;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import co.touchlab.android.threading.errorcontrol.NetworkException;
+import co.touchlab.android.threading.eventbus.EventBusExt;
+import co.touchlab.android.threading.tasks.TaskQueue;
 import retrofit.RetrofitError;
 
 /**
@@ -61,8 +61,7 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        //FIXME: get real data
-        adapter = new InvitesAdapter(generateSampleData(), this);
+        adapter = new InvitesAdapter(this);
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
         recyclerView.setAdapter(adapter);
 
@@ -70,21 +69,22 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
         recyclerView.setLayoutManager(layoutManager);
 
         titleListener.setTitle(getString(R.string.invites));
+
+        TaskQueue.loadQueueDefault(getActivity()).execute(new InvitesTask());
     }
 
-    private List<Invite> generateSampleData()
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState)
     {
-        List<Invite> invites = new ArrayList<>();
-        for(int i = 0; i < 10; i++)
-        {
-            Invite invite = new Invite();
-            invite.title = "Sample invite " + (i + 1);
-            invite.details = "This campaign is so cool.";
-            invite.code = "Need Real Data";
-            invites.add(invite);
-        }
+        super.onCreate(savedInstanceState);
+        EventBusExt.getDefault().register(this);
+    }
 
-        return invites;
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        EventBusExt.getDefault().unregister(this);
     }
 
     @Override
@@ -176,6 +176,12 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
             searchForGroupAsyncTask.cancel(true);
             adapter.setButtonState(InvitesAdapter.BUTTON_STATE_GONE);
         }
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(InvitesTask task)
+    {
+        adapter.setData(task.invites);
     }
 
 }
