@@ -3,6 +3,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              xmlns:app="http://schemas.android.com/apk/res-auto"
              android:layout_width="match_parent"
+             android:background="@color/white"
              android:layout_height="wrap_content">
 
 
@@ -48,12 +49,13 @@
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:id="@+id/code"
-            tools:text="333333"
+            tools:text="Little Pink Shark"
             android:paddingLeft="@dimen/padding_wedge"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:textColor="@color/invite_code"
             android:layout_width="wrap_content"
+            app:typeface="brandon_bold"
             android:layout_height="wrap_content"/>
 
     </RelativeLayout>

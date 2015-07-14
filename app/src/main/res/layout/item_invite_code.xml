@@ -15,18 +15,45 @@
         android:textSize="@dimen/text_42"
         android:layout_height="wrap_content"/>
 
-    <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:imeOptions="actionDone"
-        android:textColor="@color/invite_code"
-        android:id="@+id/code"
-        android:maxLength="15"
-        android:background="@android:color/transparent"
-        android:inputType="textNoSuggestions"
-        android:textSize="@dimen/text_huge"/>
+        android:paddingLeft="@dimen/padding_small"
+        android:paddingRight="@dimen/padding_small"
+        android:orientation="horizontal">
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:id="@+id/word1"
+            android:hint="Green"
+            android:imeOptions="actionNext"
+            style="@style/InviteCodeText"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:id="@+id/word2"
+            android:hint="Round"
+            android:layout_marginLeft="@dimen/padding_small"
+            android:layout_marginRight="@dimen/padding_small"
+            android:imeOptions="actionNext"
+            style="@style/InviteCodeText"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:id="@+id/word3"
+            android:hint="Dog"
+            style="@style/InviteCodeText"/>
+
+
+    </LinearLayout>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomButton
         android:id="@+id/join"
@@ -37,6 +64,6 @@
         android:layout_margin="@dimen/padding_small"
         android:visibility="gone"
         tools:visibility="visible"
-        tools:text="Join Music March Out"/>
+        android:text="@string/search_for_group"/>
 
 </FrameLayout>

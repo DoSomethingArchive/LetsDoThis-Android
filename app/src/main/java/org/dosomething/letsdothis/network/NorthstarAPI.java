@@ -1,11 +1,13 @@
 package org.dosomething.letsdothis.network;
+import android.net.Uri;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.data.User;
-import org.dosomething.letsdothis.network.models.RequestCampaignSignup;
 import org.dosomething.letsdothis.network.models.RequestKudo;
 import org.dosomething.letsdothis.network.models.ResponseAvatar;
+import org.dosomething.letsdothis.network.models.RequestCampaignSignup;
 import org.dosomething.letsdothis.network.models.ResponseCampaignSignUp;
+import org.dosomething.letsdothis.network.models.ResponseGroup;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 import org.dosomething.letsdothis.network.models.ResponseRegister;
 import org.dosomething.letsdothis.network.models.ResponseReportBack;
@@ -81,6 +83,9 @@ public interface NorthstarAPI
     @POST("/user/campaigns/{id}/signup")
     ResponseCampaignSignUp campaignSignUp(@Body RequestCampaignSignup requestCampaignSignup, @Path("id") int id, @Header("Session") String sessionToken);
 
+    @GET("/signup-group/{groupId}")
+    ResponseGroup group(@Path("groupId") int groupId);
+
     @Headers("Content-Type: application/json")
     @POST("/kudos")
     ResponseReportBack submitKudos(@Body RequestKudo requestKudo, @Header("Session") String sessionToken) throws NetworkException;
@@ -124,5 +129,5 @@ public interface NorthstarAPI
             "hs_gradyear") String hsGradYear, @Query("hs_name") String hsName, @Query(
             "sat_math") int satMath, @Query("sat_verbal") int satVerbal, @Query(
             "sat_writing") int satWriting) throws NetworkException;
-    
+
 }
