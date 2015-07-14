@@ -150,6 +150,10 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             int height = context.getResources().getDimensionPixelSize(R.dimen.campaign_height);
             Picasso.with(context).load(campaign.imagePath).resize(0, height).into(viewHolder.image);
 
+            ColorMatrix cm = new ColorMatrix();
+            cm.setSaturation(0);
+
+
             int size = campaign.group.size();
 
             if(campaign.showShare == Campaign.UploadShare.SHARE)
@@ -246,48 +250,51 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             int height = context.getResources().getDimensionPixelSize(R.dimen.campaign_height);
             Picasso.with(context).load(campaign.imagePath).resize(0, height)
                     .into(pastCampaignViewHolder.image);
-
             ColorMatrix cm = new ColorMatrix();
             cm.setSaturation(0);
+            pastCampaignViewHolder.image.setColorFilter(new ColorMatrixColorFilter(cm));
 
             pastCampaignViewHolder.title.setText(campaign.title);
-            pastCampaignViewHolder.image.setColorFilter(new ColorMatrixColorFilter(cm));
         }
         else if(getItemViewType(position) == VIEW_TYPE_EXPIRE)
         {
-            ExpireViewHolder expireViewHolder = (ExpireViewHolder) holder;
+            ExpireViewHolder viewHolder = (ExpireViewHolder) holder;
 
             Long expire = (Long) hubList.get(position);
-            List<String> timeUntilExpiration = TimeUtils.getTimeUntilExpiration(expire);
-            String days = timeUntilExpiration.get(0);
-            expireViewHolder.days.setText(days);
-            String hours = timeUntilExpiration.get(1);
-            expireViewHolder.hours.setText(hours);
-            String minutes = timeUntilExpiration.get(2);
-            expireViewHolder.minutes.setText(minutes);
-            Resources resources = expireViewHolder.itemView.getContext().getResources();
+            List<String> campExpTime = TimeUtils.getTimeUntilExpiration(expire);
+            int dayInt = Integer.parseInt(campExpTime.get(0));
+            int hourInt = Integer.parseInt(campExpTime.get(1));
+            int minInt = Integer.parseInt(campExpTime.get(2));
 
-            int dayInt = Integer.parseInt(days);
-            int hourInt = Integer.parseInt(hours);
-            expireViewHolder.daysLabel.setText(resources.getQuantityString(R.plurals.days, dayInt));
-            expireViewHolder.hoursLabel
-                    .setText(resources.getQuantityString(R.plurals.hours, hourInt));
-            expireViewHolder.minutesLabel.setText(
-                    resources.getQuantityString(R.plurals.minutes, Integer.parseInt(minutes)));
-            expireViewHolder.daysWrapper.setVisibility(View.GONE);
-            expireViewHolder.hoursrWrapper.setVisibility(View.GONE);
-            expireViewHolder.minWrapper.setVisibility(View.GONE);
+            Resources resources = viewHolder.itemView.getContext().getResources();
+            viewHolder.daysLabel.setText(resources.getQuantityString(R.plurals.days, dayInt));
+            viewHolder.hoursLabel.setText(resources.getQuantityString(R.plurals.hours, hourInt));
+            viewHolder.minutesLabel.setText(resources.getQuantityString(R.plurals.minutes, minInt));
+
+            viewHolder.expire_label.setVisibility(View.VISIBLE);
+            viewHolder.expired.setVisibility(View.GONE);
+            viewHolder.daysWrapper.setVisibility(View.GONE);
+            viewHolder.hoursWrapper.setVisibility(View.GONE);
+            viewHolder.minWrapper.setVisibility(View.GONE);
             if(dayInt > 0)
             {
-                expireViewHolder.daysWrapper.setVisibility(View.VISIBLE);
+                viewHolder.daysWrapper.setVisibility(View.VISIBLE);
+                viewHolder.days.setText(String.valueOf(dayInt));
             }
             else if(hourInt > 0)
             {
-                expireViewHolder.hoursrWrapper.setVisibility(View.VISIBLE);
+                viewHolder.hoursWrapper.setVisibility(View.VISIBLE);
+                viewHolder.hours.setText(String.valueOf(hourInt));
+            }
+            else if(minInt > 0)
+            {
+                viewHolder.minWrapper.setVisibility(View.VISIBLE);
+                viewHolder.minutes.setText(String.valueOf(minInt));
             }
             else
             {
-                expireViewHolder.minWrapper.setVisibility(View.VISIBLE);
+                viewHolder.expire_label.setVisibility(View.GONE);
+                viewHolder.expired.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -457,6 +464,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public static class ExpireViewHolder extends RecyclerView.ViewHolder
     {
+        public          TextView expired;
+        public          TextView expire_label;
         protected final TextView days;
         protected final TextView hours;
         protected final TextView minutes;
@@ -464,14 +473,16 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         protected final TextView hoursLabel;
         protected final TextView minutesLabel;
         protected final View     daysWrapper;
-        protected final View     hoursrWrapper;
+        protected final View     hoursWrapper;
         protected final View     minWrapper;
 
         public ExpireViewHolder(View itemView)
         {
             super(itemView);
+            expire_label = (TextView) itemView.findViewById(R.id.expire_label);
+            expired = (TextView) itemView.findViewById(R.id.expired_already);
             daysWrapper = itemView.findViewById(R.id.days_wrapper);
-            hoursrWrapper = itemView.findViewById(R.id.hours_wrapper);
+            hoursWrapper = itemView.findViewById(R.id.hours_wrapper);
             minWrapper = itemView.findViewById(R.id.min_wrapper);
             days = (TextView) itemView.findViewById(R.id.days);
             hours = (TextView) itemView.findViewById(R.id.hours);
