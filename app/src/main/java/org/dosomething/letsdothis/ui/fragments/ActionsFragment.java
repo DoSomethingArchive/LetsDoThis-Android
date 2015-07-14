@@ -73,7 +73,7 @@ public class ActionsFragment extends Fragment
             @Override
             public Fragment getItem(int position)
             {
-                return CategoryFragment.newInstance(position);
+                return CampaignFragment.newInstance(position);
             }
 
             @Override

@@ -14,6 +14,8 @@ public class User
     @DatabaseField(id = true)
     public String id;
     @DatabaseField
+    public Integer drupalId;
+    @DatabaseField
     public String email;
     @DatabaseField
     public String mobile;

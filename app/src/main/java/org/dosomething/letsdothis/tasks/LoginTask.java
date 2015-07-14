@@ -51,6 +51,7 @@ public class LoginTask extends BaseRegistrationTask
             {
                 //FIXME should we get back a user avatar??
                 user.id = response.data._id;
+                user.drupalId = response.data.drupal_id;
                 user.email = response.data.email;
                 user.mobile = response.data.mobile;
                 user.first_name = response.data.first_name;
