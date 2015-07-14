@@ -17,6 +17,7 @@ public class ResponseUser
         String last_name;
         String _id;
         String birthdate;
+        int drupal_id;
     }
 
     public static User getUser(ResponseUser response)
@@ -28,6 +29,7 @@ public class ResponseUser
         user.last_name = response.data[0].last_name;
         user.id = response.data[0]._id;
         user.birthdate = response.data[0].birthdate;
+        user.drupalId = response.data[0].drupal_id;
         return user;
     }
 
