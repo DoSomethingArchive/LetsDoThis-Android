@@ -19,8 +19,7 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.tasks.DbGetUserTask;
-import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignTask;
-import org.dosomething.letsdothis.tasks.GetPastUserCampaignTask;
+import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignsTask;
 import org.dosomething.letsdothis.tasks.GetUserTask;
 import org.dosomething.letsdothis.tasks.RbShareDataTask;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
@@ -84,7 +83,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         super.onAttach(activity);
         titleListener = (SetTitleListener) getActivity();
         TaskQueue.loadQueueDefault(getActivity())
-                .execute(new GetCurrentUserCampaignTask());
+                .execute(new GetCurrentUserCampaignsTask());
     }
 
     @Override
@@ -225,7 +224,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
                 startActivityForResult(PhotoCropActivity.getResultIntent(getActivity(),
                                                                          selectedImageUri
                                                                                  .toString(),
-                                                                         "Share Photo", null),
+                                                                         getString(R.string.share_photo), null),
                                        PhotoCropActivity.RESULT_CODE);
             }
             else if(requestCode == PhotoCropActivity.RESULT_CODE)
@@ -243,21 +242,11 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(GetCurrentUserCampaignTask task)
+    public void onEventMainThread(GetCurrentUserCampaignsTask task)
     {
         if(! task.currentCampaignList.isEmpty())
         {
             adapter.addCurrentCampaign(task.currentCampaignList);
-        }
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(GetPastUserCampaignTask task)
-    {
-        //FIXME this is a fake call
-        if(! task.pastCampaignList.isEmpty())
-        {
-            adapter.addPastCampaign(task.pastCampaignList);
         }
     }
 
@@ -278,7 +267,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     public void onEventMainThread(ReportbackUploadTask task)
     {
         TaskQueue.loadQueueDefault(getActivity())
-                .execute(new GetCurrentUserCampaignTask());
+                .execute(new GetCurrentUserCampaignsTask());
     }
 
     @SuppressWarnings("UnusedDeclaration")

@@ -10,46 +10,54 @@ import org.dosomething.letsdothis.utils.AppPrefs;
 import java.util.ArrayList;
 import java.util.List;
 
-import co.touchlab.android.threading.errorcontrol.NetworkException;
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
 /**
  * Created by toidiu on 4/16/15.
  */
-public class GetPastUserCampaignTask extends BaseNetworkErrorHandlerTask
+public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
 {
-    public List<Campaign> pastCampaignList;
+    public List<Campaign> currentCampaignList;
 
-    public GetPastUserCampaignTask()
+    public GetCurrentUserCampaignsTask()
     {
     }
 
     @Override
     protected void run(Context context) throws Throwable
     {
-        //FIXME this is a fake call
-
-
-        makeFakeCall(context);
-    }
-
-    private void makeFakeCall(Context context) throws NetworkException
-    {
-        pastCampaignList = new ArrayList<>();
+        currentCampaignList = new ArrayList<>();
+        ArrayList<Integer> doneCampaigns = new ArrayList<Integer>();
         String currentUserId = AppPrefs.getInstance(context).getCurrentUserId();
         ResponseUserCampaign userCampaigns = NetworkHelper.getNorthstarAPIService()
                 .getUserCampaigns(currentUserId);
-        String s = "";
-        for(ResponseUserCampaign.Wrapper c : userCampaigns.data)
+
+        String campaignIds = "";
+        for(ResponseUserCampaign.Wrapper campaignData : userCampaigns.data)
         {
-            s += c.drupal_id + ",";
+            if(campaignData.reportback_data != null)
+            {
+                doneCampaigns.add(Integer.parseInt(campaignData.drupal_id));
+            }
+            campaignIds += campaignData.drupal_id + ",";
         }
 
         ResponseCampaignList responseCampaignList = NetworkHelper.getDoSomethingAPIService()
-                .campaignListByIds(s);
+                .campaignListByIds(campaignIds);
         List<Campaign> campaigns = ResponseCampaignList.getCampaigns(responseCampaignList);
 
-        pastCampaignList.addAll(campaigns);
+        for(int i = 0; i < campaigns.size(); i++)
+        {
+            Campaign campaign = campaigns.get(i);
+            if(doneCampaigns.contains(campaign.id))
+            {
+                campaign.showShare = Campaign.UploadShare.SHARE;
+                campaigns.set(i, campaign);
+            }
+        }
+
+        currentCampaignList.addAll(campaigns);
+        //FIXME get friend group
     }
 
     @Override
