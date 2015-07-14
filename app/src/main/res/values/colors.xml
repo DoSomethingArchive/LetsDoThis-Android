@@ -33,6 +33,7 @@
     <color name="mine_shaft">#252B28</color>
     <color name="gray">#979797</color>
     <color name="silverChalice">#989898</color>
+    <color name="expireGray">#b2b2b2</color>
     <color name="dark_gray">#4A4A4A</color>
     <color name="silver">#CCCCCC</color>
     <color name="alto">#D8D8D8</color>
@@ -58,4 +59,5 @@
     <color name="black_10">#1A000000</color>
     <color name="black_5">#0D000000</color>
     <color name="fb_bg">#3b579d</color>
+    <color name="hint">#D6D6D6</color>
 </resources>

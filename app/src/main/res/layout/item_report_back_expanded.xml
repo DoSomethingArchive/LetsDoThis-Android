@@ -56,23 +56,39 @@
             tools:text="Timestamp"
             android:id="@+id/timestamp"/>
 
-        <!--FIXME get real kudos resources-->
-        <org.dosomething.letsdothis.ui.views.CircleImageView
+        <ImageView
             android:layout_width="@dimen/kudos"
             android:layout_height="@dimen/kudos"
+            android:background="@drawable/bg_kudos_toggle"
             android:id="@+id/kudos_toggle"
-            android:src="@color/white"
-            app:border_color="@color/cerulean_1"
-            app:border_width="@dimen/padding_micro"
-            app:draw_border="true"
+            tools:src="@drawable/ic_close_kudos"
             android:visibility="gone"
+            tools:visibility="visible"
+            android:scaleType="centerCrop"
             android:layout_margin="@dimen/padding_small"
+            android:paddingLeft="@dimen/padding_wedge"
+            android:paddingRight="@dimen/padding_wedge"
+            android:paddingBottom="@dimen/padding_wedge"
+            android:paddingTop="10dp"
             android:layout_alignBottom="@+id/image"
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
 
-    <!--FIXME get real kudos resources-->
+    <include layout="@layout/drop_shadow"/>
+
     <include layout="@layout/kudos"/>
+
+    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Campaign Title"
+        android:paddingLeft="@dimen/padding_small"
+        android:paddingRight="@dimen/padding_small"
+        android:paddingTop="@dimen/padding_tiny"
+        android:paddingBottom="@dimen/padding_tiny"
+        android:textColor="@color/cerulean_1"
+        app:typeface="brandon_bold"
+        android:id="@+id/title"/>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:layout_width="wrap_content"

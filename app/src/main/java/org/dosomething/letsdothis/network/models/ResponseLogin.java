@@ -13,6 +13,7 @@ public class ResponseLogin
         public String created_at;
         public String updated_at;
         public String _id;
+        public int drupal_id;
         public String session_token;
         public String first_name;
         public String last_name;

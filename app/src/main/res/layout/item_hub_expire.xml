@@ -18,6 +18,18 @@
         android:orientation="horizontal">
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/expired_already"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_small"
+            android:text="@string/expired_already"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/text_30"
+            android:visibility="gone"
+            app:typeface="brandon_bold"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/expire_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/padding_small"
@@ -28,15 +40,13 @@
             android:textSize="@dimen/text_36"
             app:typeface="brandon_bold"/>
 
-
         <LinearLayout
             android:id="@+id/days_wrapper"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:orientation="horizontal">
 
             <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
                 android:id="@+id/days"
@@ -44,7 +54,6 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="@dimen/padding_tiny"
                 android:textColor="@color/dark_gray"
-
                 android:textSize="@dimen/text_33"
                 app:typeface="brandon_bold"
                 tool:text="30"/>
@@ -54,7 +63,6 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/dark_gray"
                 android:textSize="@dimen/text_33"
-
                 app:typeface="brandon_bold"
                 tool:text="Days"/>
         </LinearLayout>
@@ -66,7 +74,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:visibility="gone">
+            tool:visibility="gone">
 
             <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
                 android:id="@+id/hours"
@@ -94,8 +102,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:visibility="visible"
-            tool:visibility="visible">
+            tool:visibility="gone">
 
             <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
                 android:id="@+id/min"

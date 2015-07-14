@@ -30,6 +30,7 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
     {
         DatabaseHelper.getInstance(context).getUserDao().createOrUpdate(user);
         AppPrefs.getInstance(context).setCurrentUserId(user.id);
+        AppPrefs.getInstance(context).setCurrentDrupalId(user.drupalId);
 
         ParseInstallation currentInstallation = ParseInstallation.getCurrentInstallation();
         currentInstallation.put("user_id", "user_" + user.id);
@@ -39,8 +40,6 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
         NetworkHelper.getNorthstarAPIService()
                      .setParseInstallationId(AppPrefs.getInstance(context).getCurrentUserId(),
                                              new ParseInstallationRequest(parseInstallation));
-
-
     }
 
     @Override
