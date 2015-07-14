@@ -234,29 +234,6 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     {
     }
 
-    public static class CampaignViewHolder extends RecyclerView.ViewHolder
-    {
-        protected TextView  title;
-        protected TextView  callToAction;
-        protected ImageView imageView;
-
-        public CampaignViewHolder(View itemView)
-        {
-            super(itemView);
-            this.imageView = (ImageView) itemView.findViewById(R.id.image);
-            this.title = (TextView) itemView.findViewById(R.id.title);
-            this.callToAction = (TextView) itemView.findViewById(R.id.call_to_action);
-        }
-    }
-
-    private static class FriendViewHolder extends RecyclerView.ViewHolder
-    {
-        public FriendViewHolder(ImageView friendLayout)
-        {
-            super(friendLayout);
-        }
-    }
-
     private static class ActionButtonsViewHolder extends RecyclerView.ViewHolder
     {
         protected Button proveShare;
