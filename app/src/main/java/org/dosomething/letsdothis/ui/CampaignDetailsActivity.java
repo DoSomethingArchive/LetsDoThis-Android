@@ -20,6 +20,8 @@ import org.dosomething.letsdothis.data.Kudos;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.tasks.CampaignDetailsTask;
 import org.dosomething.letsdothis.tasks.IndividualCampaignReportBackList;
+import org.dosomething.letsdothis.tasks.RbShareDataTask;
+import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
 import org.dosomething.letsdothis.ui.adapters.CampaignDetailsAdapter;
 import org.dosomething.letsdothis.utils.AppPrefs;
@@ -29,6 +31,7 @@ import java.util.List;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
+import co.touchlab.android.threading.tasks.utils.TaskQueueHelper;
 
 /**
  * Created by izzyoji :) on 4/17/15.
@@ -45,6 +48,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     private CampaignDetailsAdapter adapter;
     private int                    totalPages;
     private int currentPage = 1;
+    //    private ResponseCampaign.ReportBackInfo rBInfo;
 
     public static Intent getLaunchIntent(Context context, int campaignId)
     {
@@ -72,14 +76,20 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-
         int campaignId = getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1);
-        if(campaignId != - 1)
+        refreshCampaign(campaignId);
+        TaskQueue.loadQueueDefault(this).execute(
+                new IndividualCampaignReportBackList(Integer.toString(campaignId), currentPage));
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        if(TaskQueueHelper
+                .hasTasksOfType(ReportbackUploadTask.getQueue(this), ReportbackUploadTask.class))
         {
-            TaskQueue.loadQueueDefault(this).execute(new CampaignDetailsTask(campaignId));
-            TaskQueue.loadQueueDefault(this).execute(
-                    new IndividualCampaignReportBackList(Integer.toString(campaignId),
-                                                         currentPage));
+            adapter.processingUpload();
         }
     }
 
@@ -113,9 +123,15 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     }
 
     @Override
-    public void proveShareClicked()
+    public void proveClicked()
     {
         choosePicture();
+    }
+
+    @Override
+    public void shareClicked(Campaign campaign)
+    {
+        TaskQueue.loadQueueDefault(this).execute(new RbShareDataTask(campaign));
     }
 
     @Override
@@ -153,7 +169,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
             if(requestCode == SELECT_PICTURE)
             {
                 final boolean isCamera;
-                if(data == null)
+                if(data.getData() == null)
                 {
                     isCamera = true;
                 }
@@ -177,22 +193,29 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
                 }
                 else
                 {
-                    selectedImageUri = data == null
-                            ? null
-                            : data.getData();
-                }
-                if(BuildConfig.DEBUG)
-                {
-                    Log.d("asdf-----------", selectedImageUri.toString());
+                    selectedImageUri = data.getData();
                 }
 
-                //FIXME--------------
-                //                adapter.refreshTestImage(selectedImageUri);
-                startActivity(PhotoCropActivity.getLaunchIntent(this, selectedImageUri.toString()));
+                Campaign clickedCampaign = adapter.getCampaign();
+                startActivityForResult(PhotoCropActivity
+                                               .getResultIntent(this, selectedImageUri.toString(),
+                                                                clickedCampaign.title,
+                                                                clickedCampaign.id),
+                                       PhotoCropActivity.RESULT_CODE);
+            }
+            else if(requestCode == PhotoCropActivity.RESULT_CODE)
+            {
+                String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
+                Campaign clickedCampaign = adapter.getCampaign();
+                String format = String
+                        .format(getString(R.string.reportback_upload_hint), clickedCampaign.noun,
+                                clickedCampaign.verb);
+                startActivity(ReportBackUploadActivity
+                                      .getLaunchIntent(this, filePath, clickedCampaign.title,
+                                                       clickedCampaign.id, format));
             }
         }
     }
-
 
     public void choosePicture()
     {
@@ -201,14 +224,15 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         pickIntent.setType("image/*");
 
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File externalFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                                     "userPic" + System.currentTimeMillis() + ".jpg");
-        imageUri = Uri.fromFile(externalFile);
+        File externalFile = new File(Environment.getExternalStorageDirectory(), "DoSomething");
+        externalFile.mkdirs();
+        File file = new File(externalFile, "reportBack" + System.currentTimeMillis() + ".jpg");
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+        imageUri = Uri.parse(file.getAbsolutePath());
         if(BuildConfig.DEBUG)
         {
             Log.d("photo location", imageUri.toString());
         }
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
 
         String pickTitle = getString(R.string.select_picture);
         Intent chooserIntent = Intent.createChooser(takePhotoIntent, pickTitle);
@@ -217,16 +241,41 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         startActivityForResult(chooserIntent, SELECT_PICTURE);
     }
 
+    private void refreshCampaign(int campaignId)
+    {
+        TaskQueue.loadQueueDefault(this).execute(new CampaignDetailsTask(campaignId));
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(ReportbackUploadTask task)
+    {
+        refreshCampaign(task.campaignId);
+    }
+
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(CampaignDetailsTask task)
     {
         if(task.campaign != null)
         {
+            //            rBInfo = task.reportbackInfo;
             adapter.updateCampaign(task.campaign);
         }
         else
         {
             Toast.makeText(this, "campaign data failed", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(RbShareDataTask task)
+    {
+        if(task.file != null && task.file.exists())
+        {
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("image/*");
+            Uri uri = Uri.fromFile(task.file);
+            share.putExtra(Intent.EXTRA_STREAM, uri);
+            startActivity(share);
         }
     }
 

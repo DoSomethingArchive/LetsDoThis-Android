@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -39,20 +40,26 @@ public class PhotoCropActivity extends AppCompatActivity
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final  String CONTENT_URI_PREFIX = "content://";
     public static final  String IMAGE_PATH         = "IMAGE_PATH";
-    public static final  String AVATAR_PATH        = "avatarPath";
+    public static final  String EXTRA_TITLE        = "EXTRA_TITLE";
+    public static final  String EXTRA_CAMP_ID      = "EXTRA_CAMP_ID";
     public static final  int    RESULT_FAILED      = 100;
     private static final int    DEFAULT_MAX_SIZE   = 640;
+    public static final  int    RESULT_CODE        = 324;
+    public static final  String RESULT_FILE_PATH   = "file_path";
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private boolean        mPhotoLoaded;
+    private Toolbar        toolbar;
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private PhotoSortrView photoCropView;
     private FrameLayout    transparency;
     private int            imageWidth;
 
-    public static Intent getLaunchIntent(Context context, String path)
+    public static Intent getResultIntent(Context context, String path, String title, Integer campaignId)
     {
         Intent intent = new Intent(context, PhotoCropActivity.class);
         intent.putExtra(IMAGE_PATH, path);
+        intent.putExtra(EXTRA_TITLE, title);
+        intent.putExtra(EXTRA_CAMP_ID, campaignId);
         return intent;
     }
 
@@ -61,8 +68,8 @@ public class PhotoCropActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_crop_photo);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("get this from network");
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(getIntent().getStringExtra(EXTRA_TITLE));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -180,37 +187,46 @@ public class PhotoCropActivity extends AppCompatActivity
         transparency.setLayoutParams(layoutParams);
     }
 
-    public void saveReportBackImage(View save)
+    public void saveReportBackImage(View view)
     {
         if(mPhotoLoaded)
         {
-            Bitmap bitmap = null;
-            File scaledAvatar = new File(getFilesDir(),
-                                         "squareReportBack_" + System.currentTimeMillis() + ".jpg");
-
             try
             {
-                bitmap = photoCropView.takeSquareScreenshot(imageWidth);
+                Bitmap bitmap = photoCropView.takeSquareScreenshot(imageWidth);
+                File file = savePicture(bitmap);
 
-                FileOutputStream out = new FileOutputStream(scaledAvatar);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
-                out.close();
+                Intent intent = new Intent().putExtra(RESULT_FILE_PATH, file.getAbsolutePath());
+                setResult(RESULT_OK, intent);
+                finish();
             }
             catch(IOException e)
             {
                 throw new RuntimeException(e);
             }
-
-
-            startReportBackUpload(scaledAvatar);
         }
     }
 
-    private void startReportBackUpload(File croppedSquare)
+    public static File savePicture(Bitmap bitmap)
     {
-        startActivity(
-                ReportBackUploadActivity.getLaunchIntent(this, croppedSquare.getAbsolutePath()));
-        finish();
+        File filesDir = new File(Environment.getExternalStorageDirectory(), "DoSomething");
+        filesDir.mkdirs();
+
+        File scaledAvatar = new File(filesDir, "share" + System.currentTimeMillis() + ".jpg");
+
+        try
+        {
+
+            FileOutputStream out = new FileOutputStream(scaledAvatar);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
+            out.close();
+        }
+        catch(IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+
+        return scaledAvatar;
     }
 
     @Override

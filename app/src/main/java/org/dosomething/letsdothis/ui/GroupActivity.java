@@ -45,7 +45,7 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
     public static Intent getLaunchIntent(Context context, int campaignId, String userId)
     {
         return new Intent(context, GroupActivity.class).putExtra(EXTRA_CAMPAIGN_ID, campaignId)
-                                                       .putExtra(EXTRA_USER_ID, userId);
+                .putExtra(EXTRA_USER_ID, userId);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
         if(campaignId != - 1)
         {
             TaskQueue.loadQueueDefault(this)
-                     .execute(new CampaignGroupDetailsTask(campaignId, userId));
+                    .execute(new CampaignGroupDetailsTask(campaignId, userId));
             TaskQueue.loadQueueDefault(this).execute(
                     new IndividualCampaignReportBackList(Integer.toString(campaignId),
                                                          currentPage));
@@ -89,7 +89,7 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
                 {
                     case GroupAdapter.VIEW_TYPE_FRIEND:
                         return 1;
-                    case GroupAdapter.VIEW_TYPE_REPORT_BACK :
+                    case GroupAdapter.VIEW_TYPE_REPORT_BACK:
                         return 3;
                     default:
                         return 6;
@@ -147,7 +147,8 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
     public void onInviteClicked()
     {
         Campaign campaign = adapter.getCampaign();
-        startActivity(CampaignInviteActivity.getLaunchIntent(this, campaign.title, campaign.invite.code));
+        startActivity(
+                CampaignInviteActivity.getLaunchIntent(this, campaign.title, campaign.invite.code));
     }
 
     @Override
@@ -186,7 +187,7 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
             if(requestCode == SELECT_PICTURE)
             {
                 final boolean isCamera;
-                if(data == null)
+                if(data.getData() == null)
                 {
                     isCamera = true;
                 }
@@ -213,8 +214,22 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
                     selectedImageUri = data.getData();
                 }
 
-                startActivity(PhotoCropActivity
-                                      .getLaunchIntent(this, selectedImageUri.toString()));
+                startActivityForResult(PhotoCropActivity
+                                               .getResultIntent(this, selectedImageUri.toString(),
+                                                                adapter.getCampaign().title,
+                                                                adapter.getCampaign().id),
+                                       PhotoCropActivity.RESULT_CODE);
+
+            }
+            else if(requestCode == PhotoCropActivity.RESULT_CODE)
+            {
+                String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
+                Intent share = new Intent(Intent.ACTION_SEND);
+
+                share.setType("image/*");
+                Uri uri = Uri.fromFile(new File(filePath));
+                share.putExtra(Intent.EXTRA_STREAM, uri);
+                startActivity(share);
             }
         }
     }
@@ -227,14 +242,15 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
         pickIntent.setType("image/*");
 
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File externalFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                                     "report_back" + System.currentTimeMillis() + ".jpg");
-        imageUri = Uri.fromFile(externalFile);
+        File externalFile = new File(Environment.getExternalStorageDirectory(), "DoSomething");
+        externalFile.mkdirs();
+        File file = new File(externalFile, "reportBack" + System.currentTimeMillis() + ".jpg");
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+        imageUri = Uri.parse(file.getAbsolutePath());
         if(BuildConfig.DEBUG)
         {
             Log.d("photo location", imageUri.toString());
         }
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
 
         String pickTitle = getString(R.string.select_picture);
         Intent chooserIntent = Intent.createChooser(takePhotoIntent, pickTitle);

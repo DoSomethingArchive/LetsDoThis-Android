@@ -1,11 +1,15 @@
 package org.dosomething.letsdothis.network;
 import org.dosomething.letsdothis.BuildConfig;
+import org.dosomething.letsdothis.network.models.RequestKudo;
+import org.dosomething.letsdothis.network.models.RequestReportback;
 import org.dosomething.letsdothis.network.models.ResponseCampaignList;
 import org.dosomething.letsdothis.network.models.ResponseCampaignWrapper;
 import org.dosomething.letsdothis.network.models.ResponseReportBack;
 import org.dosomething.letsdothis.network.models.ResponseReportBackList;
 
 import co.touchlab.android.threading.errorcontrol.NetworkException;
+import retrofit.client.Response;
+import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.Headers;
 import retrofit.http.Path;
@@ -18,7 +22,8 @@ public interface DoSomethingAPI
 {
 
    String BASE_URL = BuildConfig.DEBUG
-        ? "http://staging.beta.dosomething.org/api/v1/"
+//        ? "http://staging.beta.dosomething.org/api/v1/"
+        ? "http://52.2.253.184/api/v1/"
         : "https://www.dosomething.org/api/v1/";
 
     @Headers("Content-Type: application/json")
@@ -38,4 +43,8 @@ public interface DoSomethingAPI
     @Headers("Content-Type: application/json")
     @GET("/campaigns.json?mobile_app=1")
     ResponseCampaignList campaignList(@Query("term_ids")int interestGroupId) throws NetworkException;
+
+    @Headers("Content-Type: application/json")
+    @GET("/campaigns.json?mobile_app=1")
+    ResponseCampaignList campaignListByIds(@Query("ids") String ids) throws NetworkException;
 }

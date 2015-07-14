@@ -22,7 +22,6 @@ public class ResponseCampaign
     public ReportBackInfo   reportback_info;
     public ReportTiming     timing;
 
-
     public static Campaign getCampaign(ResponseCampaign response)
     {
         Campaign campaign = new Campaign();
@@ -32,12 +31,14 @@ public class ResponseCampaign
         campaign.startTime = getMillisFromString(response.getTiming().getHighSeason().start);
         campaign.endTime = getMillisFromString(response.getTiming().getHighSeason().end);
         campaign.imagePath = response.getCoverImage().getWrapper().getSizes().getLandscape()
-                                     .getUri();
+                .getUri();
         campaign.solutionCopy = response.getSolutions().getCopy().formatted;
         campaign.solutionSupport = response.getSolutions().getCopy().formatted;
         campaign.problemFact = response.getFacts().getProblem();
         campaign.count = "";//response.getCountString();
-
+        campaign.showShare = Campaign.UploadShare.SHOW_OFF;
+        campaign.noun = response.reportback_info.noun;
+        campaign.verb = response.reportback_info.verb;
         return campaign;
     }
 
@@ -178,7 +179,7 @@ public class ResponseCampaign
         }
     }
 
-    private class ReportBackInfo
+    public static class ReportBackInfo
     {
         public String copy;
         public String confirmation_message;

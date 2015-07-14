@@ -33,9 +33,9 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:paddingLeft="@dimen/padding_medium"
         android:background="@drawable/drawer_bg"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/padding_medium">
 
         <ImageView
             android:layout_width="25dp"
