@@ -131,7 +131,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         super.onActivityCreated(savedInstanceState);
         progress = (ProgressBar) getView().findViewById(R.id.progress);
         progress.getIndeterminateDrawable()
-                .setColorFilter(getResources().getColor(R.color.dark_orange),
+                .setColorFilter(getResources().getColor(R.color.cerulean_1),
                                 PorterDuff.Mode.SRC_IN);
         refreshProgressBar();
 
