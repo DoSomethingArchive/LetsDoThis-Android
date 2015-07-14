@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/image_and_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/campaign_height_expanded">
+
+        <FrameLayout
+            android:id="@+id/image_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/campaign_height_expanded">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/campaign_height_expanded"
+                android:scaleType="centerCrop"
+                android:src="@drawable/placeholder"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_270"/>
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_medium">
+
+            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:maxLines="2"
+                android:textAllCaps="true"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_48"
+                app:typeface="brandon_bold"
+                tools:text="Title and we also want to test for a long title"/>
+
+            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                android:id="@+id/call_to_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:maxLines="2"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_33"
+                tools:text="Call to action. and more longer text to try and break"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/slanted_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/image_and_title"
+        android:background="@color/porcelain"
+        android:orientation="vertical">
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/problemFact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/porcelain"
+            android:padding="@dimen/padding_small"
+            android:textColor="@android:color/black"
+            tools:text="Music programs are constantly in danger of being cut from shrinking school budgets even though they're proven to improve academics."/>
+
+        <FrameLayout
+            android:id="@+id/slanted_bg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/problemFact"
+            android:background="@color/white"
+            android:paddingTop="@dimen/space_35">
+
+
+            <RelativeLayout
+                android:id="@+id/refresh_copy"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="@dimen/padding_small"
+                android:background="@drawable/bg_gray_rounded_rect_filled">
+
+                <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                    android:id="@+id/campaign_details"
+                    style="@style/lightning_btn_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="@string/refresh_copy"
+                    app:typeface="brandon_bold"/>
+
+            </RelativeLayout>
+
+        </FrameLayout>
+
+
+    </RelativeLayout>
+
+    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+        android:id="@+id/expired_already"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/slanted_wrapper"
+        android:layout_centerHorizontal="true"
+        android:padding="@dimen/padding_small"
+        android:text="@string/expired_already"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/text_30"
+        app:typeface="brandon_bold"/>
+
+
+</RelativeLayout>
