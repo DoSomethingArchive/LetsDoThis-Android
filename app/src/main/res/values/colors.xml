@@ -59,4 +59,5 @@
     <color name="black_10">#1A000000</color>
     <color name="black_5">#0D000000</color>
     <color name="fb_bg">#3b579d</color>
+    <color name="hint">#D6D6D6</color>
 </resources>
