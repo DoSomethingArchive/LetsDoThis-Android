@@ -11,11 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.ReportBack;
@@ -383,8 +381,12 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void addAll(List<ReportBack> objects)
     {
-        dataSet.addAll(objects);
-        notifyItemRangeInserted(dataSet.size() - objects.size(), dataSet.size() - 1);
+        if(!dataSet.isEmpty())
+        {
+            dataSet.addAll(objects);
+            notifyItemRangeInserted(dataSet.size() - objects.size(), dataSet.size() - 1);
+        }
+
     }
 
     public void setCampaigns(List<Campaign> campaigns)
@@ -410,6 +412,12 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public int getItemCount()
     {
         return dataSet.size();
+    }
+
+    public void clear()
+    {
+        dataSet.clear();
+        notifyDataSetChanged();
     }
 
     public static class CampaignViewHolder extends RecyclerView.ViewHolder
