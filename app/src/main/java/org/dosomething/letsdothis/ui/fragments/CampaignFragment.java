@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.ui.fragments;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
@@ -47,6 +49,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     private int             currentPage;
     private int             totalPages;
     private ArrayList<Integer> campaignIds = new ArrayList<>();
+    private ProgressBar progress;
 
     public static CampaignFragment newInstance(int position)
     {
@@ -68,9 +71,13 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     {
         super.onActivityCreated(savedInstanceState);
         position = getArguments().getInt(KEY_POSITION);
+        progress = (ProgressBar) getView().findViewById(R.id.progress);
+        progress.getIndeterminateDrawable()
+                .setColorFilter(getResources().getColor(R.color.dark_orange),
+                                PorterDuff.Mode.SRC_IN);
+
         recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
         adapter = new CampaignAdapter(this, getResources());
-
         recyclerView.setAdapter(adapter);
 
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
@@ -138,6 +145,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         totalPages = 0;
         TaskQueue.loadQueueDefault(getActivity())
                 .execute(new InterestGroupCampaignListTask(InterestGroup.values()[position].id));
+        progress.setVisibility(View.VISIBLE);
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -158,6 +166,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     {
         if(task.interestGroupId == InterestGroup.values()[position].id)
         {
+            progress.setVisibility(View.GONE);
             adapter.setCampaigns(task.campaigns);
 
             campaignIds.clear();
@@ -168,7 +177,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
 
             String campaigns = StringUtils.join(campaignIds, ",");
             TaskQueue.loadQueueDefault(getActivity())
-                     .execute(new InterestReportBackListTask(position, campaigns, FIRST_PAGE));
+                    .execute(new InterestReportBackListTask(position, campaigns, FIRST_PAGE));
 
         }
 
