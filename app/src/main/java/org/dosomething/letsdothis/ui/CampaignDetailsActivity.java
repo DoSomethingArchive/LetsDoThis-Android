@@ -169,7 +169,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
             if(requestCode == SELECT_PICTURE)
             {
                 final boolean isCamera;
-                if(data == null)
+                if(data.getData() == null)
                 {
                     isCamera = true;
                 }
@@ -193,13 +193,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
                 }
                 else
                 {
-                    selectedImageUri = data == null
-                            ? null
-                            : data.getData();
-                }
-                if(BuildConfig.DEBUG)
-                {
-                    Log.d("asdf-----------", selectedImageUri.toString());
+                    selectedImageUri = data.getData();
                 }
 
                 Campaign clickedCampaign = adapter.getCampaign();
@@ -230,14 +224,15 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         pickIntent.setType("image/*");
 
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File externalFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                                     "userPic" + System.currentTimeMillis() + ".jpg");
-        imageUri = Uri.fromFile(externalFile);
+        File externalFile = new File(Environment.getExternalStorageDirectory(), "DoSomething");
+        externalFile.mkdirs();
+        File file = new File(externalFile, "reportBack" + System.currentTimeMillis() + ".jpg");
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+        imageUri = Uri.parse(file.getAbsolutePath());
         if(BuildConfig.DEBUG)
         {
             Log.d("photo location", imageUri.toString());
         }
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
 
         String pickTitle = getString(R.string.select_picture);
         Intent chooserIntent = Intent.createChooser(takePhotoIntent, pickTitle);
