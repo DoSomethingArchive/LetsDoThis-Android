@@ -83,6 +83,6 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             app:typeface="brandon_bold"
-            android:text="@string/eupload_photo"/>
+            android:text="@string/upload_photo"/>
     </LinearLayout>
 </RelativeLayout>

@@ -43,6 +43,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private User                    user;
     private HubAdapterClickListener hubAdapterClickListener;
     private boolean isPublic = false;
+    private Campaign clickedCampaign;
 
     public HubAdapter(HubAdapterClickListener hubAdapterClickListener, boolean isPublic)
     {
@@ -134,20 +135,20 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         else if(getItemViewType(position) == VIEW_TYPE_CURRENT_CAMPAIGN)
         {
             final Campaign campaign = (Campaign) hubList.get(position);
-            CurrentCampaignViewHolder currentCampaignViewHolder = (CurrentCampaignViewHolder) holder;
-            currentCampaignViewHolder.title.setText(campaign.title);
-            currentCampaignViewHolder.callToAction.setText(campaign.callToAction);
-            currentCampaignViewHolder.count.setText(campaign.count);
+            CurrentCampaignViewHolder viewHolder = (CurrentCampaignViewHolder) holder;
+            viewHolder.title.setText(campaign.title);
+            viewHolder.callToAction.setText(campaign.callToAction);
+            viewHolder.count.setText(campaign.count);
 
+            Resources res = viewHolder.title.getResources();
             if(isPublic)
             {
-                currentCampaignViewHolder.actionButtons.setVisibility(View.GONE);
+                viewHolder.actionButtons.setVisibility(View.GONE);
             }
 
-            Context context = currentCampaignViewHolder.image.getContext();
+            Context context = viewHolder.image.getContext();
             int height = context.getResources().getDimensionPixelSize(R.dimen.campaign_height);
-            Picasso.with(context).load(campaign.imagePath).resize(0, height)
-                    .into(currentCampaignViewHolder.image);
+            Picasso.with(context).load(campaign.imagePath).resize(0, height).into(viewHolder.image);
 
             ColorMatrix cm = new ColorMatrix();
             cm.setSaturation(0);
@@ -155,16 +156,38 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             int size = campaign.group.size();
 
-            currentCampaignViewHolder.proveShare.setOnClickListener(new View.OnClickListener()
+            if(campaign.showShare == Campaign.UploadShare.SHARE)
+            {
+                viewHolder.proveShare.setText(res.getString(R.string.share_photo));
+            }
+            else if(campaign.showShare == Campaign.UploadShare.SHOW_OFF)
+            {
+                viewHolder.proveShare.setText(res.getString(R.string.show_off));
+            }
+            else if(campaign.showShare == Campaign.UploadShare.UPLOADING)
+            {
+                viewHolder.proveShare.setText(res.getString(R.string.uploading));
+            }
+
+            viewHolder.proveShare.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View v)
                 {
-                    hubAdapterClickListener.onProveShareClicked(campaign);
+                    if(campaign.showShare == Campaign.UploadShare.SHARE)
+                    {
+                        hubAdapterClickListener.onShareClicked(campaign);
+                        clickedCampaign = campaign;
+                    }
+                    else if(campaign.showShare == Campaign.UploadShare.SHOW_OFF)
+                    {
+                        hubAdapterClickListener.onProveClicked(campaign);
+                        clickedCampaign = campaign;
+                    }
                 }
             });
 
-            currentCampaignViewHolder.invite.setOnClickListener(new View.OnClickListener()
+            viewHolder.invite.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View v)
@@ -177,9 +200,9 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             {
                 int friendSize = context.getResources()
                         .getDimensionPixelSize(R.dimen.friend_avatar);
-                currentCampaignViewHolder.friends.setVisibility(View.VISIBLE);
-                currentCampaignViewHolder.friendsCount.setText(Integer.toString(size));
-                currentCampaignViewHolder.friendsCount.setOnClickListener(new View.OnClickListener()
+                viewHolder.friends.setVisibility(View.VISIBLE);
+                viewHolder.friendsCount.setText(Integer.toString(size));
+                viewHolder.friendsCount.setOnClickListener(new View.OnClickListener()
                 {
                     @Override
                     public void onClick(View v)
@@ -190,8 +213,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 for(int i = 0; i < 4; i++)
                 {
-                    FrameLayout childAt = (FrameLayout) currentCampaignViewHolder.friendsContainer
-                            .getChildAt(i);
+                    FrameLayout childAt = (FrameLayout) viewHolder.friendsContainer.getChildAt(i);
 
                     ImageView imageView = (ImageView) childAt.getChildAt(0);
 
@@ -217,7 +239,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }
             else
             {
-                currentCampaignViewHolder.friends.setVisibility(View.GONE);
+                viewHolder.friends.setVisibility(View.GONE);
             }
         }
         else if(getItemViewType(position) == VIEW_TYPE_PAST_CAMPAIGN)
@@ -311,11 +333,32 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public void addCurrentCampaign(List<Campaign> objects)
     {
-        Campaign campaign = objects.get(0);
-        setExpirationView(campaign);
-        int i = hubList.indexOf(BEEN_THERE_DONE_GOOD);
-        hubList.addAll(i, objects);
-        notifyItemRangeInserted(hubList.size() - objects.size(), hubList.size() - 1);
+        if(hubList.isEmpty())
+        {
+            Campaign campaign = objects.get(0);
+            setExpirationView(campaign);
+            int i = hubList.indexOf(BEEN_THERE_DONE_GOOD);
+            hubList.addAll(i, objects);
+            notifyItemRangeInserted(hubList.size() - objects.size(), hubList.size() - 1);
+        }
+        else
+        {
+            for(int i=0, j = 2; i < objects.size(); i++)
+            {
+                Object o = hubList.get(j);
+                if(o instanceof Campaign)
+                {
+                    hubList.set(j, objects.get(i));
+                    j++;
+                }
+                else {
+                    hubList.add(j, objects.get(i));
+                    j++;
+                }
+            }
+
+            notifyItemRangeChanged(2, objects.size());
+        }
     }
 
     private void setExpirationView(Campaign campaign)
@@ -340,6 +383,28 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public int getItemCount()
     {
         return hubList.size();
+    }
+
+    public void processingUpload()
+    {
+        for(int i = 0; i < hubList.size(); i++)
+        {
+            Object o = hubList.get(i);
+            if(o instanceof Campaign)
+            {
+                Campaign campaign = (Campaign) o;
+                if(campaign.id == clickedCampaign.id)
+                {
+                    campaign.showShare = Campaign.UploadShare.UPLOADING;
+                    notifyItemChanged(i);
+                }
+            }
+        }
+    }
+
+    public Campaign getClickedCampaign()
+    {
+        return clickedCampaign;
     }
 
     public static class ProfileViewHolder extends RecyclerView.ViewHolder
@@ -434,7 +499,9 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         void groupClicked(int campaignId, String userId);
 
-        void onProveShareClicked(Campaign campaign);
+        void onShareClicked(Campaign campaign);
+
+        void onProveClicked(Campaign campaign);
 
         void onInviteClicked(Campaign campaign);
     }

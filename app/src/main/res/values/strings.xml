@@ -30,6 +30,7 @@
     <string name="expires_in">Expires in</string>
     <string name="invite_friends">Invite Friends</string>
     <string name="share_photo">Share Photo</string>
+    <string name="show_off">Show Off</string>
     <string name="friends">Friends</string>
     <string name="fb_connect">FB Connect</string>
     <string name="desc_login_reg">Create an account to save your\n activities and group up with
@@ -60,13 +61,12 @@
     <string name="footer_register">Have a DoSomething.org account? Sign in</string>
     <string name="footer_forgot_pw">Forgot Password</string>
     <string name="forgot_pw_link">https://www.dosomething.org/user/password</string>
-    <string name="prove_it">Prove It</string>
     <string name="desc_rewards">Invite your friends to get rewards copy. There are multiple
         sentences in this paragraph body.
     </string>
     <string name="crop_photo">crop photo</string>
     <string name="report_back_caption">Caption your photo</string>
-    <string name="eupload_photo">upload photo</string>
+    <string name="upload_photo">upload photo</string>
     <string name="app_intro_description">Let\'s Do This is an app for finding fun things to do with
         your friends
     </string>
@@ -102,8 +102,10 @@
     <string name="expired_already">This action is expired. Refresh for new actions!</string>
     <string name="max_kudos">99+</string>
     <string name="log_in_with_facebook">Log in with Facebook</string>
+    <string name="reportback_upload_hint">Number of %1$s %2$s.</string>
     <string name="confirm_fb">Confirm your Facebook details</string>
     <string name="refresh_copy">refresh copy</string>
+    <string name="uploading">uploading...</string>
     <string name="cancel_search">Cancel Search</string>
     <string name="search_for_group">Search For Group</string>
     <string name="join_this_group">Join This Group</string>

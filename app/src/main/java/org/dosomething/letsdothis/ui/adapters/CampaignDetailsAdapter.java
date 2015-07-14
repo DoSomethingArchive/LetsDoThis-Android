@@ -69,19 +69,27 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     public void updateCampaign(Campaign campaign)
     {
-        if(currentCampaign == null)
+        if(dataSet.isEmpty())
         {
-            currentCampaign = campaign;
             dataSet.add(campaign);
             dataSet.add("footer item_placeholder");
             notifyItemInserted(0);
         }
         else
         {
-            currentCampaign = campaign;
-            dataSet.set(0, currentCampaign);
-            notifyItemChanged(0);
+            if(currentCampaign == null)
+            {
+                dataSet.add(0, campaign);
+                dataSet.add("footer item_placeholder");
+                notifyItemInserted(0);
+            }
+            else
+            {
+                dataSet.set(0, campaign);
+                notifyItemChanged(0);
+            }
         }
+        currentCampaign = campaign;
     }
 
     public void addAll(List<ReportBack> reportBacks)
@@ -95,11 +103,23 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         return currentCampaign;
     }
 
+    public void processingUpload()
+    {
+        if(currentCampaign != null)
+        {
+            currentCampaign.showShare = Campaign.UploadShare.UPLOADING;
+            dataSet.set(0, currentCampaign);
+            notifyItemChanged(0);
+        }
+    }
+
     public interface DetailsAdapterClickListener
     {
         void onScrolledToBottom();
 
-        void proveShareClicked();
+        void proveClicked();
+
+        void shareClicked(Campaign campaign);
 
         void inviteClicked();
 
@@ -115,18 +135,15 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         {
             case VIEW_TYPE_CAMPAIGN_FOOTER:
                 View footerLayout = LayoutInflater.from(parent.getContext())
-                                                  .inflate(R.layout.item_campaign_footer, parent,
-                                                           false);
+                        .inflate(R.layout.item_campaign_footer, parent, false);
                 return new SectionTitleViewHolder((TextView) footerLayout);
             case VIEW_TYPE_REPORT_BACK:
                 View reportBackLayout = LayoutInflater.from(parent.getContext())
-                                                      .inflate(R.layout.item_report_back_expanded,
-                                                               parent, false);
+                        .inflate(R.layout.item_report_back_expanded, parent, false);
                 return new ReportBackViewHolder(reportBackLayout);
             default:
                 View campaignLayout = LayoutInflater.from(parent.getContext())
-                                                    .inflate(R.layout.item_campaign_details, parent,
-                                                             false);
+                        .inflate(R.layout.item_campaign_details, parent, false);
                 return new CampaignViewHolder(campaignLayout);
 
         }
@@ -145,11 +162,10 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             final Campaign campaign = (Campaign) dataSet.get(position);
             CampaignViewHolder campaignViewHolder = (CampaignViewHolder) holder;
 
-            int height = campaignViewHolder.imageView.getContext().getResources()
-                                                     .getDimensionPixelSize(
-                                                             R.dimen.campaign_height_expanded);
+            Resources res = campaignViewHolder.imageView.getContext().getResources();
+            int height = res.getDimensionPixelSize(R.dimen.campaign_height_expanded);
             Picasso.with(campaignViewHolder.imageView.getContext()).load(campaign.imagePath)
-                   .resize(0, height).into(campaignViewHolder.imageView);
+                    .resize(0, height).into(campaignViewHolder.imageView);
             campaignViewHolder.title.setText(campaign.title);
             campaignViewHolder.callToAction.setText(campaign.callToAction);
             campaignViewHolder.problemFact.setText(campaign.problemFact.replaceAll("\\r\\n", ""));
@@ -180,13 +196,32 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                                                                                  widthOvershoot,
                                                                                  heightShadowOvershoot);
             campaignViewHolder.solutionWrapper.setBackground(background);
+            if(campaign.showShare == Campaign.UploadShare.SHARE)
+            {
+                campaignViewHolder.proveShare.setText(res.getString(R.string.share_photo));
+            }
+            else if(campaign.showShare == Campaign.UploadShare.UPLOADING)
+            {
+                campaignViewHolder.proveShare.setText(res.getString(R.string.uploading));
+            }
+            else if(campaign.showShare == Campaign.UploadShare.SHOW_OFF)
+            {
+                campaignViewHolder.proveShare.setText(res.getString(R.string.show_off));
+            }
 
             campaignViewHolder.proveShare.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View v)
                 {
-                    detailsAdapterClickListener.proveShareClicked();
+                    if(campaign.showShare == Campaign.UploadShare.SHARE)
+                    {
+                        detailsAdapterClickListener.shareClicked(campaign);
+                    }
+                    else if(campaign.showShare == Campaign.UploadShare.SHOW_OFF)
+                    {
+                        detailsAdapterClickListener.proveClicked();
+                    }
                 }
             });
 

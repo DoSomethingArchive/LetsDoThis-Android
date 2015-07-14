@@ -5,6 +5,8 @@ import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.ResponseCampaign;
 import org.dosomething.letsdothis.network.models.ResponseCampaignWrapper;
+import org.dosomething.letsdothis.network.models.ResponseUserCampaign;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
@@ -13,8 +15,8 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
  */
 public class CampaignDetailsTask extends BaseNetworkErrorHandlerTask
 {
-    private final int      campaignId;
-    public        Campaign campaign;
+    private final int                             campaignId;
+    public        Campaign                        campaign;
 
     public CampaignDetailsTask(int campaignId)
     {
@@ -24,9 +26,21 @@ public class CampaignDetailsTask extends BaseNetworkErrorHandlerTask
     @Override
     protected void run(Context context) throws Throwable
     {
-
-        ResponseCampaignWrapper response = NetworkHelper.getDoSomethingAPIService().campaign(campaignId);
+        ResponseCampaignWrapper response = NetworkHelper.getDoSomethingAPIService()
+                .campaign(campaignId);
         campaign = ResponseCampaign.getCampaign(response.data);
+
+        String currentUserId = AppPrefs.getInstance(context).getCurrentUserId();
+        ResponseUserCampaign userCampaigns = NetworkHelper.getNorthstarAPIService()
+                .getUserCampaigns(currentUserId);
+        for(ResponseUserCampaign.Wrapper c : userCampaigns.data)
+        {
+            if(c.reportback_data != null && campaignId == Integer.parseInt(c.drupal_id))
+            {
+                campaign.showShare = Campaign.UploadShare.SHARE;
+                return;
+            }
+        }
     }
 
     @Override

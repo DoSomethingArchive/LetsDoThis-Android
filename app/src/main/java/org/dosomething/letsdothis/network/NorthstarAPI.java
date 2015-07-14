@@ -3,6 +3,9 @@ import android.net.Uri;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.data.User;
+import org.dosomething.letsdothis.network.models.RequestCampaignSignup;
+import org.dosomething.letsdothis.network.models.RequestReportback;
+import org.dosomething.letsdothis.network.models.ResponseAvatar;
 import org.dosomething.letsdothis.network.models.ParseInstallationRequest;
 import org.dosomething.letsdothis.network.models.RequestKudo;
 import org.dosomething.letsdothis.network.models.ResponseAvatar;
@@ -11,9 +14,12 @@ import org.dosomething.letsdothis.network.models.ResponseAvatar;
 import org.dosomething.letsdothis.network.models.ResponseCampaignSignUp;
 import org.dosomething.letsdothis.network.models.ResponseGroup;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
+import org.dosomething.letsdothis.network.models.ResponseRbData;
 import org.dosomething.letsdothis.network.models.ResponseRegister;
+import org.dosomething.letsdothis.network.models.ResponseSubmitReportBack;
 import org.dosomething.letsdothis.network.models.ResponseReportBack;
 import org.dosomething.letsdothis.network.models.ResponseUser;
+import org.dosomething.letsdothis.network.models.ResponseUserCampaign;
 import org.dosomething.letsdothis.network.models.ResponseUserList;
 import org.dosomething.letsdothis.network.models.ResponseUserUpdate;
 
@@ -82,8 +88,21 @@ public interface NorthstarAPI
     Response logout(@Header("Session") String sessionToken) throws NetworkException;
 
     @Headers("Content-Type: application/json")
+    @POST("/user/campaigns/{nid}/reportback")
+    ResponseSubmitReportBack submitReportback(@Header("Session") String sessionToken, @Body RequestReportback requestreportback, @Path("nid") int id) throws NetworkException;
+
+
+    @Headers("Content-Type: application/json")
+    @GET("/user/campaigns/{id}")
+    ResponseRbData getRbData(@Header("Session") String sessionToken, @Path("id") int campId) throws NetworkException;
+
+    @Headers("Content-Type: application/json")
     @POST("/user/campaigns/{id}/signup")
     ResponseCampaignSignUp campaignSignUp(@Body RequestCampaignSignup requestCampaignSignup, @Path("id") int id, @Header("Session") String sessionToken);
+
+    @Headers("Content-Type: application/json")
+    @GET("/users/_id/{id}/campaigns")
+    ResponseUserCampaign getUserCampaigns(@Path("id") String id);
 
     @GET("/signup-group/{groupId}")
     ResponseGroup group(@Path("groupId") int groupId);
