@@ -1,5 +1,6 @@
 package org.dosomething.letsdothis.ui.fragments;
 import android.app.Activity;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,14 +9,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Notification;
+import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignsTask;
 import org.dosomething.letsdothis.ui.adapters.NotificationAdapter;
 import org.dosomething.letsdothis.ui.views.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import co.touchlab.android.threading.tasks.TaskQueue;
+import co.touchlab.android.threading.tasks.utils.TaskQueueHelper;
 
 /**
  * Created by izzyoji :) on 4/15/15.
@@ -25,6 +31,7 @@ public class NotificationsFragment extends Fragment
 
     public static final String TAG = NotificationsFragment.class.getSimpleName();
     private SetTitleListener titleListener;
+    private ProgressBar      progress;
 
     public static NotificationsFragment newInstance()
     {
@@ -51,6 +58,11 @@ public class NotificationsFragment extends Fragment
         super.onActivityCreated(savedInstanceState);
         //FIXME: get real data
         NotificationAdapter adapter = new NotificationAdapter(generateSampleData());
+        progress = (ProgressBar) getView().findViewById(R.id.progress);
+        progress.getIndeterminateDrawable()
+                .setColorFilter(getResources().getColor(R.color.dark_orange),
+                                PorterDuff.Mode.SRC_IN);
+
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
         recyclerView.setAdapter(adapter);
@@ -75,4 +87,17 @@ public class NotificationsFragment extends Fragment
         return notifications;
     }
 
+    private void refreshProgressBar()
+    {
+        boolean b = TaskQueueHelper.hasTasksOfType(TaskQueue.loadQueueDefault(getActivity()),
+                                                   GetCurrentUserCampaignsTask.class);
+        if(b)
+        {
+            progress.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            progress.setVisibility(View.GONE);
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package org.dosomething.letsdothis.ui.fragments;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
@@ -53,6 +55,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     private HubAdapter       adapter;
     private Uri              imageUri;
     private SetTitleListener titleListener;
+    private ProgressBar      progress;
 
     public static HubFragment newInstance(String id)
     {
@@ -82,8 +85,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     {
         super.onAttach(activity);
         titleListener = (SetTitleListener) getActivity();
-        TaskQueue.loadQueueDefault(getActivity())
-                .execute(new GetCurrentUserCampaignsTask());
+        refreshUserCampaign();
     }
 
     @Override
@@ -116,8 +118,8 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
                     new DbGetUserTask(AppPrefs.getInstance(getActivity()).getCurrentUserId()));
         }
 
-        if(TaskQueueHelper
-                .hasTasksOfType(ReportbackUploadTask.getQueue(getActivity()), ReportbackUploadTask.class))
+        if(TaskQueueHelper.hasTasksOfType(ReportbackUploadTask.getQueue(getActivity()),
+                                          ReportbackUploadTask.class))
         {
             adapter.processingUpload();
         }
@@ -127,8 +129,13 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
+        progress = (ProgressBar) getView().findViewById(R.id.progress);
+        progress.getIndeterminateDrawable()
+                .setColorFilter(getResources().getColor(R.color.dark_orange),
+                                PorterDuff.Mode.SRC_IN);
+        refreshProgressBar();
 
+        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
         String publicId = getArguments().getString(EXTRA_ID, null);
         adapter = new HubAdapter(this, publicId != null);
         recyclerView.setAdapter(adapter);
@@ -182,8 +189,8 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     @Override
     public void onInviteClicked(Campaign campaign)
     {
-        startActivity(CampaignInviteActivity
-                              .getLaunchIntent(getActivity(), campaign.title, campaign.invite.code));
+        startActivity(CampaignInviteActivity.getLaunchIntent(getActivity(), campaign.title,
+                                                             campaign.invite.code));
     }
 
     @Override
@@ -224,7 +231,9 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
                 startActivityForResult(PhotoCropActivity.getResultIntent(getActivity(),
                                                                          selectedImageUri
                                                                                  .toString(),
-                                                                         getString(R.string.share_photo), null),
+                                                                         getString(
+                                                                                 R.string.share_photo),
+                                                                         null),
                                        PhotoCropActivity.RESULT_CODE);
             }
             else if(requestCode == PhotoCropActivity.RESULT_CODE)
@@ -234,9 +243,36 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
                 String format = String
                         .format(getString(R.string.reportback_upload_hint), clickedCampaign.noun,
                                 clickedCampaign.verb);
-                startActivity(ReportBackUploadActivity
-                                      .getLaunchIntent(getActivity(), filePath, clickedCampaign.title,
-                                                       clickedCampaign.id, format));
+                startActivity(ReportBackUploadActivity.getLaunchIntent(getActivity(), filePath,
+                                                                       clickedCampaign.title,
+                                                                       clickedCampaign.id, format));
+            }
+        }
+    }
+
+
+    private void refreshUserCampaign()
+    {
+        TaskQueue.loadQueueDefault(getActivity()).execute(new GetCurrentUserCampaignsTask());
+        refreshProgressBar();
+    }
+
+    private void refreshProgressBar()
+    {
+        boolean b = TaskQueueHelper.hasTasksOfType(TaskQueue.loadQueueDefault(getActivity()),
+                                                   GetCurrentUserCampaignsTask.class);
+        if(b)
+        {
+            if(progress != null)
+            {
+                progress.setVisibility(View.VISIBLE);
+            }
+        }
+        else
+        {
+            if(progress != null)
+            {
+                progress.setVisibility(View.GONE);
             }
         }
     }
@@ -244,6 +280,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(GetCurrentUserCampaignsTask task)
     {
+        refreshProgressBar();
         if(! task.currentCampaignList.isEmpty())
         {
             adapter.addCurrentCampaign(task.currentCampaignList);
@@ -266,8 +303,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(ReportbackUploadTask task)
     {
-        TaskQueue.loadQueueDefault(getActivity())
-                .execute(new GetCurrentUserCampaignsTask());
+        refreshUserCampaign();
     }
 
     @SuppressWarnings("UnusedDeclaration")
