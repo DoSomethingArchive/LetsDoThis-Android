@@ -133,6 +133,9 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     @Override
     public void onCampaignRefresh()
     {
+        adapter.clear();
+        currentPage = 0;
+        totalPages = 0;
         TaskQueue.loadQueueDefault(getActivity())
                 .execute(new InterestGroupCampaignListTask(InterestGroup.values()[position].id));
     }
@@ -140,7 +143,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(InterestReportBackListTask task)
     {
-        if(task.pagerPosition == position)
+        if(task.pagerPosition == position && currentPage < task.page)
         {
             totalPages = task.totalPages;
             currentPage = task.page;
