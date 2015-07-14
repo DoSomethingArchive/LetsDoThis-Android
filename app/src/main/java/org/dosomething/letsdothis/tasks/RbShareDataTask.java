@@ -8,7 +8,6 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpStatus;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.network.NetworkHelper;
@@ -20,6 +19,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.util.concurrent.TimeUnit;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
@@ -103,7 +103,7 @@ public class RbShareDataTask extends BaseNetworkErrorHandlerTask
         InputStream inputStream = null;
         response = client.newCall(request).execute();
 
-        if(response.code() != HttpStatus.SC_NOT_FOUND)
+        if(response.code() != HttpURLConnection.HTTP_NOT_FOUND)
         {
             inputStream = response.body().byteStream();
         }
