@@ -7,6 +7,8 @@ import org.dosomething.letsdothis.network.models.RequestCampaignSignup;
 import org.dosomething.letsdothis.network.models.ResponseCampaignSignUp;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
+import co.touchlab.android.threading.eventbus.EventBusExt;
+
 /**
  * Created by izzyoji :) on 7/10/15.
  */
@@ -34,6 +36,13 @@ public class JoinGroupTask extends BaseNetworkErrorHandlerTask
         campaignActions.signUpId = ResponseCampaignSignUp.getSignUpId(response);
         CampaignActions.save(context, campaignActions);
 
+    }
+
+    @Override
+    protected void onComplete(Context context)
+    {
+        super.onComplete(context);
+        EventBusExt.getDefault().post(this);
     }
 
     @Override
