@@ -116,7 +116,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if(user != null && user.avatarPath != null)
             {
                 Picasso.with(((ProfileViewHolder) holder).userImage.getContext())
-                        .load(user.avatarPath)
+                        .load(user.avatarPath).placeholder(R.mipmap.ic_launcher)
                         .resizeDimen(R.dimen.hub_avatar_height, R.dimen.hub_avatar_height)
                         .into(profileViewHolder.userImage);
             }
@@ -220,7 +220,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     if(campaign.group.size() > i)
                     {
                         User friend = campaign.group.get(i);
-                        Picasso.with(context).load(friend.avatarPath).resize(friendSize, 0)
+                        Picasso.with(context).load(friend.avatarPath)
+                                .placeholder(R.mipmap.ic_launcher).resize(friendSize, 0)
                                 .into(imageView);
                         childAt.setOnClickListener(new View.OnClickListener()
                         {
@@ -343,7 +344,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
         else
         {
-            for(int i=0, j = 2; i < objects.size(); i++)
+            for(int i = 0, j = 2; i < objects.size(); i++)
             {
                 Object o = hubList.get(j);
                 if(o instanceof Campaign)
@@ -351,7 +352,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     hubList.set(j, objects.get(i));
                     j++;
                 }
-                else {
+                else
+                {
                     hubList.add(j, objects.get(i));
                     j++;
                 }

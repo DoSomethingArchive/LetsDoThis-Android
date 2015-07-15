@@ -133,7 +133,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
             }
             InterestReportBackListTask task = new InterestReportBackListTask(position, StringUtils
                     .join(campaignIds, ","), currentPage + 1);
-            TaskQueue.loadQueueDefault(getActivity()).execute(task);
+            getCampaignQueue().execute(task);
         }
     }
 
@@ -147,6 +147,12 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
                 .execute(new InterestGroupCampaignListTask(InterestGroup.values()[position].id));
         progress.setVisibility(View.VISIBLE);
     }
+
+    private TaskQueue getCampaignQueue()
+    {
+        return TaskQueue.loadQueue(getActivity(), "campaignQueue");
+    }
+
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(InterestReportBackListTask task)
@@ -176,7 +182,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
             }
 
             String campaigns = StringUtils.join(campaignIds, ",");
-            TaskQueue.loadQueueDefault(getActivity())
+            getCampaignQueue()
                     .execute(new InterestReportBackListTask(position, campaigns, FIRST_PAGE));
 
         }
