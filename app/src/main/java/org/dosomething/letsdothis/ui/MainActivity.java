@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -38,8 +39,10 @@ public class MainActivity extends BaseActivity implements SetTitleListener
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String GROUP_ID       = "GROUP_ID";
     public static final String ATTEMPT_INVITE = "ATTEMPT_INVITE";
+    
     //~=~=~=~=~=~=~=~=~=~=~=~=VIEWS
     private Toolbar                               toolbar;
+    private DrawerListAdapter drawerListAdapter;
 
 
     public static Intent getLaunchIntent(Context context, int groupId, boolean attemptInvite)
@@ -55,11 +58,16 @@ public class MainActivity extends BaseActivity implements SetTitleListener
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initToolbar();
+        initDrawer();
+
+
         if(savedInstanceState == null)
         {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, ActionsFragment.newInstance(), ActionsFragment.TAG)
                     .commit();
+            drawerListAdapter.notifyDataSetChanged();
         }
 
         initGroupInvite();
@@ -107,8 +115,12 @@ public class MainActivity extends BaseActivity implements SetTitleListener
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         final ListView listView = (ListView) findViewById(R.id.menu_list);
 
-        listView.setAdapter(new DrawerListAdapter(this, list));
+        drawerListAdapter = new DrawerListAdapter(this, list);
+        listView.setAdapter(drawerListAdapter);
+        listView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         listView.setItemChecked(0, true);
+        drawerListAdapter.notifyDataSetChanged();
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -219,6 +231,7 @@ public class MainActivity extends BaseActivity implements SetTitleListener
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, tag)
                 .commit();
         getSupportFragmentManager().executePendingTransactions();
+        drawerListAdapter.notifyDataSetChanged();
     }
 
     public void setTitle(String title)
