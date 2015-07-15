@@ -188,18 +188,5 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
         return invites;
     }
 
-    private void refreshProgressBar()
-    {
-        boolean b = TaskQueueHelper.hasTasksOfType(TaskQueue.loadQueueDefault(getActivity()),
-                                                   GetCurrentUserCampaignsTask.class);
-        if(b)
-        {
-            progress.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            progress.setVisibility(View.GONE);
-        }
-    }
 }
 

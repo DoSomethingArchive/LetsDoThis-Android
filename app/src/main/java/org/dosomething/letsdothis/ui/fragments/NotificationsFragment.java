@@ -86,18 +86,4 @@ public class NotificationsFragment extends Fragment
 
         return notifications;
     }
-
-    private void refreshProgressBar()
-    {
-        boolean b = TaskQueueHelper.hasTasksOfType(TaskQueue.loadQueueDefault(getActivity()),
-                                                   GetCurrentUserCampaignsTask.class);
-        if(b)
-        {
-            progress.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            progress.setVisibility(View.GONE);
-        }
-    }
 }
