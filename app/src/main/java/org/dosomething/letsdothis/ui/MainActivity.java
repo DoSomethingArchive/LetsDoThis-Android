@@ -2,7 +2,6 @@ package org.dosomething.letsdothis.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -10,6 +9,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -25,7 +25,8 @@ import org.dosomething.letsdothis.utils.AppPrefs;
 
 public class MainActivity extends BaseActivity implements SetTitleListener
 {
-    private Toolbar toolbar;
+    private Toolbar           toolbar;
+    private DrawerListAdapter drawerListAdapter;
 
     public static Intent getLaunchIntent(Context context)
     {
@@ -37,15 +38,17 @@ public class MainActivity extends BaseActivity implements SetTitleListener
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initToolbar();
+        initDrawer();
+
+
         if(savedInstanceState == null)
         {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, ActionsFragment.newInstance(), ActionsFragment.TAG)
                     .commit();
+            drawerListAdapter.notifyDataSetChanged();
         }
-
-        initToolbar();
-        initDrawer();
     }
 
     private void initToolbar()
@@ -71,8 +74,12 @@ public class MainActivity extends BaseActivity implements SetTitleListener
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         final ListView listView = (ListView) findViewById(R.id.menu_list);
 
-        listView.setAdapter(new DrawerListAdapter(this, list));
+        drawerListAdapter = new DrawerListAdapter(this, list);
+        listView.setAdapter(drawerListAdapter);
+        listView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         listView.setItemChecked(0, true);
+        drawerListAdapter.notifyDataSetChanged();
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -128,6 +135,7 @@ public class MainActivity extends BaseActivity implements SetTitleListener
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, tag)
                 .commit();
         getSupportFragmentManager().executePendingTransactions();
+        drawerListAdapter.notifyDataSetChanged();
     }
 
     public void setTitle(String title)
