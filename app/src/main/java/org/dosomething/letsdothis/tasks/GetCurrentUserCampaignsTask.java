@@ -10,7 +10,9 @@ import org.dosomething.letsdothis.network.models.ResponseUserCampaign;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
@@ -28,7 +30,6 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
     @Override
     protected void run(Context context) throws Throwable
     {
-        currentCampaignList = new ArrayList<>();
         ArrayList<Integer> doneCampaigns = new ArrayList<Integer>();
         NorthstarAPI northstarAPIService = NetworkHelper.getNorthstarAPIService();
 
@@ -48,26 +49,29 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
         }
 
         //-------get campaign and mark which have RB
-        ResponseCampaignList responseCampaignList = NetworkHelper.getDoSomethingAPIService()
-                .campaignListByIds(campaignIds);
-        List<Campaign> campaigns = ResponseCampaignList.getCampaigns(responseCampaignList);
-
-        for(int i = 0; i < campaigns.size(); i++)
+        Map<Integer, Campaign> campMap = new HashMap<>();
         {
-            Campaign campaign = campaigns.get(i);
-            if(doneCampaigns.contains(campaign.id))
+            ResponseCampaignList responseCampaignList = NetworkHelper.getDoSomethingAPIService()
+                    .campaignListByIds(campaignIds);
+            List<Campaign> campaigns = ResponseCampaignList.getCampaigns(responseCampaignList);
+
+            for(Campaign c : campaigns)
             {
-                campaign.showShare = Campaign.UploadShare.SHARE;
-                campaigns.set(i, campaign);
+                if(doneCampaigns.contains(c))
+                {
+                    c.showShare = Campaign.UploadShare.SHARE;
+                }
+                campMap.put(c.id, c);
             }
         }
 
         //-------add group info for the campaign
         signupIds = signupIds.substring(0, signupIds.length() - 1);
         ResponseGroupList response = northstarAPIService.groupList(signupIds);
-        ResponseGroupList.addUsers(campaigns, response);
+        ResponseGroupList.addUsers(campMap, response);
 
-        currentCampaignList.addAll(campaigns);
+
+        currentCampaignList = new ArrayList<>(campMap.values());
     }
 
     @Override
