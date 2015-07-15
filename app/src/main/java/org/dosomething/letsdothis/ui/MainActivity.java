@@ -40,8 +40,6 @@ public class MainActivity extends BaseActivity implements SetTitleListener
     public static final String ATTEMPT_INVITE = "ATTEMPT_INVITE";
     //~=~=~=~=~=~=~=~=~=~=~=~=VIEWS
     private Toolbar                               toolbar;
-    //~=~=~=~=~=~=~=~=~=~=~=~=Fields
-    private AsyncTask<Integer, Integer, String[]> searchForGroupAsyncTask;
 
 
     public static Intent getLaunchIntent(Context context, int groupId, boolean attemptInvite)
@@ -163,7 +161,8 @@ public class MainActivity extends BaseActivity implements SetTitleListener
 
     private void joinInvite(final int groupId)
     {
-        searchForGroupAsyncTask = new AsyncTask<Integer, Integer, String[]>()
+        //fixme one day, we should extract this class so we don't have copy pasta code
+        new AsyncTask<Integer, Integer, String[]>()
         {
             @Override
             protected String[] doInBackground(Integer... params)
@@ -176,7 +175,7 @@ public class MainActivity extends BaseActivity implements SetTitleListener
                     Gson gson = new Gson();
 
                     ResponseGroup responseGroup = NetworkHelper.getNorthstarAPIService()
-                            .group(params[0]);
+                                                               .group(params[0]);
                     responses[0] = gson.toJson(responseGroup);
 
                     ResponseCampaignWrapper responseCampaignWrapper = NetworkHelper
@@ -211,8 +210,7 @@ public class MainActivity extends BaseActivity implements SetTitleListener
                     }
                 }
             }
-        };
-        searchForGroupAsyncTask.execute(groupId);
+        }.execute(groupId);
 
     }
 
