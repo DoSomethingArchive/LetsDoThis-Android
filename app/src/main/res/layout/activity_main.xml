@@ -17,8 +17,7 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:layout_below="@id/toolbar"
-            android:layout_weight="1"/>
+            android:layout_below="@id/toolbar"/>
 
         <include
             android:id="@+id/toolbar"
