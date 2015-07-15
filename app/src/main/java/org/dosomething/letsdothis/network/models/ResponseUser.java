@@ -22,14 +22,19 @@ public class ResponseUser
 
     public static User getUser(ResponseUser response)
     {
+        return getUser(response.data[0]);
+    }
+
+    public static User getUser(Wrapper wrapper)
+    {
         User user = new User();
-        user.email = response.data[0].email;
-        user.mobile = response.data[0].mobile;
-        user.first_name = response.data[0].first_name;
-        user.last_name = response.data[0].last_name;
-        user.id = response.data[0]._id;
-        user.birthdate = response.data[0].birthdate;
-        user.drupalId = response.data[0].drupal_id;
+        user.email = wrapper.email;
+        user.mobile = wrapper.mobile;
+        user.first_name = wrapper.first_name;
+        user.last_name = wrapper.last_name;
+        user.id = wrapper._id;
+        user.birthdate = wrapper.birthdate;
+        user.drupalId = wrapper.drupal_id;
         return user;
     }
 
