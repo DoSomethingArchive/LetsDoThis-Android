@@ -8,8 +8,10 @@ import org.dosomething.letsdothis.network.models.ParseInstallationRequest;
 import org.dosomething.letsdothis.network.models.RequestCampaignSignup;
 import org.dosomething.letsdothis.network.models.RequestKudo;
 import org.dosomething.letsdothis.network.models.ResponseAvatar;
+import org.dosomething.letsdothis.network.models.ResponseCampaignList;
 import org.dosomething.letsdothis.network.models.ResponseCampaignSignUp;
 import org.dosomething.letsdothis.network.models.ResponseGroup;
+import org.dosomething.letsdothis.network.models.ResponseGroupList;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 import org.dosomething.letsdothis.network.models.ResponseRbData;
 import org.dosomething.letsdothis.network.models.ResponseRegister;
@@ -101,6 +103,9 @@ public interface NorthstarAPI
 
     @GET("/signup-group/{groupId}")
     ResponseGroup group(@Path("groupId") int groupId);
+
+    @GET("/signup-group?ids=100,101,102,1997")
+    ResponseGroupList groupList(@Query("ids") String ids) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @POST("/kudos")

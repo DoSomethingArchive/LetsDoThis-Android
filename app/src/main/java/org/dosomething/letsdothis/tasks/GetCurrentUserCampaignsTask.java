@@ -3,7 +3,9 @@ import android.content.Context;
 
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.network.NetworkHelper;
+import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.ResponseCampaignList;
+import org.dosomething.letsdothis.network.models.ResponseGroupList;
 import org.dosomething.letsdothis.network.models.ResponseUserCampaign;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
@@ -28,11 +30,13 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
     {
         currentCampaignList = new ArrayList<>();
         ArrayList<Integer> doneCampaigns = new ArrayList<Integer>();
-        String currentUserId = AppPrefs.getInstance(context).getCurrentUserId();
-        ResponseUserCampaign userCampaigns = NetworkHelper.getNorthstarAPIService()
-                .getUserCampaigns(currentUserId);
+        NorthstarAPI northstarAPIService = NetworkHelper.getNorthstarAPIService();
 
+        //-------get user's campaign id list/ which ones have RB
+        ResponseUserCampaign userCampaigns = northstarAPIService
+                .getUserCampaigns(AppPrefs.getInstance(context).getCurrentUserId());
         String campaignIds = "";
+        String signupIds = "";
         for(ResponseUserCampaign.Wrapper campaignData : userCampaigns.data)
         {
             if(campaignData.reportback_data != null)
@@ -40,8 +44,10 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
                 doneCampaigns.add(Integer.parseInt(campaignData.drupal_id));
             }
             campaignIds += campaignData.drupal_id + ",";
+            signupIds += campaignData.signup_id + ",";
         }
 
+        //-------get campaign and mark which have RB
         ResponseCampaignList responseCampaignList = NetworkHelper.getDoSomethingAPIService()
                 .campaignListByIds(campaignIds);
         List<Campaign> campaigns = ResponseCampaignList.getCampaigns(responseCampaignList);
@@ -56,8 +62,12 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
             }
         }
 
+        //-------add group info for the campaign
+        signupIds = signupIds.substring(0, signupIds.length() - 1);
+        ResponseGroupList response = northstarAPIService.groupList(signupIds);
+        ResponseGroupList.addUsers(campaigns, response);
+
         currentCampaignList.addAll(campaigns);
-        //FIXME get friend group
     }
 
     @Override
