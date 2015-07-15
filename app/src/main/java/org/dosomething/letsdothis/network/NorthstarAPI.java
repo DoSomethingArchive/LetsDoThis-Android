@@ -1,15 +1,12 @@
 package org.dosomething.letsdothis.network;
-import android.net.Uri;
-
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.models.RequestCampaignSignup;
 import org.dosomething.letsdothis.network.models.RequestReportback;
 import org.dosomething.letsdothis.network.models.ResponseAvatar;
 import org.dosomething.letsdothis.network.models.ParseInstallationRequest;
-import org.dosomething.letsdothis.network.models.RequestKudo;
-import org.dosomething.letsdothis.network.models.ResponseAvatar;
 import org.dosomething.letsdothis.network.models.RequestCampaignSignup;
+import org.dosomething.letsdothis.network.models.RequestKudo;
 import org.dosomething.letsdothis.network.models.ResponseAvatar;
 import org.dosomething.letsdothis.network.models.ResponseCampaignSignUp;
 import org.dosomething.letsdothis.network.models.ResponseGroup;
@@ -22,8 +19,6 @@ import org.dosomething.letsdothis.network.models.ResponseUser;
 import org.dosomething.letsdothis.network.models.ResponseUserCampaign;
 import org.dosomething.letsdothis.network.models.ResponseUserList;
 import org.dosomething.letsdothis.network.models.ResponseUserUpdate;
-
-import java.util.Date;
 
 import co.touchlab.android.threading.errorcontrol.NetworkException;
 import retrofit.client.Response;
@@ -114,7 +109,7 @@ public interface NorthstarAPI
     @Headers("Content-Type: application/json")
     @PUT("/users/{id}")
     ResponseUserUpdate setParseInstallationId(@Path("id") String id, @Body ParseInstallationRequest ParseInstallationRequest) throws NetworkException;
-    
+
     @Multipart
     @POST("/users/{id}/avatar")
     ResponseAvatar uploadAvatar(@Path("id") String id, @Part("photo") TypedFile file) throws NetworkException;
