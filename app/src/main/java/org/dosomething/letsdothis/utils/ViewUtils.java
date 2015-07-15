@@ -12,7 +12,7 @@ public class ViewUtils
 {
     public static File getAvatarFile(Context context)
     {
-        return new File(context.getFilesDir(), "avatar.jpg");
+        return new File(context.getExternalFilesDir("images"), "avatar.jpg");
     }
 
     public static Float getPxFromDip(Resources r, int dp)

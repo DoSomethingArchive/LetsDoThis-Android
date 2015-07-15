@@ -2,8 +2,9 @@ package org.dosomething.letsdothis.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,23 +14,42 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
+
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.network.NetworkHelper;
+import org.dosomething.letsdothis.network.models.ResponseCampaignWrapper;
+import org.dosomething.letsdothis.network.models.ResponseGroup;
 import org.dosomething.letsdothis.ui.adapters.DrawerListAdapter;
 import org.dosomething.letsdothis.ui.fragments.ActionsFragment;
 import org.dosomething.letsdothis.ui.fragments.HubFragment;
 import org.dosomething.letsdothis.ui.fragments.InvitesFragment;
+import org.dosomething.letsdothis.ui.fragments.JoinGroupDialogFragment;
 import org.dosomething.letsdothis.ui.fragments.NotificationsFragment;
 import org.dosomething.letsdothis.ui.fragments.SetTitleListener;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
+import co.touchlab.android.threading.errorcontrol.NetworkException;
+import retrofit.RetrofitError;
+
 
 public class MainActivity extends BaseActivity implements SetTitleListener
 {
-    private Toolbar toolbar;
+    //~=~=~=~=~=~=~=~=~=~=~=~=Constants
+    public static final String GROUP_ID       = "GROUP_ID";
+    public static final String ATTEMPT_INVITE = "ATTEMPT_INVITE";
+    //~=~=~=~=~=~=~=~=~=~=~=~=VIEWS
+    private Toolbar                               toolbar;
+    //~=~=~=~=~=~=~=~=~=~=~=~=Fields
+    private AsyncTask<Integer, Integer, String[]> searchForGroupAsyncTask;
 
-    public static Intent getLaunchIntent(Context context)
+
+    public static Intent getLaunchIntent(Context context, int groupId, boolean attemptInvite)
     {
-        return new Intent(context, MainActivity.class);
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(GROUP_ID, groupId);
+        intent.putExtra(ATTEMPT_INVITE, attemptInvite);
+        return intent;
     }
 
     @Override
@@ -44,8 +64,26 @@ public class MainActivity extends BaseActivity implements SetTitleListener
                     .commit();
         }
 
+        initGroupInvite();
         initToolbar();
         initDrawer();
+    }
+
+    private void initGroupInvite()
+    {
+        boolean attemptInvite = getIntent().getBooleanExtra(ATTEMPT_INVITE, false);
+        if(attemptInvite)
+        {
+            int groupId = getIntent().getIntExtra(GROUP_ID, 0);
+            if(groupId == - 1)
+            {
+                InvitesFragment.showErrorToast(this);
+            }
+            else
+            {
+                joinInvite(groupId);
+            }
+        }
     }
 
     private void initToolbar()
@@ -121,6 +159,61 @@ public class MainActivity extends BaseActivity implements SetTitleListener
             AppPrefs.getInstance(this).setFirstDrawer();
             drawerLayout.openDrawer(drawer);
         }
+    }
+
+    private void joinInvite(final int groupId)
+    {
+        searchForGroupAsyncTask = new AsyncTask<Integer, Integer, String[]>()
+        {
+            @Override
+            protected String[] doInBackground(Integer... params)
+            {
+                String[] responses = new String[2];
+                try
+                {
+                    SystemClock.sleep(1000);
+
+                    Gson gson = new Gson();
+
+                    ResponseGroup responseGroup = NetworkHelper.getNorthstarAPIService()
+                            .group(params[0]);
+                    responses[0] = gson.toJson(responseGroup);
+
+                    ResponseCampaignWrapper responseCampaignWrapper = NetworkHelper
+                            .getDoSomethingAPIService().campaign(responseGroup.data.campaign_id);
+                    responses[1] = gson.toJson(responseCampaignWrapper);
+
+                }
+                catch(RetrofitError | NetworkException e)
+                {
+                    return null;
+                }
+
+                return responses;
+            }
+
+            @Override
+            protected void onPostExecute(String[] responses)
+            {
+                super.onPostExecute(responses);
+                if(! isCancelled())
+                {
+                    if(responses == null)
+                    {
+                        InvitesFragment.showErrorToast(MainActivity.this);
+                    }
+                    else
+                    {
+                        JoinGroupDialogFragment joinGroupDialogFragment = JoinGroupDialogFragment
+                                .newInstance(groupId, responses[0], responses[1]);
+                        joinGroupDialogFragment.show(MainActivity.this.getSupportFragmentManager(),
+                                                     JoinGroupDialogFragment.TAG);
+                    }
+                }
+            }
+        };
+        searchForGroupAsyncTask.execute(groupId);
+
     }
 
     private void replaceCurrentFragment(Fragment fragment, String tag)

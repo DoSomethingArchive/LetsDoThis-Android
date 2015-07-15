@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -17,7 +18,9 @@ import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.FbUser;
 import org.dosomething.letsdothis.tasks.RegisterTask;
+import org.dosomething.letsdothis.ui.adapters.InvitesAdapter;
 import org.dosomething.letsdothis.utils.AppPrefs;
+import org.dosomething.letsdothis.utils.Hashery;
 import org.dosomething.letsdothis.utils.ViewUtils;
 
 import java.io.File;
@@ -46,7 +49,11 @@ public class RegisterActivity extends BaseActivity
     private EditText  firstName;
     private EditText  lastName;
     private EditText  birthday;
+    private EditText  invite1;
+    private EditText  invite2;
+    private EditText  invite3;
     private ImageView avatar;
+
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private Uri imageUri;
@@ -218,6 +225,15 @@ public class RegisterActivity extends BaseActivity
         firstName = (EditText) findViewById(R.id.first_name);
         lastName = (EditText) findViewById(R.id.last_name);
         birthday = (EditText) findViewById(R.id.birthday);
+        invite1 = (EditText) findViewById(R.id.invite1);
+        invite2 = (EditText) findViewById(R.id.invite2);
+        invite3 = (EditText) findViewById(R.id.invite3);
+        if(BuildConfig.DEBUG)
+        {
+            invite1.setText("Red");
+            invite2.setText("Blunt");
+            invite3.setText("Crane");
+        }
 
         findViewById(R.id.register).setOnClickListener(new View.OnClickListener()
         {
@@ -262,9 +278,17 @@ public class RegisterActivity extends BaseActivity
     {
         if(AppPrefs.getInstance(this).isLoggedIn())
         {
+            Integer groupId = null;
+            boolean allFilled = ! TextUtils.isEmpty(invite1.getText()) && ! TextUtils
+                    .isEmpty(invite2.getText()) && ! TextUtils.isEmpty(invite3.getText());
+            if(allFilled)
+            {
+                String code = InvitesAdapter.getCode(invite1, invite2, invite3);
+                groupId = Hashery.getInstance(this).decode(code);
+            }
             broadcastLogInSuccess(this);
             Toast.makeText(this, "success register", Toast.LENGTH_SHORT).show();
-            startActivity(MainActivity.getLaunchIntent(this));
+            startActivity(MainActivity.getLaunchIntent(this, groupId, allFilled));
         }
         else
         {
