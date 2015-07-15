@@ -22,13 +22,13 @@ import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.ResponseCampaignWrapper;
 import org.dosomething.letsdothis.network.models.ResponseGroup;
 import org.dosomething.letsdothis.tasks.InvitesTask;
+import org.dosomething.letsdothis.tasks.JoinGroupTask;
 import org.dosomething.letsdothis.ui.adapters.InvitesAdapter;
 import org.dosomething.letsdothis.utils.Hashery;
 
 import co.touchlab.android.threading.errorcontrol.NetworkException;
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
-import co.touchlab.android.threading.tasks.utils.TaskQueueHelper;
 import retrofit.RetrofitError;
 
 /**
@@ -78,7 +78,7 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
 
         titleListener.setTitle(getString(R.string.invites));
 
-        TaskQueue.loadQueueDefault(getActivity()).execute(new InvitesTask());
+        refreshInvites();
     }
 
     @Override
@@ -190,6 +190,19 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
     public void onEventMainThread(InvitesTask task)
     {
         adapter.setData(task.invites);
+        progress.setVisibility(View.GONE);
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(JoinGroupTask task)
+    {
+        refreshInvites();
+    }
+
+    private void refreshInvites()
+    {
+        progress.setVisibility(View.VISIBLE);
+        TaskQueue.loadQueueDefault(getActivity()).execute(new InvitesTask());
     }
 
 }

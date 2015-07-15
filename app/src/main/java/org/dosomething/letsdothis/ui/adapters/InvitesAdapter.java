@@ -248,6 +248,7 @@ public class InvitesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public void setData(ArrayList<Invite> invites)
     {
+        this.invites.clear();
         this.invites.add("input placeholder");
         this.invites.add("footer placeholder");
         this.invites.addAll(invites);
