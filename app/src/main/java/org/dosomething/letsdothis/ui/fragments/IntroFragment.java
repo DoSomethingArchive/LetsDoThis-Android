@@ -75,6 +75,8 @@ public class IntroFragment extends Fragment
             prev.setClickable(false);
         }
 
+        TextView title = (TextView) view.findViewById(R.id.title);
+        title.setText(titleRes);
         TextView description = (TextView) view.findViewById(R.id.description);
         description.setText(descriptionRes);
 
