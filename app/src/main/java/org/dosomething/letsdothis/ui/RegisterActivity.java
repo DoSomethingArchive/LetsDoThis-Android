@@ -24,11 +24,6 @@ import org.dosomething.letsdothis.utils.Hashery;
 import org.dosomething.letsdothis.utils.ViewUtils;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Arrays;
 
 import co.touchlab.android.threading.tasks.TaskQueue;
 
@@ -159,61 +154,17 @@ public class RegisterActivity extends BaseActivity
                     Log.d("drawer_text-----------", selectedImageUri.toString());
                 }
 
-                Picasso.with(this).load(selectedImageUri)
+                startActivityForResult(PhotoCropActivity
+                                               .getResultIntent(this, selectedImageUri.toString(),
+                                                                "User Photo", null),
+                                       PhotoCropActivity.RESULT_CODE);
+            }
+            else if(requestCode == PhotoCropActivity.RESULT_CODE)
+            {
+                String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
+                Picasso.with(this).load("file://" + filePath)
                         .resize(avatar.getWidth(), avatar.getHeight()).into(avatar);
-
-                File externalFile = ViewUtils.getAvatarFile(this);
-                saveFile(selectedImageUri, externalFile);
-                //FIXME: this should be loaded into Hub
-                AppPrefs.getInstance(this).setAvatarPath(externalFile.getAbsolutePath());
-            }
-        }
-    }
-
-    private void saveFile(Uri sourceUri, File externalFile)
-    {
-
-        final int chunkSize = 1024;
-        byte[] imageData = new byte[chunkSize];
-
-        InputStream in = null;
-        OutputStream out = null;
-        try
-        {
-            File temp = new File(getFilesDir(), "temp" + System.currentTimeMillis() + ".jpg");
-
-            in = getContentResolver().openInputStream(sourceUri);
-            out = new FileOutputStream(temp);
-
-            int bytesRead;
-            while((bytesRead = in.read(imageData)) > 0)
-            {
-                out.write(Arrays.copyOfRange(imageData, 0, Math.max(0, bytesRead)));
-            }
-
-            temp.renameTo(externalFile);
-
-        }
-        catch(IOException ex)
-        {
-            Log.e(TAG, ex.getMessage());
-        }
-        finally
-        {
-            try
-            {
-                if(in != null)
-                {
-                    in.close();
-                }
-                if(out != null)
-                {
-                    out.close();
-                }
-            }
-            catch(IOException e)
-            {
-                Log.e(TAG, "error closing input and output stream");
+                AppPrefs.getInstance(this).setAvatarPath(filePath);
             }
         }
     }
