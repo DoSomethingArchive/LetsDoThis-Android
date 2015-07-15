@@ -109,7 +109,7 @@ public class LoginActivity extends BaseActivity
     {
         if(AppPrefs.getInstance(this).isLoggedIn())
         {
-            Integer groupId = null;
+            Integer groupId = 0;
             boolean allFilled = ! TextUtils.isEmpty(invite1.getText()) && ! TextUtils
                     .isEmpty(invite2.getText()) && ! TextUtils.isEmpty(invite3.getText());
             if(allFilled)
