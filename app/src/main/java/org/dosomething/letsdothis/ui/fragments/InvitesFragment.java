@@ -1,5 +1,6 @@
 package org.dosomething.letsdothis.ui.fragments;
 import android.app.Activity;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -10,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -26,6 +28,7 @@ import org.dosomething.letsdothis.utils.Hashery;
 import co.touchlab.android.threading.errorcontrol.NetworkException;
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
+import co.touchlab.android.threading.tasks.utils.TaskQueueHelper;
 import retrofit.RetrofitError;
 
 /**
@@ -37,6 +40,7 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
     private InvitesAdapter                        adapter;
     private SetTitleListener                      titleListener;
     private AsyncTask<Integer, Integer, String[]> searchForGroupAsyncTask;
+    private ProgressBar                           progress;
 
 
     public static InvitesFragment newInstance()
@@ -62,9 +66,13 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
     {
         super.onActivityCreated(savedInstanceState);
         adapter = new InvitesAdapter(this);
+        progress = (ProgressBar) getView().findViewById(R.id.progress);
+        progress.getIndeterminateDrawable()
+                .setColorFilter(getResources().getColor(R.color.cerulean_1),
+                                PorterDuff.Mode.SRC_IN);
+
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
         recyclerView.setAdapter(adapter);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
