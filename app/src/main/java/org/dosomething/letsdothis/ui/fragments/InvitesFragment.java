@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,6 @@ import org.dosomething.letsdothis.data.Invite;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.ResponseCampaignWrapper;
 import org.dosomething.letsdothis.network.models.ResponseGroup;
-import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignsTask;
 import org.dosomething.letsdothis.ui.adapters.InvitesAdapter;
 import org.dosomething.letsdothis.utils.Hashery;
 
@@ -30,8 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.touchlab.android.threading.errorcontrol.NetworkException;
-import co.touchlab.android.threading.tasks.TaskQueue;
-import co.touchlab.android.threading.tasks.utils.TaskQueueHelper;
 import retrofit.RetrofitError;
 
 /**
@@ -125,6 +123,7 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
                     }
                     catch(RetrofitError | NetworkException e)
                     {
+                        Log.e(TAG, e.getMessage());
                         return null;
                     }
 
