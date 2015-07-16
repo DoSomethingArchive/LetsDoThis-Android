@@ -14,14 +14,21 @@ import com.google.gson.Gson;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.data.ReportBack;
+import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.models.ResponseCampaign;
 import org.dosomething.letsdothis.network.models.ResponseCampaignWrapper;
 import org.dosomething.letsdothis.network.models.ResponseGroup;
+import org.dosomething.letsdothis.network.models.ResponseReportBackList;
+import org.dosomething.letsdothis.network.models.ResponseUser;
+import org.dosomething.letsdothis.network.models.ResponseUserCampaign;
 import org.dosomething.letsdothis.tasks.JoinGroupTask;
+import org.dosomething.letsdothis.ui.ReportBackDetailsActivity;
 import org.dosomething.letsdothis.ui.adapters.JoinGroupAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import co.touchlab.android.threading.tasks.TaskQueue;
 
@@ -85,6 +92,8 @@ public class JoinGroupDialogFragment extends DialogFragment implements JoinGroup
                 {
                     case JoinGroupAdapter.VIEW_TYPE_FRIEND:
                         return 1;
+                    case JoinGroupAdapter.VIEW_TYPE_REPORT_BACK:
+                        return 3;
                     default:
                         return 6;
                 }
@@ -106,13 +115,29 @@ public class JoinGroupDialogFragment extends DialogFragment implements JoinGroup
         campaign = ResponseCampaign.getCampaign(responseCampaignWrapper.data);
         data.add(campaign);
 
-        //users
         String groupString = getArguments().getString(ARG_GROUP_DATA);
         ResponseGroup groupData = gson.fromJson(groupString, ResponseGroup.class);
 
+        List<ResponseUser.Wrapper> responseUserWrappers = Arrays.asList(groupData.data.users);
+
+        //users
+        ArrayList<ReportBack> reportBacks = new ArrayList<>();
+        for(ResponseUser.Wrapper wrapper : responseUserWrappers)
+        {
+            ResponseUserCampaign.Wrapper.ResponseReportBackData reportBackData = wrapper.campaigns[0].reportback_data;
+            User user = ResponseUser.getUser(wrapper);
+            data.add(user);
+            if(reportBackData != null)
+            {
+                reportBacks.addAll(ResponseReportBackList.getReportBacks(reportBackData.reportback_items));
+            }
+        }
+
         //join button
-        data.addAll(Arrays.asList(groupData.data.users));
         data.add(JoinGroupAdapter.JOIN_PLACEHOLDER);
+
+        //report backs
+        data.addAll(reportBacks);
 
         return data;
     }
@@ -135,5 +160,11 @@ public class JoinGroupDialogFragment extends DialogFragment implements JoinGroup
     public void closeClicked()
     {
         dismiss();
+    }
+
+    @Override
+    public void onReportBackClicked(int reportBackId)
+    {
+        startActivity(ReportBackDetailsActivity.getLaunchIntent(getActivity(), reportBackId));
     }
 }
