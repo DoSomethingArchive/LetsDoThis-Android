@@ -15,9 +15,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.InterestGroup;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.tasks.CampaignSignUpTask;
+import org.dosomething.letsdothis.tasks.DbInterestGroupCampListTask;
 import org.dosomething.letsdothis.tasks.InterestGroupCampaignListTask;
 import org.dosomething.letsdothis.tasks.InterestReportBackListTask;
 import org.dosomething.letsdothis.ui.CampaignDetailsActivity;
@@ -143,8 +145,8 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         adapter.clear();
         currentPage = 0;
         totalPages = 0;
-        TaskQueue.loadQueueDefault(getActivity())
-                .execute(new InterestGroupCampaignListTask(InterestGroup.values()[position].id));
+        DatabaseHelper.defaultDatabaseQueue(getActivity())
+                .execute(new DbInterestGroupCampListTask(InterestGroup.values()[position].id));
         progress.setVisibility(View.VISIBLE);
     }
 
@@ -162,25 +164,39 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     }
 
     @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(DbInterestGroupCampListTask task)
+    {
+        if(InterestGroup.values()[position].id == task.interestGroupId)
+        {
+            if(task.campList.isEmpty())
+            {
+                TaskQueue.loadQueueDefault(getActivity())
+                        .execute(new InterestGroupCampaignListTask(task.interestGroupId));
+            }
+            else
+            {
+                progress.setVisibility(View.GONE);
+                adapter.setCampaigns(task.campList);
+
+                campaignIds.clear();
+                for(Campaign campaign : task.campList)
+                {
+                    campaignIds.add(campaign.id);
+                }
+
+                String campaigns = StringUtils.join(campaignIds, ",");
+                TaskQueue.loadQueueDefault(getActivity())
+                        .execute(new InterestReportBackListTask(position, campaigns, FIRST_PAGE));
+
+            }
+        }
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(InterestGroupCampaignListTask task)
     {
-        if(task.interestGroupId == InterestGroup.values()[position].id)
-        {
-            progress.setVisibility(View.GONE);
-            adapter.setCampaigns(task.campaigns);
-
-            campaignIds.clear();
-            for(Campaign campaign : task.campaigns)
-            {
-                campaignIds.add(campaign.id);
-            }
-
-            String campaigns = StringUtils.join(campaignIds, ",");
-            TaskQueue.loadQueueDefault(getActivity())
-                    .execute(new InterestReportBackListTask(position, campaigns, FIRST_PAGE));
-
-        }
-
+        DatabaseHelper.defaultDatabaseQueue(getActivity())
+                .execute(new DbInterestGroupCampListTask(task.interestGroupId));
     }
 
 }
