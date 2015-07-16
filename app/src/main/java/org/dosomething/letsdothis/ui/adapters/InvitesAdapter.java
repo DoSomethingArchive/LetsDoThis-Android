@@ -221,7 +221,7 @@ public class InvitesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    private String getCode(EditText... editTexts)
+    public static String getCode(EditText... editTexts)
     {
         String code = "";
         for(EditText editText : editTexts)
