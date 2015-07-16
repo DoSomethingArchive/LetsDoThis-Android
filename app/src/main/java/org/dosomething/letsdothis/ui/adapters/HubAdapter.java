@@ -116,7 +116,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if(user != null && user.avatarPath != null)
             {
                 Picasso.with(((ProfileViewHolder) holder).userImage.getContext())
-                        .load(user.avatarPath).placeholder(R.mipmap.ic_launcher)
+                        .load(user.avatarPath).placeholder(R.drawable.ic_action_user)
                         .resizeDimen(R.dimen.hub_avatar_height, R.dimen.hub_avatar_height)
                         .into(profileViewHolder.userImage);
             }
@@ -375,6 +375,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
+    //fixme handle past campaigns
     public void addPastCampaign(List<Campaign> objects)
     {
         hubList.addAll(objects);
