@@ -72,7 +72,7 @@
                 android:gravity="center"
                 android:lineSpacingExtra="5dp"
                 android:textColor="@android:color/black"
-                android:textSize="@dimen/text_36"
+                android:textSize="@dimen/text_medium"
                 tools:text="This is some intro text. and then here is some more text"/>
 
         </LinearLayout>
