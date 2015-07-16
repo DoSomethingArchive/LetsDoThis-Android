@@ -51,7 +51,7 @@ public class StartActivity extends BaseActivity
 
     private void goToMain()
     {
-        startActivity(MainActivity.getLaunchIntent(this));
+        startActivity(MainActivity.getLaunchIntent(this, 0, false));
         finish();
     }
 
