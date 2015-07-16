@@ -1,5 +1,6 @@
 package org.dosomething.letsdothis.ui.fragments;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -104,11 +105,10 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
     @Override
     public void onSearchClicked(String code)
     {
-
         final int groupId = Hashery.getInstance(getActivity()).decode(code);
         if(groupId == - 1)
         {
-            showErrorToast();
+            showErrorToast(getActivity());
             adapter.setButtonState(InvitesAdapter.BUTTON_STATE_SEARCH);
         }
         else
@@ -152,7 +152,7 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
                     {
                         if(responses == null)
                         {
-                            showErrorToast();
+                            showErrorToast(getActivity());
                             adapter.setButtonState(InvitesAdapter.BUTTON_STATE_GONE);
                         }
                         else
@@ -170,10 +170,10 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
         }
     }
 
-    private void showErrorToast()
-    {
-        Toast.makeText(getActivity(), "No campaign found!", Toast.LENGTH_SHORT).show();
-    }
+    public static void showErrorToast(Context context)
+{
+    Toast.makeText(context, "No campaign found!", Toast.LENGTH_SHORT).show();
+}
 
     @Override
     public void onCancelClicked()

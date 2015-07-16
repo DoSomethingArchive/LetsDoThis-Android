@@ -15,9 +15,6 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.fragments.IntroFragment;
 import org.dosomething.letsdothis.ui.fragments.RegisterLoginFragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by toidiu on 4/15/15.
  */
@@ -25,13 +22,13 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     private static final String TAG = IntroActivity.class.getSimpleName();
+    public static final int INTRO_FRAGMENT_COUNT = 4;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
-    private ViewPager                               pager;
-    private List<IntroFragment.FragmentExtraHolder> extraList;
-    private CirclePageIndicator                     indicator;
-    private int                                     indicatorTop;
-    private ImageView                               lightning;
+    private ViewPager           pager;
+    private CirclePageIndicator indicator;
+    private int                 indicatorTop;
+    private ImageView           lightning;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
 
@@ -51,42 +48,31 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
 
     private void initPager()
     {
-        extraList = new ArrayList<>();
-        extraList.add(new IntroFragment.FragmentExtraHolder(true, "intro 1 text", null));
-        extraList.add(new IntroFragment.FragmentExtraHolder(false, "intro 2 text", null));
-        extraList.add(new IntroFragment.FragmentExtraHolder(true, "intro 3 text", null));
-        extraList.add(new IntroFragment.FragmentExtraHolder(true, null, null));
-
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager())
         {
             @Override
             public int getCount()
             {
-                return extraList.size();
+                return INTRO_FRAGMENT_COUNT;
             }
 
             @Override
             public Fragment getItem(int position)
             {
-                boolean showPrev = true;
-                if(position == 0)
+                switch(position)
                 {
-                    showPrev = false;
-                }
+                    case 0:
+                        return IntroFragment.newInstance(false, true, R.string.intro_title_1,  R.string.intro_desc_1, 0);
+                    case 1:
+                        return IntroFragment.newInstance(true, false, R.string.intro_title_2,  R.string.intro_desc_2, 0);
+                    case 2:
+                        return IntroFragment.newInstance(true, true, R.string.intro_title_3,  R.string.intro_desc_3, 0);
 
-                if(extraList.get(position).text == null)
-                {
-                    return RegisterLoginFragment.newInstance();
                 }
-                return IntroFragment.newInstance(showPrev, extraList.get(position));
+                return RegisterLoginFragment.newInstance();
             }
 
-            @Override
-            public CharSequence getPageTitle(int position)
-            {
-                return Integer.toString(position);
-            }
         });
 
         lightning = (ImageView) findViewById(R.id.lightning);
@@ -102,7 +88,7 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
                 int translateX = (- position * measuredWidth - positionOffsetPixels) / LIGHTNING_OFFSET;
                 lightning.setTranslationX(translateX);
 
-                if(position == (extraList.size() - 2))
+                if(position == (INTRO_FRAGMENT_COUNT - 2))
                 {
                     indicator.setTranslationY(indicatorTop + positionOffsetPixels / 2);
                 }
