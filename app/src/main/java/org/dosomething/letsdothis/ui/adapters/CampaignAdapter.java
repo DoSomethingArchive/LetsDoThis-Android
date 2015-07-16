@@ -59,7 +59,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         void onScrolledToBottom();
 
-        void onCampaignRefresh();
+        void onNetworkCampaignRefresh();
     }
 
     public CampaignAdapter(CampaignAdapterClickListener campaignAdapterClickListener, Resources resources)
@@ -269,7 +269,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 @Override
                 public void onClick(View v)
                 {
-                    campaignAdapterClickListener.onCampaignRefresh();
+                    campaignAdapterClickListener.onNetworkCampaignRefresh();
                     //FIXME show progress bar
                 }
             });

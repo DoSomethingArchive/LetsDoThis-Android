@@ -333,17 +333,17 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public void addCurrentCampaign(List<Campaign> objects)
     {
+        Campaign campaign = objects.get(0);
+            setExpirationView();
         if(hubList.isEmpty())
         {
-            Campaign campaign = objects.get(0);
-            setExpirationView(campaign);
             int i = hubList.indexOf(BEEN_THERE_DONE_GOOD);
             hubList.addAll(i, objects);
             notifyItemRangeInserted(hubList.size() - objects.size(), hubList.size() - 1);
         }
         else
         {
-            for(int i=0, j = 2; i < objects.size(); i++)
+            for(int i = 0, j = 3; i < objects.size(); i++)
             {
                 Object o = hubList.get(j);
                 if(o instanceof Campaign)
@@ -351,7 +351,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     hubList.set(j, objects.get(i));
                     j++;
                 }
-                else {
+                else
+                {
                     hubList.add(j, objects.get(i));
                     j++;
                 }
@@ -361,15 +362,13 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    private void setExpirationView(Campaign campaign)
+    private void setExpirationView()
     {
-        //        campaign.startTime  //FIXME get real expiration time
-
         if(! isPublic)
         {
-            Long l = TimeUtils.getSampleExpirationTime();
+            Long expire = TimeUtils.getExpirationTime();
             int i = hubList.indexOf(CURRENTLY_DOING);
-            hubList.add(i + 1, l);
+            hubList.add(i + 1, expire);
         }
     }
 

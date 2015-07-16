@@ -108,6 +108,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
         return getDao(Campaign.class);
     }
 
+
+
 }
 
 

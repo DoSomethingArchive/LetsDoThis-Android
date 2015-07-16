@@ -20,8 +20,9 @@ import org.dosomething.letsdothis.data.InterestGroup;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.tasks.CampaignSignUpTask;
 import org.dosomething.letsdothis.tasks.DbInterestGroupCampListTask;
-import org.dosomething.letsdothis.tasks.InterestGroupCampaignListTask;
 import org.dosomething.letsdothis.tasks.InterestReportBackListTask;
+import org.dosomething.letsdothis.tasks.UpdateInterestGroupCampaignTask;
+import org.dosomething.letsdothis.tasks.UpdateInterestGroupCampaignTask.IdQuery;
 import org.dosomething.letsdothis.ui.CampaignDetailsActivity;
 import org.dosomething.letsdothis.ui.ReportBackDetailsActivity;
 import org.dosomething.letsdothis.ui.adapters.CampaignAdapter;
@@ -77,6 +78,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         progress.getIndeterminateDrawable()
                 .setColorFilter(getResources().getColor(R.color.cerulean_1),
                                 PorterDuff.Mode.SRC_IN);
+        refreshProgressBar();
 
         recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
         adapter = new CampaignAdapter(this, getResources());
@@ -102,7 +104,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         recyclerView.setLayoutManager(layoutManager);
 
         EventBusExt.getDefault().register(this);
-        onCampaignRefresh();
+        dbCampaignRefresh();
     }
 
     @Override
@@ -140,14 +142,51 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     }
 
     @Override
-    public void onCampaignRefresh()
+    public void onNetworkCampaignRefresh()
+    {
+        adapter.clear();
+        currentPage = 0;
+        totalPages = 0;
+        for(InterestGroup i : InterestGroup.values())
+        {
+            TaskQueue.loadQueueDefault(getActivity())
+                    .execute(new UpdateInterestGroupCampaignTask(i.id));
+        }
+
+        refreshProgressBar();
+    }
+
+    public void dbCampaignRefresh()
     {
         adapter.clear();
         currentPage = 0;
         totalPages = 0;
         DatabaseHelper.defaultDatabaseQueue(getActivity())
-                .execute(new DbInterestGroupCampListTask(InterestGroup.values()[position].id));
-        progress.setVisibility(View.VISIBLE);
+                .execute(new DbInterestGroupCampListTask(findGroupId()));
+        refreshProgressBar();
+    }
+
+    private int findGroupId()
+    {
+        return InterestGroup.values()[position].id;
+    }
+
+    private void refreshProgressBar()
+    {
+        if(progress != null)
+        {
+            IdQuery queueQuery = new IdQuery(findGroupId());
+            TaskQueue.loadQueueDefault(getActivity()).query(queueQuery);
+
+            if(queueQuery.found)
+            {
+                progress.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                progress.setVisibility(View.GONE);
+            }
+        }
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -166,16 +205,16 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(DbInterestGroupCampListTask task)
     {
-        if(InterestGroup.values()[position].id == task.interestGroupId)
+        if(findGroupId() == task.interestGroupId)
         {
             if(task.campList.isEmpty())
             {
                 TaskQueue.loadQueueDefault(getActivity())
-                        .execute(new InterestGroupCampaignListTask(task.interestGroupId));
+                        .execute(new UpdateInterestGroupCampaignTask(task.interestGroupId));
             }
             else
             {
-                progress.setVisibility(View.GONE);
+                refreshProgressBar();
                 adapter.setCampaigns(task.campList);
 
                 campaignIds.clear();
@@ -193,7 +232,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(InterestGroupCampaignListTask task)
+    public void onEventMainThread(UpdateInterestGroupCampaignTask task)
     {
         DatabaseHelper.defaultDatabaseQueue(getActivity())
                 .execute(new DbInterestGroupCampListTask(task.interestGroupId));
