@@ -39,9 +39,9 @@ public class MainActivity extends BaseActivity implements SetTitleListener
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String GROUP_ID       = "GROUP_ID";
     public static final String ATTEMPT_INVITE = "ATTEMPT_INVITE";
-    
+
     //~=~=~=~=~=~=~=~=~=~=~=~=VIEWS
-    private Toolbar                               toolbar;
+    private Toolbar           toolbar;
     private DrawerListAdapter drawerListAdapter;
 
 
@@ -117,8 +117,6 @@ public class MainActivity extends BaseActivity implements SetTitleListener
 
         drawerListAdapter = new DrawerListAdapter(this, list);
         listView.setAdapter(drawerListAdapter);
-        listView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
-        listView.setItemChecked(0, true);
         drawerListAdapter.notifyDataSetChanged();
 
 
@@ -127,27 +125,31 @@ public class MainActivity extends BaseActivity implements SetTitleListener
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                String positionString = list[position];
-                if(TextUtils.equals(positionString, getString(R.string.actions)))
+                if(drawerListAdapter.selected != position)
                 {
-                    replaceCurrentFragment(ActionsFragment.newInstance(), ActionsFragment.TAG);
+                    drawerListAdapter.selected = position;
+                    String positionString = list[position];
+                    if(TextUtils.equals(positionString, getString(R.string.actions)))
+                    {
+                        replaceCurrentFragment(ActionsFragment.newInstance(), ActionsFragment.TAG);
 
-                }
-                else if(TextUtils.equals(positionString, getString(R.string.hub)))
-                {
-                    replaceCurrentFragment(HubFragment.newInstance(null), HubFragment.TAG);
+                    }
+                    else if(TextUtils.equals(positionString, getString(R.string.hub)))
+                    {
+                        replaceCurrentFragment(HubFragment.newInstance(null), HubFragment.TAG);
 
-                }
-                else if(TextUtils.equals(positionString, getString(R.string.invites)))
-                {
-                    replaceCurrentFragment(InvitesFragment.newInstance(), InvitesFragment.TAG);
+                    }
+                    else if(TextUtils.equals(positionString, getString(R.string.invites)))
+                    {
+                        replaceCurrentFragment(InvitesFragment.newInstance(), InvitesFragment.TAG);
 
-                }
-                else if(TextUtils.equals(positionString, getString(R.string.notifications)))
-                {
-                    replaceCurrentFragment(NotificationsFragment.newInstance(),
-                                           NotificationsFragment.TAG);
+                    }
+                    else if(TextUtils.equals(positionString, getString(R.string.notifications)))
+                    {
+                        replaceCurrentFragment(NotificationsFragment.newInstance(),
+                                               NotificationsFragment.TAG);
 
+                    }
                 }
                 drawerLayout.closeDrawer(drawer);
             }
@@ -187,7 +189,7 @@ public class MainActivity extends BaseActivity implements SetTitleListener
                     Gson gson = new Gson();
 
                     ResponseGroup responseGroup = NetworkHelper.getNorthstarAPIService()
-                                                               .group(params[0]);
+                            .group(params[0]);
                     responses[0] = gson.toJson(responseGroup);
 
                     ResponseCampaignWrapper responseCampaignWrapper = NetworkHelper

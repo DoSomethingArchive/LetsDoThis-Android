@@ -333,8 +333,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public void addCurrentCampaign(List<Campaign> objects)
     {
-        Campaign campaign = objects.get(0);
-            setExpirationView();
+        setExpirationView();
         if(hubList.isEmpty())
         {
             int i = hubList.indexOf(BEEN_THERE_DONE_GOOD);

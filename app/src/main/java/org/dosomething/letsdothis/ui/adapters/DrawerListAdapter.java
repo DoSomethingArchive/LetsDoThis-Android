@@ -16,6 +16,7 @@ import org.dosomething.letsdothis.R;
  */
 public class DrawerListAdapter extends ArrayAdapter<String>
 {
+    public int selected = 0;
 
     public DrawerListAdapter(Context context, String[] list)
     {
@@ -35,25 +36,28 @@ public class DrawerListAdapter extends ArrayAdapter<String>
         ImageView icon = (ImageView) convertView.findViewById(R.id.icon);
 
         String positionString = getItem(position);
+        boolean selectedItem = position == selected;
         if(TextUtils.equals(positionString, resources.getString(R.string.actions)))
         {
-            icon.setImageResource(R.drawable.ic_actions);
+            icon.setImageResource(selectedItem ? R.drawable.ic_actions_blue : R.drawable.ic_actions);
         }
         else if(TextUtils.equals(positionString, resources.getString(R.string.hub)))
         {
-            icon.setImageResource(R.drawable.ic_hub);
+            icon.setImageResource(selectedItem ? R.drawable.ic_hub_blue : R.drawable.ic_hub);
         }
         else if(TextUtils.equals(positionString, resources.getString(R.string.invites)))
         {
-            icon.setImageResource(R.drawable.ic_invites);
+            icon.setImageResource(selectedItem ? R.drawable.ic_invites_blue : R.drawable.ic_invites);
         }
         else if(TextUtils.equals(positionString, resources.getString(R.string.notifications)))
         {
-            icon.setImageResource(R.drawable.ic_notifications);
+            icon.setImageResource(selectedItem ? R.drawable.ic_notifications_blue : R.drawable.ic_invites);
         }
 
         TextView text = (TextView) convertView.findViewById(R.id.text);
         text.setText(positionString);
+        text.setSelected(selectedItem);
+
         return convertView;
     }
 }
