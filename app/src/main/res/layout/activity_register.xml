@@ -76,6 +76,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:gravity="center"
                     android:layout_marginTop="@dimen/padding_small"
                     android:layout_marginBottom="@dimen/padding_xlarge"
                     android:text="@string/confirm_fb"
@@ -212,7 +213,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_small"
                 android:layout_marginRight="@dimen/padding_small"
-                android:text="@string/create_account"
+                android:text="@string/register"
                 app:typeface="brandon_bold"/>
 
             <org.dosomething.letsdothis.ui.views.typeface.CustomTextView

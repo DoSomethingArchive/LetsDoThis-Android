@@ -78,7 +78,6 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         progress.getIndeterminateDrawable()
                 .setColorFilter(getResources().getColor(R.color.cerulean_1),
                                 PorterDuff.Mode.SRC_IN);
-        refreshProgressBar();
 
         recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
         adapter = new CampaignAdapter(this, getResources());
@@ -147,7 +146,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
             }
             InterestReportBackListTask task = new InterestReportBackListTask(position, StringUtils
                     .join(campaignIds, ","), currentPage + 1);
-            TaskQueue.loadQueueDefault(getActivity()).execute(task);
+            getCampaignQueue().execute(task);
         }
     }
 
@@ -165,6 +164,12 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
 
         refreshProgressBar();
     }
+
+    private TaskQueue getCampaignQueue()
+    {
+        return TaskQueue.loadQueue(getActivity(), "campaignQueue");
+    }
+
 
     public void dbCampaignRefresh()
     {
