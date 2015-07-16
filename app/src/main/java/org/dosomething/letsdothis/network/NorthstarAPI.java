@@ -1,22 +1,19 @@
 package org.dosomething.letsdothis.network;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.data.User;
-import org.dosomething.letsdothis.network.models.RequestCampaignSignup;
-import org.dosomething.letsdothis.network.models.RequestReportback;
-import org.dosomething.letsdothis.network.models.ResponseAvatar;
 import org.dosomething.letsdothis.network.models.ParseInstallationRequest;
 import org.dosomething.letsdothis.network.models.RequestCampaignSignup;
 import org.dosomething.letsdothis.network.models.RequestKudo;
+import org.dosomething.letsdothis.network.models.RequestReportback;
 import org.dosomething.letsdothis.network.models.ResponseAvatar;
-import org.dosomething.letsdothis.network.models.ResponseCampaignList;
 import org.dosomething.letsdothis.network.models.ResponseCampaignSignUp;
 import org.dosomething.letsdothis.network.models.ResponseGroup;
 import org.dosomething.letsdothis.network.models.ResponseGroupList;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 import org.dosomething.letsdothis.network.models.ResponseRbData;
 import org.dosomething.letsdothis.network.models.ResponseRegister;
-import org.dosomething.letsdothis.network.models.ResponseSubmitReportBack;
 import org.dosomething.letsdothis.network.models.ResponseReportBack;
+import org.dosomething.letsdothis.network.models.ResponseSubmitReportBack;
 import org.dosomething.letsdothis.network.models.ResponseUser;
 import org.dosomething.letsdothis.network.models.ResponseUserCampaign;
 import org.dosomething.letsdothis.network.models.ResponseUserList;
@@ -104,7 +101,7 @@ public interface NorthstarAPI
     @GET("/signup-group/{groupId}")
     ResponseGroup group(@Path("groupId") int groupId);
 
-    @GET("/signup-group?ids=100,101,102,1997")
+    @GET("/signup-group")
     ResponseGroupList groupList(@Query("ids") String ids) throws NetworkException;
 
     @Headers("Content-Type: application/json")
