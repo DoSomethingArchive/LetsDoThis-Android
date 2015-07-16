@@ -3,12 +3,16 @@ import android.content.Context;
 
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.network.NetworkHelper;
+import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.ResponseCampaignList;
+import org.dosomething.letsdothis.network.models.ResponseGroupList;
 import org.dosomething.letsdothis.network.models.ResponseUserCampaign;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
@@ -28,11 +32,13 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
     {
         currentCampaignList = new ArrayList<>();
         ArrayList<Integer> doneCampaigns = new ArrayList<Integer>();
-        String currentUserId = AppPrefs.getInstance(context).getCurrentUserId();
-        ResponseUserCampaign userCampaigns = NetworkHelper.getNorthstarAPIService()
-                .getUserCampaigns(currentUserId);
+        NorthstarAPI northstarAPIService = NetworkHelper.getNorthstarAPIService();
 
+        //-------get user's campaign id list/ which ones have RB
+        ResponseUserCampaign userCampaigns = northstarAPIService
+                .getUserCampaigns(AppPrefs.getInstance(context).getCurrentUserId());
         String campaignIds = "";
+        String signupIds = "";
         for(ResponseUserCampaign.Wrapper campaignData : userCampaigns.data)
         {
             if(campaignData.reportback_data != null)
@@ -40,24 +46,32 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
                 doneCampaigns.add(campaignData.drupal_id);
             }
             campaignIds += campaignData.drupal_id + ",";
+            signupIds += campaignData.signup_id + ",";
         }
 
-        ResponseCampaignList responseCampaignList = NetworkHelper.getDoSomethingAPIService()
-                .campaignListByIds(campaignIds);
-        List<Campaign> campaigns = ResponseCampaignList.getCampaigns(responseCampaignList);
-
-        for(int i = 0; i < campaigns.size(); i++)
+        //-------get campaign and mark which have RB
+        Map<Integer, Campaign> campMap = new HashMap<>();
         {
-            Campaign campaign = campaigns.get(i);
-            if(doneCampaigns.contains(campaign.id))
+            ResponseCampaignList responseCampaignList = NetworkHelper.getDoSomethingAPIService()
+                    .campaignListByIds(campaignIds);
+            List<Campaign> campaigns = ResponseCampaignList.getCampaigns(responseCampaignList);
+
+            for(Campaign campaign : campaigns)
             {
-                campaign.showShare = Campaign.UploadShare.SHARE;
-                campaigns.set(i, campaign);
+                if(doneCampaigns.contains(campaign.id))
+                {
+                    campaign.showShare = Campaign.UploadShare.SHARE;
+                }
+                campMap.put(campaign.id, campaign);
             }
         }
 
-        currentCampaignList.addAll(campaigns);
-        //FIXME get friend group
+        //-------add group info for the campaign
+        signupIds = signupIds.substring(0, signupIds.length() - 1);
+        ResponseGroupList response = northstarAPIService.groupList(signupIds);
+        ResponseGroupList.addUsers(campMap, response);
+
+        currentCampaignList.addAll(campMap.values());
     }
 
     @Override
