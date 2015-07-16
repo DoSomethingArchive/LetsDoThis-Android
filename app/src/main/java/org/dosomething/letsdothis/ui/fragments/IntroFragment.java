@@ -18,23 +18,25 @@ import org.dosomething.letsdothis.ui.views.SlantedBackgroundDrawable;
 public class IntroFragment extends Fragment
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final String TAG          = IntroFragment.class.getSimpleName();
-    public static final String SLANTED_LEFT = "SLANTED_LEFT";
-    public static final String INTRO_TEXT   = "INTRO_TEXT";
-    public static final String IMAGE_RES    = "IMAGE_RES";
-    public static final String SHOW_PREV    = "SHOW_PREV";
+    public static final String TAG              = IntroFragment.class.getSimpleName();
+    public static final String ARG_SLANTED_LEFT = "ARG_SLANTED_LEFT";
+    public static final String ARG_TITLE_RES    = "title";
+    public static final String ARG_DESC_RES     = "description";
+    public static final String ARG_IMAGE_RES    = "image";
+    public static final String ARG_SHOW_PREV    = "ARG_SHOW_PREV";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private PagerChangeListener listener;
 
-    public static IntroFragment newInstance(boolean showPrev, FragmentExtraHolder introFragmentExtraHolder)
+    public static Fragment newInstance(boolean showPrev, boolean slantedLeft, int titleTextRes, int descTextRes, int imageResource)
     {
         Bundle bundle = new Bundle();
-        bundle.putBoolean(SHOW_PREV, showPrev);
-        bundle.putBoolean(SLANTED_LEFT, introFragmentExtraHolder.slantedLeft);
-        bundle.putString(INTRO_TEXT, introFragmentExtraHolder.text);
+        bundle.putBoolean(ARG_SHOW_PREV, showPrev);
+        bundle.putBoolean(ARG_SLANTED_LEFT, slantedLeft);
+        bundle.putInt(ARG_TITLE_RES, titleTextRes);
+        bundle.putInt(ARG_DESC_RES, descTextRes);
+        bundle.putInt(ARG_IMAGE_RES, imageResource);
 
-        bundle.putString(IMAGE_RES, introFragmentExtraHolder.imageResource);
         IntroFragment introFragment = new IntroFragment();
         introFragment.setArguments(bundle);
 
@@ -60,9 +62,11 @@ public class IntroFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
         initIntroNavigation(view);
 
-        boolean slatedLeft = getArguments().getBoolean(SLANTED_LEFT);
-        String text = getArguments().getString(INTRO_TEXT);
-        boolean showPrev = getArguments().getBoolean(SHOW_PREV);
+        boolean slantLeft = getArguments().getBoolean(ARG_SLANTED_LEFT);
+        int titleRes = getArguments().getInt(ARG_TITLE_RES);
+        int descriptionRes = getArguments().getInt(ARG_DESC_RES);
+        int imageRes = getArguments().getInt(ARG_IMAGE_RES);
+        boolean showPrev = getArguments().getBoolean(ARG_SHOW_PREV);
 
         View prev = view.findViewById(R.id.prev);
         if(! showPrev)
@@ -71,8 +75,10 @@ public class IntroFragment extends Fragment
             prev.setClickable(false);
         }
 
-        TextView introText = (TextView) view.findViewById(R.id.intro_text);
-        introText.setText(text);
+        TextView title = (TextView) view.findViewById(R.id.title);
+        title.setText(titleRes);
+        TextView description = (TextView) view.findViewById(R.id.description);
+        description.setText(descriptionRes);
 
         View slantedBg = view.findViewById(R.id.slanted_bg);
         Resources resources = getResources();
@@ -80,7 +86,7 @@ public class IntroFragment extends Fragment
         int slantHeight = resources.getDimensionPixelSize(R.dimen.height_xxtiny);
         int widthOvershoot = resources.getDimensionPixelSize(R.dimen.space_50);
         int heightShadowOvershoot = resources.getDimensionPixelSize(R.dimen.padding_tiny);
-        SlantedBackgroundDrawable background = new SlantedBackgroundDrawable(slatedLeft,
+        SlantedBackgroundDrawable background = new SlantedBackgroundDrawable(slantLeft,
                                                                              Color.WHITE,
                                                                              shadowColor,
                                                                              slantHeight,
@@ -89,24 +95,6 @@ public class IntroFragment extends Fragment
         slantedBg.setBackground(background);
         slantedBg.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
-
-
-    public static class FragmentExtraHolder
-    {
-        public boolean slantedLeft;
-        public String  text;
-        public String  imageResource;
-
-        public FragmentExtraHolder(boolean slanted, String text, String imageResource)
-        {
-            this.slantedLeft = slanted;
-            this.text = text;
-
-            //FIXME eventually pass in a image from assets
-            this.imageResource = imageResource;
-        }
-    }
-
 
     private void initIntroNavigation(View view)
     {
