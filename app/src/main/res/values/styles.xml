@@ -87,12 +87,6 @@
         <item name="android:textColor">@color/dark_orange</item>
     </style>
 
-    <style name="IntroText" parent="TextAppearance.AppCompat">
-        <item name="android:textSize">@dimen/text_36</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textColor">@android:color/black</item>
-    </style>
-
     <style name="SignInText" parent="TextAppearance.AppCompat">
         <item name="android:textSize">@dimen/text_33</item>
         <item name="android:gravity">center</item>
