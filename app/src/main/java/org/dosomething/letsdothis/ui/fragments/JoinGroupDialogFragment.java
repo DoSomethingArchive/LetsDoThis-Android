@@ -23,6 +23,7 @@ import org.dosomething.letsdothis.network.models.ResponseReportBackList;
 import org.dosomething.letsdothis.network.models.ResponseUser;
 import org.dosomething.letsdothis.network.models.ResponseUserCampaign;
 import org.dosomething.letsdothis.tasks.JoinGroupTask;
+import org.dosomething.letsdothis.ui.PublicProfileActivity;
 import org.dosomething.letsdothis.ui.ReportBackDetailsActivity;
 import org.dosomething.letsdothis.ui.adapters.JoinGroupAdapter;
 
@@ -146,7 +147,7 @@ public class JoinGroupDialogFragment extends DialogFragment implements JoinGroup
     @Override
     public void onFriendClicked(String id)
     {
-        Toast.makeText(getActivity(),"TODO are we going to a hub from here", Toast.LENGTH_SHORT).show();
+        startActivity(PublicProfileActivity.getLaunchIntent(getActivity(), id));
     }
 
     @Override
