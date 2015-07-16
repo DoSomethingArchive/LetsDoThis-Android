@@ -24,18 +24,8 @@ public class ResponseUser
 
     public static User getUser(ResponseUser response)
     {
-        User user = new User();
-        user.email = response.data[0].email;
-        user.mobile = response.data[0].mobile;
-        user.first_name = response.data[0].first_name;
-        user.last_name = response.data[0].last_name;
-        user.id = response.data[0]._id;
-        user.birthdate = response.data[0].birthdate;
-        user.drupalId = response.data[0].drupal_id;
-        user.avatarPath = response.data[0].avatar;
-        return user;
+        return getUser(response.data[0]);
     }
-
 
     public static User getUser(Wrapper wrapper)
     {

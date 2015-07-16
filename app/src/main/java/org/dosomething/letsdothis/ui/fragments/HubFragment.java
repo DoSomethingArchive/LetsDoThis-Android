@@ -189,8 +189,8 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     @Override
     public void onInviteClicked(Campaign campaign)
     {
-        startActivity(CampaignInviteActivity.getLaunchIntent(getActivity(), campaign.title,
-                                                             campaign.invite.code));
+        startActivity(CampaignInviteActivity
+                              .getLaunchIntent(getActivity(), campaign.title, campaign.invite.code));
     }
 
     @Override
