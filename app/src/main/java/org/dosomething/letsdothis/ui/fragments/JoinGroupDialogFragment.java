@@ -68,9 +68,7 @@ public class JoinGroupDialogFragment extends DialogFragment implements JoinGroup
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-
-        arrangeData();
-
+        
         final JoinGroupAdapter adapter = new JoinGroupAdapter(arrangeData(), this);
 
         final RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
