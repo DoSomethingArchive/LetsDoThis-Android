@@ -18,7 +18,6 @@ import com.facebook.login.LoginResult;
 import com.google.gson.Gson;
 
 import org.dosomething.letsdothis.BuildConfig;
-import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.FbUser;
 import org.dosomething.letsdothis.ui.LoginActivity;

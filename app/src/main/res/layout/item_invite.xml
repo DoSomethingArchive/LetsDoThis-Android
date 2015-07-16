@@ -19,7 +19,7 @@
         android:orientation="horizontal"
         android:paddingTop="@dimen/padding_wedge"
         android:paddingLeft="@dimen/padding_small"
-        android:paddingRight="@dimen/padding_medium"
+        android:paddingRight="@dimen/padding_small"
         android:paddingBottom="@dimen/padding_large"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -42,6 +42,7 @@
             <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 tools:text="Run a musical walk out to defend music program funding at school."
                 android:id="@+id/details"/>
 

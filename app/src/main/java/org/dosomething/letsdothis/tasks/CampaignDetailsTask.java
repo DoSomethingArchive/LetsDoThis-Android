@@ -35,7 +35,7 @@ public class CampaignDetailsTask extends BaseNetworkErrorHandlerTask
                 .getUserCampaigns(currentUserId);
         for(ResponseUserCampaign.Wrapper c : userCampaigns.data)
         {
-            if(c.reportback_data != null && campaignId == Integer.parseInt(c.drupal_id))
+            if(c.reportback_data != null && campaignId == c.drupal_id)
             {
                 campaign.showShare = Campaign.UploadShare.SHARE;
                 return;
