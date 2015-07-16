@@ -8,13 +8,17 @@ public class ResponseUserCampaign
 
     public static class Wrapper
     {
-        public int drupal_id;
-        public Integer signup_group;
-        public int signup_id;
-        //                "signup_source": "android",
+        public int                    drupal_id;
+        public Integer                signup_group;
+        public int                    signup_id;
+        public ResponseReportBackData reportback_data;
+
         //                "updated_at": "2015-07-02 20:43:36",
         //                "created_at": "2015-06-29 15:24:23",
-//        public int    reportback_id;
-        public Object reportback_data;
+        //        public int    reportback_id;
+        public class ResponseReportBackData
+        {
+            public ResponseReportBackList reportback_items;
+        }
     }
 }

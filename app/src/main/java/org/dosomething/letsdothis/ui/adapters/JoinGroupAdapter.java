@@ -11,6 +11,7 @@ import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.data.User;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class JoinGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public static final int    VIEW_TYPE_FRIEND      = 0;
     public static final int    VIEW_TYPE_CAMPAIGN    = 1;
     public static final int    VIEW_TYPE_JOIN_BUTTON = 2;
+    public static final int    VIEW_TYPE_REPORT_BACK = 3;
     public static final String JOIN_PLACEHOLDER      = "join";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Members
@@ -39,6 +41,8 @@ public class JoinGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         void joinClicked();
 
         void closeClicked();
+
+        void onReportBackClicked(int id);
     }
 
     public JoinGroupAdapter(List<Object> data, JoinGroupAdapterListener joinGroupAdapterListener)
@@ -61,6 +65,11 @@ public class JoinGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                                    .inflate(R.layout.item_primary_button, parent,
                                                             false);
                 return new ButtonViewHolder(primaryButton);
+            case VIEW_TYPE_REPORT_BACK:
+                View reportBackLayout = LayoutInflater.from(parent.getContext())
+                                                      .inflate(R.layout.item_report_back_square,
+                                                               parent, false);
+                return new ReportBackViewHolder((ImageView) reportBackLayout);
             default:
                 View campaignLayout = LayoutInflater.from(parent.getContext())
                                                     .inflate(R.layout.item_group_campaign, parent,
@@ -73,6 +82,7 @@ public class JoinGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
     {
 
+        Context context = holder.itemView.getContext();
         if(getItemViewType(position) == VIEW_TYPE_CAMPAIGN)
         {
             final Campaign campaign = (Campaign) data.get(position);
@@ -80,7 +90,6 @@ public class JoinGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             campaignViewHolder.title.setText(campaign.title);
             campaignViewHolder.callToAction.setText(campaign.callToAction);
 
-            Context context = campaignViewHolder.imageView.getContext();
             int height = context.getResources().getDimensionPixelSize(R.dimen.campaign_height);
             Picasso.with(context).load(campaign.imagePath).resize(0, height)
                    .into(campaignViewHolder.imageView);
@@ -114,7 +123,7 @@ public class JoinGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             final User user = (User) data.get(position);
             FriendViewHolder friendViewHolder = (FriendViewHolder) holder;
 
-            if(!TextUtils.isEmpty(user.avatarPath))
+            if(! TextUtils.isEmpty(user.avatarPath))
             {
                 Picasso.with(friendViewHolder.itemView.getContext()).load(user.avatarPath)
                        .into((ImageView) friendViewHolder.itemView);
@@ -126,6 +135,22 @@ public class JoinGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 public void onClick(View v)
                 {
                     joinGroupAdapterListener.onFriendClicked(user.id);
+                }
+            });
+        }
+        else if(getItemViewType(position) == VIEW_TYPE_REPORT_BACK)
+        {
+            final ReportBack reportBack = (ReportBack) data.get(position);
+            ReportBackViewHolder reportBackViewHolder = (ReportBackViewHolder) holder;
+
+            Picasso.with(context).load(reportBack.getImagePath()).into(reportBackViewHolder.root);
+
+            reportBackViewHolder.root.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    joinGroupAdapterListener.onReportBackClicked(reportBack.id);
                 }
             });
         }
@@ -148,6 +173,10 @@ public class JoinGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         else if(currentObject instanceof String)
         {
             return VIEW_TYPE_JOIN_BUTTON;
+        }
+        else if(currentObject instanceof ReportBack)
+        {
+            return VIEW_TYPE_REPORT_BACK;
         }
         else
         {
