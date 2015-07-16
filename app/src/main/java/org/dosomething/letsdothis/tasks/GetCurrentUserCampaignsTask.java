@@ -56,13 +56,13 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
                     .campaignListByIds(campaignIds);
             List<Campaign> campaigns = ResponseCampaignList.getCampaigns(responseCampaignList);
 
-            for(Campaign c : campaigns)
+            for(Campaign campaign : campaigns)
             {
-                if(doneCampaigns.contains(c))
+                if(doneCampaigns.contains(campaign.id))
                 {
-                    c.showShare = Campaign.UploadShare.SHARE;
+                    campaign.showShare = Campaign.UploadShare.SHARE;
                 }
-                campMap.put(c.id, c);
+                campMap.put(campaign.id, campaign);
             }
         }
 
