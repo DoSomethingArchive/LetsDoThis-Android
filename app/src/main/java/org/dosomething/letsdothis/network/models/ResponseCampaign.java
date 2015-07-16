@@ -7,6 +7,7 @@ import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.utils.ISO8601;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 
 /**
  * Created by izzyoji :) on 4/17/15.
@@ -39,6 +40,7 @@ public class ResponseCampaign
         campaign.showShare = Campaign.UploadShare.SHOW_OFF;
         campaign.noun = response.reportback_info.noun;
         campaign.verb = response.reportback_info.verb;
+        campaign.group = new ArrayList<>();
         return campaign;
     }
 

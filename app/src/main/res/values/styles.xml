@@ -11,7 +11,6 @@
         <item name="colorPrimaryDark">@color/dark_orange</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="android:scrollbarSize">4dp</item>
-
     </style>
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
@@ -57,6 +56,7 @@
     <style name="EditText" parent="@style/Widget.AppCompat.EditText">
         <item name="android:inputType">textAutoComplete</item>
         <item name="android:background">@drawable/bg_white_rounded_rect_filled</item>
+        <item name="android:textCursorDrawable">@null</item>
     </style>
 
     <style name="PrimaryButton" parent="Widget.AppCompat.Button">
@@ -85,12 +85,6 @@
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/bg_selectable_black</item>
         <item name="android:textColor">@color/dark_orange</item>
-    </style>
-
-    <style name="IntroText" parent="TextAppearance.AppCompat">
-        <item name="android:textSize">@dimen/text_36</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textColor">@android:color/black</item>
     </style>
 
     <style name="SignInText" parent="TextAppearance.AppCompat">
