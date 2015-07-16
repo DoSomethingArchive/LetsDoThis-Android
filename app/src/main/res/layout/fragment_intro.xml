@@ -1,51 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/padding_medium"
+        android:paddingRight="@dimen/padding_medium"
+        android:paddingTop="@dimen/padding_xxlarge"
+        android:src="@drawable/phone"/>
 
     <RelativeLayout
         android:id="@+id/slanted_bg"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="#ffffff"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:background="#ffffff">
 
         <ImageButton
             android:id="@+id/prev"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleType="fitCenter"
-            android:src="@drawable/prev_intro_arrow"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:background="#00000000"
             android:padding="20dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"/>
+            android:scaleType="fitCenter"
+            android:src="@drawable/prev_intro_arrow"/>
 
 
         <ImageButton
             android:id="@+id/next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleType="fitCenter"
-            android:padding="20dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/next_intro_arrow"
-            android:background="#00000000"/>
+            android:background="#00000000"
+            android:padding="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/next_intro_arrow"/>
 
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:id="@+id/intro_text"
-            style="@style/IntroText"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textSize="@dimen/text_large"
+            android:layout_toLeftOf="@id/next"
             android:gravity="center"
             android:layout_toRightOf="@+id/prev"
-            android:layout_toLeftOf="@id/next"
-            android:lineSpacingExtra="5dp"
-            tools:text="This is some intro text. and then here is some more text"/>
+            android:orientation="vertical">
+
+            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:singleLine="true"
+                android:paddingBottom="@dimen/padding_tiny"
+                android:textAllCaps="true"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_large"
+                app:typeface="brandon_bold"
+                tools:text="Title"/>
+
+            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lineSpacingExtra="5dp"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_medium"
+                tools:text="This is some intro text. and then here is some more text"/>
+
+        </LinearLayout>
+
 
     </RelativeLayout>
 
