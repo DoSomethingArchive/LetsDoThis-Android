@@ -22,16 +22,14 @@ import org.dosomething.letsdothis.data.Invite;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.ResponseCampaignWrapper;
 import org.dosomething.letsdothis.network.models.ResponseGroup;
-import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignsTask;
+import org.dosomething.letsdothis.tasks.InvitesTask;
+import org.dosomething.letsdothis.tasks.JoinGroupTask;
 import org.dosomething.letsdothis.ui.adapters.InvitesAdapter;
 import org.dosomething.letsdothis.utils.Hashery;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import co.touchlab.android.threading.errorcontrol.NetworkException;
+import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
-import co.touchlab.android.threading.tasks.utils.TaskQueueHelper;
 import retrofit.RetrofitError;
 
 /**
@@ -68,8 +66,7 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        //FIXME: get real data
-        adapter = new InvitesAdapter(generateSampleData(), this);
+        adapter = new InvitesAdapter(this);
         progress = (ProgressBar) getView().findViewById(R.id.progress);
         progress.getIndeterminateDrawable()
                 .setColorFilter(getResources().getColor(R.color.cerulean_1),
@@ -81,6 +78,22 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
         recyclerView.setLayoutManager(layoutManager);
 
         titleListener.setTitle(getString(R.string.invites));
+
+        refreshInvites();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        EventBusExt.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        EventBusExt.getDefault().unregister(this);
     }
 
     @Override
@@ -173,19 +186,23 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
         }
     }
 
-    private List<Invite> generateSampleData()
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(InvitesTask task)
     {
-        List<Invite> invites = new ArrayList<>();
-        for(int i = 0; i < 10; i++)
-        {
-            Invite invite = new Invite();
-            invite.title = "Sample invite " + (i + 1);
-            invite.details = "This campaign is so cool.";
-            invite.code = "Need Real Data";
-            invites.add(invite);
-        }
+        adapter.setData(task.invites);
+        progress.setVisibility(View.GONE);
+    }
 
-        return invites;
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(JoinGroupTask task)
+    {
+        refreshInvites();
+    }
+
+    private void refreshInvites()
+    {
+        progress.setVisibility(View.VISIBLE);
+        TaskQueue.loadQueueDefault(getActivity()).execute(new InvitesTask());
     }
 
 }

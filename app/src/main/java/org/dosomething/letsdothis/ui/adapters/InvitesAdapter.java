@@ -38,12 +38,9 @@ public class InvitesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private InviteAdapterClickListener inviteAdapterClickListener;
     private int buttonState = BUTTON_STATE_GONE;
 
-    public InvitesAdapter(List<Invite> invites, InviteAdapterClickListener inviteAdapterClickListener)
+    public InvitesAdapter(InviteAdapterClickListener inviteAdapterClickListener)
     {
         this.inviteAdapterClickListener = inviteAdapterClickListener;
-        this.invites.add("input placeholder");
-        this.invites.add("footer placeholder");
-        this.invites.addAll(invites);
     }
 
     public interface InviteAdapterClickListener
@@ -247,6 +244,15 @@ public class InvitesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         notifyItemChanged(0);
+    }
+
+    public void setData(ArrayList<Invite> invites)
+    {
+        this.invites.clear();
+        this.invites.add("input placeholder");
+        this.invites.add("footer placeholder");
+        this.invites.addAll(invites);
+        notifyDataSetChanged();
     }
 
     @Override

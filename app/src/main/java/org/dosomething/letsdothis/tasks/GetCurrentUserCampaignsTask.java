@@ -43,7 +43,7 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
         {
             if(campaignData.reportback_data != null)
             {
-                doneCampaigns.add(Integer.parseInt(campaignData.drupal_id));
+                doneCampaigns.add(campaignData.drupal_id);
             }
             campaignIds += campaignData.drupal_id + ",";
             signupIds += campaignData.signup_id + ",";
