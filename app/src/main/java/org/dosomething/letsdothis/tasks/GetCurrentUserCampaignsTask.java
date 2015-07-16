@@ -30,6 +30,7 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
     @Override
     protected void run(Context context) throws Throwable
     {
+        currentCampaignList = new ArrayList<>();
         ArrayList<Integer> doneCampaigns = new ArrayList<Integer>();
         NorthstarAPI northstarAPIService = NetworkHelper.getNorthstarAPIService();
 
@@ -70,8 +71,7 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
         ResponseGroupList response = northstarAPIService.groupList(signupIds);
         ResponseGroupList.addUsers(campMap, response);
 
-
-        currentCampaignList = new ArrayList<>(campMap.values());
+        currentCampaignList.addAll(campMap.values());
     }
 
     @Override
