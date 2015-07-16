@@ -108,6 +108,16 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     }
 
     @Override
+    public void onResume()
+    {
+        super.onResume();
+        if(adapter != null)
+        {
+//            adapter.notifyItemRangeChanged(0, 3);
+        }
+    }
+
+    @Override
     public void onCampaignClicked(int campaignId)
     {
         TaskQueue.loadQueueDefault(getActivity()).execute(new CampaignSignUpTask(campaignId));
