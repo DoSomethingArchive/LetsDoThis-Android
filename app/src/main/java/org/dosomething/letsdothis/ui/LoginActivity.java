@@ -3,6 +3,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -10,7 +11,9 @@ import android.widget.Toast;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.LoginTask;
+import org.dosomething.letsdothis.ui.adapters.InvitesAdapter;
 import org.dosomething.letsdothis.utils.AppPrefs;
+import org.dosomething.letsdothis.utils.Hashery;
 
 import co.touchlab.android.threading.tasks.TaskQueue;
 
@@ -24,6 +27,9 @@ public class LoginActivity extends BaseActivity
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private EditText phoneEmail;
     private EditText password;
+    private EditText invite1;
+    private EditText invite2;
+    private EditText invite3;
 
 
     public static Intent getLaunchIntent(Context context)
@@ -73,6 +79,17 @@ public class LoginActivity extends BaseActivity
     {
         phoneEmail = (EditText) findViewById(R.id.phone_email);
         password = (EditText) findViewById(R.id.password);
+        invite1 = (EditText) findViewById(R.id.invite1);
+        invite2 = (EditText) findViewById(R.id.invite2);
+        invite3 = (EditText) findViewById(R.id.invite3);
+
+        if(BuildConfig.DEBUG)
+        {
+            invite1.setText("Red");
+            invite2.setText("Blunt");
+            invite3.setText("Crane");
+        }
+
         findViewById(R.id.login).setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -92,9 +109,17 @@ public class LoginActivity extends BaseActivity
     {
         if(AppPrefs.getInstance(this).isLoggedIn())
         {
+            Integer groupId = 0;
+            boolean allFilled = ! TextUtils.isEmpty(invite1.getText()) && ! TextUtils
+                    .isEmpty(invite2.getText()) && ! TextUtils.isEmpty(invite3.getText());
+            if(allFilled)
+            {
+                String code = InvitesAdapter.getCode(invite1, invite2, invite3);
+                groupId = Hashery.getInstance(this).decode(code);
+            }
             broadcastLogInSuccess(this);
             Toast.makeText(this, "success login", Toast.LENGTH_SHORT).show();
-            startActivity(MainActivity.getLaunchIntent(this));
+            startActivity(MainActivity.getLaunchIntent(this, groupId, allFilled));
         }
         else
         {
