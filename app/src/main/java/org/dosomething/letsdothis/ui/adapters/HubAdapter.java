@@ -314,7 +314,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
         else if(currentObject instanceof Campaign)
         {
-            //FIXME properly get if campaign is past
             int posOfPastHeader = hubList.indexOf(BEEN_THERE_DONE_GOOD);
             if(position < posOfPastHeader)
             {
@@ -337,7 +336,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         setExpirationView();
         if(hubList.isEmpty())
         {
-            Campaign campaign = objects.get(0);
             setExpirationView();
             int i = hubList.indexOf(BEEN_THERE_DONE_GOOD);
             hubList.addAll(i, objects);
@@ -374,7 +372,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    //fixme handle past campaigns
     public void addPastCampaign(List<Campaign> objects)
     {
         hubList.addAll(objects);
