@@ -2,6 +2,7 @@ package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
 import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.ResponseCampaignList;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import co.touchlab.android.threading.errorcontrol.NetworkException;
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
 /**
@@ -22,6 +24,7 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
 public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
 {
     public List<Campaign> currentCampaignList;
+    public List<Campaign> pastCampaignList;
 
     public GetCurrentUserCampaignsTask()
     {
@@ -30,13 +33,21 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
     @Override
     protected void run(Context context) throws Throwable
     {
-        currentCampaignList = new ArrayList<>();
-        ArrayList<Integer> doneCampaigns = new ArrayList<Integer>();
         NorthstarAPI northstarAPIService = NetworkHelper.getNorthstarAPIService();
-
-        //-------get user's campaign id list/ which ones have RB
         ResponseUserCampaign userCampaigns = northstarAPIService
                 .getUserCampaigns(AppPrefs.getInstance(context).getCurrentUserId());
+
+
+        getCurrentCampaign(northstarAPIService, userCampaigns);
+        getPastCampaign(context, userCampaigns);
+    }
+
+    private void getCurrentCampaign(NorthstarAPI northstarAPIService, ResponseUserCampaign userCampaigns) throws NetworkException
+    {
+        currentCampaignList = new ArrayList<>();
+        ArrayList<Integer> doneCampaigns = new ArrayList<Integer>();
+
+        //-------get user's campaign id list/ which ones have RB
         String campaignIds = "";
         String signupIds = "";
         for(ResponseUserCampaign.Wrapper campaignData : userCampaigns.data)
@@ -72,6 +83,36 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
         ResponseGroupList.addUsers(campMap, response);
 
         currentCampaignList.addAll(campMap.values());
+    }
+
+    private void getPastCampaign(Context context, ResponseUserCampaign userCampaigns) throws java.sql.SQLException, NetworkException
+    {
+        pastCampaignList = new ArrayList<>();
+        List<Integer> currCampIds = new ArrayList<>();
+
+        List<Campaign> currCamp = DatabaseHelper.getInstance(context).getCampDao().queryForAll();
+        for(Campaign camp : currCamp)
+        {
+            currCampIds.add(camp.id);
+        }
+
+        String pastIds = "";
+        for(ResponseUserCampaign.Wrapper campaignData : userCampaigns.data)
+        {
+            if(currCampIds.contains(campaignData.drupal_id))
+            {
+                pastIds = campaignData.drupal_id + ",";
+            }
+        }
+        pastIds = pastIds.substring(0, pastIds.length() - 1);
+
+
+        if(! pastIds.isEmpty())
+        {
+            ResponseCampaignList responseCampaignList = NetworkHelper.getDoSomethingAPIService()
+                    .campaignListByIds(pastIds);
+            pastCampaignList = ResponseCampaignList.getCampaigns(responseCampaignList);
+        }
     }
 
     @Override

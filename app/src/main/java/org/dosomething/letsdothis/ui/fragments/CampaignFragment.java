@@ -19,7 +19,7 @@ import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.InterestGroup;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.tasks.CampaignSignUpTask;
-import org.dosomething.letsdothis.tasks.DbInterestGroupCampListTask;
+import org.dosomething.letsdothis.tasks.DbInterestGroupCampaignListTask;
 import org.dosomething.letsdothis.tasks.InterestReportBackListTask;
 import org.dosomething.letsdothis.tasks.UpdateInterestGroupCampaignTask;
 import org.dosomething.letsdothis.tasks.UpdateInterestGroupCampaignTask.IdQuery;
@@ -177,7 +177,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         currentPage = 0;
         totalPages = 0;
         DatabaseHelper.defaultDatabaseQueue(getActivity())
-                .execute(new DbInterestGroupCampListTask(findGroupId()));
+                .execute(new DbInterestGroupCampaignListTask(findGroupId()));
         refreshProgressBar();
     }
 
@@ -218,7 +218,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(DbInterestGroupCampListTask task)
+    public void onEventMainThread(DbInterestGroupCampaignListTask task)
     {
         if(findGroupId() == task.interestGroupId)
         {
@@ -250,7 +250,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     public void onEventMainThread(UpdateInterestGroupCampaignTask task)
     {
         DatabaseHelper.defaultDatabaseQueue(getActivity())
-                .execute(new DbInterestGroupCampListTask(task.interestGroupId));
+                .execute(new DbInterestGroupCampaignListTask(task.interestGroupId));
     }
 
 }
