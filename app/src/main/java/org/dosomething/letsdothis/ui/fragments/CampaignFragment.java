@@ -15,11 +15,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.InterestGroup;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.tasks.CampaignSignUpTask;
-import org.dosomething.letsdothis.tasks.InterestGroupCampaignListTask;
+import org.dosomething.letsdothis.tasks.DbInterestGroupCampaignListTask;
 import org.dosomething.letsdothis.tasks.InterestReportBackListTask;
+import org.dosomething.letsdothis.tasks.UpdateInterestGroupCampaignTask;
+import org.dosomething.letsdothis.tasks.UpdateInterestGroupCampaignTask.IdQuery;
 import org.dosomething.letsdothis.ui.CampaignDetailsActivity;
 import org.dosomething.letsdothis.ui.ReportBackDetailsActivity;
 import org.dosomething.letsdothis.ui.adapters.CampaignAdapter;
@@ -107,7 +110,17 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         recyclerView.setLayoutManager(layoutManager);
 
         EventBusExt.getDefault().register(this);
-        onCampaignRefresh();
+        dbCampaignRefresh();
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        if(adapter != null)
+        {
+            adapter.notifyItemRangeChanged(0, 3);
+        }
     }
 
     @Override
@@ -145,14 +158,18 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     }
 
     @Override
-    public void onCampaignRefresh()
+    public void onNetworkCampaignRefresh()
     {
         adapter.clear();
         currentPage = 0;
         totalPages = 0;
-        TaskQueue.loadQueueDefault(getActivity())
-                .execute(new InterestGroupCampaignListTask(InterestGroup.values()[position].id));
-        progress.setVisibility(View.VISIBLE);
+        for(InterestGroup i : InterestGroup.values())
+        {
+            getCampaignQueue()
+                    .execute(new UpdateInterestGroupCampaignTask(i.id));
+        }
+
+        refreshProgressBar();
     }
 
     private TaskQueue getCampaignQueue()
@@ -160,6 +177,39 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         return TaskQueue.loadQueue(getActivity(), "campaignQueue");
     }
 
+
+    public void dbCampaignRefresh()
+    {
+        adapter.clear();
+        currentPage = 0;
+        totalPages = 0;
+        DatabaseHelper.defaultDatabaseQueue(getActivity())
+                .execute(new DbInterestGroupCampaignListTask(findGroupId()));
+        refreshProgressBar();
+    }
+
+    private int findGroupId()
+    {
+        return InterestGroup.values()[position].id;
+    }
+
+    private void refreshProgressBar()
+    {
+        if(progress != null)
+        {
+            IdQuery queueQuery = new IdQuery(findGroupId());
+            getCampaignQueue().query(queueQuery);
+
+            if(queueQuery.found)
+            {
+                progress.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                progress.setVisibility(View.GONE);
+            }
+        }
+    }
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(InterestReportBackListTask task)
@@ -175,25 +225,38 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(InterestGroupCampaignListTask task)
+    public void onEventMainThread(DbInterestGroupCampaignListTask task)
     {
-        if(task.interestGroupId == InterestGroup.values()[position].id)
+        if(findGroupId() == task.interestGroupId)
         {
-            progress.setVisibility(View.GONE);
-            adapter.setCampaigns(task.campaigns);
-
-            campaignIds.clear();
-            for(Campaign campaign : task.campaigns)
+            if(task.campList.isEmpty())
             {
-                campaignIds.add(campaign.id);
+                getCampaignQueue()
+                        .execute(new UpdateInterestGroupCampaignTask(task.interestGroupId));
             }
+            else
+            {
+                refreshProgressBar();
+                adapter.setCampaigns(task.campList);
 
-            String campaigns = StringUtils.join(campaignIds, ",");
-            getCampaignQueue()
-                    .execute(new InterestReportBackListTask(position, campaigns, FIRST_PAGE));
+                campaignIds.clear();
+                for(Campaign campaign : task.campList)
+                {
+                    campaignIds.add(campaign.id);
+                }
 
+                String campaigns = StringUtils.join(campaignIds, ",");
+                getCampaignQueue()
+                        .execute(new InterestReportBackListTask(position, campaigns, FIRST_PAGE));
+
+            }
         }
+    }
 
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(UpdateInterestGroupCampaignTask task)
+    {
+        getCampaignQueue().execute(new DbInterestGroupCampaignListTask(task.interestGroupId));
     }
 
 }

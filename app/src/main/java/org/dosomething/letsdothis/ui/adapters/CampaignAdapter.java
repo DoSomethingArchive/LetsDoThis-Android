@@ -59,7 +59,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         void onScrolledToBottom();
 
-        void onCampaignRefresh();
+        void onNetworkCampaignRefresh();
     }
 
     public CampaignAdapter(CampaignAdapterClickListener campaignAdapterClickListener, Resources resources)
@@ -269,7 +269,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 @Override
                 public void onClick(View v)
                 {
-                    campaignAdapterClickListener.onCampaignRefresh();
+                    campaignAdapterClickListener.onNetworkCampaignRefresh();
                     //FIXME show progress bar
                 }
             });
@@ -381,7 +381,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void addAll(List<ReportBack> objects)
     {
-        if(!dataSet.isEmpty())
+        if(! dataSet.isEmpty())
         {
             dataSet.addAll(objects);
             notifyItemRangeInserted(dataSet.size() - objects.size(), dataSet.size() - 1);
@@ -399,11 +399,15 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
         else
         {
-            for(int i = 0, length = Math.min(dataSet.size(), indexOfPlaceHolder); i < length; i++)
+            int size = dataSet.size();
+            for(int i = 0; i < campaigns.size(); i++)
             {
-                dataSet.remove(i);
+                Campaign c = campaigns.get(i);
+                if(size > i && dataSet.get(i) instanceof Campaign)
+                {
+                    dataSet.set(i, c);
+                }
             }
-            dataSet.addAll(0, campaigns);
         }
         notifyDataSetChanged();
     }

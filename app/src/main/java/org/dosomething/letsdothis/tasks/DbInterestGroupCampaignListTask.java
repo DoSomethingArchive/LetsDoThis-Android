@@ -1,9 +1,10 @@
 package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
+import com.j256.ormlite.dao.Dao;
+
 import org.dosomething.letsdothis.data.Campaign;
-import org.dosomething.letsdothis.network.NetworkHelper;
-import org.dosomething.letsdothis.network.models.ResponseCampaignList;
+import org.dosomething.letsdothis.data.DatabaseHelper;
 
 import java.util.List;
 
@@ -13,12 +14,12 @@ import co.touchlab.android.threading.tasks.Task;
 /**
  * Created by izzyoji :) on 6/23/15.
  */
-public class InterestGroupCampaignListTask extends BaseNetworkErrorHandlerTask
+public class DbInterestGroupCampaignListTask extends Task
 {
+    public List<Campaign> campList;
     public int            interestGroupId;
-    public List<Campaign> campaigns;
 
-    public InterestGroupCampaignListTask(int interestGroupId)
+    public DbInterestGroupCampaignListTask(int interestGroupId)
     {
         this.interestGroupId = interestGroupId;
     }
@@ -26,22 +27,21 @@ public class InterestGroupCampaignListTask extends BaseNetworkErrorHandlerTask
     @Override
     protected void run(Context context) throws Throwable
     {
-        ResponseCampaignList response = NetworkHelper.getDoSomethingAPIService().campaignList(interestGroupId);
-        campaigns = ResponseCampaignList.getCampaigns(response);
+        Dao<Campaign, String> dao = DatabaseHelper.getInstance(context).getCampDao();
+        campList = dao.queryBuilder().where().eq(Campaign.INTEREST_GROUP, interestGroupId).query();
     }
 
     @Override
     protected boolean handleError(Context context, Throwable throwable)
     {
-        super.handleError(context, throwable);
         return false;
     }
 
     @Override
     protected void onComplete(Context context)
     {
-        EventBusExt.getDefault().post(this);
         super.onComplete(context);
+        EventBusExt.getDefault().post(this);
     }
 
 }

@@ -140,7 +140,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     });
                     break;
                 case SHOW_OFF:
-                    actionButtonsViewHolder.proveShare.setText(R.string.show_me_how);
+                    actionButtonsViewHolder.proveShare.setText(R.string.show_off);
                     actionButtonsViewHolder.proveShare.setOnClickListener(new View.OnClickListener()
                     {
                         @Override
@@ -159,6 +159,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             FriendViewHolder friendViewHolder = (FriendViewHolder) holder;
 
             Picasso.with(friendViewHolder.itemView.getContext()).load(user.avatarPath)
+                    .placeholder(R.drawable.ic_action_user)
                    .into((ImageView) friendViewHolder.itemView);
 
             friendViewHolder.itemView.setOnClickListener(new View.OnClickListener()
