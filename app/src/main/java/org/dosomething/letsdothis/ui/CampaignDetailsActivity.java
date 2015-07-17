@@ -139,7 +139,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     {
         Campaign campaign = adapter.getCampaign();
         startActivity(
-                CampaignInviteActivity.getLaunchIntent(this, campaign.title, campaign.invite.code));
+                CampaignInviteActivity.getLaunchIntent(this, campaign.title, campaign.signupGroup));
     }
 
     @Override
@@ -257,7 +257,6 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     {
         if(task.campaign != null)
         {
-            //            rBInfo = task.reportbackInfo;
             adapter.updateCampaign(task.campaign);
         }
         else
