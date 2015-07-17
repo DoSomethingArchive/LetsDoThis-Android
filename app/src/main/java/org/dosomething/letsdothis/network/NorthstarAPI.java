@@ -92,11 +92,11 @@ public interface NorthstarAPI
 
     @Headers("Content-Type: application/json")
     @POST("/user/campaigns/{id}/signup")
-    ResponseCampaignSignUp campaignSignUp(@Body RequestCampaignSignup requestCampaignSignup, @Path("id") int id, @Header("Session") String sessionToken);
+    ResponseCampaignSignUp campaignSignUp(@Body RequestCampaignSignup requestCampaignSignup, @Path("id") int id, @Header("Session") String sessionToken) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @GET("/users/_id/{id}/campaigns")
-    ResponseUserCampaign getUserCampaigns(@Path("id") String id);
+    ResponseUserCampaign getUserCampaigns(@Path("id") String id) throws NetworkException;
 
     @GET("/signup-group/{groupId}")
     ResponseGroup group(@Path("groupId") int groupId);

@@ -381,7 +381,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void addAll(List<ReportBack> objects)
     {
-        if(!dataSet.isEmpty())
+        if(! dataSet.isEmpty() && objects != null)
         {
             dataSet.addAll(objects);
             notifyItemRangeInserted(dataSet.size() - objects.size(), dataSet.size() - 1);
