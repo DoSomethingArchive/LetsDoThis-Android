@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Invite;
+import org.dosomething.letsdothis.utils.Hashery;
 
 /**
  * Created by izzyoji :) on 5/13/15.
@@ -17,7 +18,7 @@ public class CampaignInviteActivity extends BaseActivity
 {
 
     public static final String EXTRA_CAMPAIGN_NAME = "campaign_name";
-    public static final String EXTRA_INVITE_CODE   = "invite_code";
+    public static final String EXTRA_SIGNUP_GROUP  = "signup_group";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -26,15 +27,15 @@ public class CampaignInviteActivity extends BaseActivity
         super.setContentView(R.layout.activity_campaign_invite);
 
         final String campaignName = getIntent().getStringExtra(EXTRA_CAMPAIGN_NAME);
-        final String inviteCode = getIntent().getStringExtra(EXTRA_INVITE_CODE);
+        final int inviteCode = getIntent().getIntExtra(EXTRA_SIGNUP_GROUP, - 1);
 
         initUI(campaignName, inviteCode);
     }
 
-    private void initUI(final String campaignName, final String inviteCode)
+    private void initUI(final String campaignName, final int groupId)
     {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("R.string.app_name");
+        toolbar.setTitle(campaignName);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -45,14 +46,15 @@ public class CampaignInviteActivity extends BaseActivity
         details.setText(getString(R.string.desc_campaign_invite, campaignName));
 
         TextView code = (TextView) findViewById(R.id.code);
-        code.setText(inviteCode);
+        final String hashedCode = Hashery.getInstance(this).encode(groupId);
+        code.setText(hashedCode);
 
         findViewById(R.id.invite).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                startActivity(Invite.buildShareIntent(getResources(), campaignName, inviteCode));
+                startActivity(Invite.buildShareIntent(getResources(), campaignName, hashedCode));
             }
         });
     }
@@ -70,10 +72,10 @@ public class CampaignInviteActivity extends BaseActivity
         }
     }
 
-    public static Intent getLaunchIntent(Context context, String campaignName, String inviteCode)
+    public static Intent getLaunchIntent(Context context, String campaignName, int signupGroup)
     {
         return new Intent(context, CampaignInviteActivity.class)
                 .putExtra(EXTRA_CAMPAIGN_NAME, campaignName)
-                .putExtra(EXTRA_INVITE_CODE, inviteCode);
+                .putExtra(EXTRA_SIGNUP_GROUP, signupGroup);
     }
 }
