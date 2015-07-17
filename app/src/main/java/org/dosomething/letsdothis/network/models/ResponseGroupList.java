@@ -3,7 +3,6 @@ import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.User;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -15,8 +14,20 @@ public class ResponseGroupList
 
     public static class Wrapper
     {
-        String               campaign_id;
-        ResponseUser.Wrapper users[];
+        String    campaign_id;
+        GroupUser users[];
+    }
+
+    public static class GroupUser
+    {
+        String email;
+        String mobile;
+        String first_name;
+        String last_name;
+        String _id;
+        String birthdate;
+        String avatar;
+        int    drupal_id;
     }
 
     public static Map<Integer, Campaign> addUsers(Map<Integer, Campaign> campMap, ResponseGroupList response)
@@ -25,9 +36,9 @@ public class ResponseGroupList
         {
             if(r.users.length > 0)
             {
-                for(ResponseUser.Wrapper u : r.users)
+                for(GroupUser u : r.users)
                 {
-                    User user = ResponseUser.getUser(u);
+                    User user = getUser(u);
                     int id = Integer.parseInt(r.campaign_id);
 
                     Campaign campaign = campMap.get(id);
@@ -38,6 +49,20 @@ public class ResponseGroupList
         }
 
         return campMap;
+    }
+
+    public static User getUser(GroupUser wrapper)
+    {
+        User user = new User();
+        user.email = wrapper.email;
+        user.mobile = wrapper.mobile;
+        user.first_name = wrapper.first_name;
+        user.last_name = wrapper.last_name;
+        user.id = wrapper._id;
+        user.birthdate = wrapper.birthdate;
+        user.drupalId = wrapper.drupal_id;
+        user.avatarPath = wrapper.avatar;
+        return user;
     }
 
 }
