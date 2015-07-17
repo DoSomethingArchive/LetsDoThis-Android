@@ -6,6 +6,16 @@
                 android:layout_height="match_parent">
 
 
+    <ProgressBar
+        android:id="@+id/progress"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_progress"
+        android:indeterminate="true"
+        android:visibility="gone"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler"
         android:background="@color/white"

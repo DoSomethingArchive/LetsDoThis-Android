@@ -150,9 +150,9 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @Override
-    public void groupClicked(int campaignId, String userId)
+    public void groupClicked(int groupId)
     {
-        startActivity(GroupActivity.getLaunchIntent(getActivity(), campaignId, userId));
+        startActivity(GroupActivity.getLaunchIntent(getActivity(), groupId));
     }
 
     @Override
@@ -187,10 +187,10 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @Override
-    public void onInviteClicked(Campaign campaign)
+    public void onInviteClicked(String title, int signupGroup)
     {
         startActivity(CampaignInviteActivity
-                              .getLaunchIntent(getActivity(), campaign.title, campaign.invite.code));
+                              .getLaunchIntent(getActivity(), title, signupGroup));
     }
 
     @Override
@@ -284,6 +284,10 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         if(! task.currentCampaignList.isEmpty())
         {
             adapter.addCurrentCampaign(task.currentCampaignList);
+        }
+        if(! task.pastCampaignList.isEmpty())
+        {
+            adapter.addPastCampaign(task.pastCampaignList);
         }
     }
 

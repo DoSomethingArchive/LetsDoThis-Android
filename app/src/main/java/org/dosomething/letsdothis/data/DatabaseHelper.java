@@ -25,7 +25,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private static DatabaseHelper instance;
     // @reminder Ordering matters, create foreign key dependant classes later
-    private final Class[] tableClasses = new Class[] {User.class, CampaignActions.class};
+    private final Class[] tableClasses = new Class[] {User.class, CampaignActions.class, Campaign.class};
 
     private DatabaseHelper(Context context)
     {
@@ -102,6 +102,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
     {
         return getDao(User.class);
     }
+
+    public Dao<Campaign, String> getCampDao() throws SQLException
+    {
+        return getDao(Campaign.class);
+    }
+
+
 
 }
 
