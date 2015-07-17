@@ -19,15 +19,14 @@ public class Campaign
     public String      count;
     public UploadShare showShare;
     public List<User> group  = new ArrayList<>();
-    //FIXME invite code will come from the user's campaign data
-    public Invite     invite = new Invite();
     public String noun;
     public String verb;
+    public int    signupGroup;
 
-    public static enum UploadShare
+    public enum UploadShare
     {
         UPLOADING,
         SHOW_OFF,
-        SHARE;
+        SHARE
     }
 }

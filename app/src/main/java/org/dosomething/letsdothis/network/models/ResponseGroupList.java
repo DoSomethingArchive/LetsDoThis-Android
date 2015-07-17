@@ -3,7 +3,6 @@ import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.User;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -15,7 +14,8 @@ public class ResponseGroupList
 
     public static class Wrapper
     {
-        String               campaign_id;
+        int                  campaign_id;
+        int                  signup_group;
         ResponseUser.Wrapper users[];
     }
 
@@ -23,14 +23,16 @@ public class ResponseGroupList
     {
         for(Wrapper r : response.data)
         {
+            Campaign campaign = campMap.get(r.campaign_id);
+            campaign.signupGroup = r.signup_group;
+
             if(r.users.length > 0)
             {
                 for(ResponseUser.Wrapper u : r.users)
                 {
                     User user = ResponseUser.getUser(u);
-                    int id = Integer.parseInt(r.campaign_id);
 
-                    Campaign campaign = campMap.get(id);
+
                     campaign.group = new ArrayList<>();
                     campaign.group.add(user);
                 }
