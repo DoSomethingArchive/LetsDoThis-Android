@@ -1,7 +1,6 @@
 package org.dosomething.letsdothis.ui.fragments;
 import android.app.Activity;
 import android.content.Context;
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -9,17 +8,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.SwitchPreference;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.preference.SwitchPreference;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.UploadAvatarTask;
 import org.dosomething.letsdothis.ui.BaseActivity;
-import org.dosomething.letsdothis.ui.ChangeEmailActivity;
-import org.dosomething.letsdothis.ui.ChangeNumberActivity;
-import org.dosomething.letsdothis.ui.ChangePasswordActivity;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.io.File;
@@ -88,7 +84,7 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                     }
                 });
     }
-    
+
     private void initChangePhoto()
     {
         findPreference(getString(R.string.change_photo))
@@ -97,9 +93,7 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                     @Override
                     public boolean onPreferenceClick(Preference preference)
                     {
-
                         choosePicture();
-                        //                        startActivity(ChangeNumberActivity.getResultIntent(getActivity()));
                         return true;
                     }
                 });
@@ -126,8 +120,8 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                     @Override
                     public boolean onPreferenceClick(Preference preference)
                     {
-                        getFragmentManager().beginTransaction().replace(R.id.container,
-                                                                        new NotificationSettingsFragment())
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.container, new NotificationSettingsFragment())
                                 .addToBackStack(null).commit();
                         return true;
                     }

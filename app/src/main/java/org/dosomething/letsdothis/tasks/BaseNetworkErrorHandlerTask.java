@@ -1,9 +1,11 @@
 package org.dosomething.letsdothis.tasks;
 import android.content.Context;
+import android.widget.Toast;
+
+import org.dosomething.letsdothis.R;
 
 import java.net.HttpURLConnection;
 
-import co.touchlab.android.threading.errorcontrol.NetworkException;
 import co.touchlab.android.threading.tasks.Task;
 import retrofit.RetrofitError;
 
@@ -25,6 +27,9 @@ public abstract class BaseNetworkErrorHandlerTask extends Task
             }
         }
 
-        return throwable.getCause() instanceof NetworkException;
+        Toast.makeText(context, context.getString(R.string.bad_connection), Toast.LENGTH_SHORT)
+                .show();
+        return true;
+        //        return throwable.getCause() instanceof NetworkException;
     }
 }
