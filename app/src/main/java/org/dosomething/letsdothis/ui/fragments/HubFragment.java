@@ -22,7 +22,6 @@ import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.tasks.DbGetUserTask;
 import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignsTask;
-import org.dosomething.letsdothis.tasks.GetPastUserCampaignsTask;
 import org.dosomething.letsdothis.tasks.GetUserTask;
 import org.dosomething.letsdothis.tasks.RbShareDataTask;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
@@ -190,8 +189,8 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     @Override
     public void onInviteClicked(Campaign campaign)
     {
-        startActivity(CampaignInviteActivity
-                              .getLaunchIntent(getActivity(), campaign.title, campaign.invite.code));
+        startActivity(CampaignInviteActivity.getLaunchIntent(getActivity(), campaign.title,
+                                                             campaign.invite.code));
     }
 
     @Override
@@ -255,7 +254,6 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     private void refreshUserCampaign()
     {
         TaskQueue.loadQueueDefault(getActivity()).execute(new GetCurrentUserCampaignsTask());
-        TaskQueue.loadQueueDefault(getActivity()).execute(new GetPastUserCampaignsTask());
         refreshProgressBar();
     }
 
@@ -287,12 +285,6 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         {
             adapter.addCurrentCampaign(task.currentCampaignList);
         }
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(GetPastUserCampaignsTask task)
-    {
-        refreshProgressBar();
         if(! task.pastCampaignList.isEmpty())
         {
             adapter.addPastCampaign(task.pastCampaignList);

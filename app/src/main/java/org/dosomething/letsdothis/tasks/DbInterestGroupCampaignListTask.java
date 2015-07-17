@@ -14,12 +14,12 @@ import co.touchlab.android.threading.tasks.Task;
 /**
  * Created by izzyoji :) on 6/23/15.
  */
-public class DbInterestGroupCampListTask extends Task
+public class DbInterestGroupCampaignListTask extends Task
 {
     public List<Campaign> campList;
     public int            interestGroupId;
 
-    public DbInterestGroupCampListTask(int interestGroupId)
+    public DbInterestGroupCampaignListTask(int interestGroupId)
     {
         this.interestGroupId = interestGroupId;
     }
