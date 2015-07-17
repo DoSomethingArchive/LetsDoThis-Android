@@ -100,7 +100,7 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
         String pastIds = "";
         for(ResponseUserCampaign.Wrapper campaignData : userCampaigns.data)
         {
-            if(currCampIds.contains(campaignData.drupal_id))
+            if(!currCampIds.contains(campaignData.drupal_id))
             {
                 pastIds = campaignData.drupal_id + ",";
             }
