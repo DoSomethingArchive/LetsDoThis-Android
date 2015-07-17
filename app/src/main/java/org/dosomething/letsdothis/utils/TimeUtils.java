@@ -92,7 +92,7 @@ public class TimeUtils
         return expire;
     }
 
-    public static long getSampleExpirationTime()
+    public static long getExpirationTime()
     {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, 1);

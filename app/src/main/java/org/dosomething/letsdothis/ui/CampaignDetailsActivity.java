@@ -5,12 +5,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import org.dosomething.letsdothis.BuildConfig;
@@ -139,7 +141,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     {
         Campaign campaign = adapter.getCampaign();
         startActivity(
-                CampaignInviteActivity.getLaunchIntent(this, campaign.title, campaign.invite.code));
+                CampaignInviteActivity.getLaunchIntent(this, campaign.title, campaign.signupGroup));
     }
 
     @Override
@@ -257,7 +259,6 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     {
         if(task.campaign != null)
         {
-            //            rBInfo = task.reportbackInfo;
             adapter.updateCampaign(task.campaign);
         }
         else
