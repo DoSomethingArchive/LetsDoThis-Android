@@ -285,6 +285,10 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         {
             adapter.addCurrentCampaign(task.currentCampaignList);
         }
+        if(! task.pastCampaignList.isEmpty())
+        {
+            adapter.addPastCampaign(task.pastCampaignList);
+        }
     }
 
     @SuppressWarnings("UnusedDeclaration")

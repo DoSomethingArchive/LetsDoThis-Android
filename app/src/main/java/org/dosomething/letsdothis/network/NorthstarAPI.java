@@ -85,7 +85,6 @@ public interface NorthstarAPI
     @POST("/user/campaigns/{nid}/reportback")
     ResponseSubmitReportBack submitReportback(@Header("Session") String sessionToken, @Body RequestReportback requestreportback, @Path("nid") int id) throws NetworkException;
 
-
     @Headers("Content-Type: application/json")
     @GET("/user/campaigns/{id}")
     ResponseRbData getRbData(@Header("Session") String sessionToken, @Path("id") int campId) throws NetworkException;
