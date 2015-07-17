@@ -43,13 +43,12 @@ public class Campaign
 
 
     public List<User> group  = new ArrayList<>();
-    //FIXME invite code will come from the user's campaign data
-    public Invite     invite = new Invite();
+    public int    signupGroup;
 
     public enum UploadShare
     {
         UPLOADING,
         SHOW_OFF,
-        SHARE;
+        SHARE
     }
 }

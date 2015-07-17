@@ -14,8 +14,9 @@ public class ResponseGroupList
 
     public static class Wrapper
     {
-        String    campaign_id;
-        GroupUser users[];
+        int                  campaign_id;
+        int                  signup_group;
+        ResponseUser.Wrapper users[];
     }
 
     public static class GroupUser
@@ -34,15 +35,16 @@ public class ResponseGroupList
     {
         for(Wrapper r : response.data)
         {
+            Campaign campaign = campMap.get(r.campaign_id);
+            campaign.signupGroup = r.signup_group;
+            campaign.group = new ArrayList<>();
+            
             if(r.users.length > 0)
             {
                 for(GroupUser u : r.users)
                 {
                     User user = getUser(u);
-                    int id = Integer.parseInt(r.campaign_id);
-
-                    Campaign campaign = campMap.get(id);
-                    campaign.group = new ArrayList<>();
+                    
                     campaign.group.add(user);
                 }
             }
