@@ -338,7 +338,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if(hubList.isEmpty())
         {
             Campaign campaign = objects.get(0);
-            setExpirationView(campaign);
+            setExpirationView();
             int i = hubList.indexOf(BEEN_THERE_DONE_GOOD);
             hubList.addAll(i, objects);
             notifyItemRangeInserted(hubList.size() - objects.size(), hubList.size() - 1);
