@@ -11,7 +11,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -132,7 +131,6 @@ public class MainActivity extends BaseActivity implements SetTitleListener
                     if(TextUtils.equals(positionString, getString(R.string.actions)))
                     {
                         replaceCurrentFragment(ActionsFragment.newInstance(), ActionsFragment.TAG);
-
                     }
                     else if(TextUtils.equals(positionString, getString(R.string.hub)))
                     {

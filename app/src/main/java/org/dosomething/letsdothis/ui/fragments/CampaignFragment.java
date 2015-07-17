@@ -112,7 +112,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         super.onResume();
         if(adapter != null)
         {
-//            adapter.notifyItemRangeChanged(0, 3);
+            adapter.notifyItemRangeChanged(0, 3);
         }
     }
 
