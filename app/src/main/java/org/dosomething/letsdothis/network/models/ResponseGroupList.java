@@ -16,7 +16,7 @@ public class ResponseGroupList
     {
         int                  campaign_id;
         int                  signup_group;
-        ResponseUser.Wrapper users[];
+        GroupUser users[];
     }
 
     public static class GroupUser
