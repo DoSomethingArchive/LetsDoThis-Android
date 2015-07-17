@@ -4,12 +4,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.squareup.picasso.Picasso;
@@ -238,12 +238,15 @@ public class RegisterActivity extends BaseActivity
                 groupId = Hashery.getInstance(this).decode(code);
             }
             broadcastLogInSuccess(this);
-            Toast.makeText(this, "success register", Toast.LENGTH_SHORT).show();
             startActivity(MainActivity.getLaunchIntent(this, groupId, allFilled));
         }
         else
         {
-            Toast.makeText(this, "failed register", Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar
+                    .make(findViewById(R.id.snack), R.string.fail_register, Snackbar.LENGTH_SHORT);
+            View snackBarView = snackbar.getView();
+            snackBarView.setBackgroundColor(getResources().getColor(R.color.snack_error));
+            snackbar.show();
         }
     }
 
