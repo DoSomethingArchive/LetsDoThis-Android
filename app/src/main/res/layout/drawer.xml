@@ -38,8 +38,8 @@
         android:paddingLeft="@dimen/padding_medium">
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@drawable/ic_settings"/>
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView

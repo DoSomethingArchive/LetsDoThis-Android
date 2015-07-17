@@ -192,7 +192,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View v)
                 {
-                    hubAdapterClickListener.onInviteClicked(campaign);
+                    hubAdapterClickListener.onInviteClicked(campaign.title, campaign.signupGroup);
                 }
             });
 
@@ -207,7 +207,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     @Override
                     public void onClick(View v)
                     {
-                        hubAdapterClickListener.groupClicked(campaign.id, user.id);
+                        hubAdapterClickListener.groupClicked(campaign.signupGroup);
                     }
                 });
 
@@ -221,7 +221,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     {
                         User friend = campaign.group.get(i);
                         Picasso.with(context).load(friend.avatarPath)
-                                .placeholder(R.mipmap.ic_launcher).resize(friendSize, 0)
+                                .placeholder(R.drawable.ic_action_user).resize(friendSize, 0)
                                 .into(imageView);
                         childAt.setOnClickListener(new View.OnClickListener()
                         {
@@ -314,7 +314,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
         else if(currentObject instanceof Campaign)
         {
-            //FIXME properly get if campaign is past
             int posOfPastHeader = hubList.indexOf(BEEN_THERE_DONE_GOOD);
             if(position < posOfPastHeader)
             {
@@ -334,17 +333,17 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public void addCurrentCampaign(List<Campaign> objects)
     {
+        setExpirationView();
         if(hubList.isEmpty())
         {
-            Campaign campaign = objects.get(0);
-            setExpirationView(campaign);
+            setExpirationView();
             int i = hubList.indexOf(BEEN_THERE_DONE_GOOD);
             hubList.addAll(i, objects);
             notifyItemRangeInserted(hubList.size() - objects.size(), hubList.size() - 1);
         }
         else
         {
-            for(int i = 0, j = 2; i < objects.size(); i++)
+            for(int i = 0, j = 3; i < objects.size(); i++)
             {
                 Object o = hubList.get(j);
                 if(o instanceof Campaign)
@@ -363,19 +362,16 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    private void setExpirationView(Campaign campaign)
+    private void setExpirationView()
     {
-        //        campaign.startTime  //FIXME get real expiration time
-
         if(! isPublic)
         {
-            Long l = TimeUtils.getSampleExpirationTime();
+            Long expire = TimeUtils.getExpirationTime();
             int i = hubList.indexOf(CURRENTLY_DOING);
-            hubList.add(i + 1, l);
+            hubList.add(i + 1, expire);
         }
     }
 
-    //fixme handle past campaigns
     public void addPastCampaign(List<Campaign> objects)
     {
         hubList.addAll(objects);
@@ -500,12 +496,12 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     {
         void friendClicked(String friendId);
 
-        void groupClicked(int campaignId, String userId);
+        void groupClicked(int groupId);
 
         void onShareClicked(Campaign campaign);
 
         void onProveClicked(Campaign campaign);
 
-        void onInviteClicked(Campaign campaign);
+        void onInviteClicked(String title, int signupGroup);
     }
 }

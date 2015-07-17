@@ -29,8 +29,8 @@
                 android:id="@+id/avatarContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_gravity="center"
+                android:orientation="vertical"
                 tools:visibility="gone">
 
                 <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
@@ -60,29 +60,28 @@
                 android:id="@+id/fbContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_gravity="center"
+                android:orientation="vertical"
                 android:visibility="gone"
                 tools:visibility="visible">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/fb_logo"
                     android:layout_gravity="center_horizontal"
-                    android:layout_margin="@dimen/padding_wedge"/>
+                    android:layout_margin="@dimen/padding_wedge"
+                    android:src="@drawable/fb_logo"/>
 
                 <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_marginTop="@dimen/padding_small"
                     android:layout_marginBottom="@dimen/padding_xlarge"
+                    android:layout_marginTop="@dimen/padding_small"
+                    android:gravity="center"
                     android:text="@string/confirm_fb"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_33"/>
-
 
 
             </LinearLayout>
@@ -225,6 +224,15 @@
                 android:text="@string/footer_register"
                 android:textColor="@color/white"/>
         </LinearLayout>
+
     </ScrollView>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/snack"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+    </android.support.design.widget.CoordinatorLayout>
 
 </RelativeLayout>
