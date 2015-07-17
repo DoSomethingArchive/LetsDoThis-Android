@@ -5,10 +5,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -26,6 +26,7 @@ import org.dosomething.letsdothis.tasks.JoinGroupTask;
 import org.dosomething.letsdothis.ui.PublicProfileActivity;
 import org.dosomething.letsdothis.ui.ReportBackDetailsActivity;
 import org.dosomething.letsdothis.ui.adapters.JoinGroupAdapter;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -127,7 +128,11 @@ public class JoinGroupDialogFragment extends DialogFragment implements JoinGroup
         {
             ResponseUserCampaign.Wrapper.ResponseReportBackData reportBackData = wrapper.campaigns[0].reportback_data;
             User user = ResponseUser.getUser(wrapper);
-            data.add(user);
+            String currentUserId = AppPrefs.getInstance(getActivity()).getCurrentUserId();
+            if(! TextUtils.equals(currentUserId, user.id))
+            {
+                data.add(user);
+            }
             if(reportBackData != null)
             {
                 reportBacks.addAll(ResponseReportBackList.getReportBacks(reportBackData.reportback_items));
