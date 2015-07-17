@@ -49,7 +49,7 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
 
         //-------get user's campaign id list/ which ones have RB
         String campaignIds = "";
-        String signupIds = "";
+        String signUpGroups = "";
         for(ResponseUserCampaign.Wrapper campaignData : userCampaigns.data)
         {
             if(campaignData.reportback_data != null)
@@ -57,7 +57,7 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
                 doneCampaigns.add(campaignData.drupal_id);
             }
             campaignIds += campaignData.drupal_id + ",";
-            signupIds += campaignData.signup_id + ",";
+            signUpGroups += campaignData.signup_group + ",";
         }
 
         //-------get campaign and mark which have RB
@@ -78,8 +78,8 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
         }
 
         //-------add group info for the campaign
-        signupIds = signupIds.substring(0, signupIds.length() - 1);
-        ResponseGroupList response = northstarAPIService.groupList(signupIds);
+        signUpGroups = signUpGroups.substring(0, signUpGroups.length() - 1);
+        ResponseGroupList response = northstarAPIService.groupList(signUpGroups);
         ResponseGroupList.addUsers(campMap, response);
 
         currentCampaignList.addAll(campMap.values());
