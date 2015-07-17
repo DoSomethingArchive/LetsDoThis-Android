@@ -1,4 +1,6 @@
 package org.dosomething.letsdothis.network.models;
+import android.text.TextUtils;
+
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.User;
 
@@ -31,7 +33,7 @@ public class ResponseGroupList
         int    drupal_id;
     }
 
-    public static Map<Integer, Campaign> addUsers(Map<Integer, Campaign> campMap, ResponseGroupList response)
+    public static Map<Integer, Campaign> addUsers(Map<Integer, Campaign> campMap, ResponseGroupList response, String currentUserId)
     {
         for(Wrapper r : response.data)
         {
@@ -44,8 +46,10 @@ public class ResponseGroupList
                 for(GroupUser u : r.users)
                 {
                     User user = getUser(u);
-                    
-                    campaign.group.add(user);
+                    if(! TextUtils.equals(currentUserId, user.id))
+                    {
+                        campaign.group.add(user);
+                    }
                 }
             }
         }
