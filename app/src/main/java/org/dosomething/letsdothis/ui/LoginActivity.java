@@ -95,10 +95,23 @@ public class LoginActivity extends BaseActivity
             @Override
             public void onClick(View view)
             {
+
                 String usertext = phoneEmail.getText().toString();
                 String passtext = password.getText().toString();
-                TaskQueue.loadQueueDefault(LoginActivity.this)
-                        .execute(new LoginTask(usertext, passtext));
+                if(TextUtils.isEmpty(usertext))
+                {
+                    phoneEmail.setError("Must not be empty");
+                }
+                else if(TextUtils.isEmpty(passtext))
+                {
+                    password.setError("Must not be empty");
+                }
+                else
+                {
+                    TaskQueue.loadQueueDefault(LoginActivity.this)
+                             .execute(new LoginTask(usertext, passtext));
+                }
+
             }
         });
 
@@ -118,7 +131,6 @@ public class LoginActivity extends BaseActivity
                 groupId = Hashery.getInstance(this).decode(code);
             }
             broadcastLogInSuccess(this);
-            Snackbar.make(findViewById(R.id.snack), getString(R.string.success_login), Snackbar.LENGTH_LONG).show();
             startActivity(MainActivity.getLaunchIntent(this, groupId, allFilled));
         }
         else
