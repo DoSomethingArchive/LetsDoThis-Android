@@ -1,9 +1,9 @@
 package org.dosomething.letsdothis.tasks;
 import android.content.Context;
+import android.widget.Toast;
 
 import java.net.HttpURLConnection;
 
-import co.touchlab.android.threading.errorcontrol.NetworkException;
 import co.touchlab.android.threading.tasks.Task;
 import retrofit.RetrofitError;
 
@@ -25,6 +25,8 @@ public abstract class BaseNetworkErrorHandlerTask extends Task
             }
         }
 
-        return throwable.getCause() instanceof NetworkException;
+        Toast.makeText(context, "There was a connection error.", Toast.LENGTH_SHORT).show();
+        return true;
+        //        return throwable.getCause() instanceof NetworkException;
     }
 }
