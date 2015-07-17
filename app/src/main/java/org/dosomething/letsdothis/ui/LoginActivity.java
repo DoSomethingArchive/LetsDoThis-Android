@@ -3,10 +3,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
@@ -118,12 +118,16 @@ public class LoginActivity extends BaseActivity
                 groupId = Hashery.getInstance(this).decode(code);
             }
             broadcastLogInSuccess(this);
-            Toast.makeText(this, "success login", Toast.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(R.id.snack), getString(R.string.success_login), Snackbar.LENGTH_LONG).show();
             startActivity(MainActivity.getLaunchIntent(this, groupId, allFilled));
         }
         else
         {
-            Toast.makeText(this, "failed login", Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar
+                    .make(findViewById(R.id.snack), R.string.fail_login, Snackbar.LENGTH_SHORT);
+            View snackBarView = snackbar.getView();
+            snackBarView.setBackgroundColor(getResources().getColor(R.color.snack_error));
+            snackbar.show();
         }
     }
 

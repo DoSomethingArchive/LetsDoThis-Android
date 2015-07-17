@@ -60,4 +60,6 @@
     <color name="black_5">#0D000000</color>
     <color name="fb_bg">#3b579d</color>
     <color name="hint">#D6D6D6</color>
+    <color name="snack_error">#d0021b</color>
+    <color name="snack_success">#0fad22</color>
 </resources>

@@ -109,11 +109,16 @@
     <string name="intro_desc_1">Discover new (monthly!) ways to have fun based on things
         you like most.\nPlus, you’ll be doing some social good!
     </string>
-    <string name="intro_title_2">Get Social</string>
+    <string name="fail_register">Register failed</string>
+    <string name="fail_login">Login failed</string>    <string name="intro_title_2">Get Social</string>
+    <string name="success_login">Login successful</string>
+    <string name="success_register">Register successful</string>
     <string name="intro_desc_2">Use exclusive invite codes to get your friends to join you in
         action.
     </string>
     <string name="intro_title_3">Get Props</string>
     <string name="intro_desc_3">Submit your photos to show off and get props from other users.
     </string>
+    <string name="reportback_success">Reportback uploaded</string>
+
 </resources>
