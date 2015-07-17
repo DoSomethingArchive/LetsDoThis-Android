@@ -124,6 +124,13 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     }
 
     @Override
+    public void onDestroy()
+    {
+        EventBusExt.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Override
     public void onCampaignClicked(int campaignId)
     {
         TaskQueue.loadQueueDefault(getActivity()).execute(new CampaignSignUpTask(campaignId));
