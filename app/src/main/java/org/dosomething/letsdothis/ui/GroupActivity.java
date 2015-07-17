@@ -146,19 +146,6 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
         choosePicture();
     }
 
-    @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(CampaignGroupDetailsTask task)
-    {
-        if(task.campaign != null)
-        {
-            adapter.updateCampaign(task.campaign);
-        }
-        else
-        {
-            Toast.makeText(this, "campaign data failed", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -207,7 +194,6 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
         }
     }
 
-
     public void choosePicture()
     {
         Intent pickIntent = new Intent(Intent.ACTION_PICK,
@@ -249,6 +235,19 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
         else
         {
             progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(CampaignGroupDetailsTask task)
+    {
+        if(task.campaign != null)
+        {
+            adapter.updateCampaign(task.campaign);
+        }
+        else
+        {
+            Toast.makeText(this, "campaign data failed", Toast.LENGTH_SHORT).show();
         }
     }
 
