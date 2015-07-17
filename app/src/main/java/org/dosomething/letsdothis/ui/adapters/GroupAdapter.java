@@ -60,7 +60,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 return new ReportBackViewHolder((ReportBackImageView) reportBackLayout);
             case VIEW_TYPE_ACTION_BUTTONS:
                 View primaryButton = LayoutInflater.from(parent.getContext())
-                                               .inflate(R.layout.item_action_buttons, parent, false);
+                                                   .inflate(R.layout.item_action_buttons, parent, false);
                 return new ActionButtonsViewHolder(primaryButton);
             case VIEW_TYPE_REWARD:
                 View rewardLayout = LayoutInflater.from(parent.getContext())
@@ -78,10 +78,6 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position)
     {
-        if(dataSet.size() >= 24 && position == dataSet.size() - 3)
-        {
-            groupAdapterClickListener.onScrolledToBottom();
-        }
 
         if(getItemViewType(position) == VIEW_TYPE_CAMPAIGN)
         {
@@ -122,17 +118,40 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View v)
                 {
-                    groupAdapterClickListener.onInviteClicked();
+                    groupAdapterClickListener.onInviteClicked(currentCampaign.title);
                 }
             });
-            actionButtonsViewHolder.proveShare.setOnClickListener(new View.OnClickListener()
+
+            switch(currentCampaign.showShare)
             {
-                @Override
-                public void onClick(View v)
-                {
-                    groupAdapterClickListener.onProveShareClicked();
-                }
-            });
+                case UPLOADING:
+                    actionButtonsViewHolder.proveShare.setText(R.string.uploading);
+                    actionButtonsViewHolder.proveShare.setOnClickListener(null);
+                    break;
+                case SHARE:
+                    actionButtonsViewHolder.proveShare.setText(R.string.share_photo);
+                    actionButtonsViewHolder.proveShare.setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            groupAdapterClickListener.onShareClicked(currentCampaign);
+                        }
+                    });
+                    break;
+                case SHOW_OFF:
+                    actionButtonsViewHolder.proveShare.setText(R.string.show_me_how);
+                    actionButtonsViewHolder.proveShare.setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            groupAdapterClickListener.onShowOffClicked(currentCampaign);
+                        }
+                    });
+                    break;
+            }
+
         }
         else if(getItemViewType(position) == VIEW_TYPE_FRIEND)
         {
@@ -186,15 +205,6 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return dataSet.size();
     }
 
-    public void addAll(List<ReportBack> reportBacks)
-    {
-        if(!dataSet.contains(actionButtons))
-        {
-            dataSet.add(actionButtons);
-        }
-        dataSet.addAll(reportBacks);
-        notifyDataSetChanged();
-    }
 
     public int getStartPositionOfReportBacks()
     {
@@ -224,6 +234,19 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public Campaign getCampaign()
     {
         return currentCampaign;
+    }
+
+    public void addUsers(List<User> users)
+    {
+        dataSet.addAll(users);
+        dataSet.add(actionButtons);
+        notifyDataSetChanged();
+    }
+
+    public void addReportBacks(List<ReportBack> reportBacks)
+    {
+        dataSet.addAll(reportBacks);
+        notifyDataSetChanged();
     }
 
     private class Reward
@@ -260,12 +283,12 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     {
         void onReportBackClicked(int reportBackId);
 
-        void onScrolledToBottom();
-
-        void onProveShareClicked();
-
-        void onInviteClicked();
+        void onInviteClicked(String title);
 
         void onFriendClicked(String id);
+
+        void onShareClicked(Campaign campaign);
+
+        void onShowOffClicked(Campaign campaign);
     }
 }

@@ -192,7 +192,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View v)
                 {
-                    hubAdapterClickListener.onInviteClicked(campaign);
+                    hubAdapterClickListener.onInviteClicked(campaign.title, campaign.signupGroup);
                 }
             });
 
@@ -207,7 +207,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     @Override
                     public void onClick(View v)
                     {
-                        hubAdapterClickListener.groupClicked(campaign.id, user.id);
+                        hubAdapterClickListener.groupClicked(campaign.signupGroup);
                     }
                 });
 
@@ -221,7 +221,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     {
                         User friend = campaign.group.get(i);
                         Picasso.with(context).load(friend.avatarPath)
-                                .placeholder(R.mipmap.ic_launcher).resize(friendSize, 0)
+                                .placeholder(R.drawable.ic_action_user).resize(friendSize, 0)
                                 .into(imageView);
                         childAt.setOnClickListener(new View.OnClickListener()
                         {
@@ -500,12 +500,12 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     {
         void friendClicked(String friendId);
 
-        void groupClicked(int campaignId, String userId);
+        void groupClicked(int groupId);
 
         void onShareClicked(Campaign campaign);
 
         void onProveClicked(Campaign campaign);
 
-        void onInviteClicked(Campaign campaign);
+        void onInviteClicked(String title, int signupGroup);
     }
 }

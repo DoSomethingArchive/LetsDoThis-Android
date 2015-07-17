@@ -67,6 +67,13 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     }
 
     @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        EventBusExt.getDefault().unregister(this);
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
