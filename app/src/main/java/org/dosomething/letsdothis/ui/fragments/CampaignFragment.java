@@ -165,7 +165,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         totalPages = 0;
         for(InterestGroup i : InterestGroup.values())
         {
-            TaskQueue.loadQueueDefault(getActivity())
+            getCampaignQueue()
                     .execute(new UpdateInterestGroupCampaignTask(i.id));
         }
 
@@ -198,7 +198,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         if(progress != null)
         {
             IdQuery queueQuery = new IdQuery(findGroupId());
-            TaskQueue.loadQueueDefault(getActivity()).query(queueQuery);
+            getCampaignQueue().query(queueQuery);
 
             if(queueQuery.found)
             {
@@ -231,7 +231,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         {
             if(task.campList.isEmpty())
             {
-                TaskQueue.loadQueueDefault(getActivity())
+                getCampaignQueue()
                         .execute(new UpdateInterestGroupCampaignTask(task.interestGroupId));
             }
             else
@@ -246,7 +246,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
                 }
 
                 String campaigns = StringUtils.join(campaignIds, ",");
-                TaskQueue.loadQueueDefault(getActivity())
+                getCampaignQueue()
                         .execute(new InterestReportBackListTask(position, campaigns, FIRST_PAGE));
 
             }
@@ -256,8 +256,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(UpdateInterestGroupCampaignTask task)
     {
-        DatabaseHelper.defaultDatabaseQueue(getActivity())
-                .execute(new DbInterestGroupCampaignListTask(task.interestGroupId));
+        getCampaignQueue().execute(new DbInterestGroupCampaignListTask(task.interestGroupId));
     }
 
 }
