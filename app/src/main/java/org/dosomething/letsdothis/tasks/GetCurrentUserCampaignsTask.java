@@ -38,11 +38,12 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
                 .getUserCampaigns(AppPrefs.getInstance(context).getCurrentUserId());
 
 
-        getCurrentCampaign(northstarAPIService, userCampaigns);
+        String currentUserId = AppPrefs.getInstance(context).getCurrentUserId();
+        getCurrentCampaign(northstarAPIService, userCampaigns, currentUserId);
         getPastCampaign(context, userCampaigns);
     }
 
-    private void getCurrentCampaign(NorthstarAPI northstarAPIService, ResponseUserCampaign userCampaigns) throws NetworkException
+    private void getCurrentCampaign(NorthstarAPI northstarAPIService, ResponseUserCampaign userCampaigns, String currentUserId) throws NetworkException
     {
         currentCampaignList = new ArrayList<>();
         ArrayList<Integer> doneCampaigns = new ArrayList<Integer>();
@@ -80,7 +81,7 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
         //-------add group info for the campaign
         signUpGroups = signUpGroups.substring(0, signUpGroups.length() - 1);
         ResponseGroupList response = northstarAPIService.groupList(signUpGroups);
-        ResponseGroupList.addUsers(campMap, response);
+        ResponseGroupList.addUsers(campMap, response, currentUserId);
 
         currentCampaignList.addAll(campMap.values());
     }
