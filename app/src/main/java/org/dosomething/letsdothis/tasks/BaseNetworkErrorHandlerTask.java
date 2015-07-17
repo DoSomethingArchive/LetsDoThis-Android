@@ -2,6 +2,8 @@ package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 import android.widget.Toast;
 
+import org.dosomething.letsdothis.R;
+
 import java.net.HttpURLConnection;
 
 import co.touchlab.android.threading.tasks.Task;
@@ -25,7 +27,8 @@ public abstract class BaseNetworkErrorHandlerTask extends Task
             }
         }
 
-        Toast.makeText(context, "There was a connection error.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, context.getString(R.string.bad_connection), Toast.LENGTH_SHORT)
+                .show();
         return true;
         //        return throwable.getCause() instanceof NetworkException;
     }
