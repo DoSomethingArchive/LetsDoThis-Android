@@ -11,24 +11,24 @@ crashlytics-build.properties
 *.hrpof
 *.hprof
 
-    # files for the dex VM
+# files for the dex VM
 *.dex
 
-    # Java class files
+# Java class files
 *.class
 
-    # generated files
+# generated files
 bin/
 gen/
 
 
-    # Eclipse project files
+# Eclipse project files
 .classpath
 .project
 
-    # Android Studio
+# Android Studio
 .idea
-    #.idea/workspace.xml - uncomment this and comment/delete .idea if it better suit your needs
+#.idea/workspace.xml - uncomment this and comment/delete .idea if it better suit your needs
 /*/local.properties
 /*/out
 /*/*/build
@@ -42,4 +42,9 @@ gen/
 
 /build
 
+# Project-specific files
 secrets.xml
+brandon_bold.otf
+brandon_reg.otf
+proxima_nova_bold.otf
+proxima_nova_reg.otf
