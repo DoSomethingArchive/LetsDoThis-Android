@@ -51,9 +51,9 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
         //-------get user's campaign id list/ which ones have RB
         String campaignIds = "";
         String signUpGroups = "";
-        for(ResponseUserCampaign.Wrapper campaignData : userCampaigns.data)
+        for (ResponseUserCampaign.Wrapper campaignData : userCampaigns.data)
         {
-            if(campaignData.reportback_data != null)
+            if (campaignData.reportback_data != null)
             {
                 doneCampaigns.add(campaignData.drupal_id);
             }
@@ -63,14 +63,15 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
 
         //-------get campaign and mark which have RB
         Map<Integer, Campaign> campMap = new HashMap<>();
+        if (!campaignIds.isEmpty())
         {
             ResponseCampaignList responseCampaignList = NetworkHelper.getDoSomethingAPIService()
                     .campaignListByIds(campaignIds);
             List<Campaign> campaigns = ResponseCampaignList.getCampaigns(responseCampaignList);
 
-            for(Campaign campaign : campaigns)
+            for (Campaign campaign : campaigns)
             {
-                if(doneCampaigns.contains(campaign.id))
+                if (doneCampaigns.contains(campaign.id))
                 {
                     campaign.showShare = Campaign.UploadShare.SHARE;
                 }
@@ -79,9 +80,11 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
         }
 
         //-------add group info for the campaign
-        signUpGroups = signUpGroups.substring(0, signUpGroups.length() - 1);
-        ResponseGroupList response = northstarAPIService.groupList(signUpGroups);
-        ResponseGroupList.addUsers(campMap, response, currentUserId);
+        if (!signUpGroups.isEmpty()) {
+            signUpGroups = signUpGroups.substring(0, signUpGroups.length() - 1);
+            ResponseGroupList response = northstarAPIService.groupList(signUpGroups);
+            ResponseGroupList.addUsers(campMap, response, currentUserId);
+        }
 
         currentCampaignList.addAll(campMap.values());
     }
@@ -92,24 +95,23 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
         List<Integer> currCampIds = new ArrayList<>();
 
         List<Campaign> currCamp = DatabaseHelper.getInstance(context).getCampDao().queryForAll();
-        for(Campaign camp : currCamp)
+        for (Campaign camp : currCamp)
         {
             currCampIds.add(camp.id);
         }
 
         String pastIds = "";
-        for(ResponseUserCampaign.Wrapper campaignData : userCampaigns.data)
+        for (ResponseUserCampaign.Wrapper campaignData : userCampaigns.data)
         {
-            if(!currCampIds.contains(campaignData.drupal_id))
+            if (!currCampIds.contains(campaignData.drupal_id))
             {
                 pastIds = campaignData.drupal_id + ",";
             }
         }
-        pastIds = pastIds.substring(0, pastIds.length() - 1);
 
-
-        if(! pastIds.isEmpty())
+        if (!pastIds.isEmpty())
         {
+            pastIds = pastIds.substring(0, pastIds.length() - 1);
             ResponseCampaignList responseCampaignList = NetworkHelper.getDoSomethingAPIService()
                     .campaignListByIds(pastIds);
             pastCampaignList = ResponseCampaignList.getCampaigns(responseCampaignList);

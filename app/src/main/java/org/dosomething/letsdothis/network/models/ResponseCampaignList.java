@@ -14,10 +14,11 @@ public class ResponseCampaignList
     public static List<Campaign> getCampaigns(ResponseCampaignList response)
     {
         ArrayList<Campaign> campaigns = new ArrayList<>();
-        for(ResponseCampaign responseCampaign : response.data)
-        {
-            Campaign campaign = ResponseCampaign.getCampaign(responseCampaign);
-            campaigns.add(campaign);
+        if (response != null && response.data != null) {
+            for (ResponseCampaign responseCampaign : response.data) {
+                Campaign campaign = ResponseCampaign.getCampaign(responseCampaign);
+                campaigns.add(campaign);
+            }
         }
 
         return campaigns;

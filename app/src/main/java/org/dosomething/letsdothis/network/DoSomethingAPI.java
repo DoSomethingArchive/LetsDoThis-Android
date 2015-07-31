@@ -22,8 +22,7 @@ public interface DoSomethingAPI
 {
 
    String BASE_URL = BuildConfig.DEBUG
-//        ? "http://staging.beta.dosomething.org/api/v1/"
-        ? "http://52.2.253.184/api/v1/"
+        ? "http://staging.beta.dosomething.org/api/v1/"
         : "https://www.dosomething.org/api/v1/";
 
     @Headers("Content-Type: application/json")
