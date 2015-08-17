@@ -86,35 +86,16 @@
 
             </LinearLayout>
 
-
-            <LinearLayout
+            <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
+                android:id="@+id/first_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_small"
                 android:layout_marginRight="@dimen/padding_small"
-                android:orientation="horizontal">
-
-                <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
-                    android:id="@+id/first_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/padding_tiny"
-                    android:layout_weight="1"
-                    android:hint="@string/first_name"
-                    android:imeOptions="actionNext">
-                    <requestFocus/>
-                </org.dosomething.letsdothis.ui.views.typeface.CustomEditText>
-
-                <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
-                    android:id="@+id/last_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/padding_tiny"
-                    android:layout_weight="1"
-                    android:hint="@string/last_name"
-                    android:imeOptions="actionNext"/>
-
-            </LinearLayout>
+                android:hint="@string/first_name"
+                android:imeOptions="actionNext">
+                <requestFocus/>
+            </org.dosomething.letsdothis.ui.views.typeface.CustomEditText>
 
             <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
                 android:id="@+id/email"
@@ -132,33 +113,15 @@
                 android:layout_margin="@dimen/padding_small"
                 android:hint="@string/phone"/>
 
-            <LinearLayout
+            <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
+                android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_small"
                 android:layout_marginRight="@dimen/padding_small"
-                android:orientation="horizontal">
-
-                <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
-                    android:id="@+id/password"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/padding_tiny"
-                    android:layout_weight="2"
-                    android:hint="@string/password"
-                    android:imeOptions="actionNext"
-                    android:inputType="textPassword"/>
-
-                <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
-                    android:id="@+id/birthday"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/padding_tiny"
-                    android:layout_weight="1"
-                    android:hint="@string/birthday"
-                    android:imeOptions="actionNext"
-                    android:inputType="date"/>
-            </LinearLayout>
+                android:hint="@string/password"
+                android:imeOptions="actionNext"
+                android:inputType="textPassword"/>
 
             <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
                 android:layout_width="match_parent"
@@ -223,6 +186,18 @@
                 android:padding="@dimen/padding_small"
                 android:text="@string/footer_register"
                 android:textColor="@color/white"/>
+
+            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:paddingLeft="@dimen/padding_small"
+                android:paddingRight="@dimen/padding_small"
+                android:paddingBottom="@dimen/padding_small"
+                android:paddingTop="@dimen/padding_xxlarge"
+                android:text="@string/ctia"
+                android:textColor="@color/white"/>
+
         </LinearLayout>
 
     </ScrollView>

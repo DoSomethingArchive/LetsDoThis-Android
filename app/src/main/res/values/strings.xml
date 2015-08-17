@@ -21,7 +21,7 @@
     <string name="invite_code_opt3">Here</string>
     <string name="sign_in">Sign in</string>
     <string name="show_me_how">Get Started</string>
-    <string name="register">Register</string>
+    <string name="register">Create Account</string>
     <string name="birthday">Birthday</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
@@ -58,6 +58,7 @@
     <string name="footer_register">Have a DoSomething.org account? Sign in</string>
     <string name="footer_forgot_pw">Forgot Password</string>
     <string name="forgot_pw_link">https://www.dosomething.org/user/password</string>
+    <string name="ctia">Creating an account means you agree to our Privacy Policy &amp; to receive our weekly update. Message &amp; data rates may apply. Text STOP to opt-out, HELP for help</string>
     <string name="desc_rewards">Invite your friends to get rewards copy. There are multiple
         sentences in this paragraph body.
     </string>
@@ -90,7 +91,7 @@
     <string name="interest_1">Outdoor</string>
     <string name="interest_2">Sports</string>
     <string name="interest_3">Craft</string>
-    <string name="forgot_pw">Reset Password</string>
+    <string name="forgot_pw">Forgot Password?</string>
     <string name="notification_kudos">notification_kudos</string>
     <string name="notification_friend">notification_friend</string>
     <string name="notification_campaign">notification_campaign</string>
