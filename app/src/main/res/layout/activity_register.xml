@@ -186,6 +186,18 @@
                 android:padding="@dimen/padding_small"
                 android:text="@string/footer_register"
                 android:textColor="@color/white"/>
+
+            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:paddingLeft="@dimen/padding_small"
+                android:paddingRight="@dimen/padding_small"
+                android:paddingBottom="@dimen/padding_small"
+                android:paddingTop="@dimen/padding_xxlarge"
+                android:text="@string/ctia"
+                android:textColor="@color/white"/>
+
         </LinearLayout>
 
     </ScrollView>
