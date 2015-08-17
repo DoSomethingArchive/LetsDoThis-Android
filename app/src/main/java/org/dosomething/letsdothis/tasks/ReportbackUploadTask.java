@@ -37,6 +37,7 @@ public class ReportbackUploadTask extends BaseNetworkErrorHandlerTask
     private ReportbackUploadTask(RequestReportback req, int campaignId, String filePath)
     {
         this.req = req;
+        this.req.why_participated = "(Not provided by reportback submissions from the Android app)";
         this.campaignId = campaignId;
         this.filePath = filePath;
     }
@@ -45,7 +46,6 @@ public class ReportbackUploadTask extends BaseNetworkErrorHandlerTask
     protected void run(Context context) throws Throwable
     {
         req.file = base64Encode(filePath);
-        req.why_participated = "Doing something!";
         String sessionToken = AppPrefs.getInstance(context).getSessionToken();
         ResponseSubmitReportBack response = NetworkHelper.getNorthstarAPIService()
                 .submitReportback(sessionToken, req, campaignId);
