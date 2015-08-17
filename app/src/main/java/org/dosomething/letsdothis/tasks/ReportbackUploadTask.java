@@ -37,7 +37,6 @@ public class ReportbackUploadTask extends BaseNetworkErrorHandlerTask
     private ReportbackUploadTask(RequestReportback req, int campaignId, String filePath)
     {
         this.req = req;
-        this.req.why_participated = "(Not provided by reportback submissions from the Android app)";
         this.campaignId = campaignId;
         this.filePath = filePath;
     }

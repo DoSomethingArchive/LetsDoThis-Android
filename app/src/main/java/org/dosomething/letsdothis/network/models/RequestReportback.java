@@ -7,7 +7,7 @@ public class RequestReportback
     public String quantity;
     public String uid;
     public String file;
-    public String why_participated;
+    public final String why_participated = "(why_participated not provided in reportback submissions from the Android app)";
     public String caption;
     public final String source = "android";
 }
