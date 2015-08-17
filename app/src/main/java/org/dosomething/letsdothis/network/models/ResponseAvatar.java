@@ -8,6 +8,6 @@ public class ResponseAvatar
 
     public static class Wrapper
     {
-        public String url;
+        public String avatar;
     }
 }

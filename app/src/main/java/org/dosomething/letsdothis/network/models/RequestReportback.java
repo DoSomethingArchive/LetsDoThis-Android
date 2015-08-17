@@ -9,4 +9,5 @@ public class RequestReportback
     public String file;
     public String why_participated;
     public String caption;
+    public final String source = "android";
 }
