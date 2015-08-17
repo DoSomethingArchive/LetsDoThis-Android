@@ -44,7 +44,7 @@ public class UploadAvatarTask extends Task
         TypedFile typedFile = new TypedFile("multipart/form-data", file);
         ResponseAvatar response = NetworkHelper.getNorthstarAPIService()
                 .uploadAvatar(userId, typedFile);
-        user.avatarPath = response.data.url;
+        user.avatarPath = response.data.avatar;
         userDao.createOrUpdate(user);
     }
 
