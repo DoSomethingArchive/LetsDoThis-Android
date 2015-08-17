@@ -42,8 +42,6 @@ public class RegisterActivity extends BaseActivity
     private EditText  email;
     private EditText  password;
     private EditText  firstName;
-    private EditText  lastName;
-    private EditText  birthday;
     private EditText  invite1;
     private EditText  invite2;
     private EditText  invite3;
@@ -174,8 +172,6 @@ public class RegisterActivity extends BaseActivity
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
         firstName = (EditText) findViewById(R.id.first_name);
-        lastName = (EditText) findViewById(R.id.last_name);
-        birthday = (EditText) findViewById(R.id.birthday);
         invite1 = (EditText) findViewById(R.id.invite1);
         invite2 = (EditText) findViewById(R.id.invite2);
         invite3 = (EditText) findViewById(R.id.invite3);
@@ -194,11 +190,9 @@ public class RegisterActivity extends BaseActivity
                 String emailText = email.getText().toString();
                 String passtext = password.getText().toString();
                 String firsttext = firstName.getText().toString();
-                String lasttext = lastName.getText().toString();
-                String birthtext = birthday.getText().toString();
 
                 TaskQueue.loadQueueDefault(RegisterActivity.this).execute(
-                        new RegisterTask(emailText, passtext, firsttext, lasttext, birthtext));
+                        new RegisterTask(emailText, passtext, firsttext));
             }
         });
     }
@@ -208,9 +202,7 @@ public class RegisterActivity extends BaseActivity
         if(fbUser != null)
         {
             firstName.setText(fbUser.first_name);
-            lastName.setText(fbUser.last_name);
             email.setText(fbUser.email);
-            birthday.setText(fbUser.birthday);
 
             findViewById(R.id.fbContainer).setVisibility(View.VISIBLE);
             findViewById(R.id.avatarContainer).setVisibility(View.GONE);

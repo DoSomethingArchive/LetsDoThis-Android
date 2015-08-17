@@ -14,22 +14,18 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
 public class RegisterTask extends BaseRegistrationTask
 {
     private final String firstName;
-    private final String lastName;
-    private final String birthday;
 
-    public RegisterTask(String phoneEmail, String password, String firsttext, String lastText, String birthText)
+    public RegisterTask(String phoneEmail, String password, String firsttext)
     {
         super(phoneEmail, password);
         firstName = firsttext;
-        lastName = lastText;
-        birthday = birthText;
     }
 
     @Override
     protected void attemptRegistration(Context context) throws Throwable
     {
         ResponseRegister response;
-        User user = new User(password, firstName, lastName, birthday);
+        User user = new User(password, firstName);
 
         if(matchesEmail(phoneEmail))
         {

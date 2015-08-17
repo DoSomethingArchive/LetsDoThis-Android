@@ -49,7 +49,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     {
         super();
         this.hubAdapterClickListener = hubAdapterClickListener;
-        addUser(new User(null, "", "", null));
+        addUser(new User(null, ""));
         hubList.add(CURRENTLY_DOING);
         hubList.add(BEEN_THERE_DONE_GOOD);
         this.isPublic = isPublic;

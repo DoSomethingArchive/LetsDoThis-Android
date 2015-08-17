@@ -45,12 +45,10 @@ public class User
         this.password = password;
     }
 
-    public User(String password, String firstName, String lastName, String birthday)
+    public User(String password, String firstName)
     {
         this.password = password;
         this.first_name = firstName;
-        this.last_name = lastName;
-        this.birthdate = birthday;
     }
 
     public static TypedInput getJsonTypedInput(User user) throws Throwable
