@@ -27,13 +27,6 @@ import co.touchlab.android.threading.tasks.TaskQueue;
  */
 public class SettingsFragment extends PreferenceFragment implements ConfirmDialog.ConfirmListener
 {
-
-    //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final int SELECT_PICTURE = 47539;
-    //~=~=~=~=~=~=~=~=~=~=~=~=Fields
-    private Uri imageUri;
-
-
     private SetTitleListener setTitleListener;
 
     public static SettingsFragment newInstance()
@@ -93,7 +86,9 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                     @Override
                     public boolean onPreferenceClick(Preference preference)
                     {
-                        choosePicture();
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.container, new AvatarChangeFragment())
+                                .addToBackStack(null).commit();
                         return true;
                     }
                 });
@@ -172,94 +167,5 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
     public void onConfirmClick()
     {
         BaseActivity.logOutUser(getActivity());
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if(resultCode == Activity.RESULT_OK)
-        {
-            if(requestCode == SELECT_PICTURE)
-            {
-                final boolean isCamera;
-                if(data == null || data.getData() == null)
-                {
-                    isCamera = true;
-                }
-                else
-                {
-                    final String action = data.getAction();
-                    if(action == null)
-                    {
-                        isCamera = false;
-                    }
-                    else
-                    {
-                        isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    }
-                }
-
-                Uri selectedImageUri;
-                String realPathFromURI;
-                if(isCamera)
-                {
-                    selectedImageUri = imageUri;
-                    realPathFromURI = selectedImageUri.toString().replaceFirst("file://", "");
-                }
-                else
-                {
-                    selectedImageUri = data.getData();
-                    realPathFromURI = getRealPathFromURI(getActivity(), selectedImageUri);
-                }
-
-                String id = AppPrefs.getInstance(getActivity()).getCurrentUserId();
-                TaskQueue.loadQueueDefault(getActivity())
-                        .execute(new UploadAvatarTask(id, realPathFromURI));
-            }
-        }
-    }
-
-    public String getRealPathFromURI(Context context, Uri contentUri)
-    {
-        Cursor cursor = null;
-        try
-        {
-            String[] proj = {MediaStore.Images.Media.DATA};
-            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        }
-        finally
-        {
-            if(cursor != null)
-            {
-                cursor.close();
-            }
-        }
-    }
-
-    public void choosePicture()
-    {
-        Intent pickIntent = new Intent(Intent.ACTION_PICK,
-                                       android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        pickIntent.setType("image/*");
-
-        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File externalFile = new File(
-                getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                "user_profile" + ".jpg");
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(externalFile));
-        imageUri = Uri.parse(externalFile.getAbsolutePath());
-        if(BuildConfig.DEBUG)
-        {
-            Log.d("photo location", imageUri.toString());
-        }
-
-        String pickTitle = getString(R.string.select_picture);
-        Intent chooserIntent = Intent.createChooser(takePhotoIntent, pickTitle);
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
-
-        startActivityForResult(chooserIntent, SELECT_PICTURE);
     }
 }
