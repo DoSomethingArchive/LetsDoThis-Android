@@ -18,6 +18,7 @@ import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.FbUser;
 import org.dosomething.letsdothis.tasks.RegisterTask;
+import org.dosomething.letsdothis.tasks.UploadAvatarTask;
 import org.dosomething.letsdothis.ui.adapters.InvitesAdapter;
 import org.dosomething.letsdothis.utils.AppPrefs;
 import org.dosomething.letsdothis.utils.Hashery;
@@ -219,13 +220,20 @@ public class RegisterActivity extends BaseActivity
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(RegisterTask task)
     {
-        if(AppPrefs.getInstance(this).isLoggedIn())
+        AppPrefs prefs = AppPrefs.getInstance(this);
+        if (prefs.getCurrentUserId() != null && prefs.getAvatarPath() != null)
+        {
+            TaskQueue.loadQueueDefault(RegisterActivity.this).execute(
+                    new UploadAvatarTask(prefs.getCurrentUserId(), prefs.getAvatarPath())
+            );
+        }
+
+        if (prefs.isLoggedIn())
         {
             Integer groupId = null;
             boolean allFilled = ! TextUtils.isEmpty(invite1.getText()) && ! TextUtils
                     .isEmpty(invite2.getText()) && ! TextUtils.isEmpty(invite3.getText());
-            if(allFilled)
-            {
+            if (allFilled) {
                 String code = InvitesAdapter.getCode(invite1, invite2, invite3);
                 groupId = Hashery.getInstance(this).decode(code);
             }

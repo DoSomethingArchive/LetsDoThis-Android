@@ -57,7 +57,6 @@ public class UploadAvatarTask extends Task
     @Override
     protected void onComplete(Context context)
     {
-//        EventBusExt.getDefault().post(this);œ
         super.onComplete(context);
     }
 }
