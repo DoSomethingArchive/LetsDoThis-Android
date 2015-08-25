@@ -18,11 +18,11 @@ import org.dosomething.letsdothis.ui.fragments.RegisterLoginFragment;
 /**
  * Created by toidiu on 4/15/15.
  */
-public class IntroActivity extends BaseActivity implements IntroFragment.PagerChangeListener
+public class IntroActivity extends BaseActivity
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     private static final String TAG = IntroActivity.class.getSimpleName();
-    public static final int INTRO_FRAGMENT_COUNT = 4;
+    public static final int INTRO_FRAGMENT_COUNT = 3;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private ViewPager           pager;
@@ -63,11 +63,9 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
                 switch(position)
                 {
                     case 0:
-                        return IntroFragment.newInstance(false, true, R.string.intro_title_1,  R.string.intro_desc_1, 0);
+                        return IntroFragment.newInstance(R.string.intro_title_1,  R.string.intro_desc_1);
                     case 1:
-                        return IntroFragment.newInstance(true, false, R.string.intro_title_2,  R.string.intro_desc_2, 0);
-                    case 2:
-                        return IntroFragment.newInstance(true, true, R.string.intro_title_3,  R.string.intro_desc_3, 0);
+                        return IntroFragment.newInstance(R.string.intro_title_2,  R.string.intro_desc_2);
 
                 }
                 return RegisterLoginFragment.newInstance();
@@ -109,23 +107,6 @@ public class IntroActivity extends BaseActivity implements IntroFragment.PagerCh
             {
             }
         });
-    }
-
-    @Override
-    public void navigatePrev()
-    {
-        int currentItem = pager.getCurrentItem();
-        if(currentItem != 0)
-        {
-            pager.setCurrentItem(currentItem - 1);
-        }
-    }
-
-    @Override
-    public void navigateNext()
-    {
-        int currentItem = pager.getCurrentItem();
-        pager.setCurrentItem(currentItem + 1);
     }
 
     @Override
