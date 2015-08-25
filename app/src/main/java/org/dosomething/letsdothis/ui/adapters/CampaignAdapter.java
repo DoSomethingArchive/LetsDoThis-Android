@@ -22,6 +22,8 @@ import org.dosomething.letsdothis.ui.views.SlantedBackgroundDrawable;
 import org.dosomething.letsdothis.utils.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -391,6 +393,13 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void setCampaigns(List<Campaign> campaigns)
     {
+        // Sort campaigns in alphabetical order
+        Collections.sort(campaigns, new Comparator<Campaign>() {
+            public int compare(Campaign c1, Campaign c2) {
+                return c1.title.compareToIgnoreCase(c2.title);
+            }
+        });
+
         int indexOfPlaceHolder = dataSet.indexOf(PLACEHOLDER);
         if(indexOfPlaceHolder == - 1)
         {
