@@ -16,6 +16,7 @@ public abstract class BaseReportBackListTask extends BaseNetworkErrorHandlerTask
     public static String STATUS_PROMOTED = "promoted";
     public static String STATUS_APPROVED = "approved";
 
+    // Number of reportbacks to retrieve with each request
     private final int REQUEST_COUNT = 20;
 
     public List<ReportBack> reportBacks;
@@ -28,6 +29,13 @@ public abstract class BaseReportBackListTask extends BaseNetworkErrorHandlerTask
 
     private String campaignIds;
 
+    /**
+     * Base task for retrieving reportback items.
+     *
+     * @param campaignId Campaign(s) to retrieve reportbacks for
+     * @param page Page number of paginated response to retrieve
+     * @param status Type of reportback items to retrieve - STATUS_PROMOTED or STATUS_APPROVED
+     */
     public BaseReportBackListTask(String campaignId, int page, String status) {
         this.campaignIds = campaignId;
         this.page = page;

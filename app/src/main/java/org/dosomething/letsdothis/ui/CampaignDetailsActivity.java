@@ -51,6 +51,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     private CampaignDetailsAdapter adapter;
     private int                    totalPages;
     private int currentPage = 1;
+    private String currentRbQueryStatus;
     //    private ResponseCampaign.ReportBackInfo rBInfo;
 
     public static Intent getLaunchIntent(Context context, int campaignId)
@@ -81,7 +82,9 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
 
         int campaignId = getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1);
         refreshCampaign(campaignId);
-        // @TODO fix so that once promoted images are done, we start loading approved
+
+        // First query for only "promoted" reportbacks to show in the reportback feed
+        currentRbQueryStatus = BaseReportBackListTask.STATUS_PROMOTED;
         IndividualCampaignReportBackList task = new IndividualCampaignReportBackList(
                 Integer.toString(campaignId), currentPage, BaseReportBackListTask.STATUS_PROMOTED);
         TaskQueue.loadQueueDefault(this).execute(task);
@@ -112,18 +115,28 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     }
 
     @Override
-    public void onScrolledToBottom()
-    {
-        if(currentPage < totalPages)
-        {
-            if(BuildConfig.DEBUG)
-            {
+    public void onScrolledToBottom() {
+        boolean getMoreData = false;
+        if (currentRbQueryStatus == BaseReportBackListTask.STATUS_PROMOTED && totalPages > 0) {
+            getMoreData = true;
+
+            if (currentPage >= totalPages) {
+                currentPage = 0;
+                currentRbQueryStatus = BaseReportBackListTask.STATUS_APPROVED;
+            }
+        }
+        else if (currentRbQueryStatus == BaseReportBackListTask.STATUS_APPROVED && currentPage < totalPages) {
+            getMoreData = true;
+        }
+
+        if (getMoreData) {
+            if(BuildConfig.DEBUG) {
                 Toast.makeText(this, "get more data", Toast.LENGTH_SHORT).show();
             }
+
             String campaigns = Integer.toString(getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1));
-            // @TODO fix so that once promoted images are done, we start loading approved
             IndividualCampaignReportBackList task = new IndividualCampaignReportBackList(campaigns,
-                    currentPage + 1, BaseReportBackListTask.STATUS_PROMOTED);
+                    currentPage + 1, currentRbQueryStatus);
             TaskQueue.loadQueueDefault(this).execute(task);
         }
     }

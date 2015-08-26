@@ -148,11 +148,9 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     public void onScrolledToBottom() {
         boolean getMoreData = false;
         if (currentRbQueryStatus == BaseReportBackListTask.STATUS_PROMOTED && totalPages > 0) {
-            if (currentPage < totalPages) {
-                getMoreData = true;
-            }
-            else {
-                getMoreData = true;
+            getMoreData = true;
+
+            if (currentPage >= totalPages) {
                 currentPage = 0;
                 currentRbQueryStatus = BaseReportBackListTask.STATUS_APPROVED;
             }
@@ -165,6 +163,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
             if (BuildConfig.DEBUG) {
                 Toast.makeText(getActivity(), "get more data", Toast.LENGTH_SHORT).show();
             }
+
             InterestReportBackListTask task = new InterestReportBackListTask(position, StringUtils
                     .join(campaignIds, ","), currentPage + 1, currentRbQueryStatus);
             getCampaignQueue().execute(task);
