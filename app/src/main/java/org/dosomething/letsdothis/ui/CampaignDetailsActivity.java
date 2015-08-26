@@ -20,6 +20,7 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.Kudos;
 import org.dosomething.letsdothis.data.ReportBack;
+import org.dosomething.letsdothis.tasks.BaseReportBackListTask;
 import org.dosomething.letsdothis.tasks.CampaignDetailsTask;
 import org.dosomething.letsdothis.tasks.IndividualCampaignReportBackList;
 import org.dosomething.letsdothis.tasks.RbShareDataTask;
@@ -80,8 +81,10 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
 
         int campaignId = getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1);
         refreshCampaign(campaignId);
-        TaskQueue.loadQueueDefault(this).execute(
-                new IndividualCampaignReportBackList(Integer.toString(campaignId), currentPage));
+        // @TODO fix so that once promoted images are done, we start loading approved
+        IndividualCampaignReportBackList task = new IndividualCampaignReportBackList(
+                Integer.toString(campaignId), currentPage, BaseReportBackListTask.STATUS_PROMOTED);
+        TaskQueue.loadQueueDefault(this).execute(task);
     }
 
     @Override
@@ -118,8 +121,9 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
                 Toast.makeText(this, "get more data", Toast.LENGTH_SHORT).show();
             }
             String campaigns = Integer.toString(getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1));
+            // @TODO fix so that once promoted images are done, we start loading approved
             IndividualCampaignReportBackList task = new IndividualCampaignReportBackList(campaigns,
-                                                                                         currentPage + 1);
+                    currentPage + 1, BaseReportBackListTask.STATUS_PROMOTED);
             TaskQueue.loadQueueDefault(this).execute(task);
         }
     }

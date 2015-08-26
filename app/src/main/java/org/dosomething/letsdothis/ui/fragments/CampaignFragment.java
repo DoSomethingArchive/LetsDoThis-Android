@@ -18,6 +18,7 @@ import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.InterestGroup;
 import org.dosomething.letsdothis.data.ReportBack;
+import org.dosomething.letsdothis.tasks.BaseReportBackListTask;
 import org.dosomething.letsdothis.tasks.CampaignSignUpTask;
 import org.dosomething.letsdothis.tasks.DbInterestGroupCampaignListTask;
 import org.dosomething.letsdothis.tasks.InterestReportBackListTask;
@@ -51,6 +52,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     private int             position;
     private int             currentPage;
     private int             totalPages;
+    private String          currentRbQueryStatus;
     private ArrayList<Integer> campaignIds = new ArrayList<>();
     private ProgressBar progress;
 
@@ -143,16 +145,28 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     }
 
     @Override
-    public void onScrolledToBottom()
-    {
-        if(currentPage < totalPages)
-        {
-            if(BuildConfig.DEBUG)
-            {
+    public void onScrolledToBottom() {
+        boolean getMoreData = false;
+        if (currentRbQueryStatus == BaseReportBackListTask.STATUS_PROMOTED && totalPages > 0) {
+            if (currentPage < totalPages) {
+                getMoreData = true;
+            }
+            else {
+                getMoreData = true;
+                currentPage = 0;
+                currentRbQueryStatus = BaseReportBackListTask.STATUS_APPROVED;
+            }
+        }
+        else if (currentRbQueryStatus == BaseReportBackListTask.STATUS_APPROVED && currentPage < totalPages) {
+            getMoreData = true;
+        }
+
+        if (getMoreData) {
+            if (BuildConfig.DEBUG) {
                 Toast.makeText(getActivity(), "get more data", Toast.LENGTH_SHORT).show();
             }
             InterestReportBackListTask task = new InterestReportBackListTask(position, StringUtils
-                    .join(campaignIds, ","), currentPage + 1);
+                    .join(campaignIds, ","), currentPage + 1, currentRbQueryStatus);
             getCampaignQueue().execute(task);
         }
     }
@@ -181,6 +195,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     public void dbCampaignRefresh()
     {
         adapter.clear();
+        currentRbQueryStatus = BaseReportBackListTask.STATUS_PROMOTED;
         currentPage = 0;
         totalPages = 0;
         DatabaseHelper.defaultDatabaseQueue(getActivity())
@@ -214,14 +229,23 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(InterestReportBackListTask task)
     {
-        if(task.pagerPosition == position && currentPage < task.page)
-        {
+        if (task.pagerPosition != position) {
+            return;
+        }
+
+        if (task.error == null && currentPage < task.page) {
             totalPages = task.totalPages;
             currentPage = task.page;
             List<ReportBack> reportBacks = task.reportBacks;
             adapter.addAll(reportBacks);
         }
-
+        else if (task.error != null && task.status == BaseReportBackListTask.STATUS_PROMOTED) {
+            // A search for promoted reportbacks yielded nothing. Search again for approved photos.
+            String campaigns = StringUtils.join(campaignIds, ",");
+            getCampaignQueue().execute(new InterestReportBackListTask(position, campaigns,
+                    FIRST_PAGE, BaseReportBackListTask.STATUS_APPROVED));
+            currentPage = 0;
+        }
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -245,10 +269,10 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
                     campaignIds.add(campaign.id);
                 }
 
+                // On initial query of reportback photos, set page to 1 and status to "promoted"
                 String campaigns = StringUtils.join(campaignIds, ",");
-                getCampaignQueue()
-                        .execute(new InterestReportBackListTask(position, campaigns, FIRST_PAGE));
-
+                getCampaignQueue().execute(new InterestReportBackListTask(position, campaigns,
+                        FIRST_PAGE, BaseReportBackListTask.STATUS_PROMOTED));
             }
         }
     }

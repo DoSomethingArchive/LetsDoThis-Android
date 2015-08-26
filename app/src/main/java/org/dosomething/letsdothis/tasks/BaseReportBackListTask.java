@@ -10,29 +10,42 @@ import java.util.List;
 /**
  * Created by izzyoji :) on 4/23/15.
  */
-public abstract class BaseReportBackListTask extends BaseNetworkErrorHandlerTask
-{
+public abstract class BaseReportBackListTask extends BaseNetworkErrorHandlerTask {
 
-    public  List<ReportBack> reportBacks;
-    private String           campaignIds;
-    public  int              page;
-    public  int              totalPages;
+    // Query values for status parameter
+    public static String STATUS_PROMOTED = "promoted";
+    public static String STATUS_APPROVED = "approved";
 
-    public BaseReportBackListTask(String campaignId, int page)
-    {
+    private final int REQUEST_COUNT = 20;
+
+    public List<ReportBack> reportBacks;
+    public int page;
+    public int totalPages;
+    public String status;
+
+    // If an error is received in the response, this will be populated
+    public String error;
+
+    private String campaignIds;
+
+    public BaseReportBackListTask(String campaignId, int page, String status) {
         this.campaignIds = campaignId;
         this.page = page;
+        this.status = status;
     }
 
     @Override
-    protected void run(Context context) throws Throwable
-    {
-        ResponseReportBackList response = NetworkHelper.getDoSomethingAPIService()
-                                                       .reportBackList(campaignIds, 20, false, page);
-        //FIXME an issue was created for the server so that an empty array will be returned if empty, not an error
-        //letting it crash for now
-        totalPages = response.pagination.total_pages;
-        reportBacks = ResponseReportBackList.getReportBacks(response);
+    protected void run(Context context) throws Throwable {
+        ResponseReportBackList response = NetworkHelper.getDoSomethingAPIService().reportBackList(
+            status, campaignIds, REQUEST_COUNT, false, page);
+
+        if (response.error != null) {
+            error = response.error.message;
+        }
+        else {
+            totalPages = response.pagination.total_pages;
+            reportBacks = ResponseReportBackList.getReportBacks(response);
+        }
     }
 
 }
