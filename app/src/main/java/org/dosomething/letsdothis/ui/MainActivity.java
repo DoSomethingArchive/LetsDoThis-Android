@@ -44,11 +44,9 @@ public class MainActivity extends BaseActivity implements SetTitleListener
     private DrawerListAdapter drawerListAdapter;
 
 
-    public static Intent getLaunchIntent(Context context, int groupId, boolean attemptInvite)
+    public static Intent getLaunchIntent(Context context)
     {
         Intent intent = new Intent(context, MainActivity.class);
-        intent.putExtra(GROUP_ID, groupId);
-        intent.putExtra(ATTEMPT_INVITE, attemptInvite);
         return intent;
     }
 
@@ -99,8 +97,8 @@ public class MainActivity extends BaseActivity implements SetTitleListener
 
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
-                                                                        R.string.invite_code_opt1,
-                                                                        R.string.account);
+                                                                        R.string.drawer_desc_open,
+                                                                        R.string.drawer_desc_closed);
         drawerLayout.setDrawerListener(mDrawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);

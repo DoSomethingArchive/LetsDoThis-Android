@@ -123,58 +123,13 @@
                 android:imeOptions="actionNext"
                 android:inputType="textPassword"/>
 
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/padding_small"
-                android:layout_marginRight="@dimen/padding_small"
-                android:paddingTop="@dimen/padding_medium"
-                android:text="@string/footer_invite_code"
-                android:textColor="@color/white"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/padding_small"
-                android:layout_marginRight="@dimen/padding_small"
-                android:layout_marginTop="@dimen/padding_small"
-                android:orientation="horizontal">
-
-                <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
-                    android:id="@+id/invite1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/padding_small"
-                    android:layout_marginRight="@dimen/padding_small"
-                    android:layout_weight="1"
-                    android:hint="@string/invite_code_opt1"
-                    android:imeOptions="actionNext"/>
-
-                <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
-                    android:id="@+id/invite2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/padding_small"
-                    android:layout_marginRight="@dimen/padding_small"
-                    android:layout_weight="1"
-                    android:hint="@string/invite_code_opt2"
-                    android:imeOptions="actionNext"/>
-
-                <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
-                    android:id="@+id/invite3"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/padding_small"
-                    android:layout_weight="1"
-                    android:hint="@string/invite_code_opt3"/>
-            </LinearLayout>
-
             <org.dosomething.letsdothis.ui.views.typeface.CustomButton
                 android:id="@+id/register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_small"
                 android:layout_marginRight="@dimen/padding_small"
+                android:layout_marginTop="@dimen/padding_small"
                 android:text="@string/register"
                 app:typeface="brandon_bold"/>
 

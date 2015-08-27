@@ -13,12 +13,6 @@
     <string name="email">Email</string>
     <string name="phone">Phone Number (Optional)</string>
     <string name="password">Password</string>
-    <string name="footer_invite_code">Invited to this app by a friend? Enter that invite code here! (Optional.)
-    </string>
-    <string name="invite_code_opt">Invite Code (optional)</string>
-    <string name="invite_code_opt1">Enter</string>
-    <string name="invite_code_opt2">Code</string>
-    <string name="invite_code_opt3">Here</string>
     <string name="sign_in">Sign in</string>
     <string name="show_me_how">Get Started</string>
     <string name="register">Create Account</string>
@@ -58,7 +52,9 @@
     <string name="footer_register">Have a DoSomething.org account? Sign in</string>
     <string name="footer_forgot_pw">Forgot Password</string>
     <string name="forgot_pw_link">https://www.dosomething.org/user/password</string>
-    <string name="ctia">Creating an account means you agree to our Privacy Policy &amp; to receive our weekly update. Message &amp; data rates may apply. Text STOP to opt-out, HELP for help</string>
+    <string name="ctia">Creating an account means you agree to our Privacy Policy &amp; to receive
+        our weekly update. Message &amp; data rates may apply. Text STOP to opt-out, HELP for help
+    </string>
     <string name="desc_rewards">Invite your friends to get rewards copy. There are multiple
         sentences in this paragraph body.
     </string>
@@ -107,23 +103,18 @@
     <string name="cancel_search">Cancel Search</string>
     <string name="search_for_group">Search For Group</string>
     <string name="join_this_group">Join This Group</string>
-    <string name="intro_title_1">Get Un-bored</string>
-    <string name="intro_desc_1">Discover new (monthly!) ways to have fun based on things
-        you like most.\nPlus, you’ll be doing some social good!
-    </string>
+    <string name="intro_title_1">Let\'s Do This</string>
+    <string name="intro_desc_1">Discover new (monthly!) ways to have fun</string>
+    <string name="intro_title_2">Get Social</string>
+    <string name="intro_desc_2">&lt;Placeholder TODO social description string&gt;</string>
     <string name="fail_register">Register failed</string>
     <string name="fail_login">Your username or password was incorrect.</string>
-    <string name="intro_title_2">Get Social</string>
     <string name="success_login">Login successful</string>
     <string name="success_register">Register successful</string>
-    <string name="intro_desc_2">Use exclusive invite codes to get your friends to join you in
-        action.
-    </string>
-    <string name="intro_title_3">Get Props</string>
-    <string name="intro_desc_3">Submit your photos to show off and get props from other users.
-    </string>
     <string name="bad_connection">No connection. Seems like the Internet is trying to cause drama.
     </string>
     <string name="reportback_success">Reportback uploaded</string>
+    <string name="drawer_desc_open">Drawer Open</string>
+    <string name="drawer_desc_closed">Drawer Closed</string>
 
 </resources>

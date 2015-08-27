@@ -13,71 +13,42 @@
         android:paddingTop="@dimen/padding_xxlarge"
         android:src="@drawable/phone"/>
 
-    <RelativeLayout
-        android:id="@+id/slanted_bg"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:layout_alignParentBottom="true"
-        android:background="#ffffff">
+        android:gravity="center"
+        android:paddingTop="@dimen/padding_medium"
+        android:paddingBottom="@dimen/padding_xxlarge"
+        android:paddingLeft="@dimen/padding_medium"
+        android:paddingRight="@dimen/padding_medium"
+        android:background="#ffffff"
+        android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/prev"
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:background="#00000000"
-            android:padding="20dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/prev_intro_arrow"/>
-
-
-        <ImageButton
-            android:id="@+id/next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="#00000000"
-            android:padding="20dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/next_intro_arrow"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_toLeftOf="@id/next"
             android:gravity="center"
-            android:layout_toRightOf="@+id/prev"
-            android:orientation="vertical">
+            android:singleLine="true"
+            android:paddingBottom="@dimen/padding_tiny"
+            android:textAllCaps="true"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_large"
+            app:typeface="brandon_bold"
+            tools:text="Title"/>
 
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:singleLine="true"
-                android:paddingBottom="@dimen/padding_tiny"
-                android:textAllCaps="true"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/text_large"
-                app:typeface="brandon_bold"
-                tools:text="Title"/>
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="5dp"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_medium"
+            tools:text="This is some intro text. and then here is some more text"/>
 
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-                android:id="@+id/description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:lineSpacingExtra="5dp"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/text_medium"
-                tools:text="This is some intro text. and then here is some more text"/>
-
-        </LinearLayout>
-
-
-    </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>

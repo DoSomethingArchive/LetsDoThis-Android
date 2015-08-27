@@ -43,9 +43,6 @@ public class RegisterActivity extends BaseActivity
     private EditText  email;
     private EditText  password;
     private EditText  firstName;
-    private EditText  invite1;
-    private EditText  invite2;
-    private EditText  invite3;
     private ImageView avatar;
 
 
@@ -173,15 +170,6 @@ public class RegisterActivity extends BaseActivity
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
         firstName = (EditText) findViewById(R.id.first_name);
-        invite1 = (EditText) findViewById(R.id.invite1);
-        invite2 = (EditText) findViewById(R.id.invite2);
-        invite3 = (EditText) findViewById(R.id.invite3);
-        if(BuildConfig.DEBUG)
-        {
-            invite1.setText("Red");
-            invite2.setText("Blunt");
-            invite3.setText("Crane");
-        }
 
         findViewById(R.id.register).setOnClickListener(new View.OnClickListener()
         {
@@ -230,15 +218,8 @@ public class RegisterActivity extends BaseActivity
 
         if (prefs.isLoggedIn())
         {
-            Integer groupId = null;
-            boolean allFilled = ! TextUtils.isEmpty(invite1.getText()) && ! TextUtils
-                    .isEmpty(invite2.getText()) && ! TextUtils.isEmpty(invite3.getText());
-            if (allFilled) {
-                String code = InvitesAdapter.getCode(invite1, invite2, invite3);
-                groupId = Hashery.getInstance(this).decode(code);
-            }
             broadcastLogInSuccess(this);
-            startActivity(MainActivity.getLaunchIntent(this, groupId, allFilled));
+            startActivity(MainActivity.getLaunchIntent(this));
         }
         else
         {
