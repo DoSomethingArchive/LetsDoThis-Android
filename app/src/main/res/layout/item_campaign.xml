@@ -56,4 +56,11 @@
             tools:text="Call to action. and more longer text to try and break"/>
     </LinearLayout>
 
+    <View
+        android:id="@+id/signedup_indicator"
+        android:layout_width="@dimen/padding_small"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:background="@color/signedup_indicator"/>
+
 </RelativeLayout>

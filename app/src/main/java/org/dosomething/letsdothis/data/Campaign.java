@@ -45,6 +45,8 @@ public class Campaign
     public List<User> group  = new ArrayList<>();
     public int    signupGroup;
 
+    public boolean userIsSignedUp = false;
+
     public enum UploadShare
     {
         UPLOADING,

@@ -22,6 +22,8 @@ import org.dosomething.letsdothis.ui.views.SlantedBackgroundDrawable;
 import org.dosomething.letsdothis.utils.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -142,8 +144,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position)
     {
-        if(dataSet.size() >= 24 && position == dataSet.size() - 3)
-        {
+        if (position == dataSet.size() - 3) {
             campaignAdapterClickListener.onScrolledToBottom();
         }
 
@@ -165,6 +166,13 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 Picasso.with(context).load(campaign.imagePath).resize(0, height)
                         .into(campaignViewHolder.imageView);
                 campaignViewHolder.imageView.setTag(campaign.imagePath);
+            }
+
+            if (campaign.userIsSignedUp) {
+                campaignViewHolder.signedupIndicator.setVisibility(View.VISIBLE);
+            }
+            else {
+                campaignViewHolder.signedupIndicator.setVisibility(View.GONE);
             }
 
             campaignViewHolder.root.setOnClickListener(new View.OnClickListener()
@@ -308,6 +316,13 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             });
 
+            if (campaign.userIsSignedUp) {
+                viewHolder.signedupIndicator.setVisibility(View.VISIBLE);
+            }
+            else {
+                viewHolder.signedupIndicator.setVisibility(View.GONE);
+            }
+
             SlantedBackgroundDrawable background = new SlantedBackgroundDrawable(false, Color.WHITE,
                                                                                  shadowColor,
                                                                                  slantHeight,
@@ -391,6 +406,13 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void setCampaigns(List<Campaign> campaigns)
     {
+        // Sort campaigns in alphabetical order
+        Collections.sort(campaigns, new Comparator<Campaign>() {
+            public int compare(Campaign c1, Campaign c2) {
+                return c1.title.compareToIgnoreCase(c2.title);
+            }
+        });
+
         int indexOfPlaceHolder = dataSet.indexOf(PLACEHOLDER);
         if(indexOfPlaceHolder == - 1)
         {
@@ -412,6 +434,25 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyDataSetChanged();
     }
 
+    /**
+     * Update the adapter's data set indicating a user is signed up for a given campaign. Then
+     * refresh the view.
+     *
+     * @param id Campaign id the user is signed up for
+     */
+    public void userSignedUpForCampaign(int id) {
+        for (int i = 0; i < dataSet.size(); i++) {
+            if (dataSet.get(i) instanceof Campaign) {
+                Campaign c = (Campaign)dataSet.get(i);
+                if (c.id == id && !c.userIsSignedUp) {
+                    c.userIsSignedUp = true;
+                    notifyItemChanged(i);
+                    break;
+                }
+            }
+        }
+    }
+
     @Override
     public int getItemCount()
     {
@@ -430,6 +471,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         protected ImageView imageView;
         protected TextView  title;
         protected TextView  callToAction;
+        protected View      signedupIndicator;
 
         public CampaignViewHolder(View itemView)
         {
@@ -438,6 +480,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             this.imageView = (ImageView) itemView.findViewById(R.id.image);
             this.title = (TextView) itemView.findViewById(R.id.title);
             this.callToAction = (TextView) itemView.findViewById(R.id.call_to_action);
+            this.signedupIndicator = itemView.findViewById(R.id.signedup_indicator);
         }
     }
 
@@ -453,6 +496,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public          TextView hoursLabel;
         public          TextView minutesLabel;
         private final   View     slantedBg;
+        protected final View     signedupIndicator;
         protected final View     daysWrapper;
         protected final View     hoursWrapper;
         protected final View     minWrapper;
@@ -466,6 +510,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             minWrapper = itemView.findViewById(R.id.min_wrapper);
             problemFact = (TextView) itemView.findViewById(R.id.problemFact);
             slantedBg = itemView.findViewById(R.id.slanted_bg);
+            signedupIndicator = itemView.findViewById(R.id.signedup_indicator);
             campaignDetailsWrapper = itemView.findViewById(R.id.campaign_details_wrapper);
             days = (TextView) itemView.findViewById(R.id.days);
             hours = (TextView) itemView.findViewById(R.id.hours);
