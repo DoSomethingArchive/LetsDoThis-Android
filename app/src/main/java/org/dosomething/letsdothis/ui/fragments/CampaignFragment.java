@@ -21,6 +21,7 @@ import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.tasks.BaseReportBackListTask;
 import org.dosomething.letsdothis.tasks.CampaignSignUpTask;
 import org.dosomething.letsdothis.tasks.DbInterestGroupCampaignListTask;
+import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignsTask;
 import org.dosomething.letsdothis.tasks.InterestReportBackListTask;
 import org.dosomething.letsdothis.tasks.UpdateInterestGroupCampaignTask;
 import org.dosomething.letsdothis.tasks.UpdateInterestGroupCampaignTask.IdQuery;
@@ -252,6 +253,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     {
         if(findGroupId() == task.interestGroupId)
         {
+            // @TODO seems like campaigns won't get updated on app if they're changed on the server?
             if(task.campList.isEmpty())
             {
                 getCampaignQueue()
@@ -272,6 +274,9 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
                 String campaigns = StringUtils.join(campaignIds, ",");
                 getCampaignQueue().execute(new InterestReportBackListTask(position, campaigns,
                         FIRST_PAGE, BaseReportBackListTask.STATUS_PROMOTED));
+
+                // Now that we have campaigns, get user info to find out what they've participated in
+                TaskQueue.loadQueueDefault(getActivity()).execute(new GetCurrentUserCampaignsTask());
             }
         }
     }
@@ -280,6 +285,34 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     public void onEventMainThread(UpdateInterestGroupCampaignTask task)
     {
         getCampaignQueue().execute(new DbInterestGroupCampaignListTask(task.interestGroupId));
+    }
+
+    /**
+     * On receiving user campaign data, determine if the user's has signed up for any of the
+     * displayed campaigns.
+     *
+     * @TODO A potential optimization would be to only query for campaigns and user activity once
+     *   overall, instead of once per CampaignFragment.
+     *
+     * @param task Result of getting current user's campaign activity
+     */
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(GetCurrentUserCampaignsTask task) {
+        List<Campaign> allCampaigns = new ArrayList<>();
+        if (task.currentCampaignList != null) {
+            allCampaigns.addAll(task.currentCampaignList);
+        }
+
+        if (task.pastCampaignList != null) {
+            allCampaigns.addAll(task.pastCampaignList);
+        }
+
+        for (Campaign campaign : allCampaigns) {
+            int match = campaignIds.indexOf(campaign.id);
+            if (match >= 0) {
+                adapter.userSignedUpForCampaign(campaign.id);
+            }
+        }
     }
 
 }
