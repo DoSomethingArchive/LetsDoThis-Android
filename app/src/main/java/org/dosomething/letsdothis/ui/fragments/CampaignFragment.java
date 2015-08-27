@@ -127,9 +127,12 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     }
 
     @Override
-    public void onCampaignClicked(int campaignId)
+    public void onCampaignClicked(int campaignId, boolean alreadySignedUp)
     {
-        TaskQueue.loadQueueDefault(getActivity()).execute(new CampaignSignUpTask(campaignId));
+        if (!alreadySignedUp) {
+            TaskQueue.loadQueueDefault(getActivity()).execute(new CampaignSignUpTask(campaignId));
+        }
+
         startActivity(CampaignDetailsActivity.getLaunchIntent(getActivity(), campaignId));
     }
 

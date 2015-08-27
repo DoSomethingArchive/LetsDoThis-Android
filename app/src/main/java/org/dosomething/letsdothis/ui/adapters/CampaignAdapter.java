@@ -53,7 +53,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public interface CampaignAdapterClickListener
     {
-        void onCampaignClicked(int campaignId);
+        void onCampaignClicked(int campaignId, boolean alreadySignedUp);
 
         void onCampaignExpanded(int position);
 
@@ -225,6 +225,14 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             });
 
+            if (campaign.userIsSignedUp) {
+                smallCampaignViewHolder.signedupIndicator.setVisibility(View.VISIBLE);
+            }
+            else {
+                smallCampaignViewHolder.signedupIndicator.setVisibility(View.GONE);
+            }
+
+
             ColorMatrix cm = new ColorMatrix();
             if(TimeUtils.isCampaignExpired(campaign))
             {
@@ -318,9 +326,13 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             if (campaign.userIsSignedUp) {
                 viewHolder.signedupIndicator.setVisibility(View.VISIBLE);
+                viewHolder.alreadySignedUp.setVisibility(View.VISIBLE);
+                viewHolder.notSignedUp.setVisibility(View.GONE);
             }
             else {
                 viewHolder.signedupIndicator.setVisibility(View.GONE);
+                viewHolder.alreadySignedUp.setVisibility(View.GONE);
+                viewHolder.notSignedUp.setVisibility(View.VISIBLE);
             }
 
             SlantedBackgroundDrawable background = new SlantedBackgroundDrawable(false, Color.WHITE,
@@ -334,7 +346,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 @Override
                 public void onClick(View v)
                 {
-                    campaignAdapterClickListener.onCampaignClicked(campaign.id);
+                    campaignAdapterClickListener.onCampaignClicked(campaign.id, campaign.userIsSignedUp);
                 }
             });
 
@@ -496,6 +508,8 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public          TextView hoursLabel;
         public          TextView minutesLabel;
         private final   View     slantedBg;
+        private final   View     notSignedUp;
+        private final   View     alreadySignedUp;
         protected final View     signedupIndicator;
         protected final View     daysWrapper;
         protected final View     hoursWrapper;
@@ -512,6 +526,8 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             slantedBg = itemView.findViewById(R.id.slanted_bg);
             signedupIndicator = itemView.findViewById(R.id.signedup_indicator);
             campaignDetailsWrapper = itemView.findViewById(R.id.campaign_details_wrapper);
+            notSignedUp = campaignDetailsWrapper.findViewById(R.id.not_signedup);
+            alreadySignedUp = campaignDetailsWrapper.findViewById(R.id.signedup);
             days = (TextView) itemView.findViewById(R.id.days);
             hours = (TextView) itemView.findViewById(R.id.hours);
             minutes = (TextView) itemView.findViewById(R.id.min);
