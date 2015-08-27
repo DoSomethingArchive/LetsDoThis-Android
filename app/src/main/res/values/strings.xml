@@ -13,12 +13,6 @@
     <string name="email">Email</string>
     <string name="phone">Phone Number (Optional)</string>
     <string name="password">Password</string>
-    <string name="footer_invite_code">Invited to this app by a friend? Enter that invite code here! (Optional.)
-    </string>
-    <string name="invite_code_opt">Invite Code (optional)</string>
-    <string name="invite_code_opt1">Enter</string>
-    <string name="invite_code_opt2">Code</string>
-    <string name="invite_code_opt3">Here</string>
     <string name="sign_in">Sign in</string>
     <string name="show_me_how">Get Started</string>
     <string name="register">Create Account</string>
@@ -120,5 +114,7 @@
     <string name="bad_connection">No connection. Seems like the Internet is trying to cause drama.
     </string>
     <string name="reportback_success">Reportback uploaded</string>
+    <string name="drawer_desc_open">Drawer Open</string>
+    <string name="drawer_desc_closed">Drawer Closed</string>
 
 </resources>

@@ -79,16 +79,6 @@ public class LoginActivity extends BaseActivity
     {
         phoneEmail = (EditText) findViewById(R.id.phone_email);
         password = (EditText) findViewById(R.id.password);
-        invite1 = (EditText) findViewById(R.id.invite1);
-        invite2 = (EditText) findViewById(R.id.invite2);
-        invite3 = (EditText) findViewById(R.id.invite3);
-
-        if(BuildConfig.DEBUG)
-        {
-            invite1.setText("Red");
-            invite2.setText("Blunt");
-            invite3.setText("Crane");
-        }
 
         findViewById(R.id.login).setOnClickListener(new View.OnClickListener()
         {
@@ -122,16 +112,8 @@ public class LoginActivity extends BaseActivity
     {
         if(AppPrefs.getInstance(this).isLoggedIn())
         {
-            Integer groupId = 0;
-            boolean allFilled = ! TextUtils.isEmpty(invite1.getText()) && ! TextUtils
-                    .isEmpty(invite2.getText()) && ! TextUtils.isEmpty(invite3.getText());
-            if(allFilled)
-            {
-                String code = InvitesAdapter.getCode(invite1, invite2, invite3);
-                groupId = Hashery.getInstance(this).decode(code);
-            }
             broadcastLogInSuccess(this);
-            startActivity(MainActivity.getLaunchIntent(this, groupId, allFilled));
+            startActivity(MainActivity.getLaunchIntent(this));
         }
         else
         {

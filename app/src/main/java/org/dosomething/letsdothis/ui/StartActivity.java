@@ -34,7 +34,7 @@ public class StartActivity extends BaseActivity {
     }
 
     private void goToMain() {
-        startActivity(MainActivity.getLaunchIntent(this, 0, false));
+        startActivity(MainActivity.getLaunchIntent(this));
         finish();
     }
 
