@@ -30,36 +30,19 @@
                 android:background="@drawable/gradient_270"/>
         </FrameLayout>
 
-        <LinearLayout
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="@dimen/padding_medium">
-
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:maxLines="2"
-                android:textAllCaps="true"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/text_48"
-                app:typeface="brandon_bold"
-                tools:text="Title and we also want to test for a long title"/>
-
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-                android:id="@+id/call_to_action"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:maxLines="2"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/text_33"
-                tools:text="Call to action. and more longer text to try and break"/>
-        </LinearLayout>
+            android:gravity="center_horizontal"
+            android:maxLines="2"
+            android:padding="@dimen/padding_medium"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_48"
+            app:typeface="brandon_bold"
+            tools:text="Title and we also want to test for a long title"/>
 
         <View
             android:id="@+id/signedup_indicator"
@@ -80,21 +63,22 @@
         android:orientation="vertical">
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:id="@+id/problemFact"
+            android:id="@+id/call_to_action"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/padding_small"
             android:background="@color/porcelain"
+            android:gravity="center"
+            android:padding="@dimen/padding_medium"
             android:textColor="@android:color/black"
-            tools:text="Music programs are constantly in danger of being cut from shrinking school budgets even though they're proven to improve academics."/>
+            android:textSize="@dimen/text_33"
+            tools:text="Call to action. and more longer text to try and break"/>
 
         <FrameLayout
             android:id="@+id/slanted_bg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/problemFact"
-            android:background="@color/white"
-            android:paddingTop="@dimen/space_35">
+            android:layout_below="@+id/call_to_action"
+            android:background="@color/white">
 
             <include layout="@layout/lightning_button"/>
 
@@ -109,6 +93,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/slanted_wrapper"
-        android:padding="@dimen/padding_small"/>
+        android:paddingBottom="@dimen/padding_small"
+        android:paddingLeft="@dimen/padding_small"
+        android:paddingRight="@dimen/padding_small"/>
 
 </RelativeLayout>

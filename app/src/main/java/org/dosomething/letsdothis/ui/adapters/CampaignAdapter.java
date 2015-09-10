@@ -156,7 +156,6 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             final Campaign campaign = (Campaign) dataSet.get(position);
             CampaignViewHolder campaignViewHolder = (CampaignViewHolder) holder;
             campaignViewHolder.title.setText(campaign.title);
-            campaignViewHolder.callToAction.setText(campaign.callToAction);
 
             int height = resources.getDimensionPixelSize(R.dimen.campaign_height);
 
@@ -203,7 +202,6 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             final Campaign campaign = (Campaign) dataSet.get(position);
             CampaignViewHolder smallCampaignViewHolder = (CampaignViewHolder) holder;
             smallCampaignViewHolder.title.setText(campaign.title);
-            smallCampaignViewHolder.callToAction.setText(campaign.callToAction);
 
             int height = resources.getDimensionPixelSize(R.dimen.campaign_small_height);
 
@@ -263,12 +261,10 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         .into(viewHolder.imageView);
                 viewHolder.imageView.setTag(campaign.imagePath);
             }
-            viewHolder.imageView.setOnClickListener(new View.OnClickListener()
-            {
+            viewHolder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
-                    selectedPosition = - 1;
+                public void onClick(View v) {
+                    selectedPosition = -1;
                     notifyItemChanged(position);
                 }
             });
@@ -280,17 +276,13 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                                                                        widthOvershoot,
                                                                                        heightShadowOvershoot);
             viewHolder.slantedBg.setBackground(background);
-            viewHolder.refreshCopy.setOnClickListener(new View.OnClickListener()
-            {
+            viewHolder.refreshCopy.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     campaignAdapterClickListener.onNetworkCampaignRefresh();
                     //FIXME show progress bar
                 }
             });
-
-            viewHolder.problemFact.setText(campaign.problemFact);
 
             ColorMatrix cm = new ColorMatrix();
             cm.setSaturation(0);
@@ -341,16 +333,12 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                                                                  widthOvershoot,
                                                                                  heightShadowOvershoot);
             viewHolder.slantedBg.setBackground(background);
-            viewHolder.campaignDetailsWrapper.setOnClickListener(new View.OnClickListener()
-            {
+            viewHolder.campaignDetailsWrapper.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     campaignAdapterClickListener.onCampaignClicked(campaign.id, campaign.userIsSignedUp);
                 }
             });
-
-            viewHolder.problemFact.setText(campaign.problemFact);
 
             List<String> campExpTime = TimeUtils.getTimeUntilExpiration(campaign.endTime);
             int dayInt = Integer.parseInt(campExpTime.get(0));
@@ -482,7 +470,6 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         protected View      root;
         protected ImageView imageView;
         protected TextView  title;
-        protected TextView  callToAction;
         protected View      signedupIndicator;
 
         public CampaignViewHolder(View itemView)
@@ -491,15 +478,14 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             this.root = itemView;
             this.imageView = (ImageView) itemView.findViewById(R.id.image);
             this.title = (TextView) itemView.findViewById(R.id.title);
-            this.callToAction = (TextView) itemView.findViewById(R.id.call_to_action);
             this.signedupIndicator = itemView.findViewById(R.id.signedup_indicator);
         }
     }
 
     public static class ExpandedCampaignViewHolder extends CampaignViewHolder
     {
-        private         TextView problemFact;
         private         View     campaignDetailsWrapper;
+        public          TextView callToAction;
         public          TextView expire_label;
         public          TextView days;
         public          TextView hours;
@@ -519,10 +505,10 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         {
             super(itemView);
             expire_label = (TextView) itemView.findViewById(R.id.expire_label);
+            callToAction = (TextView) itemView.findViewById(R.id.call_to_action);
             daysWrapper = itemView.findViewById(R.id.days_wrapper);
             hoursWrapper = itemView.findViewById(R.id.hours_wrapper);
             minWrapper = itemView.findViewById(R.id.min_wrapper);
-            problemFact = (TextView) itemView.findViewById(R.id.problemFact);
             slantedBg = itemView.findViewById(R.id.slanted_bg);
             signedupIndicator = itemView.findViewById(R.id.signedup_indicator);
             campaignDetailsWrapper = itemView.findViewById(R.id.campaign_details_wrapper);
@@ -539,8 +525,8 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public static class ExpandedExpireCampaignViewHolder extends CampaignViewHolder
     {
-        private       TextView problemFact;
         private       View     refreshCopy;
+        public        TextView callToAction;
         public        TextView expired;
         private final View     slantedBg;
 
@@ -548,7 +534,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         {
             super(itemView);
             expired = (TextView) itemView.findViewById(R.id.expired_already);
-            problemFact = (TextView) itemView.findViewById(R.id.problemFact);
+            callToAction = (TextView) itemView.findViewById(R.id.call_to_action);
             slantedBg = itemView.findViewById(R.id.slanted_bg);
             refreshCopy = itemView.findViewById(R.id.refresh_copy);
         }
