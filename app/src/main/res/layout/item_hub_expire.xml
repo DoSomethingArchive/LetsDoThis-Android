@@ -68,62 +68,6 @@
                 tool:text="Days"/>
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/hours_wrapper"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            tool:visibility="gone">
-
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-                android:id="@+id/hours"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="@dimen/padding_tiny"
-                android:textColor="@color/dark_gray"
-                android:textSize="@dimen/text_33"
-                app:typeface="brandon_bold"
-                tool:text="30"/>
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-                android:id="@+id/hours_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_gray"
-                android:textSize="@dimen/text_33"
-                app:typeface="brandon_bold"
-                tool:text="Hours"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/min_wrapper"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            tool:visibility="gone">
-
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-                android:id="@+id/min"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="@dimen/padding_tiny"
-                android:textColor="@color/dark_gray"
-                android:textSize="@dimen/text_33"
-                app:typeface="brandon_bold"
-                tool:text="30"/>
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-                android:id="@+id/minutes_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_gray"
-                android:textSize="@dimen/text_33"
-                app:typeface="brandon_bold"
-                tool:text="Minutes"/>
-        </LinearLayout>
-
     </LinearLayout>
 
 </RelativeLayout>

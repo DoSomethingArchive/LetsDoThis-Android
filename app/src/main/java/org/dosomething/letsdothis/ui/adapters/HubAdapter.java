@@ -261,39 +261,23 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             ExpireViewHolder viewHolder = (ExpireViewHolder) holder;
 
+            // @todo Pretty sure I'm breaking whatever expired logic is going on here with the change
+            // to using mobile_app.dates.end time for campaign end dates. Will want to fix this when
+            // working on Hub stuff.
             Long expire = (Long) hubList.get(position);
             List<String> campExpTime = TimeUtils.getTimeUntilExpiration(expire);
             int dayInt = Integer.parseInt(campExpTime.get(0));
-            int hourInt = Integer.parseInt(campExpTime.get(1));
-            int minInt = Integer.parseInt(campExpTime.get(2));
 
             Resources resources = viewHolder.itemView.getContext().getResources();
             viewHolder.daysLabel.setText(resources.getQuantityString(R.plurals.days, dayInt));
-            viewHolder.hoursLabel.setText(resources.getQuantityString(R.plurals.hours, hourInt));
-            viewHolder.minutesLabel.setText(resources.getQuantityString(R.plurals.minutes, minInt));
 
             viewHolder.expire_label.setVisibility(View.VISIBLE);
             viewHolder.expired.setVisibility(View.GONE);
             viewHolder.daysWrapper.setVisibility(View.GONE);
-            viewHolder.hoursWrapper.setVisibility(View.GONE);
-            viewHolder.minWrapper.setVisibility(View.GONE);
-            if(dayInt > 0)
-            {
+            if (dayInt > 0) {
                 viewHolder.daysWrapper.setVisibility(View.VISIBLE);
                 viewHolder.days.setText(String.valueOf(dayInt));
-            }
-            else if(hourInt > 0)
-            {
-                viewHolder.hoursWrapper.setVisibility(View.VISIBLE);
-                viewHolder.hours.setText(String.valueOf(hourInt));
-            }
-            else if(minInt > 0)
-            {
-                viewHolder.minWrapper.setVisibility(View.VISIBLE);
-                viewHolder.minutes.setText(String.valueOf(minInt));
-            }
-            else
-            {
+            } else {
                 viewHolder.expire_label.setVisibility(View.GONE);
                 viewHolder.expired.setVisibility(View.VISIBLE);
             }
@@ -366,7 +350,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     {
         if(! isPublic)
         {
-            Long expire = TimeUtils.getExpirationTime();
+            Long expire = TimeUtils.getStartOfNextMonth();
             int i = hubList.indexOf(CURRENTLY_DOING);
             hubList.add(i + 1, expire);
         }
@@ -466,14 +450,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public          TextView expired;
         public          TextView expire_label;
         protected final TextView days;
-        protected final TextView hours;
-        protected final TextView minutes;
         protected final TextView daysLabel;
-        protected final TextView hoursLabel;
-        protected final TextView minutesLabel;
         protected final View     daysWrapper;
-        protected final View     hoursWrapper;
-        protected final View     minWrapper;
 
         public ExpireViewHolder(View itemView)
         {
@@ -481,14 +459,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             expire_label = (TextView) itemView.findViewById(R.id.expire_label);
             expired = (TextView) itemView.findViewById(R.id.expired_already);
             daysWrapper = itemView.findViewById(R.id.days_wrapper);
-            hoursWrapper = itemView.findViewById(R.id.hours_wrapper);
-            minWrapper = itemView.findViewById(R.id.min_wrapper);
             days = (TextView) itemView.findViewById(R.id.days);
-            hours = (TextView) itemView.findViewById(R.id.hours);
-            minutes = (TextView) itemView.findViewById(R.id.min);
             daysLabel = (TextView) itemView.findViewById(R.id.days_label);
-            hoursLabel = (TextView) itemView.findViewById(R.id.hours_label);
-            minutesLabel = (TextView) itemView.findViewById(R.id.minutes_label);
         }
     }
 

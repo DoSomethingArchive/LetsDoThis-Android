@@ -340,32 +340,19 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             });
 
-            List<String> campExpTime = TimeUtils.getTimeUntilExpiration(campaign.endTime);
-            int dayInt = Integer.parseInt(campExpTime.get(0));
-            int hourInt = Integer.parseInt(campExpTime.get(1));
-            int minInt = Integer.parseInt(campExpTime.get(2));
-            viewHolder.daysWrapper.setVisibility(View.GONE);
-            viewHolder.hoursWrapper.setVisibility(View.GONE);
-            viewHolder.minWrapper.setVisibility(View.GONE);
-            if(dayInt > 0)
-            {
+            // If campaign.endTime isn't specified by the server, then don't show the expires label
+            if (campaign.endTime == 0) {
+                viewHolder.expire_label.setVisibility(View.GONE);
+                viewHolder.daysWrapper.setVisibility(View.GONE);
+            }
+            else {
+                viewHolder.expire_label.setVisibility(View.VISIBLE);
                 viewHolder.daysWrapper.setVisibility(View.VISIBLE);
+
+                List<String> campExpTime = TimeUtils.getTimeUntilExpiration(campaign.endTime);
+                int dayInt = Integer.parseInt(campExpTime.get(0));
                 viewHolder.daysLabel.setText(resources.getQuantityString(R.plurals.days, dayInt));
                 viewHolder.days.setText(String.valueOf(dayInt));
-            }
-            else if(hourInt > 0)
-            {
-                viewHolder.hoursWrapper.setVisibility(View.VISIBLE);
-                viewHolder.hoursLabel
-                        .setText(resources.getQuantityString(R.plurals.hours, hourInt));
-                viewHolder.hours.setText(String.valueOf(hourInt));
-            }
-            else
-            {
-                viewHolder.minWrapper.setVisibility(View.VISIBLE);
-                viewHolder.minutesLabel
-                        .setText(resources.getQuantityString(R.plurals.minutes, minInt));
-                viewHolder.minutes.setText(String.valueOf(minInt));
             }
         }
         else if(getItemViewType(position) == VIEW_TYPE_REPORT_BACK)
@@ -488,18 +475,12 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public          TextView callToAction;
         public          TextView expire_label;
         public          TextView days;
-        public          TextView hours;
-        public          TextView minutes;
         public          TextView daysLabel;
-        public          TextView hoursLabel;
-        public          TextView minutesLabel;
         private final   View     slantedBg;
         private final   View     notSignedUp;
         private final   View     alreadySignedUp;
         protected final View     signedupIndicator;
         protected final View     daysWrapper;
-        protected final View     hoursWrapper;
-        protected final View     minWrapper;
 
         public ExpandedCampaignViewHolder(View itemView)
         {
@@ -507,19 +488,13 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             expire_label = (TextView) itemView.findViewById(R.id.expire_label);
             callToAction = (TextView) itemView.findViewById(R.id.call_to_action);
             daysWrapper = itemView.findViewById(R.id.days_wrapper);
-            hoursWrapper = itemView.findViewById(R.id.hours_wrapper);
-            minWrapper = itemView.findViewById(R.id.min_wrapper);
             slantedBg = itemView.findViewById(R.id.slanted_bg);
             signedupIndicator = itemView.findViewById(R.id.signedup_indicator);
             campaignDetailsWrapper = itemView.findViewById(R.id.campaign_details_wrapper);
             notSignedUp = campaignDetailsWrapper.findViewById(R.id.not_signedup);
             alreadySignedUp = campaignDetailsWrapper.findViewById(R.id.signedup);
             days = (TextView) itemView.findViewById(R.id.days);
-            hours = (TextView) itemView.findViewById(R.id.hours);
-            minutes = (TextView) itemView.findViewById(R.id.min);
             daysLabel = (TextView) itemView.findViewById(R.id.days_label);
-            hoursLabel = (TextView) itemView.findViewById(R.id.hours_label);
-            minutesLabel = (TextView) itemView.findViewById(R.id.minutes_label);
         }
     }
 
