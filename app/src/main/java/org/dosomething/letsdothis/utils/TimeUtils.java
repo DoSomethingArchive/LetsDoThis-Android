@@ -92,7 +92,7 @@ public class TimeUtils
         return expire;
     }
 
-    public static long getExpirationTime()
+    public static long getStartOfNextMonth()
     {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
@@ -102,6 +102,10 @@ public class TimeUtils
 
     public static boolean isCampaignExpired(Campaign campaign)
     {
+        if (campaign.endTime == 0) {
+            return false;
+        }
+
         return campaign.endTime < System.currentTimeMillis();
     }
 }

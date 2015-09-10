@@ -21,7 +21,7 @@ public class ResponseCampaign
     public ResponseSolution solutions;
     public ResponseFacts    facts;
     public ReportBackInfo   reportback_info;
-    public ReportTiming     timing;
+    public MobileAppTiming  mobile_app;
 
     public static Campaign getCampaign(ResponseCampaign response)
     {
@@ -29,8 +29,8 @@ public class ResponseCampaign
         campaign.id = response.id;
         campaign.title = response.title;
         campaign.callToAction = response.tagline;
-        campaign.startTime = getMillisFromString(response.getTiming().getHighSeason().start);
-        campaign.endTime = getMillisFromString(response.getTiming().getHighSeason().end);
+        campaign.startTime = getMillisFromString(response.getMobileAppTiming().getDates().start);
+        campaign.endTime = getMillisFromString(response.getMobileAppTiming().getDates().end);
         campaign.imagePath = response.getCoverImage().getWrapper().getSizes().getLandscape()
                 .getUri();
         campaign.solutionCopy = response.getSolutions().getCopy().formatted;
@@ -58,11 +58,10 @@ public class ResponseCampaign
         }
     }
 
-    private ReportTiming getTiming()
-    {
-        return timing == null
-                ? new ReportTiming()
-                : timing;
+    private MobileAppTiming getMobileAppTiming() {
+        return mobile_app == null
+                ? new MobileAppTiming()
+                : mobile_app;
     }
 
 
@@ -196,19 +195,16 @@ public class ResponseCampaign
                 : reportback_info;
     }
 
-    private class ReportTiming
-    {
-        public ResponseSeason high_season;
+    private class MobileAppTiming {
+        public MobileAppDates dates;
 
-        public ResponseSeason getHighSeason()
-        {
-            return high_season == null
-                    ? new ResponseSeason()
-                    : high_season;
+        public MobileAppDates getDates() {
+            return dates == null
+                    ? new MobileAppDates()
+                    : dates;
         }
 
-        private class ResponseSeason
-        {
+        private class MobileAppDates {
             public String start;
             public String end;
         }
