@@ -6,8 +6,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,8 +13,6 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.R;
-import org.dosomething.letsdothis.data.Kudos;
-import org.dosomething.letsdothis.data.KudosMeta;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.ReportBackDetailsTask;
@@ -25,8 +21,6 @@ import org.dosomething.letsdothis.ui.views.KudosView;
 import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
 import org.dosomething.letsdothis.utils.AppPrefs;
 import org.dosomething.letsdothis.utils.TimeUtils;
-
-import java.util.ArrayList;
 
 import co.touchlab.android.threading.tasks.TaskQueue;
 
@@ -44,7 +38,6 @@ public class ReportBackDetailsActivity extends BaseActivity
     private TextView  title;
     private TextView  caption;
     private TextView  name;
-    private ViewGroup kudos;
     private CustomToolbar toolbar;
 
     @Override
@@ -58,7 +51,6 @@ public class ReportBackDetailsActivity extends BaseActivity
         title = (TextView) findViewById(R.id.title);
         caption = (TextView) findViewById(R.id.caption);
         name = (TextView) findViewById(R.id.name);
-        kudos = (ViewGroup) findViewById(R.id.kudos_bar);
 
         toolbar = (CustomToolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
@@ -131,42 +123,6 @@ public class ReportBackDetailsActivity extends BaseActivity
                 name.setText(reportBack.user.id);
             }
             toolbar.setTitle(reportBack.campaign.title);
-
-            //FIXME add user's avatar
-
-            int drupalId = AppPrefs.getInstance(this).getCurrentDrupalId();
-            ArrayList<KudosMeta> sanitizedKudosList = reportBack.getSanitizedKudosList(drupalId);
-            for(int i = 0, size = sanitizedKudosList.size(); i < size; i++)
-            {
-                final KudosView kudoView = (KudosView) kudos.getChildAt(i);
-                KudosMeta kudosMeta = sanitizedKudosList.get(i);
-                kudoView.setKudos(kudosMeta);
-                kudoView.setOnClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        Context context = ReportBackDetailsActivity.this;
-                        boolean selected = kudoView.isSelected();
-
-                        if(! selected && !reportBack.kudosed)
-                        {
-                            kudoView.setSelected(true);
-                            int countNum = kudoView.getCountNum();
-                            kudoView.setCountNum(countNum + 1);
-                            Kudos kudos = kudoView.getKudos();
-                            TaskQueue.loadQueueDefault(context)
-                                     .execute(new SubmitKudosTask(kudos.id, reportBack.id));
-                            kudoView.getImage().startAnimation(
-                                    AnimationUtils.loadAnimation(context, R.anim.scale_bounce));
-                        }
-
-                    }
-                });
-
-            }
-
-
         }
         else
         {

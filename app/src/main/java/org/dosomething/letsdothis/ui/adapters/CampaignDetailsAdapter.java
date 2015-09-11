@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,9 +14,7 @@ import com.squareup.picasso.Picasso;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.Kudos;
-import org.dosomething.letsdothis.data.KudosMeta;
 import org.dosomething.letsdothis.data.ReportBack;
-import org.dosomething.letsdothis.ui.views.KudosView;
 import org.dosomething.letsdothis.ui.views.SlantedBackgroundDrawable;
 import org.dosomething.letsdothis.utils.TimeUtils;
 
@@ -246,89 +243,6 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             reportBackViewHolder.timestamp.setText(TimeUtils.getTimeSince(
                     reportBackViewHolder.timestamp.getContext(), reportBack.createdAt * 1000));
             reportBackViewHolder.caption.setText(reportBack.caption);
-            final boolean selected = position == selectedPosition;
-            reportBackViewHolder.kudosToggle.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    if(selected)
-                    {
-                        selectedPosition = - 1;
-                        notifyItemChanged(position);
-                    }
-                    else
-                    {
-                        selectedPosition = position;
-                        notifyDataSetChanged();
-                    }
-                }
-            });
-
-            ArrayList<KudosMeta> sanitizedKudosList = reportBack.getSanitizedKudosList(drupalId);
-            if(selected)
-            {
-                reportBackViewHolder.kudosToggle.setImageResource(R.drawable.ic_close_kudos);
-                reportBackViewHolder.kudosBar.setVisibility(View.VISIBLE);
-
-                // is there a better way to do this?
-                for(int i = 0, size = sanitizedKudosList.size(); i < size; i++)
-                {
-                    final KudosView kudoView = (KudosView) reportBackViewHolder.kudosBar
-                            .getChildAt(i);
-                    final KudosMeta kudosMeta = sanitizedKudosList.get(i);
-                    kudoView.setKudos(kudosMeta);
-                    if(kudosedMap.containsKey(reportBack.id))
-                    {
-                        Kudos mapKudos = kudosedMap.get(reportBack.id);
-                        if(mapKudos == kudosMeta.kudos)
-                        {
-                            kudoView.setSelected(true);
-                            kudoView.setCountNum(kudoView.getCountNum() + 1);
-                        }
-                    }
-
-                    kudoView.setOnClickListener(new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            Kudos kudos = kudoView.getKudos();
-                            if(! kudosMeta.selected && ! reportBack.kudosed)
-                            {
-                                reportBack.kudosed = true;
-                                detailsAdapterClickListener.onKudosClicked(reportBack, kudos);
-                                kudosedMap.put(reportBack.id, kudos);
-
-                                int updatedCount = kudoView.getCountNum() + 1;
-                                kudoView.setCountNum(updatedCount);
-                                kudoView.getImage().startAnimation(
-                                        AnimationUtils.loadAnimation(context, R.anim.scale_bounce));
-                            }
-
-                        }
-                    });
-
-                }
-
-            }
-            else
-            {
-                reportBackViewHolder.kudosBar.setVisibility(View.GONE);
-
-                //fun
-                if(sanitizedKudosList.get(0).total == 0)
-                {
-                    Kudos[] values = Kudos.values();
-                    reportBackViewHolder.kudosToggle
-                            .setImageResource(values[random.nextInt(values.length)].imageResId);
-                }
-                else
-                {
-                    reportBackViewHolder.kudosToggle
-                            .setImageResource(sanitizedKudosList.get(0).kudos.imageResId);
-                }
-            }
         }
         else if(getItemViewType(position) == VIEW_TYPE_CAMPAIGN_FOOTER)
         {
@@ -409,9 +323,6 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.name = (TextView) view.findViewById(R.id.name);
             this.timestamp = (TextView) view.findViewById(R.id.timestamp);
             this.caption = (TextView) view.findViewById(R.id.caption);
-            this.kudosToggle = (ImageView) view.findViewById(R.id.kudos_toggle);
-            this.kudosToggle.setVisibility(View.VISIBLE);
-            this.kudosBar = (ViewGroup) view.findViewById(R.id.kudos_bar);
             view.findViewById(R.id.title).setVisibility(View.GONE);
         }
     }
