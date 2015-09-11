@@ -2,7 +2,6 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,9 +16,7 @@ import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.ReportBackDetailsTask;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
-import org.dosomething.letsdothis.ui.views.KudosView;
 import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
-import org.dosomething.letsdothis.utils.AppPrefs;
 import org.dosomething.letsdothis.utils.TimeUtils;
 
 import co.touchlab.android.threading.tasks.TaskQueue;
@@ -38,6 +35,7 @@ public class ReportBackDetailsActivity extends BaseActivity
     private TextView  title;
     private TextView  caption;
     private TextView  name;
+    private TextView  impact;
     private CustomToolbar toolbar;
 
     @Override
@@ -50,6 +48,7 @@ public class ReportBackDetailsActivity extends BaseActivity
         timestamp = (TextView) findViewById(R.id.timestamp);
         title = (TextView) findViewById(R.id.title);
         caption = (TextView) findViewById(R.id.caption);
+        impact = (TextView) findViewById(R.id.impact);
         name = (TextView) findViewById(R.id.name);
 
         toolbar = (CustomToolbar) findViewById(R.id.toolbar);
@@ -100,17 +99,16 @@ public class ReportBackDetailsActivity extends BaseActivity
                    .into(image);
             timestamp.setText(TimeUtils.getTimeSince(this, reportBack.createdAt * 1000));
             title.setText(reportBack.campaign.title);
-            title.setOnClickListener(new View.OnClickListener()
-            {
+            title.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     startActivity(CampaignDetailsActivity
-                                          .getLaunchIntent(ReportBackDetailsActivity.this,
-                                                           reportBack.campaign.id));
+                            .getLaunchIntent(ReportBackDetailsActivity.this,
+                                    reportBack.campaign.id));
                 }
             });
             caption.setText(reportBack.caption);
+            impact.setText(String.valueOf(reportBack.reportback.quantity));
             if(user != null && ! TextUtils.isEmpty(user.first_name))
             {
                 String formattedName = TextUtils.isEmpty(user.last_name)

@@ -243,6 +243,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             reportBackViewHolder.timestamp.setText(TimeUtils.getTimeSince(
                     reportBackViewHolder.timestamp.getContext(), reportBack.createdAt * 1000));
             reportBackViewHolder.caption.setText(reportBack.caption);
+            reportBackViewHolder.impact.setText(String.valueOf(reportBack.reportback.quantity));
         }
         else if(getItemViewType(position) == VIEW_TYPE_CAMPAIGN_FOOTER)
         {
@@ -312,8 +313,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         protected TextView  name;
         protected TextView  timestamp;
         protected TextView  caption;
-        protected ImageView kudosToggle;
-        protected ViewGroup kudosBar;
+        protected TextView  impact;
 
         public ReportBackViewHolder(View view)
         {
@@ -323,6 +323,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.name = (TextView) view.findViewById(R.id.name);
             this.timestamp = (TextView) view.findViewById(R.id.timestamp);
             this.caption = (TextView) view.findViewById(R.id.caption);
+            this.impact = (TextView) view.findViewById(R.id.impact);
             view.findViewById(R.id.title).setVisibility(View.GONE);
         }
     }
