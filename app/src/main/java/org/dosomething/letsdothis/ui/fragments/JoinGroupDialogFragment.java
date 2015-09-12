@@ -171,6 +171,6 @@ public class JoinGroupDialogFragment extends DialogFragment implements JoinGroup
     @Override
     public void onReportBackClicked(int reportBackId)
     {
-        startActivity(ReportBackDetailsActivity.getLaunchIntent(getActivity(), reportBackId));
+        startActivity(ReportBackDetailsActivity.getLaunchIntent(getActivity(), reportBackId, -1));
     }
 }

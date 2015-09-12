@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.data.User;
+import org.dosomething.letsdothis.tasks.DbGetCampaignTask;
 import org.dosomething.letsdothis.tasks.ReportBackDetailsTask;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
 import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
@@ -28,6 +29,7 @@ public class ReportBackDetailsActivity extends BaseActivity
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String EXTRA_REPORT_BACK_ID = "report_back_id";
+    public static final String EXTRA_CAMPAIGN_ID = "campaign_id";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private ImageView image;
@@ -37,6 +39,11 @@ public class ReportBackDetailsActivity extends BaseActivity
     private TextView  name;
     private TextView  impact;
     private CustomToolbar toolbar;
+
+    // Values for impact text
+    private String actionNoun;
+    private String actionVerb;
+    private String actionQuantity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -58,13 +65,17 @@ public class ReportBackDetailsActivity extends BaseActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         TaskQueue.loadQueueDefault(this).execute(
-                new ReportBackDetailsTask(getIntent().getIntExtra(EXTRA_REPORT_BACK_ID, - 1)));
+                new ReportBackDetailsTask(getIntent().getIntExtra(EXTRA_REPORT_BACK_ID, -1)));
+
+        TaskQueue.loadQueueDefault(this).execute(
+                new DbGetCampaignTask(getIntent().getStringExtra(EXTRA_CAMPAIGN_ID)));
     }
 
-    public static Intent getLaunchIntent(Context context, int reportBackId)
+    public static Intent getLaunchIntent(Context context, int reportBackId, int campaignId)
     {
         return new Intent(context, ReportBackDetailsActivity.class)
-                .putExtra(EXTRA_REPORT_BACK_ID, reportBackId);
+                .putExtra(EXTRA_REPORT_BACK_ID, reportBackId)
+                .putExtra(EXTRA_CAMPAIGN_ID, Integer.toString(campaignId));
     }
 
     @Override
@@ -80,11 +91,17 @@ public class ReportBackDetailsActivity extends BaseActivity
         }
     }
 
+    private void setImpactTextIfReady() {
+        if (actionNoun != null && actionVerb != null && actionQuantity != null) {
+            impact.setText(String.format("%s %s %s", actionQuantity, actionNoun, actionVerb));
+        }
+    }
+
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(SubmitKudosTask task)
     {
         TaskQueue.loadQueueDefault(this).execute(
-                new ReportBackDetailsTask(getIntent().getIntExtra(EXTRA_REPORT_BACK_ID, - 1)));
+                new ReportBackDetailsTask(getIntent().getIntExtra(EXTRA_REPORT_BACK_ID, -1)));
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -108,7 +125,6 @@ public class ReportBackDetailsActivity extends BaseActivity
                 }
             });
             caption.setText(reportBack.caption);
-            impact.setText(String.valueOf(reportBack.reportback.quantity));
             if(user != null && ! TextUtils.isEmpty(user.first_name))
             {
                 String formattedName = TextUtils.isEmpty(user.last_name)
@@ -121,10 +137,24 @@ public class ReportBackDetailsActivity extends BaseActivity
                 name.setText(reportBack.user.id);
             }
             toolbar.setTitle(reportBack.campaign.title);
+
+            actionQuantity = String.valueOf(reportBack.reportback.quantity);
+            setImpactTextIfReady();
         }
         else
         {
             Toast.makeText(this, "report back data failed", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @SuppressWarnings("UnusedDeclarations")
+    public void onEventMainThread(DbGetCampaignTask task) {
+        if (task == null || task.campaign == null) {
+            return;
+        }
+
+        actionNoun = task.campaign.noun;
+        actionVerb = task.campaign.verb;
+        setImpactTextIfReady();
     }
 }

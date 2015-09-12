@@ -226,11 +226,9 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             final ReportBackViewHolder reportBackViewHolder = (ReportBackViewHolder) holder;
 
             //FIXME get real avatar
-            reportBackViewHolder.avatar.setOnClickListener(new View.OnClickListener()
-            {
+            reportBackViewHolder.avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     detailsAdapterClickListener.onUserClicked(reportBack.user.id);
                 }
             });
@@ -242,8 +240,12 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             reportBackViewHolder.name.setText(reportBack.user.id);
             reportBackViewHolder.timestamp.setText(TimeUtils.getTimeSince(
                     reportBackViewHolder.timestamp.getContext(), reportBack.createdAt * 1000));
+            reportBackViewHolder.title.setText(currentCampaign.title);
             reportBackViewHolder.caption.setText(reportBack.caption);
-            reportBackViewHolder.impact.setText(String.valueOf(reportBack.reportback.quantity));
+
+            String impactText = String.format("%s %s %s", String.valueOf(reportBack.reportback.quantity),
+                    currentCampaign.noun, currentCampaign.verb);
+            reportBackViewHolder.impact.setText(impactText);
         }
         else if(getItemViewType(position) == VIEW_TYPE_CAMPAIGN_FOOTER)
         {
@@ -314,6 +316,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         protected TextView  timestamp;
         protected TextView  caption;
         protected TextView  impact;
+        protected TextView  title;
 
         public ReportBackViewHolder(View view)
         {
@@ -324,7 +327,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.timestamp = (TextView) view.findViewById(R.id.timestamp);
             this.caption = (TextView) view.findViewById(R.id.caption);
             this.impact = (TextView) view.findViewById(R.id.impact);
-            view.findViewById(R.id.title).setVisibility(View.GONE);
+            this.title = (TextView) view.findViewById(R.id.title);
         }
     }
 
