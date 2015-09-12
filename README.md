@@ -2,10 +2,10 @@
 
 ## Development
 
-Make sure to also add a __secrets.xml__ file here for your local development and build boxes to set
-secret values needed by the app.
-
 #### secrets.xml
+
+Make sure to also add a __secrets.xml__ file to the __app/src/main/res/values__ folder for your local development and build boxes to set secret values needed by the app.
+
 ```
 <resources>
  <string name="facebook_app_id">FACEBOOK APP ID HERE</string>
@@ -15,10 +15,15 @@ secret values needed by the app.
 </resources>
 ```
 
-With the addition of Fabric, you'll also likely need to add a __fabric.properties__ file in the __app/__ folder in order to successfully build.
-
 #### fabric.properties
+
+With the addition of Fabric, you'll also likely need to add a __fabric.properties__ file to the __app/__ folder in order to successfully build.
+
 ```
 apiSecret=FABRIC SECRET HERE
 apiKey=FABRIC KEY HERE
 ```
+
+#### Fonts
+
+Font files need to be included in the __app/src/main/assets/fonts__ folder. See the [README](https://github.com/DoSomething/LetsDoThis-Android/blob/master/app/src/main/assets/fonts/README.md) for more info.
