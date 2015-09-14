@@ -17,27 +17,36 @@ import retrofit.RetrofitError;
  */
 public class LoginTask extends BaseRegistrationTask
 {
+    private final String mLogin;
 
-    public LoginTask(String phoneEmail, String password)
+    public LoginTask(String login, String password)
     {
-        super(phoneEmail, password);
+        super(login, password);
+
+        mLogin = login;
     }
 
+    /**
+     * @TODO this feels like a misnomer because only a login is being attempted here, not a registration
+     *
+     * @param context
+     * @throws Throwable
+     */
     @Override
     protected void attemptRegistration(Context context) throws Throwable
     {
         ResponseLogin response;
         User user;
 
-        if(matchesEmail(phoneEmail))
+        if(matchesEmail(mLogin))
         {
-            response = NetworkHelper.getNorthstarAPIService().loginWithEmail(phoneEmail, password);
-            user = new User(phoneEmail, null, null);
+            response = NetworkHelper.getNorthstarAPIService().loginWithEmail(mLogin, mPassword);
+            user = new User(mLogin, null, null);
         }
         else
         {
-            response = NetworkHelper.getNorthstarAPIService().loginWithMobile(phoneEmail, password);
-            user = new User(null, phoneEmail, null);
+            response = NetworkHelper.getNorthstarAPIService().loginWithMobile(mLogin, mPassword);
+            user = new User(null, mLogin, null);
         }
 
         validateResponse(context, response, user);

@@ -15,15 +15,15 @@ import org.dosomething.letsdothis.utils.AppPrefs;
  */
 public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
 {
-    protected final String phoneEmail;
-    protected final String password;
+    private final String mPhoneEmail;
+    protected final String mPassword;
 
-    protected BaseRegistrationTask(String phoneEmail, String password)
+    protected BaseRegistrationTask(String email, String password)
     {
-        this.phoneEmail = phoneEmail.isEmpty()
+        mPhoneEmail = email.isEmpty()
                 ? null
-                : phoneEmail;
-        this.password = password;
+                : email;
+        mPassword = password;
     }
 
     protected void loginUser(Context context, User user) throws Throwable
@@ -45,7 +45,7 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
     @Override
     protected void run(Context context) throws Throwable
     {
-        if(phoneEmail == null)
+        if(mPhoneEmail == null)
         {
             return;
         }
@@ -55,9 +55,9 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
 
     protected abstract void attemptRegistration(Context context) throws Throwable;
 
-    protected boolean matchesEmail(String phoneEmail)
+    protected boolean matchesEmail(String email)
     {
-        return Patterns.EMAIL_ADDRESS.matcher(phoneEmail).matches();
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
 }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -132,7 +133,7 @@ public class RegisterActivity extends BaseActivity
         }
 
         String inputEmail = email.getText().toString();
-        if (inputEmail.isEmpty() || !inputEmail.matches(".+[@].+[.].+")) {
+        if (inputEmail.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(inputEmail).matches()) {
             email.setBackgroundResource(R.drawable.edittext_error_background);
             Toast.makeText(RegisterActivity.this, R.string.error_registration_email, Toast.LENGTH_SHORT).show();
             isValid = false;
@@ -211,11 +212,12 @@ public class RegisterActivity extends BaseActivity
             {
                 if (validateForRegistration()) {
                     String emailText = email.getText().toString();
-                    String passtext = password.getText().toString();
-                    String firsttext = firstName.getText().toString();
+                    String phoneText = phone.getText().toString();
+                    String passText = password.getText().toString();
+                    String firstText = firstName.getText().toString();
 
                     TaskQueue.loadQueueDefault(RegisterActivity.this).execute(
-                            new RegisterTask(emailText, passtext, firsttext));
+                            new RegisterTask(emailText, phoneText, passText, firstText));
                 }
             }
         });

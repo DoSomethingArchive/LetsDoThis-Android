@@ -32,7 +32,7 @@ public class User
     @DatabaseField
     public String avatarPath;
 
-    public final String source = "android";
+    public String source;
 
     public User()
     {
