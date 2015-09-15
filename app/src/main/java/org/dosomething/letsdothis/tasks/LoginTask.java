@@ -17,53 +17,70 @@ import retrofit.RetrofitError;
  */
 public class LoginTask extends BaseRegistrationTask
 {
+    private final String mLogin;
 
-    public LoginTask(String phoneEmail, String password)
+    // Flag indicating whether the user doc on the server needs to be updated after login
+    public boolean mUserNeedsUpdate;
+
+    // User object after logging in
+    public User mLoggedInUser;
+
+    public LoginTask(String login, String password)
     {
-        super(phoneEmail, password);
+        super(login, password);
+
+        mLogin = login;
+        mUserNeedsUpdate = false;
+        mLoggedInUser = null;
     }
 
+    /**
+     * @TODO this feels like a misnomer because only a login is being attempted here, not a registration
+     *
+     * @param context
+     * @param country
+     * @throws Throwable
+     */
     @Override
-    protected void attemptRegistration(Context context) throws Throwable
-    {
+    protected void attemptRegistration(Context context, String country) throws Throwable {
         ResponseLogin response;
-        User user;
+        User user = new User();
+        user.country = country;
 
-        if(matchesEmail(phoneEmail))
-        {
-            response = NetworkHelper.getNorthstarAPIService().loginWithEmail(phoneEmail, password);
-            user = new User(phoneEmail, null, null);
+        if (matchesEmail(mLogin)) {
+            response = NetworkHelper.getNorthstarAPIService().loginWithEmail(mLogin, mPassword);
+            user.email = mLogin;
         }
-        else
-        {
-            response = NetworkHelper.getNorthstarAPIService().loginWithMobile(phoneEmail, password);
-            user = new User(null, phoneEmail, null);
+        else {
+            response = NetworkHelper.getNorthstarAPIService().loginWithMobile(mLogin, mPassword);
+            user.mobile = mLogin;
         }
 
-        validateResponse(context, response, user);
+        mLoggedInUser = validateResponse(context, response, user);
     }
 
-    private void validateResponse(Context context, ResponseLogin response, User user) throws Throwable
-    {
-        if(response != null)
-        {
-            if(response.data._id != null)
-            {
-                //FIXME should we get back a user avatar??
-                user.id = response.data._id;
-                user.drupalId = response.data.drupal_id;
-                user.email = response.data.email;
-                user.mobile = response.data.mobile;
-                user.first_name = response.data.first_name;
-                user.last_name = response.data.last_name;
-                user.birthdate = response.data.birthday;
-                user.avatarPath = response.data.avatar;
-                AppPrefs.getInstance(context).setSessionToken(response.data.session_token);
-                loginUser(context, user);
+    private User validateResponse(Context context, ResponseLogin response, User user) throws Throwable {
+        if (response != null && response.data != null && response.data._id != null) {
+            user.id = response.data._id;
+            user.drupalId = response.data.drupal_id;
+            user.email = response.data.email;
+            user.mobile = response.data.mobile;
+            user.first_name = response.data.first_name;
+            user.last_name = response.data.last_name;
+            user.birthdate = response.data.birthday;
+            user.avatarPath = response.data.photo;
 
-                DatabaseHelper.getInstance(context).getUserDao().createOrUpdate(user);
+            AppPrefs.getInstance(context).setSessionToken(response.data.session_token);
+            loginUser(context, user);
+
+            DatabaseHelper.getInstance(context).getUserDao().createOrUpdate(user);
+
+            if (!user.country.equalsIgnoreCase(response.data.country)) {
+                mUserNeedsUpdate = true;
             }
         }
+
+        return user;
     }
 
     @Override
