@@ -42,18 +42,30 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
                                              new ParseInstallationRequest(parseInstallation));
     }
 
+    /**
+     * Using the configured country instead of something provided by the LocationManager. This should
+     * be fine in a large majority of cases. If we find we need to get more refined with our location,
+     * then we can revisit this.
+     *
+     * @param context
+     * @return String country code
+     */
+    protected String getCountryCode(Context context) {
+        return context.getResources().getConfiguration().locale.getCountry();
+    }
+
     @Override
-    protected void run(Context context) throws Throwable
-    {
-        if(mPhoneEmail == null)
-        {
+    protected void run(Context context) throws Throwable {
+        if(mPhoneEmail == null) {
             return;
         }
 
-        attemptRegistration(context);
+        String country = getCountryCode(context);
+
+        attemptRegistration(context, country);
     }
 
-    protected abstract void attemptRegistration(Context context) throws Throwable;
+    protected abstract void attemptRegistration(Context context, String country) throws Throwable;
 
     protected boolean matchesEmail(String email)
     {

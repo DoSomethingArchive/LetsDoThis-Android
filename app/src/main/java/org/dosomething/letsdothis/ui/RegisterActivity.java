@@ -127,22 +127,25 @@ public class RegisterActivity extends BaseActivity
 
         String inputFName = firstName.getText().toString();
         if (inputFName.isEmpty()) {
+            String fnameError = getResources().getString(R.string.error_registration_first_name);
+            firstName.setError(fnameError);
             firstName.setBackgroundResource(R.drawable.edittext_error_background);
-            Toast.makeText(RegisterActivity.this, R.string.error_registration_first_name, Toast.LENGTH_SHORT).show();
             isValid = false;
         }
 
         String inputEmail = email.getText().toString();
         if (inputEmail.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(inputEmail).matches()) {
+            String emailError = getResources().getString(R.string.error_registration_email);
+            email.setError(emailError);
             email.setBackgroundResource(R.drawable.edittext_error_background);
-            Toast.makeText(RegisterActivity.this, R.string.error_registration_email, Toast.LENGTH_SHORT).show();
             isValid = false;
         }
 
         String inputPassword = password.getText().toString();
         if (inputPassword.length() < 6) {
+            String passwordError = getResources().getString(R.string.error_registration_password);
+            password.setError(passwordError);
             password.setBackgroundResource(R.drawable.edittext_error_background);
-            Toast.makeText(RegisterActivity.this, R.string.error_registration_password, Toast.LENGTH_SHORT).show();
             isValid = false;
         }
 

@@ -29,10 +29,11 @@ public class RegisterTask extends BaseRegistrationTask
     }
 
     @Override
-    protected void attemptRegistration(Context context) throws Throwable
+    protected void attemptRegistration(Context context, String country) throws Throwable
     {
         User user = new User(mEmail, mPhone, mPassword);
         user.first_name = mFirstName;
+        user.country = country;
         user.source = SOURCE;
 
         ResponseRegister response = NetworkHelper.getNorthstarAPIService().registerWithEmail(user);

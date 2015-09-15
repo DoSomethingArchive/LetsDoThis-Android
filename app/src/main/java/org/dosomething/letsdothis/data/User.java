@@ -25,13 +25,12 @@ public class User
     public String last_name;
     @DatabaseField
     public String birthdate;
-
-    //DON'T STORE PASSWORD IN DATABASE
-    public String password;
-
     @DatabaseField
     public String avatarPath;
 
+    // Fields not saved in the database
+    public String country;
+    public String password;
     public String source;
 
     public User()
@@ -54,29 +53,26 @@ public class User
     public static TypedInput getJsonTypedInput(User user) throws Throwable
     {
         JSONObject jsonObject = new JSONObject();
-        if(user.first_name != null && ! user.first_name.isEmpty())
-        {
+        if (user.first_name != null && !user.first_name.isEmpty()) {
             jsonObject.put("first_name", user.first_name);
         }
-        if(user.last_name != null && ! user.last_name.isEmpty())
-        {
+        if (user.last_name != null && !user.last_name.isEmpty()) {
             jsonObject.put("last_name", user.last_name);
         }
-        if(user.email != null && ! user.email.isEmpty())
-        {
+        if (user.email != null && !user.email.isEmpty()) {
             jsonObject.put("email", user.email);
         }
-        if(user.mobile != null && ! user.mobile.isEmpty())
-        {
+        if (user.mobile != null && !user.mobile.isEmpty()) {
             jsonObject.put("mobile", user.mobile);
         }
-        if(user.password != null && ! user.password.isEmpty())
-        {
+        if (user.password != null && !user.password.isEmpty()) {
             jsonObject.put("password", user.password);
         }
-        if(user.birthdate != null && ! user.birthdate.isEmpty())
-        {
+        if (user.birthdate != null && !user.birthdate.isEmpty()) {
             jsonObject.put("birthdate", user.birthdate);
+        }
+        if (user.country != null && !user.country.isEmpty()) {
+            jsonObject.put("country", user.country);
         }
 
         String json = jsonObject.toString();
