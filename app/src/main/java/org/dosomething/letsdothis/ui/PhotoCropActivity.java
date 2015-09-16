@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,7 @@ import android.widget.FrameLayout;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.views.BitmapUtils;
 import org.dosomething.letsdothis.ui.views.PhotoSortrView;
+import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -48,7 +48,6 @@ public class PhotoCropActivity extends AppCompatActivity
     public static final  String RESULT_FILE_PATH   = "file_path";
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private boolean        mPhotoLoaded;
-    private Toolbar        toolbar;
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private PhotoSortrView photoCropView;
     private FrameLayout    transparency;
@@ -68,8 +67,11 @@ public class PhotoCropActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_crop_photo);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getIntent().getStringExtra(EXTRA_TITLE));
+        String strTitle = getResources().getString(R.string.reportback_toolbar_title_template,
+                getIntent().getStringExtra(EXTRA_TITLE));
+        CustomToolbar toolbar = (CustomToolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(strTitle);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

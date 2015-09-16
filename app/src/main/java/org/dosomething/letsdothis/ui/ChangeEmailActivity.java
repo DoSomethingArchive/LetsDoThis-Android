@@ -2,7 +2,6 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -10,6 +9,7 @@ import android.widget.EditText;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.UpdateUserTask;
+import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import co.touchlab.android.threading.tasks.TaskQueue;
@@ -36,7 +36,7 @@ public class ChangeEmailActivity extends BaseActivity
 
         intiChangeListener();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        CustomToolbar toolbar = (CustomToolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Change Email");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

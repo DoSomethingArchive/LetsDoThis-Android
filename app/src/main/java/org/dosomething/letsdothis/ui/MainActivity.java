@@ -8,7 +8,6 @@ import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,6 +26,7 @@ import org.dosomething.letsdothis.ui.fragments.InvitesFragment;
 import org.dosomething.letsdothis.ui.fragments.JoinGroupDialogFragment;
 import org.dosomething.letsdothis.ui.fragments.NotificationsFragment;
 import org.dosomething.letsdothis.ui.fragments.SetTitleListener;
+import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import co.touchlab.android.threading.errorcontrol.NetworkException;
@@ -40,7 +40,7 @@ public class MainActivity extends BaseActivity implements SetTitleListener
     public static final String ATTEMPT_INVITE = "ATTEMPT_INVITE";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=VIEWS
-    private Toolbar           toolbar;
+    private CustomToolbar toolbar;
     private DrawerListAdapter drawerListAdapter;
 
 
@@ -91,7 +91,7 @@ public class MainActivity extends BaseActivity implements SetTitleListener
 
     private void initToolbar()
     {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (CustomToolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Actions");
         setSupportActionBar(toolbar);
 
