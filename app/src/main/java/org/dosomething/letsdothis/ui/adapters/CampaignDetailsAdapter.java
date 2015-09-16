@@ -2,8 +2,6 @@ package org.dosomething.letsdothis.ui.adapters;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +12,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.Kudos;
@@ -167,26 +164,19 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     .resize(0, height).into(campaignViewHolder.imageView);
             campaignViewHolder.title.setText(campaign.title);
             campaignViewHolder.callToAction.setText(campaign.callToAction);
-            campaignViewHolder.problemFact.setText(campaign.problemFact.replaceAll("\\r\\n", ""));
-            if(BuildConfig.DEBUG && campaign.solutionCopy != null) //FIXME this is null sometime
-            {
-                String cleanText = campaign.solutionCopy.replace("\n", "");
-                campaignViewHolder.solutionCopy.setText(Html.fromHtml(cleanText));
+
+            if (campaign.solutionCopy != null) {
+                campaignViewHolder.solutionCopy.setText(campaign.solutionCopy.trim());
             }
-            else
-            {
+            else {
                 campaignViewHolder.solutionCopy.setVisibility(View.GONE);
             }
-            if(BuildConfig.DEBUG && campaign.solutionSupport != null) //FIXME this is null sometime
-            {
-                //FIXME also this is a problem. might need to filter the text as soon as we get in from the response.
-                Spanned spanned = Html.fromHtml(campaign.solutionSupport);
-                String cleanText = spanned.toString().replace("\n", "");
-                campaignViewHolder.solutionSupport.setText(cleanText);
+
+            if (campaign.solutionSupport != null) {
+                campaignViewHolder.solutionSupport.setText(campaign.solutionSupport.trim());
             }
-            else
-            {
-                campaignViewHolder.solutionCopy.setVisibility(View.GONE);
+            else {
+                campaignViewHolder.solutionSupport.setVisibility(View.GONE);
             }
 
             SlantedBackgroundDrawable background = new SlantedBackgroundDrawable(true, webOrange,
@@ -380,7 +370,6 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     {
         protected TextView  solutionSupport;
         protected TextView  solutionCopy;
-        protected TextView  problemFact;
         protected ImageView imageView;
         protected TextView  title;
         protected TextView  callToAction;
@@ -395,7 +384,6 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.imageView = (ImageView) itemView.findViewById(R.id.image);
             this.title = (TextView) itemView.findViewById(R.id.title);
             this.callToAction = (TextView) itemView.findViewById(R.id.call_to_action);
-            this.problemFact = (TextView) itemView.findViewById(R.id.problemFact);
             this.solutionCopy = (TextView) itemView.findViewById(R.id.solutionCopy);
             this.solutionSupport = (TextView) itemView.findViewById(R.id.solutionSupport);
             this.proveShare = (Button) itemView.findViewById(R.id.prove_share);
