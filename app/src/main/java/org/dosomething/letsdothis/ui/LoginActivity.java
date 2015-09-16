@@ -63,12 +63,6 @@ public class LoginActivity extends BaseActivity
                 startActivity(browserIntent);
             }
         });
-
-        if(BuildConfig.DEBUG)
-        {
-            phoneEmail.setText("touch@lab.co");
-            password.setText("test");
-        }
     }
 
     private void initLoginListener()
