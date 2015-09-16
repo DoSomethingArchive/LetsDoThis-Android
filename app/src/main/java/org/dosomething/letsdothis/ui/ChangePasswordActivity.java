@@ -2,12 +2,12 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
 
 /**
  * Created by toidiu on 4/15/15.
@@ -37,7 +37,7 @@ public class ChangePasswordActivity extends BaseActivity
             }
         });
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        CustomToolbar toolbar = (CustomToolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Change Number");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

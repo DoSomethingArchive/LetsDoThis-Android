@@ -22,6 +22,7 @@ import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.ReportBackDetailsTask;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
 import org.dosomething.letsdothis.ui.views.KudosView;
+import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
 import org.dosomething.letsdothis.utils.AppPrefs;
 import org.dosomething.letsdothis.utils.TimeUtils;
 
@@ -44,7 +45,7 @@ public class ReportBackDetailsActivity extends BaseActivity
     private TextView  caption;
     private TextView  name;
     private ViewGroup kudos;
-    private Toolbar   toolbar;
+    private CustomToolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -59,7 +60,7 @@ public class ReportBackDetailsActivity extends BaseActivity
         name = (TextView) findViewById(R.id.name);
         kudos = (ViewGroup) findViewById(R.id.kudos_bar);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (CustomToolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 

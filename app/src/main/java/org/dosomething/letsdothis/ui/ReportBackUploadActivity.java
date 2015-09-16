@@ -3,13 +3,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -19,6 +17,7 @@ import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.network.models.RequestReportback;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
+import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.io.File;
@@ -56,11 +55,10 @@ public class ReportBackUploadActivity extends AppCompatActivity
             Toast.makeText(this, "Error with Campaign", Toast.LENGTH_SHORT).show();
             finish();
         }
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        TextView titleView = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        CustomToolbar toolbar = (CustomToolbar) findViewById(R.id.toolbar);
         String strTitle = getResources().getString(R.string.reportback_toolbar_title_template,
                 getIntent().getStringExtra(EXTRA_TITLE));
-        titleView.setText(strTitle);
+        toolbar.setTitle(strTitle);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
