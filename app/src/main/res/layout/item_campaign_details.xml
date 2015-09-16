@@ -33,39 +33,25 @@
         android:textSize="@dimen/text_48"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/call_to_action"
+        android:layout_alignBottom="@+id/image_container"
         android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:paddingBottom="@dimen/padding_medium"
         android:paddingLeft="@dimen/padding_medium"
         android:paddingRight="@dimen/padding_medium"
-        android:layout_above="@+id/call_to_action"
-        android:gravity="center"
         tool:text="title"/>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:id="@+id/call_to_action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:textAppearanceLarge"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_33"
-        android:layout_alignBottom="@+id/image_container"
+        android:layout_below="@+id/image_container"
         android:gravity="center"
-        android:paddingLeft="@dimen/padding_medium"
-        android:paddingRight="@dimen/padding_medium"
-        android:layout_marginBottom="@dimen/padding_large"
-        android:layout_centerHorizontal="true"
-        tool:text="call to action. make chocolate and give to all the people because it has antioxidants."/>
-
-    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-        android:id="@+id/problemFact"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/padding_small"
-        android:paddingRight="@dimen/padding_small"
-        android:paddingTop="@dimen/padding_small"
+        android:padding="@dimen/padding_medium"
         android:textColor="@android:color/black"
         android:textSize="@dimen/text_33"
-        android:layout_below="@+id/image_container"
-        tool:text="problem fact"/>
+        tool:text="call to action. make chocolate and give to all the people because it has antioxidants."/>
 
     <LinearLayout
         android:id="@+id/solutionWrapper"
@@ -77,7 +63,7 @@
         android:paddingRight="@dimen/padding_small"
         android:paddingBottom="@dimen/padding_small"
         android:background="@color/web_orange"
-        android:layout_below="@+id/problemFact">
+        android:layout_below="@+id/call_to_action">
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:layout_width="wrap_content"
@@ -93,11 +79,11 @@
             android:layout_below="@+id/image_container"
             android:text="@string/do_something_about_it"/>
 
-
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:id="@+id/solutionCopy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/padding_medium"
             android:textColor="@color/white"
             android:textSize="@dimen/text_33"
             tool:text="solution copy"/>

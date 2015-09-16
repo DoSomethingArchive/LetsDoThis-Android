@@ -33,8 +33,8 @@ public class ResponseCampaign
         campaign.endTime = getMillisFromString(response.getMobileAppTiming().getDates().end);
         campaign.imagePath = response.getCoverImage().getWrapper().getSizes().getLandscape()
                 .getUri();
-        campaign.solutionCopy = response.getSolutions().getCopy().formatted;
-        campaign.solutionSupport = response.getSolutions().getCopy().formatted;
+        campaign.solutionCopy = response.getSolutions().getCopy().raw;
+        campaign.solutionSupport = response.getSolutions().getSupportCopy().raw;
         campaign.problemFact = response.getFacts().getProblem();
         campaign.count = "";//response.getCountString();
         campaign.showShare = Campaign.UploadShare.SHOW_OFF;

@@ -47,11 +47,13 @@ public interface NorthstarAPI
             : "http://northstar.dosomething.org/v1";
 
     @FormUrlEncoded
+    @Headers("Accept: application/json")
     @POST("/login")
     ResponseLogin loginWithMobile(@Field("mobile") String mobile, @Field(
             "password") String password) throws NetworkException;
 
     @FormUrlEncoded
+    @Headers("Accept: application/json")
     @POST("/login")
     ResponseLogin loginWithEmail(@Field("email") String email, @Field(
             "password") String password) throws NetworkException;
