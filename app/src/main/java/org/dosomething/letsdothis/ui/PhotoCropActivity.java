@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.views.BitmapUtils;
@@ -69,7 +70,10 @@ public class PhotoCropActivity extends AppCompatActivity
         super.setContentView(R.layout.activity_crop_photo);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getIntent().getStringExtra(EXTRA_TITLE));
+        TextView titleView = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        String strTitle = getResources().getString(R.string.reportback_toolbar_title_template,
+                getIntent().getStringExtra(EXTRA_TITLE));
+        titleView.setText(strTitle);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

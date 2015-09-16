@@ -23,7 +23,7 @@
     <string name="expires_in">Expires in</string>
     <string name="invite_friends">Invite Friends</string>
     <string name="share_photo">Share Photo</string>
-    <string name="show_off">Show Off</string>
+    <string name="show_off">Prove It</string>
     <string name="friends">Friends</string>
     <string name="desc_login_reg">Let’s make this official. Create an account to find actions you
         can do with friends.
@@ -102,7 +102,8 @@
     <string name="expired_already">Oof - this action has expired. Let’s freshen things up.</string>
     <string name="max_kudos">99+</string>
     <string name="log_in_with_facebook">Log in with Facebook</string>
-    <string name="reportback_upload_hint">Number of %1$s %2$s.</string>
+    <string name="reportback_toolbar_title_template">I Did %1$s</string>
+    <string name="reportback_upload_hint">Number of %1$s %2$s</string>
     <string name="confirm_fb">Use your Facebook details to make a DoSomething.org profile!</string>
     <string name="refresh_copy">Get New Actions</string>
     <string name="uploading">uploading…</string>

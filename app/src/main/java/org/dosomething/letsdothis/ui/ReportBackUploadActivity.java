@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -17,13 +18,10 @@ import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.network.models.RequestReportback;
-import org.dosomething.letsdothis.tasks.CampaignDetailsTask;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.io.File;
-
-import co.touchlab.android.threading.tasks.TaskQueue;
 
 /**
  * Created by toidiu on 5/8/15.
@@ -59,7 +57,11 @@ public class ReportBackUploadActivity extends AppCompatActivity
             finish();
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getIntent().getStringExtra(EXTRA_TITLE));
+        TextView titleView = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        String strTitle = getResources().getString(R.string.reportback_toolbar_title_template,
+                getIntent().getStringExtra(EXTRA_TITLE));
+        titleView.setText(strTitle);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
