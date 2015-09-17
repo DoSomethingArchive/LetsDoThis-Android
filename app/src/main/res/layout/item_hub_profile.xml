@@ -21,7 +21,7 @@
             app:border_color="@color/white"
             app:draw_border="true"
             app:border_width="@dimen/padding_tiny"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@drawable/default_profile_photo"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             app:typeface="brandon_bold"
