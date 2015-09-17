@@ -2,10 +2,8 @@ package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
 import org.dosomething.letsdothis.data.ReportBack;
-import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.ResponseReportBack;
-import org.dosomething.letsdothis.network.models.ResponseUser;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
@@ -16,7 +14,6 @@ public class ReportBackDetailsTask extends BaseNetworkErrorHandlerTask
 {
     private final int              reportBackId;
     public        ReportBack       reportBack;
-    public        User             user;
 
     public ReportBackDetailsTask(int campaignId)
     {
@@ -29,9 +26,6 @@ public class ReportBackDetailsTask extends BaseNetworkErrorHandlerTask
         ResponseReportBack response = NetworkHelper.getDoSomethingAPIService()
                                                    .reportBack(reportBackId);
         reportBack = ResponseReportBack.getReportBack(response);
-
-        ResponseUser responseUser = NetworkHelper.getNorthstarAPIService().userProfileWithDrupalId(reportBack.user.id);
-        user = ResponseUser.getUser(responseUser);
     }
 
     @Override

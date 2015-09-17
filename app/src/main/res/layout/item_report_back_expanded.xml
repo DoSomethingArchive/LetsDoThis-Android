@@ -47,15 +47,16 @@
             android:id="@+id/name"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="41dp"
+            android:layout_alignParentRight="true"
             android:paddingRight="@dimen/padding_small"
             android:gravity="bottom"
+            android:textAllCaps="true"
             android:textColor="@color/gray"
             app:typeface="brandon_bold"
-            android:layout_alignParentRight="true"
-            tools:text="Timestamp"
-            android:id="@+id/timestamp"/>
+            tools:text="United States"/>
 
     </RelativeLayout>
 

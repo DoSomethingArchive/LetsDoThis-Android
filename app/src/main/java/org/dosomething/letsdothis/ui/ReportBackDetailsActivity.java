@@ -2,7 +2,6 @@ package org.dosomething.letsdothis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,12 +12,12 @@ import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.ReportBack;
-import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.tasks.DbGetCampaignTask;
 import org.dosomething.letsdothis.tasks.ReportBackDetailsTask;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
 import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
-import org.dosomething.letsdothis.utils.TimeUtils;
+
+import java.util.Locale;
 
 import co.touchlab.android.threading.tasks.TaskQueue;
 
@@ -33,7 +32,7 @@ public class ReportBackDetailsActivity extends BaseActivity
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private ImageView image;
-    private TextView  timestamp;
+    private TextView  location;
     private TextView  title;
     private TextView  caption;
     private TextView  name;
@@ -52,7 +51,7 @@ public class ReportBackDetailsActivity extends BaseActivity
         setContentView(R.layout.activity_report_back_details);
 
         image = (ImageView) findViewById(R.id.image);
-        timestamp = (TextView) findViewById(R.id.timestamp);
+        location = (TextView) findViewById(R.id.location);
         title = (TextView) findViewById(R.id.title);
         caption = (TextView) findViewById(R.id.caption);
         impact = (TextView) findViewById(R.id.impact);
@@ -110,11 +109,15 @@ public class ReportBackDetailsActivity extends BaseActivity
         if(task.reportBack != null)
         {
             final ReportBack reportBack = task.reportBack;
-            User user = task.user;
 
             Picasso.with(this).load(reportBack.getImagePath()).resize(image.getWidth(), 0)
                    .into(image);
-            timestamp.setText(TimeUtils.getTimeSince(this, reportBack.createdAt * 1000));
+
+            if (reportBack.user.country != null && !reportBack.user.country.isEmpty()) {
+                Locale locale = new Locale("", reportBack.user.country);
+                location.setText(locale.getDisplayCountry());
+            }
+
             title.setText(reportBack.campaign.title);
             title.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -124,18 +127,15 @@ public class ReportBackDetailsActivity extends BaseActivity
                                     reportBack.campaign.id));
                 }
             });
+
             caption.setText(reportBack.caption);
-            if(user != null && ! TextUtils.isEmpty(user.first_name))
-            {
-                String formattedName = TextUtils.isEmpty(user.last_name)
-                        ? user.first_name
-                        : String.format("%s %s.", user.first_name, user.last_name.charAt(0));
-                name.setText(formattedName);
+
+            String username = reportBack.user.first_name;
+            if (reportBack.user.last_name != null && !reportBack.user.last_name.isEmpty()) {
+                username += " " + reportBack.user.last_name.charAt(0) + ".";
             }
-            else
-            {
-                name.setText(reportBack.user.id);
-            }
+            name.setText(username);
+
             toolbar.setTitle(reportBack.campaign.title);
 
             actionQuantity = String.valueOf(reportBack.reportback.quantity);

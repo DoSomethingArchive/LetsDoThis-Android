@@ -16,11 +16,11 @@ import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.Kudos;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.ui.views.SlantedBackgroundDrawable;
-import org.dosomething.letsdothis.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 /**
@@ -237,9 +237,17 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             Picasso.with(context).
                     load(reportBack.getImagePath()).into(reportBackViewHolder.imageView);
 
-            reportBackViewHolder.name.setText(reportBack.user.id);
-            reportBackViewHolder.timestamp.setText(TimeUtils.getTimeSince(
-                    reportBackViewHolder.timestamp.getContext(), reportBack.createdAt * 1000));
+            String reportbackName = reportBack.user.first_name;
+            if (reportBack.user.last_name != null && !reportBack.user.last_name.isEmpty()) {
+                reportbackName += " " + reportBack.user.last_name.charAt(0) + ".";
+            }
+            reportBackViewHolder.name.setText(reportbackName);
+
+            if (reportBack.user.country != null && !reportBack.user.country.isEmpty()) {
+                Locale locale = new Locale("", reportBack.user.country);
+                reportBackViewHolder.location.setText(locale.getDisplayCountry());
+            }
+
             reportBackViewHolder.title.setText(currentCampaign.title);
             reportBackViewHolder.caption.setText(reportBack.caption);
 
@@ -313,7 +321,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         protected ImageView avatar;
         protected ImageView imageView;
         protected TextView  name;
-        protected TextView  timestamp;
+        protected TextView  location;
         protected TextView  caption;
         protected TextView  impact;
         protected TextView  title;
@@ -324,7 +332,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.imageView = (ImageView) view.findViewById(R.id.image);
             this.avatar = (ImageView) view.findViewById(R.id.avatar);
             this.name = (TextView) view.findViewById(R.id.name);
-            this.timestamp = (TextView) view.findViewById(R.id.timestamp);
+            this.location = (TextView) view.findViewById(R.id.location);
             this.caption = (TextView) view.findViewById(R.id.caption);
             this.impact = (TextView) view.findViewById(R.id.impact);
             this.title = (TextView) view.findViewById(R.id.title);
