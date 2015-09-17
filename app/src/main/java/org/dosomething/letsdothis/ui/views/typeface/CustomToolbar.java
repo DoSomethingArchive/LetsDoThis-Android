@@ -23,6 +23,9 @@ public class CustomToolbar extends Toolbar {
     }
 
     public void setTitle(String title) {
+        // The parent's title field should be empty
+        super.setTitle("");
+
         TextView view = (TextView) findViewById(R.id.toolbar_title);
         view.setText(title);
     }
