@@ -10,29 +10,44 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/hub_profile_header"
-        android:orientation="vertical"
+        android:background="@drawable/hub_lightning"
         android:gravity="center"
-        android:background="@drawable/hub_lightning">
+        android:orientation="vertical">
 
         <org.dosomething.letsdothis.ui.views.CircleImageView
             android:id="@+id/user_image"
             android:layout_width="@dimen/hub_avatar_height"
             android:layout_height="@dimen/hub_avatar_height"
+            android:src="@drawable/default_profile_photo"
             app:border_color="@color/white"
-            app:draw_border="true"
             app:border_width="@dimen/padding_tiny"
-            android:src="@drawable/default_profile_photo"/>
+            app:draw_border="true"
+            />
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            app:typeface="brandon_bold"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_48"
             android:id="@+id/name"
-            android:textAllCaps="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/padding_small"
+            android:paddingLeft="@dimen/padding_small"
+            android:paddingRight="@dimen/padding_small"
+            android:paddingTop="@dimen/padding_small"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_48"
+            app:typeface="brandon_bold"
             tool:text="Person P."/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/user_country"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/padding_small"
+            android:paddingLeft="@dimen/padding_small"
+            android:paddingRight="@dimen/padding_small"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            app:typeface="brandon_bold"
+            tool:text="New Zealand"/>
 
     </LinearLayout>
 

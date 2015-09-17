@@ -22,6 +22,7 @@ import org.dosomething.letsdothis.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by toidiu on 4/17/15.
@@ -126,11 +127,17 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             String last = "";
             if(user.last_name != null && user.last_name.length() > 0)
             {
-                last = user.last_name.charAt(0) + ".";
+                last = " " + user.last_name.charAt(0) + ".";
             }
 
-            String displayName = String.format("%s %s", first, last);
+            String displayName = String.format("%s%s", first, last);
             profileViewHolder.name.setText(displayName);
+
+            // Convert from country code to display name
+            if (user.country != null) {
+                Locale locale = new Locale("", user.country);
+                profileViewHolder.userCountry.setText(locale.getDisplayCountry());
+            }
         }
         else if(getItemViewType(position) == VIEW_TYPE_CURRENT_CAMPAIGN)
         {
@@ -394,12 +401,14 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     {
         protected ImageView userImage;
         protected TextView  name;
+        protected TextView  userCountry;
 
         public ProfileViewHolder(View itemView)
         {
             super(itemView);
             this.userImage = (ImageView) itemView.findViewById(R.id.user_image);
             this.name = (TextView) itemView.findViewById(R.id.name);
+            this.userCountry = (TextView) itemView.findViewById(R.id.user_country);
         }
     }
 

@@ -27,9 +27,10 @@ public class User
     public String birthdate;
     @DatabaseField
     public String avatarPath;
+    @DatabaseField
+    public String country;
 
     // Fields not saved in the database
-    public String country;
     public String password;
     public String source;
 
