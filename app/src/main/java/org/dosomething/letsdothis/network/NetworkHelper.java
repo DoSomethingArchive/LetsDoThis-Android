@@ -6,6 +6,8 @@ import com.squareup.okhttp.OkHttpClient;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.network.deserializers.ResponseCampaignDeserializer;
+import org.dosomething.letsdothis.network.models.ResponseCampaign;
 
 import java.util.concurrent.TimeUnit;
 
@@ -78,7 +80,9 @@ public class NetworkHelper
 
     public static DoSomethingAPI getDoSomethingAPIService()
     {
-        Gson gson = new GsonBuilder().setDateFormat(JSON_DATE_FORMAT_DO_SOMETHING).create();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(ResponseCampaign.class, new ResponseCampaignDeserializer<ResponseCampaign>())
+                .setDateFormat(JSON_DATE_FORMAT_DO_SOMETHING).create();
         GsonConverter gsonConverter = new GsonConverter(gson);
         return getRequestAdapterBuilder().setConverter(gsonConverter)
                 .setEndpoint(DoSomethingAPI.BASE_URL).build().create(DoSomethingAPI.class);

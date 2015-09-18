@@ -3,7 +3,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -17,13 +16,11 @@ import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.network.models.RequestReportback;
-import org.dosomething.letsdothis.tasks.CampaignDetailsTask;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
+import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.io.File;
-
-import co.touchlab.android.threading.tasks.TaskQueue;
 
 /**
  * Created by toidiu on 5/8/15.
@@ -58,8 +55,11 @@ public class ReportBackUploadActivity extends AppCompatActivity
             Toast.makeText(this, "Error with Campaign", Toast.LENGTH_SHORT).show();
             finish();
         }
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getIntent().getStringExtra(EXTRA_TITLE));
+        CustomToolbar toolbar = (CustomToolbar) findViewById(R.id.toolbar);
+        String strTitle = getResources().getString(R.string.reportback_toolbar_title_template,
+                getIntent().getStringExtra(EXTRA_TITLE));
+        toolbar.setTitle(strTitle);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -76,13 +76,7 @@ public class ReportBackUploadActivity extends AppCompatActivity
 
         final EditText caption = (EditText) findViewById(R.id.caption);
         final EditText number = (EditText) findViewById(R.id.number);
-        if(BuildConfig.DEBUG)
-        {
-            caption.setText("test");
-            number.setText("8");
-        }
         number.setHint(getIntent().getStringExtra(EXTRA_COPY));
-
 
         this.getWindow()
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);

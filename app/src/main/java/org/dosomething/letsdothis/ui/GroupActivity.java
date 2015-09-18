@@ -119,7 +119,7 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
     @Override
     public void onReportBackClicked(int reportBackId)
     {
-        startActivity(ReportBackDetailsActivity.getLaunchIntent(this, reportBackId));
+        startActivity(ReportBackDetailsActivity.getLaunchIntent(this, reportBackId, -1));
     }
 
     @Override

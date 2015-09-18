@@ -22,6 +22,8 @@ import org.dosomething.letsdothis.ui.views.SlantedBackgroundDrawable;
 import org.dosomething.letsdothis.utils.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -51,11 +53,11 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public interface CampaignAdapterClickListener
     {
-        void onCampaignClicked(int campaignId);
+        void onCampaignClicked(int campaignId, boolean alreadySignedUp);
 
         void onCampaignExpanded(int position);
 
-        void onReportBackClicked(int reportBackId);
+        void onReportBackClicked(int reportBackId, int campaignId);
 
         void onScrolledToBottom();
 
@@ -142,8 +144,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position)
     {
-        if(dataSet.size() >= 24 && position == dataSet.size() - 3)
-        {
+        if (position == dataSet.size() - 3) {
             campaignAdapterClickListener.onScrolledToBottom();
         }
 
@@ -155,7 +156,6 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             final Campaign campaign = (Campaign) dataSet.get(position);
             CampaignViewHolder campaignViewHolder = (CampaignViewHolder) holder;
             campaignViewHolder.title.setText(campaign.title);
-            campaignViewHolder.callToAction.setText(campaign.callToAction);
 
             int height = resources.getDimensionPixelSize(R.dimen.campaign_height);
 
@@ -165,6 +165,13 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 Picasso.with(context).load(campaign.imagePath).resize(0, height)
                         .into(campaignViewHolder.imageView);
                 campaignViewHolder.imageView.setTag(campaign.imagePath);
+            }
+
+            if (campaign.userIsSignedUp) {
+                campaignViewHolder.signedupIndicator.setVisibility(View.VISIBLE);
+            }
+            else {
+                campaignViewHolder.signedupIndicator.setVisibility(View.GONE);
             }
 
             campaignViewHolder.root.setOnClickListener(new View.OnClickListener()
@@ -195,7 +202,6 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             final Campaign campaign = (Campaign) dataSet.get(position);
             CampaignViewHolder smallCampaignViewHolder = (CampaignViewHolder) holder;
             smallCampaignViewHolder.title.setText(campaign.title);
-            smallCampaignViewHolder.callToAction.setText(campaign.callToAction);
 
             int height = resources.getDimensionPixelSize(R.dimen.campaign_small_height);
 
@@ -216,6 +222,14 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     notifyItemChanged(position);
                 }
             });
+
+            if (campaign.userIsSignedUp) {
+                smallCampaignViewHolder.signedupIndicator.setVisibility(View.VISIBLE);
+            }
+            else {
+                smallCampaignViewHolder.signedupIndicator.setVisibility(View.GONE);
+            }
+
 
             ColorMatrix cm = new ColorMatrix();
             if(TimeUtils.isCampaignExpired(campaign))
@@ -247,12 +261,10 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         .into(viewHolder.imageView);
                 viewHolder.imageView.setTag(campaign.imagePath);
             }
-            viewHolder.imageView.setOnClickListener(new View.OnClickListener()
-            {
+            viewHolder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
-                    selectedPosition = - 1;
+                public void onClick(View v) {
+                    selectedPosition = -1;
                     notifyItemChanged(position);
                 }
             });
@@ -264,17 +276,13 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                                                                        widthOvershoot,
                                                                                        heightShadowOvershoot);
             viewHolder.slantedBg.setBackground(background);
-            viewHolder.refreshCopy.setOnClickListener(new View.OnClickListener()
-            {
+            viewHolder.refreshCopy.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     campaignAdapterClickListener.onNetworkCampaignRefresh();
                     //FIXME show progress bar
                 }
             });
-
-            viewHolder.problemFact.setText(campaign.problemFact);
 
             ColorMatrix cm = new ColorMatrix();
             cm.setSaturation(0);
@@ -308,49 +316,43 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             });
 
+            if (campaign.userIsSignedUp) {
+                viewHolder.signedupIndicator.setVisibility(View.VISIBLE);
+                viewHolder.alreadySignedUp.setVisibility(View.VISIBLE);
+                viewHolder.notSignedUp.setVisibility(View.GONE);
+            }
+            else {
+                viewHolder.signedupIndicator.setVisibility(View.GONE);
+                viewHolder.alreadySignedUp.setVisibility(View.GONE);
+                viewHolder.notSignedUp.setVisibility(View.VISIBLE);
+            }
+
             SlantedBackgroundDrawable background = new SlantedBackgroundDrawable(false, Color.WHITE,
                                                                                  shadowColor,
                                                                                  slantHeight,
                                                                                  widthOvershoot,
                                                                                  heightShadowOvershoot);
             viewHolder.slantedBg.setBackground(background);
-            viewHolder.campaignDetailsWrapper.setOnClickListener(new View.OnClickListener()
-            {
+            viewHolder.campaignDetailsWrapper.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
-                    campaignAdapterClickListener.onCampaignClicked(campaign.id);
+                public void onClick(View v) {
+                    campaignAdapterClickListener.onCampaignClicked(campaign.id, campaign.userIsSignedUp);
                 }
             });
 
-            viewHolder.problemFact.setText(campaign.problemFact);
-
-            List<String> campExpTime = TimeUtils.getTimeUntilExpiration(campaign.endTime);
-            int dayInt = Integer.parseInt(campExpTime.get(0));
-            int hourInt = Integer.parseInt(campExpTime.get(1));
-            int minInt = Integer.parseInt(campExpTime.get(2));
-            viewHolder.daysWrapper.setVisibility(View.GONE);
-            viewHolder.hoursWrapper.setVisibility(View.GONE);
-            viewHolder.minWrapper.setVisibility(View.GONE);
-            if(dayInt > 0)
-            {
+            // If campaign.endTime isn't specified by the server, then don't show the expires label
+            if (campaign.endTime == 0) {
+                viewHolder.expire_label.setVisibility(View.GONE);
+                viewHolder.daysWrapper.setVisibility(View.GONE);
+            }
+            else {
+                viewHolder.expire_label.setVisibility(View.VISIBLE);
                 viewHolder.daysWrapper.setVisibility(View.VISIBLE);
+
+                List<String> campExpTime = TimeUtils.getTimeUntilExpiration(campaign.endTime);
+                int dayInt = Integer.parseInt(campExpTime.get(0));
                 viewHolder.daysLabel.setText(resources.getQuantityString(R.plurals.days, dayInt));
                 viewHolder.days.setText(String.valueOf(dayInt));
-            }
-            else if(hourInt > 0)
-            {
-                viewHolder.hoursWrapper.setVisibility(View.VISIBLE);
-                viewHolder.hoursLabel
-                        .setText(resources.getQuantityString(R.plurals.hours, hourInt));
-                viewHolder.hours.setText(String.valueOf(hourInt));
-            }
-            else
-            {
-                viewHolder.minWrapper.setVisibility(View.VISIBLE);
-                viewHolder.minutesLabel
-                        .setText(resources.getQuantityString(R.plurals.minutes, minInt));
-                viewHolder.minutes.setText(String.valueOf(minInt));
             }
         }
         else if(getItemViewType(position) == VIEW_TYPE_REPORT_BACK)
@@ -365,7 +367,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 @Override
                 public void onClick(View v)
                 {
-                    campaignAdapterClickListener.onReportBackClicked(reportBack.id);
+                    campaignAdapterClickListener.onReportBackClicked(reportBack.id, reportBack.campaign.id);
                 }
             });
         }
@@ -391,6 +393,13 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void setCampaigns(List<Campaign> campaigns)
     {
+        // Sort campaigns in alphabetical order
+        Collections.sort(campaigns, new Comparator<Campaign>() {
+            public int compare(Campaign c1, Campaign c2) {
+                return c1.title.compareToIgnoreCase(c2.title);
+            }
+        });
+
         int indexOfPlaceHolder = dataSet.indexOf(PLACEHOLDER);
         if(indexOfPlaceHolder == - 1)
         {
@@ -412,6 +421,25 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyDataSetChanged();
     }
 
+    /**
+     * Update the adapter's data set indicating a user is signed up for a given campaign. Then
+     * refresh the view.
+     *
+     * @param id Campaign id the user is signed up for
+     */
+    public void userSignedUpForCampaign(int id) {
+        for (int i = 0; i < dataSet.size(); i++) {
+            if (dataSet.get(i) instanceof Campaign) {
+                Campaign c = (Campaign)dataSet.get(i);
+                if (c.id == id && !c.userIsSignedUp) {
+                    c.userIsSignedUp = true;
+                    notifyItemChanged(i);
+                    break;
+                }
+            }
+        }
+    }
+
     @Override
     public int getItemCount()
     {
@@ -429,7 +457,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         protected View      root;
         protected ImageView imageView;
         protected TextView  title;
-        protected TextView  callToAction;
+        protected View      signedupIndicator;
 
         public CampaignViewHolder(View itemView)
         {
@@ -437,49 +465,43 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             this.root = itemView;
             this.imageView = (ImageView) itemView.findViewById(R.id.image);
             this.title = (TextView) itemView.findViewById(R.id.title);
-            this.callToAction = (TextView) itemView.findViewById(R.id.call_to_action);
+            this.signedupIndicator = itemView.findViewById(R.id.signedup_indicator);
         }
     }
 
     public static class ExpandedCampaignViewHolder extends CampaignViewHolder
     {
-        private         TextView problemFact;
         private         View     campaignDetailsWrapper;
+        public          TextView callToAction;
         public          TextView expire_label;
         public          TextView days;
-        public          TextView hours;
-        public          TextView minutes;
         public          TextView daysLabel;
-        public          TextView hoursLabel;
-        public          TextView minutesLabel;
         private final   View     slantedBg;
+        private final   View     notSignedUp;
+        private final   View     alreadySignedUp;
+        protected final View     signedupIndicator;
         protected final View     daysWrapper;
-        protected final View     hoursWrapper;
-        protected final View     minWrapper;
 
         public ExpandedCampaignViewHolder(View itemView)
         {
             super(itemView);
             expire_label = (TextView) itemView.findViewById(R.id.expire_label);
+            callToAction = (TextView) itemView.findViewById(R.id.call_to_action);
             daysWrapper = itemView.findViewById(R.id.days_wrapper);
-            hoursWrapper = itemView.findViewById(R.id.hours_wrapper);
-            minWrapper = itemView.findViewById(R.id.min_wrapper);
-            problemFact = (TextView) itemView.findViewById(R.id.problemFact);
             slantedBg = itemView.findViewById(R.id.slanted_bg);
+            signedupIndicator = itemView.findViewById(R.id.signedup_indicator);
             campaignDetailsWrapper = itemView.findViewById(R.id.campaign_details_wrapper);
+            notSignedUp = campaignDetailsWrapper.findViewById(R.id.not_signedup);
+            alreadySignedUp = campaignDetailsWrapper.findViewById(R.id.signedup);
             days = (TextView) itemView.findViewById(R.id.days);
-            hours = (TextView) itemView.findViewById(R.id.hours);
-            minutes = (TextView) itemView.findViewById(R.id.min);
             daysLabel = (TextView) itemView.findViewById(R.id.days_label);
-            hoursLabel = (TextView) itemView.findViewById(R.id.hours_label);
-            minutesLabel = (TextView) itemView.findViewById(R.id.minutes_label);
         }
     }
 
     public static class ExpandedExpireCampaignViewHolder extends CampaignViewHolder
     {
-        private       TextView problemFact;
         private       View     refreshCopy;
+        public        TextView callToAction;
         public        TextView expired;
         private final View     slantedBg;
 
@@ -487,7 +509,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         {
             super(itemView);
             expired = (TextView) itemView.findViewById(R.id.expired_already);
-            problemFact = (TextView) itemView.findViewById(R.id.problemFact);
+            callToAction = (TextView) itemView.findViewById(R.id.call_to_action);
             slantedBg = itemView.findViewById(R.id.slanted_bg);
             refreshCopy = itemView.findViewById(R.id.refresh_copy);
         }

@@ -15,6 +15,7 @@ public class ReportBack
     public String    caption;
     public Media     media;
     public User      user;
+    public ReportBackData reportback;
     public KudosData kudos;
     public boolean   kudosed;
 
@@ -69,6 +70,10 @@ public class ReportBack
     {
         public String uri;
         public String type;
+    }
+
+    public class ReportBackData {
+        public int quantity;
     }
 
     public class KudosData

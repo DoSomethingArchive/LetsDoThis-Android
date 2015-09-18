@@ -18,8 +18,10 @@ import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.InterestGroup;
 import org.dosomething.letsdothis.data.ReportBack;
+import org.dosomething.letsdothis.tasks.BaseReportBackListTask;
 import org.dosomething.letsdothis.tasks.CampaignSignUpTask;
 import org.dosomething.letsdothis.tasks.DbInterestGroupCampaignListTask;
+import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignsTask;
 import org.dosomething.letsdothis.tasks.InterestReportBackListTask;
 import org.dosomething.letsdothis.tasks.UpdateInterestGroupCampaignTask;
 import org.dosomething.letsdothis.tasks.UpdateInterestGroupCampaignTask.IdQuery;
@@ -51,6 +53,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     private int             position;
     private int             currentPage;
     private int             totalPages;
+    private String          currentRbQueryStatus;
     private ArrayList<Integer> campaignIds = new ArrayList<>();
     private ProgressBar progress;
 
@@ -124,9 +127,12 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     }
 
     @Override
-    public void onCampaignClicked(int campaignId)
+    public void onCampaignClicked(int campaignId, boolean alreadySignedUp)
     {
-        TaskQueue.loadQueueDefault(getActivity()).execute(new CampaignSignUpTask(campaignId));
+        if (!alreadySignedUp) {
+            TaskQueue.loadQueueDefault(getActivity()).execute(new CampaignSignUpTask(campaignId));
+        }
+
         startActivity(CampaignDetailsActivity.getLaunchIntent(getActivity(), campaignId));
     }
 
@@ -137,22 +143,33 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     }
 
     @Override
-    public void onReportBackClicked(int reportBackId)
+    public void onReportBackClicked(int reportBackId, int campaignId)
     {
-        startActivity(ReportBackDetailsActivity.getLaunchIntent(getActivity(), reportBackId));
+        startActivity(ReportBackDetailsActivity.getLaunchIntent(getActivity(), reportBackId, campaignId));
     }
 
     @Override
-    public void onScrolledToBottom()
-    {
-        if(currentPage < totalPages)
-        {
-            if(BuildConfig.DEBUG)
-            {
+    public void onScrolledToBottom() {
+        boolean getMoreData = false;
+        if (currentRbQueryStatus == BaseReportBackListTask.STATUS_PROMOTED && totalPages > 0) {
+            getMoreData = true;
+
+            if (currentPage >= totalPages) {
+                currentPage = 0;
+                currentRbQueryStatus = BaseReportBackListTask.STATUS_APPROVED;
+            }
+        }
+        else if (currentRbQueryStatus == BaseReportBackListTask.STATUS_APPROVED && currentPage < totalPages) {
+            getMoreData = true;
+        }
+
+        if (getMoreData) {
+            if (BuildConfig.DEBUG) {
                 Toast.makeText(getActivity(), "get more data", Toast.LENGTH_SHORT).show();
             }
+
             InterestReportBackListTask task = new InterestReportBackListTask(position, StringUtils
-                    .join(campaignIds, ","), currentPage + 1);
+                    .join(campaignIds, ","), currentPage + 1, currentRbQueryStatus);
             getCampaignQueue().execute(task);
         }
     }
@@ -181,6 +198,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     public void dbCampaignRefresh()
     {
         adapter.clear();
+        currentRbQueryStatus = BaseReportBackListTask.STATUS_PROMOTED;
         currentPage = 0;
         totalPages = 0;
         DatabaseHelper.defaultDatabaseQueue(getActivity())
@@ -214,14 +232,23 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(InterestReportBackListTask task)
     {
-        if(task.pagerPosition == position && currentPage < task.page)
-        {
+        if (task.pagerPosition != position) {
+            return;
+        }
+
+        if (task.error == null && currentPage < task.page) {
             totalPages = task.totalPages;
             currentPage = task.page;
             List<ReportBack> reportBacks = task.reportBacks;
             adapter.addAll(reportBacks);
         }
-
+        else if (task.error != null && task.status == BaseReportBackListTask.STATUS_PROMOTED) {
+            // A search for promoted reportbacks yielded nothing. Search again for approved photos.
+            String campaigns = StringUtils.join(campaignIds, ",");
+            getCampaignQueue().execute(new InterestReportBackListTask(position, campaigns,
+                    FIRST_PAGE, BaseReportBackListTask.STATUS_APPROVED));
+            currentPage = 0;
+        }
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -229,6 +256,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     {
         if(findGroupId() == task.interestGroupId)
         {
+            // @TODO seems like campaigns won't get updated on app if they're changed on the server?
             if(task.campList.isEmpty())
             {
                 getCampaignQueue()
@@ -245,10 +273,13 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
                     campaignIds.add(campaign.id);
                 }
 
+                // On initial query of reportback photos, set page to 1 and status to "promoted"
                 String campaigns = StringUtils.join(campaignIds, ",");
-                getCampaignQueue()
-                        .execute(new InterestReportBackListTask(position, campaigns, FIRST_PAGE));
+                getCampaignQueue().execute(new InterestReportBackListTask(position, campaigns,
+                        FIRST_PAGE, BaseReportBackListTask.STATUS_PROMOTED));
 
+                // Now that we have campaigns, get user info to find out what they've participated in
+                TaskQueue.loadQueueDefault(getActivity()).execute(new GetCurrentUserCampaignsTask());
             }
         }
     }
@@ -257,6 +288,34 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     public void onEventMainThread(UpdateInterestGroupCampaignTask task)
     {
         getCampaignQueue().execute(new DbInterestGroupCampaignListTask(task.interestGroupId));
+    }
+
+    /**
+     * On receiving user campaign data, determine if the user's has signed up for any of the
+     * displayed campaigns.
+     *
+     * @TODO A potential optimization would be to only query for campaigns and user activity once
+     *   overall, instead of once per CampaignFragment.
+     *
+     * @param task Result of getting current user's campaign activity
+     */
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(GetCurrentUserCampaignsTask task) {
+        List<Campaign> allCampaigns = new ArrayList<>();
+        if (task.currentCampaignList != null) {
+            allCampaigns.addAll(task.currentCampaignList);
+        }
+
+        if (task.pastCampaignList != null) {
+            allCampaigns.addAll(task.pastCampaignList);
+        }
+
+        for (Campaign campaign : allCampaigns) {
+            int match = campaignIds.indexOf(campaign.id);
+            if (match >= 0) {
+                adapter.userSignedUpForCampaign(campaign.id);
+            }
+        }
     }
 
 }

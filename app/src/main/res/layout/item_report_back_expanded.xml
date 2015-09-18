@@ -23,7 +23,7 @@
         <org.dosomething.letsdothis.ui.views.CircleImageView
             android:layout_marginLeft="@dimen/padding_small"
             android:id="@+id/avatar"
-            android:src="@drawable/ic_action_user"
+            android:src="@drawable/default_profile_photo"
             android:layout_width="@dimen/friend_avatar"
             android:layout_height="@dimen/friend_avatar"
             app:background_color="@color/gray"
@@ -47,58 +47,53 @@
             android:id="@+id/name"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="41dp"
+            android:layout_alignParentRight="true"
             android:paddingRight="@dimen/padding_small"
             android:gravity="bottom"
+            android:textAllCaps="true"
             android:textColor="@color/gray"
             app:typeface="brandon_bold"
-            android:layout_alignParentRight="true"
-            tools:text="Timestamp"
-            android:id="@+id/timestamp"/>
+            tools:text="United States"/>
 
-        <ImageView
-            android:layout_width="@dimen/kudos"
-            android:layout_height="@dimen/kudos"
-            android:background="@drawable/bg_kudos_toggle"
-            android:id="@+id/kudos_toggle"
-            tools:src="@drawable/ic_close_kudos"
-            android:visibility="gone"
-            tools:visibility="visible"
-            android:scaleType="centerCrop"
-            android:layout_margin="@dimen/padding_small"
-            android:paddingLeft="@dimen/padding_wedge"
-            android:paddingRight="@dimen/padding_wedge"
-            android:paddingBottom="@dimen/padding_wedge"
-            android:paddingTop="10dp"
-            android:layout_alignBottom="@+id/image"
-            android:layout_alignParentRight="true"/>
     </RelativeLayout>
 
     <include layout="@layout/drop_shadow"/>
 
-    <include layout="@layout/kudos"/>
-
-    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="Campaign Title"
-        android:paddingLeft="@dimen/padding_small"
-        android:paddingRight="@dimen/padding_small"
-        android:paddingTop="@dimen/padding_tiny"
-        android:paddingBottom="@dimen/padding_tiny"
-        android:textColor="@color/cerulean_1"
-        app:typeface="brandon_bold"
-        android:id="@+id/title"/>
+        android:padding="@dimen/padding_small">
 
-    <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="Caption"
-        android:paddingLeft="@dimen/padding_small"
-        android:paddingRight="@dimen/padding_small"
-        android:paddingTop="@dimen/padding_tiny"
-        android:paddingBottom="@dimen/padding_tiny"
-        android:textColor="@android:color/black"
-        android:id="@+id/caption"/>
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            tools:text="Campaign Title"
+            android:textColor="@color/cerulean_1"
+            app:typeface="brandon_bold"
+            android:id="@+id/title"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/impact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            tools:text="# of Nouns Verbed"
+            android:textColor="@color/gray"
+            app:typeface="brandon_bold"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/title"
+            tools:text="Caption"
+            android:textColor="@android:color/black"
+            android:id="@+id/caption"/>
+
+    </RelativeLayout>
+
 </LinearLayout>

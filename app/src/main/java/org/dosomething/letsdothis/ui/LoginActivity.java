@@ -11,9 +11,8 @@ import android.widget.EditText;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.LoginTask;
-import org.dosomething.letsdothis.ui.adapters.InvitesAdapter;
+import org.dosomething.letsdothis.tasks.UpdateUserTask;
 import org.dosomething.letsdothis.utils.AppPrefs;
-import org.dosomething.letsdothis.utils.Hashery;
 
 import co.touchlab.android.threading.tasks.TaskQueue;
 
@@ -27,9 +26,6 @@ public class LoginActivity extends BaseActivity
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private EditText phoneEmail;
     private EditText password;
-    private EditText invite1;
-    private EditText invite2;
-    private EditText invite3;
 
 
     public static Intent getLaunchIntent(Context context)
@@ -67,74 +63,56 @@ public class LoginActivity extends BaseActivity
                 startActivity(browserIntent);
             }
         });
-
-        if(BuildConfig.DEBUG)
-        {
-            phoneEmail.setText("touch@lab.co");
-            password.setText("test");
-        }
     }
 
     private void initLoginListener()
     {
         phoneEmail = (EditText) findViewById(R.id.phone_email);
         password = (EditText) findViewById(R.id.password);
-        invite1 = (EditText) findViewById(R.id.invite1);
-        invite2 = (EditText) findViewById(R.id.invite2);
-        invite3 = (EditText) findViewById(R.id.invite3);
 
-        if(BuildConfig.DEBUG)
-        {
-            invite1.setText("Red");
-            invite2.setText("Blunt");
-            invite3.setText("Crane");
-        }
-
-        findViewById(R.id.login).setOnClickListener(new View.OnClickListener()
-        {
+        findViewById(R.id.login).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
+                phoneEmail.setBackgroundResource(R.drawable.bg_white_rounded_rect_filled);
+                password.setBackgroundResource(R.drawable.bg_white_rounded_rect_filled);
 
+                boolean isValid = true;
                 String usertext = phoneEmail.getText().toString();
                 String passtext = password.getText().toString();
-                if(TextUtils.isEmpty(usertext))
-                {
-                    phoneEmail.setError("Must not be empty");
+                if (TextUtils.isEmpty(usertext)) {
+                    String error = getResources().getString(R.string.error_login_phone_email);
+                    phoneEmail.setError(error);
+                    phoneEmail.setBackgroundResource(R.drawable.edittext_error_background);
+                    isValid = false;
                 }
-                else if(TextUtils.isEmpty(passtext))
-                {
-                    password.setError("Must not be empty");
+
+                if (TextUtils.isEmpty(passtext)) {
+                    String error = getResources().getString(R.string.error_login_password);
+                    password.setError(error);
+                    password.setBackgroundResource(R.drawable.edittext_error_background);
+                    isValid = false;
                 }
-                else
-                {
+
+                if (isValid) {
                     TaskQueue.loadQueueDefault(LoginActivity.this)
                              .execute(new LoginTask(usertext, passtext));
                 }
-
             }
         });
 
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(LoginTask task)
-    {
-        if(AppPrefs.getInstance(this).isLoggedIn())
-        {
-            Integer groupId = 0;
-            boolean allFilled = ! TextUtils.isEmpty(invite1.getText()) && ! TextUtils
-                    .isEmpty(invite2.getText()) && ! TextUtils.isEmpty(invite3.getText());
-            if(allFilled)
-            {
-                String code = InvitesAdapter.getCode(invite1, invite2, invite3);
-                groupId = Hashery.getInstance(this).decode(code);
-            }
+    public void onEventMainThread(LoginTask task) {
+        if (AppPrefs.getInstance(this).isLoggedIn()) {
             broadcastLogInSuccess(this);
-            startActivity(MainActivity.getLaunchIntent(this, groupId, allFilled));
+            startActivity(MainActivity.getLaunchIntent(this));
+
+            if (task.mUserNeedsUpdate) {
+                TaskQueue.loadQueueDefault(LoginActivity.this).execute(new UpdateUserTask(task.mLoggedInUser));
+            }
         }
-        else
-        {
+        else {
             Snackbar snackbar = Snackbar
                     .make(findViewById(R.id.snack), R.string.fail_login, Snackbar.LENGTH_SHORT);
             View snackBarView = snackbar.getView();

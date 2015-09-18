@@ -45,7 +45,6 @@ public class UpdateInterestGroupCampaignTask extends BaseNetworkErrorHandlerTask
         for(Campaign c : campaigns)
         {
             c.interestGroup = interestGroupId;
-            c.endTime = TimeUtils.getExpirationTime();
             campDao.createOrUpdate(c);
         }
     }

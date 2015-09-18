@@ -8,17 +8,12 @@
     <string name="invites">Invites</string>
     <string name="staff_pick">Staff pick</string>
     <string name="stop_being_bored">Do This Now</string>
+    <string name="youre_doing_this">You\'re Doing This</string>
     <string name="people_doing_stuff">Who’s Doing It Now</string>
     <string name="phone_email">Phone Number or Email</string>
     <string name="email">Email</string>
     <string name="phone">Phone Number (Optional)</string>
     <string name="password">Password</string>
-    <string name="footer_invite_code">Invited to this app by a friend? Enter that invite code here! (Optional.)
-    </string>
-    <string name="invite_code_opt">Invite Code (optional)</string>
-    <string name="invite_code_opt1">Enter</string>
-    <string name="invite_code_opt2">Code</string>
-    <string name="invite_code_opt3">Here</string>
     <string name="sign_in">Sign in</string>
     <string name="show_me_how">Get Started</string>
     <string name="register">Create Account</string>
@@ -28,14 +23,14 @@
     <string name="expires_in">Expires in</string>
     <string name="invite_friends">Invite Friends</string>
     <string name="share_photo">Share Photo</string>
-    <string name="show_off">Show Off</string>
+    <string name="show_off">Prove It</string>
     <string name="friends">Friends</string>
     <string name="desc_login_reg">Let’s make this official. Create an account to find actions you
         can do with friends.
     </string>
     <string name="settings">Settings</string>
     <string name="rate">Rate Let\'s Do This</string>
-    <string name="people_doing_it">People Doing It</string>
+    <string name="people_doing_it">Who\'s Doing It Now</string>
     <string name="account">Account</string>
     <string name="change_photo">Change Photo</string>
     <string name="receive_notifications">Receive Notifications</string>
@@ -54,11 +49,18 @@
     </string>
     <string name="done">Done</string>
     <string name="error_code_length">An invite code should be 15 characters long!</string>
+    <string name="error_login_phone_email">Must not be empty</string>
+    <string name="error_login_password">Must not be empty</string>
+    <string name="error_registration_email">We need a valid email</string>
+    <string name="error_registration_first_name">We need your first name</string>
+    <string name="error_registration_password">Your password must be 6+ characters</string>
     <string name="tell_us">Tell us about yourself!</string>
     <string name="footer_register">Have a DoSomething.org account? Sign in</string>
     <string name="footer_forgot_pw">Forgot Password</string>
     <string name="forgot_pw_link">https://www.dosomething.org/user/password</string>
-    <string name="ctia">Creating an account means you agree to our Privacy Policy &amp; to receive our weekly update. Message &amp; data rates may apply. Text STOP to opt-out, HELP for help</string>
+    <string name="ctia">Creating an account means you agree to our Privacy Policy &amp; to receive
+        our weekly update. Message &amp; data rates may apply. Text STOP to opt-out, HELP for help
+    </string>
     <string name="desc_rewards">Invite your friends to get rewards copy. There are multiple
         sentences in this paragraph body.
     </string>
@@ -73,7 +75,7 @@
     <string name="ok">Ok</string>
     <string name="prompt_logout">Are you sure? We’ll miss you.</string>
     <string name="cancel">Cancel</string>
-    <string name="do_something_about_it">Do Something About It</string>
+    <string name="do_something_about_it">Do This</string>
     <string name="share_code">Share Code</string>
     <string name="desc_campaign_invite">When a friend uses your code, they join your action group.
         You can rock %s together and unlock rewards as a group.
@@ -100,30 +102,26 @@
     <string name="expired_already">Oof - this action has expired. Let’s freshen things up.</string>
     <string name="max_kudos">99+</string>
     <string name="log_in_with_facebook">Log in with Facebook</string>
-    <string name="reportback_upload_hint">Number of %1$s %2$s.</string>
+    <string name="reportback_toolbar_title_template">I Did %1$s</string>
+    <string name="reportback_upload_hint">Number of %1$s %2$s</string>
     <string name="confirm_fb">Use your Facebook details to make a DoSomething.org profile!</string>
     <string name="refresh_copy">Get New Actions</string>
     <string name="uploading">uploading…</string>
     <string name="cancel_search">Cancel Search</string>
     <string name="search_for_group">Search For Group</string>
     <string name="join_this_group">Join This Group</string>
-    <string name="intro_title_1">Get Un-bored</string>
-    <string name="intro_desc_1">Discover new (monthly!) ways to have fun based on things
-        you like most.\nPlus, you’ll be doing some social good!
-    </string>
+    <string name="intro_title_1">Let\'s Do This</string>
+    <string name="intro_desc_1">Discover new (monthly!) ways to have fun</string>
+    <string name="intro_title_2">Get Social</string>
+    <string name="intro_desc_2">&lt;Placeholder TODO social description string&gt;</string>
     <string name="fail_register">Register failed</string>
     <string name="fail_login">Your username or password was incorrect.</string>
-    <string name="intro_title_2">Get Social</string>
     <string name="success_login">Login successful</string>
     <string name="success_register">Register successful</string>
-    <string name="intro_desc_2">Use exclusive invite codes to get your friends to join you in
-        action.
-    </string>
-    <string name="intro_title_3">Get Props</string>
-    <string name="intro_desc_3">Submit your photos to show off and get props from other users.
-    </string>
     <string name="bad_connection">No connection. Seems like the Internet is trying to cause drama.
     </string>
     <string name="reportback_success">Reportback uploaded</string>
+    <string name="drawer_desc_open">Drawer Open</string>
+    <string name="drawer_desc_closed">Drawer Closed</string>
 
 </resources>

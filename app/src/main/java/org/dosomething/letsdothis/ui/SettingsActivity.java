@@ -3,13 +3,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.LogoutTask;
 import org.dosomething.letsdothis.ui.fragments.SetTitleListener;
 import org.dosomething.letsdothis.ui.fragments.SettingsFragment;
+import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
 
 /**
  * Created by izzyoji :) on 4/29/15.
@@ -17,7 +17,7 @@ import org.dosomething.letsdothis.ui.fragments.SettingsFragment;
 public class SettingsActivity extends BaseActivity implements SetTitleListener
 {
 
-    private Toolbar toolbar;
+    private CustomToolbar toolbar;
 
     public static Intent getLaunchIntent(Context context)
     {
@@ -29,7 +29,7 @@ public class SettingsActivity extends BaseActivity implements SetTitleListener
     {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_settings);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (CustomToolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
