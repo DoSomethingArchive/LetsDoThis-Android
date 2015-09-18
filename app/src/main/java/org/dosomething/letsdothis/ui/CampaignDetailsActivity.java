@@ -130,15 +130,23 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         }
 
         if (getMoreData) {
-            if(BuildConfig.DEBUG) {
-                Toast.makeText(this, "get more data", Toast.LENGTH_SHORT).show();
-            }
-
-            String campaigns = Integer.toString(getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1));
-            IndividualCampaignReportBackList task = new IndividualCampaignReportBackList(campaigns,
-                    currentPage + 1, currentRbQueryStatus);
-            TaskQueue.loadQueueDefault(this).execute(task);
+            fetchMoreReportbacks();
         }
+    }
+
+    /**
+     * Fetches more reportback submissions. Uses current page and status to determine what to fetch
+     * next. Should occur when gallery scrolling nears the bottom or if no reportbacks are promoted.
+     */
+    private void fetchMoreReportbacks() {
+        if(BuildConfig.DEBUG) {
+            Toast.makeText(CampaignDetailsActivity.this, "get more data", Toast.LENGTH_SHORT).show();
+        }
+
+        String campaigns = Integer.toString(getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1));
+        IndividualCampaignReportBackList task = new IndividualCampaignReportBackList(campaigns,
+                currentPage + 1, currentRbQueryStatus);
+        TaskQueue.loadQueueDefault(CampaignDetailsActivity.this).execute(task);
     }
 
     @Override
@@ -303,6 +311,14 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         totalPages = task.totalPages;
         currentPage = task.page;
         List<ReportBack> reportBacks = task.reportBacks;
-        adapter.addAll(reportBacks);
+        if (reportBacks != null) {
+            adapter.addAll(reportBacks);
+        }
+        else if (currentRbQueryStatus == BaseReportBackListTask.STATUS_PROMOTED) {
+            currentPage = 0;
+            currentRbQueryStatus = BaseReportBackListTask.STATUS_APPROVED;
+
+            fetchMoreReportbacks();
+        }
     }
 }
