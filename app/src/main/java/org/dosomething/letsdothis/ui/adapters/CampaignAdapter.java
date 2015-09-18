@@ -57,7 +57,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         void onCampaignExpanded(int position);
 
-        void onReportBackClicked(int reportBackId);
+        void onReportBackClicked(int reportBackId, int campaignId);
 
         void onScrolledToBottom();
 
@@ -367,7 +367,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 @Override
                 public void onClick(View v)
                 {
-                    campaignAdapterClickListener.onReportBackClicked(reportBack.id);
+                    campaignAdapterClickListener.onReportBackClicked(reportBack.id, reportBack.campaign.id);
                 }
             });
         }

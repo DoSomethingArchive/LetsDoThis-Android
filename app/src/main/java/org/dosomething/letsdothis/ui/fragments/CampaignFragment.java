@@ -143,9 +143,9 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     }
 
     @Override
-    public void onReportBackClicked(int reportBackId)
+    public void onReportBackClicked(int reportBackId, int campaignId)
     {
-        startActivity(ReportBackDetailsActivity.getLaunchIntent(getActivity(), reportBackId));
+        startActivity(ReportBackDetailsActivity.getLaunchIntent(getActivity(), reportBackId, campaignId));
     }
 
     @Override
