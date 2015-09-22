@@ -135,17 +135,6 @@ public class MainActivity extends BaseActivity implements SetTitleListener
                         replaceCurrentFragment(HubFragment.newInstance(null), HubFragment.TAG);
 
                     }
-                    else if(TextUtils.equals(positionString, getString(R.string.invites)))
-                    {
-                        replaceCurrentFragment(InvitesFragment.newInstance(), InvitesFragment.TAG);
-
-                    }
-                    else if(TextUtils.equals(positionString, getString(R.string.notifications)))
-                    {
-                        replaceCurrentFragment(NotificationsFragment.newInstance(),
-                                               NotificationsFragment.TAG);
-
-                    }
                 }
                 drawerLayout.closeDrawer(drawer);
             }
