@@ -140,8 +140,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 profileViewHolder.userCountry.setText(locale.getDisplayCountry());
             }
         }
-        else if(getItemViewType(position) == VIEW_TYPE_CURRENT_CAMPAIGN)
-        {
+        else if (getItemViewType(position) == VIEW_TYPE_CURRENT_CAMPAIGN) {
             final Campaign campaign = (Campaign) hubList.get(position);
             CurrentCampaignViewHolder viewHolder = (CurrentCampaignViewHolder) holder;
             viewHolder.title.setText(campaign.title);
@@ -149,40 +148,23 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             viewHolder.count.setText(campaign.count);
 
             Resources res = viewHolder.title.getResources();
-            if(isPublic)
-            {
+            if (isPublic) {
                 viewHolder.actionButtons.setVisibility(View.GONE);
             }
 
-            ColorMatrix cm = new ColorMatrix();
-            cm.setSaturation(0);
-
             if(campaign.showShare == Campaign.UploadShare.SHARE)
             {
-                viewHolder.proveShare.setText(res.getString(R.string.share_photo));
+                viewHolder.share.setText(res.getString(R.string.share_photo));
             }
-            else if(campaign.showShare == Campaign.UploadShare.SHOW_OFF)
-            {
-                viewHolder.proveShare.setText(res.getString(R.string.show_off));
-            }
-            else if(campaign.showShare == Campaign.UploadShare.UPLOADING)
-            {
-                viewHolder.proveShare.setText(res.getString(R.string.uploading));
+            else {
+                viewHolder.share.setVisibility(View.GONE);
             }
 
-            viewHolder.proveShare.setOnClickListener(new View.OnClickListener()
-            {
+            viewHolder.share.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
-                    if(campaign.showShare == Campaign.UploadShare.SHARE)
-                    {
+                public void onClick(View v) {
+                    if (campaign.showShare == Campaign.UploadShare.SHARE) {
                         hubAdapterClickListener.onShareClicked(campaign);
-                        clickedCampaign = campaign;
-                    }
-                    else if(campaign.showShare == Campaign.UploadShare.SHOW_OFF)
-                    {
-                        hubAdapterClickListener.onProveClicked(campaign);
                         clickedCampaign = campaign;
                     }
                 }
@@ -192,6 +174,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View view) {
                     Toast.makeText(view.getContext(), "TODO: start reportback", Toast.LENGTH_LONG).show();
+                    hubAdapterClickListener.onProveClicked(campaign);
+                    clickedCampaign = campaign;
                 }
             });
         }
@@ -364,7 +348,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         protected final TextView     count;
         protected final ImageView    addImage;
         protected final ImageView    reportbackImage;
-        protected final Button       proveShare;
+        protected final Button       share;
         protected final View         actionButtons;
 
         public CurrentCampaignViewHolder(View itemView)
@@ -375,7 +359,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             addImage = (ImageView) itemView.findViewById(R.id.add_image);
             reportbackImage = (ImageView) itemView.findViewById(R.id.reportback_image);
             count = (TextView) itemView.findViewById(R.id.count);
-            proveShare = (Button) itemView.findViewById(R.id.prove_share);
+            share = (Button) itemView.findViewById(R.id.prove_share);
             actionButtons = itemView.findViewById(R.id.action_buttons);
         }
     }
