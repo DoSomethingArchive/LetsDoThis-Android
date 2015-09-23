@@ -8,17 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.User;
+import org.dosomething.letsdothis.ui.CampaignDetailsActivity;
 import org.dosomething.letsdothis.utils.TimeUtils;
 
 import java.util.ArrayList;
@@ -46,10 +44,12 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private HubAdapterClickListener hubAdapterClickListener;
     private boolean isPublic = false;
     private Campaign clickedCampaign;
+    private Context mContext;
 
-    public HubAdapter(HubAdapterClickListener hubAdapterClickListener, boolean isPublic)
+    public HubAdapter(Context context, HubAdapterClickListener hubAdapterClickListener, boolean isPublic)
     {
         super();
+        this.mContext = context;
         this.hubAdapterClickListener = hubAdapterClickListener;
         addUser(new User(null, ""));
         hubList.add(CURRENTLY_DOING);
@@ -152,14 +152,22 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 viewHolder.actionButtons.setVisibility(View.GONE);
             }
 
-            if(campaign.showShare == Campaign.UploadShare.SHARE)
-            {
+            if(campaign.showShare == Campaign.UploadShare.SHARE) {
                 viewHolder.share.setText(res.getString(R.string.share_photo));
             }
             else {
                 viewHolder.share.setVisibility(View.GONE);
             }
 
+            // Clicking on campaign title should go to the Campaign Details screen
+            viewHolder.title.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mContext.startActivity(CampaignDetailsActivity.getLaunchIntent(mContext, campaign.id));
+                }
+            });
+
+            // Clicking on the Share button should share the reportback
             viewHolder.share.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -170,10 +178,10 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }
             });
 
+            // Clicking the "add image" button should start the reportback flow
             viewHolder.addImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(view.getContext(), "TODO: start reportback", Toast.LENGTH_LONG).show();
                     hubAdapterClickListener.onProveClicked(campaign);
                     clickedCampaign = campaign;
                 }

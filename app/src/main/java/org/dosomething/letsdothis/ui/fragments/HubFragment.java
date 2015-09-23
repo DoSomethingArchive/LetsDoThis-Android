@@ -137,7 +137,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
         String publicId = getArguments().getString(EXTRA_ID, null);
-        adapter = new HubAdapter(this, publicId != null);
+        adapter = new HubAdapter(getActivity(), this, publicId != null);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
