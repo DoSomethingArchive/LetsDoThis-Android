@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -153,15 +154,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 viewHolder.actionButtons.setVisibility(View.GONE);
             }
 
-            Context context = viewHolder.image.getContext();
-            int height = context.getResources().getDimensionPixelSize(R.dimen.campaign_height);
-            Picasso.with(context).load(campaign.imagePath).resize(0, height).into(viewHolder.image);
-
             ColorMatrix cm = new ColorMatrix();
             cm.setSaturation(0);
-
-
-            int size = campaign.group.size();
 
             if(campaign.showShare == Campaign.UploadShare.SHARE)
             {
@@ -194,61 +188,12 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }
             });
 
-            viewHolder.invite.setOnClickListener(new View.OnClickListener()
-            {
+            viewHolder.addImage.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
-                    hubAdapterClickListener.onInviteClicked(campaign.title, campaign.signupGroup);
+                public void onClick(View view) {
+                    Toast.makeText(view.getContext(), "TODO: start reportback", Toast.LENGTH_LONG).show();
                 }
             });
-
-            if(size > 0)
-            {
-                int friendSize = context.getResources()
-                        .getDimensionPixelSize(R.dimen.friend_avatar);
-                viewHolder.friends.setVisibility(View.VISIBLE);
-                viewHolder.friendsCount.setText(Integer.toString(size));
-                viewHolder.friendsCount.setOnClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        hubAdapterClickListener.groupClicked(campaign.signupGroup);
-                    }
-                });
-
-                for(int i = 0; i < 4; i++)
-                {
-                    FrameLayout childAt = (FrameLayout) viewHolder.friendsContainer.getChildAt(i);
-
-                    ImageView imageView = (ImageView) childAt.getChildAt(0);
-
-                    if(campaign.group.size() > i)
-                    {
-                        User friend = campaign.group.get(i);
-                        Picasso.with(context).load(friend.avatarPath)
-                                .placeholder(R.drawable.ic_action_user).resize(friendSize, 0)
-                                .into(imageView);
-                        childAt.setOnClickListener(new View.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View view)
-                            {
-                                hubAdapterClickListener.friendClicked(user.id);
-                            }
-                        });
-                    }
-                    else
-                    {
-                        imageView.setImageDrawable(null);
-                    }
-                }
-            }
-            else
-            {
-                viewHolder.friends.setVisibility(View.GONE);
-            }
         }
         else if(getItemViewType(position) == VIEW_TYPE_PAST_CAMPAIGN)
         {
@@ -417,12 +362,9 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         protected final TextView     title;
         protected final TextView     callToAction;
         protected final TextView     count;
-        protected final ImageView    image;
-        protected final View         friends;
-        protected final TextView     friendsCount;
-        protected final LinearLayout friendsContainer;
+        protected final ImageView    addImage;
+        protected final ImageView    reportbackImage;
         protected final Button       proveShare;
-        protected final Button       invite;
         protected final View         actionButtons;
 
         public CurrentCampaignViewHolder(View itemView)
@@ -430,13 +372,10 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
             callToAction = (TextView) itemView.findViewById(R.id.call_to_action);
-            image = (ImageView) itemView.findViewById(R.id.image);
+            addImage = (ImageView) itemView.findViewById(R.id.add_image);
+            reportbackImage = (ImageView) itemView.findViewById(R.id.reportback_image);
             count = (TextView) itemView.findViewById(R.id.count);
-            friends = itemView.findViewById(R.id.friends);
-            friendsCount = (TextView) itemView.findViewById(R.id.friends_count);
-            friendsContainer = (LinearLayout) itemView.findViewById(R.id.friends_container);
             proveShare = (Button) itemView.findViewById(R.id.prove_share);
-            invite = (Button) itemView.findViewById(R.id.invite);
             actionButtons = itemView.findViewById(R.id.action_buttons);
         }
     }
