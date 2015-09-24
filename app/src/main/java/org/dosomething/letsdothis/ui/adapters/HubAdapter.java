@@ -143,8 +143,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             final Campaign campaign = (Campaign) hubList.get(position);
             CurrentCampaignViewHolder viewHolder = (CurrentCampaignViewHolder) holder;
             viewHolder.title.setText(campaign.title);
-            viewHolder.callToAction.setText(campaign.callToAction);
-            viewHolder.count.setText(campaign.count);
+            viewHolder.taglineCaption.setText(campaign.callToAction);
 
             Resources res = viewHolder.title.getResources();
             if (isPublic) {
@@ -161,6 +160,10 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             boolean hasReportBackImage = false;
             String tmpRbItemId = "";
             if (campaign.userReportBack != null) {
+                String count = String.format("%d %s %s", campaign.userReportBack.quantity,
+                        campaign.noun, campaign.verb);
+                viewHolder.count.setText(count);
+
                 ArrayList<UserReportBack.ReportBackItem> items = campaign.userReportBack.getItems();
                 if (items != null && items.size() > 0) {
                     hasReportBackImage = true;
@@ -172,6 +175,9 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     int height = mContext.getResources().getDimensionPixelSize(R.dimen.campaign_height);
                     Picasso.with(mContext).load(reportBackImage).resize(0, height)
                             .into(viewHolder.reportbackImage);
+
+                    // And use this image's caption
+                    viewHolder.taglineCaption.setText(items.get(0).getCaption());
                 }
             }
 
@@ -191,6 +197,9 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 });
             }
             else {
+                // Use campaign's call-to-action if no reportback
+                viewHolder.taglineCaption.setText(campaign.callToAction);
+
                 viewHolder.addImage.setVisibility(View.VISIBLE);
                 viewHolder.reportbackImage.setVisibility(View.GONE);
 
@@ -388,7 +397,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public static class CurrentCampaignViewHolder extends RecyclerView.ViewHolder
     {
         protected final TextView     title;
-        protected final TextView     callToAction;
+        protected final TextView     taglineCaption;
         protected final TextView     count;
         protected final ImageView    addImage;
         protected final ImageView    reportbackImage;
@@ -399,7 +408,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
-            callToAction = (TextView) itemView.findViewById(R.id.call_to_action);
+            taglineCaption = (TextView) itemView.findViewById(R.id.tagline_caption);
             addImage = (ImageView) itemView.findViewById(R.id.add_image);
             reportbackImage = (ImageView) itemView.findViewById(R.id.reportback_image);
             count = (TextView) itemView.findViewById(R.id.count);
