@@ -1,5 +1,6 @@
 package org.dosomething.letsdothis.ui.adapters;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
@@ -16,7 +17,9 @@ import com.squareup.picasso.Picasso;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.User;
+import org.dosomething.letsdothis.data.UserReportBack;
 import org.dosomething.letsdothis.ui.CampaignDetailsActivity;
+import org.dosomething.letsdothis.ui.ReportBackDetailsActivity;
 import org.dosomething.letsdothis.utils.TimeUtils;
 
 import java.util.ArrayList;
@@ -40,7 +43,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private ArrayList<Object> hubList = new ArrayList<>();
-    private User                    user;
+    private User                    mUser;
     private HubAdapterClickListener hubAdapterClickListener;
     private boolean isPublic = false;
     private Campaign clickedCampaign;
@@ -59,7 +62,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public void addUser(User user)
     {
-        this.user = user;
+        this.mUser = user;
         if(! hubList.isEmpty() && hubList.get(0) instanceof User)
         {
             hubList.set(0, user);
@@ -110,33 +113,29 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             SectionTitleViewHolder sectionTitleViewHolder = (SectionTitleViewHolder) holder;
             sectionTitleViewHolder.textView.setText(s);
         }
-        else if(getItemViewType(position) == VIEW_TYPE_PROFILE)
-        {
-            User user = (User) hubList.get(position);
+        else if (getItemViewType(position) == VIEW_TYPE_PROFILE) {
             ProfileViewHolder profileViewHolder = (ProfileViewHolder) holder;
 
-            if(user != null && user.avatarPath != null)
-            {
+            if (mUser != null && mUser.avatarPath != null) {
                 Picasso.with(((ProfileViewHolder) holder).userImage.getContext())
-                        .load(user.avatarPath).placeholder(R.drawable.ic_action_user)
+                        .load(mUser.avatarPath).placeholder(R.drawable.ic_action_user)
                         .resizeDimen(R.dimen.hub_avatar_height, R.dimen.hub_avatar_height)
                         .into(profileViewHolder.userImage);
             }
 
 
-            String first = user.first_name;
+            String first = mUser.first_name;
             String last = "";
-            if(user.last_name != null && user.last_name.length() > 0)
-            {
-                last = " " + user.last_name.charAt(0) + ".";
+            if (mUser.last_name != null && mUser.last_name.length() > 0) {
+                last = " " + mUser.last_name.charAt(0) + ".";
             }
 
             String displayName = String.format("%s%s", first, last);
             profileViewHolder.name.setText(displayName);
 
             // Convert from country code to display name
-            if (user.country != null) {
-                Locale locale = new Locale("", user.country);
+            if (mUser.country != null) {
+                Locale locale = new Locale("", mUser.country);
                 profileViewHolder.userCountry.setText(locale.getDisplayCountry());
             }
         }
@@ -152,11 +151,57 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 viewHolder.actionButtons.setVisibility(View.GONE);
             }
 
-            if(campaign.showShare == Campaign.UploadShare.SHARE) {
+            if (campaign.showShare == Campaign.UploadShare.SHARE) {
                 viewHolder.share.setText(res.getString(R.string.share_photo));
             }
             else {
                 viewHolder.share.setVisibility(View.GONE);
+            }
+
+            boolean hasReportBackImage = false;
+            String tmpRbItemId = "";
+            if (campaign.userReportBack != null) {
+                ArrayList<UserReportBack.ReportBackItem> items = campaign.userReportBack.getItems();
+                if (items != null && items.size() > 0) {
+                    hasReportBackImage = true;
+
+                    // We'll just default to showing the first image in the reportback list
+                    String reportBackImage = items.get(0).getImagePath();
+                    tmpRbItemId = items.get(0).getId();
+
+                    int height = mContext.getResources().getDimensionPixelSize(R.dimen.campaign_height);
+                    Picasso.with(mContext).load(reportBackImage).resize(0, height)
+                            .into(viewHolder.reportbackImage);
+                }
+            }
+
+            if (hasReportBackImage) {
+                final String rbItemId = tmpRbItemId;
+                viewHolder.addImage.setVisibility(View.GONE);
+                viewHolder.reportbackImage.setVisibility(View.VISIBLE);
+
+                // Clicking the reportback image should go to that reportback's detail screen
+                viewHolder.reportbackImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = ReportBackDetailsActivity.getLaunchIntent(mContext,
+                                Integer.parseInt(rbItemId), campaign.id);
+                        mContext.startActivity(intent);
+                    }
+                });
+            }
+            else {
+                viewHolder.addImage.setVisibility(View.VISIBLE);
+                viewHolder.reportbackImage.setVisibility(View.GONE);
+
+                // Clicking the "add image" button should start the reportback flow
+                viewHolder.addImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        hubAdapterClickListener.onProveClicked(campaign);
+                        clickedCampaign = campaign;
+                    }
+                });
             }
 
             // Clicking on campaign title should go to the Campaign Details screen
@@ -175,15 +220,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         hubAdapterClickListener.onShareClicked(campaign);
                         clickedCampaign = campaign;
                     }
-                }
-            });
-
-            // Clicking the "add image" button should start the reportback flow
-            viewHolder.addImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    hubAdapterClickListener.onProveClicked(campaign);
-                    clickedCampaign = campaign;
                 }
             });
         }
