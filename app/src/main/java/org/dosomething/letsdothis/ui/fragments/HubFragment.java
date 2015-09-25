@@ -280,9 +280,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(GetCurrentUserCampaignsTask task) {
         refreshProgressBar();
-        if (task.currentCampaignList != null && !task.currentCampaignList.isEmpty()) {
-            adapter.addCurrentCampaign(task.currentCampaignList);
-        }
+        adapter.setCurrentCampaign(task.currentCampaignList);
 
         if (task.pastCampaignList != null && !task.pastCampaignList.isEmpty()) {
             adapter.addPastCampaign(task.pastCampaignList);

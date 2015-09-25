@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -33,13 +34,16 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final int    VIEW_TYPE_PROFILE          = 0;
-    public static final int    VIEW_TYPE_SECTION_TITLE    = 1;
-    public static final int    VIEW_TYPE_CURRENT_CAMPAIGN = 2;
-    public static final int    VIEW_TYPE_PAST_CAMPAIGN    = 3;
-    public static final int    VIEW_TYPE_EXPIRE           = 4;
-    public static final String CURRENTLY_DOING            = "currently doing";
-    public static final String BEEN_THERE_DONE_GOOD       = "been there, done good";
+    private static final int    VIEW_TYPE_PROFILE          = 0;
+    private static final int    VIEW_TYPE_SECTION_TITLE    = 1;
+    private static final int    VIEW_TYPE_CURRENT_CAMPAIGN = 2;
+    private static final int    VIEW_TYPE_PAST_CAMPAIGN    = 3;
+    private static final int    VIEW_TYPE_EXPIRE           = 4;
+    private static final int    VIEW_TYPE_CURRENT_EMPTY    = 5;
+
+    private static final String CURRENTLY_DOING            = "currently doing";
+    private static final String BEEN_THERE_DONE_GOOD       = "been there, done good";
+    private static final String CURRENT_CAMPAIGNS_EMPTY_STUB = "PLACEHOLDER: CURRENT_CAMPAIGNS_EMPTY_STUB";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private ArrayList<Object> hubList = new ArrayList<>();
@@ -56,7 +60,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.hubAdapterClickListener = hubAdapterClickListener;
         addUser(new User(null, ""));
         hubList.add(CURRENTLY_DOING);
-        hubList.add(BEEN_THERE_DONE_GOOD);
         this.isPublic = isPublic;
     }
 
@@ -99,6 +102,10 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 View expireLayout = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_hub_expire, parent, false);
                 return new ExpireViewHolder(expireLayout);
+            case VIEW_TYPE_CURRENT_EMPTY:
+                View emptyLayout = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_hub_current_empty, parent, false);
+                return new EmptyViewHolder(emptyLayout);
             default:
                 return null;
         }
@@ -257,9 +264,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             List<String> campExpTime = TimeUtils.getTimeUntilExpiration(expire);
             int dayInt = Integer.parseInt(campExpTime.get(0));
 
-            Resources resources = viewHolder.itemView.getContext().getResources();
-            viewHolder.daysLabel.setText(resources.getQuantityString(R.plurals.days, dayInt));
-
             viewHolder.expire_label.setVisibility(View.VISIBLE);
             viewHolder.expired.setVisibility(View.GONE);
             viewHolder.daysWrapper.setVisibility(View.GONE);
@@ -271,68 +275,92 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 viewHolder.expired.setVisibility(View.VISIBLE);
             }
         }
+        else if (getItemViewType(position) == VIEW_TYPE_CURRENT_EMPTY) {
+            EmptyViewHolder viewHolder = (EmptyViewHolder) holder;
+
+            viewHolder.actions.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // @TODO go to Actions fragment
+                    Toast.makeText(mContext, "TODO: Go to Actions fragment", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     @Override
-    public int getItemViewType(int position)
-    {
+    public int getItemViewType(int position) {
         Object currentObject = hubList.get(position);
-        if(currentObject instanceof String)
-        {
-            return VIEW_TYPE_SECTION_TITLE;
+
+        if (currentObject instanceof String) {
+            if (CURRENT_CAMPAIGNS_EMPTY_STUB.equals(currentObject)) {
+                return VIEW_TYPE_CURRENT_EMPTY;
+            }
+            else {
+                return VIEW_TYPE_SECTION_TITLE;
+            }
         }
-        else if(currentObject instanceof User)
-        {
+        else if (currentObject instanceof User) {
             return VIEW_TYPE_PROFILE;
         }
-        else if(currentObject instanceof Campaign)
-        {
+        else if (currentObject instanceof Campaign) {
             int posOfPastHeader = hubList.indexOf(BEEN_THERE_DONE_GOOD);
-            if(position < posOfPastHeader)
-            {
-                return VIEW_TYPE_CURRENT_CAMPAIGN;
-            }
-            else
-            {
+
+            if (posOfPastHeader != -1 && position >= posOfPastHeader) {
                 return VIEW_TYPE_PAST_CAMPAIGN;
             }
+            else {
+                return VIEW_TYPE_CURRENT_CAMPAIGN;
+            }
         }
-        else if(currentObject instanceof Long)
-        {
+        else if (currentObject instanceof Long) {
             return VIEW_TYPE_EXPIRE;
         }
+
         return 0;
     }
 
-    public void addCurrentCampaign(List<Campaign> objects)
-    {
-        setExpirationView();
-        if(hubList.isEmpty())
-        {
-            setExpirationView();
-            int i = hubList.indexOf(BEEN_THERE_DONE_GOOD);
-            hubList.addAll(i, objects);
-            notifyItemRangeInserted(hubList.size() - objects.size(), hubList.size() - 1);
-        }
-        else
-        {
-            for(int i = 0, j = 3; i < objects.size(); i++)
-            {
-                Object o = hubList.get(j);
-                if(o instanceof Campaign)
-                {
-                    hubList.set(j, objects.get(i));
-                    j++;
-                }
-                else
-                {
-                    hubList.add(j, objects.get(i));
-                    j++;
+    /**
+     * Set the campaigns a user is currently doing.
+     *
+     * @param objects Campaigns the user is doing. Could be empty or null.
+     */
+    public void setCurrentCampaign(List<Campaign> objects) {
+        int indexCurrentLabel = hubList.indexOf(CURRENTLY_DOING);
+
+        if (objects != null && objects.size() > 0) {
+            // Remove empty stub if it's there
+            hubList.remove(CURRENT_CAMPAIGNS_EMPTY_STUB);
+
+            // Remove anything between the past campaigns label and current campaigns label
+            int indexPastLabel = hubList.indexOf(BEEN_THERE_DONE_GOOD);
+            if (indexPastLabel > indexCurrentLabel + 1) {
+                for (int i = indexPastLabel; i > indexCurrentLabel; i--) {
+                    hubList.remove(i);
                 }
             }
 
-            notifyItemRangeChanged(2, objects.size());
+            // Set the expires label
+            setExpirationView();
+
+            // Add the campaigns
+            int insertIndex = indexCurrentLabel + 2;
+            for (int i = 0; i < objects.size(); i++) {
+                hubList.add(insertIndex, objects.get(i));
+                insertIndex++;
+            }
         }
+        else {
+            setExpirationView();
+
+            // Add on the empty stub if it's not already there
+            if (hubList.indexOf(CURRENT_CAMPAIGNS_EMPTY_STUB) == -1) {
+                // + 2 to add after the expires label
+                hubList.add(indexCurrentLabel + 2, CURRENT_CAMPAIGNS_EMPTY_STUB);
+            }
+        }
+
+        notifyDataSetChanged();
     }
 
     private void setExpirationView()
@@ -345,10 +373,13 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    public void addPastCampaign(List<Campaign> objects)
-    {
+    public void addPastCampaign(List<Campaign> objects) {
+        if (hubList.indexOf(BEEN_THERE_DONE_GOOD) == -1) {
+            hubList.add(BEEN_THERE_DONE_GOOD);
+        }
+
         hubList.addAll(objects);
-        notifyItemRangeInserted(hubList.size() - objects.size(), hubList.size() - 1);
+        notifyItemRangeInserted(hubList.size() - objects.size() - 1, hubList.size() - 1);
     }
 
     @Override
@@ -435,7 +466,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public          TextView expired;
         public          TextView expire_label;
         protected final TextView days;
-        protected final TextView daysLabel;
         protected final View     daysWrapper;
 
         public ExpireViewHolder(View itemView)
@@ -445,7 +475,16 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             expired = (TextView) itemView.findViewById(R.id.expired_already);
             daysWrapper = itemView.findViewById(R.id.days_wrapper);
             days = (TextView) itemView.findViewById(R.id.days);
-            daysLabel = (TextView) itemView.findViewById(R.id.days_label);
+        }
+    }
+
+    public static class EmptyViewHolder extends RecyclerView.ViewHolder {
+        public Button actions;
+
+        public EmptyViewHolder(View itemView) {
+            super(itemView);
+
+            actions = (Button) itemView.findViewById(R.id.actions);
         }
     }
 
