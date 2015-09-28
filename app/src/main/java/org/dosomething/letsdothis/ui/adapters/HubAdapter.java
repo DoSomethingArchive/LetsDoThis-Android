@@ -1,5 +1,6 @@
 package org.dosomething.letsdothis.ui.adapters;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
@@ -8,16 +9,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.User;
+import org.dosomething.letsdothis.data.UserReportBack;
+import org.dosomething.letsdothis.ui.CampaignDetailsActivity;
+import org.dosomething.letsdothis.ui.ReportBackDetailsActivity;
 import org.dosomething.letsdothis.utils.TimeUtils;
 
 import java.util.ArrayList;
@@ -31,34 +34,38 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final int    VIEW_TYPE_PROFILE          = 0;
-    public static final int    VIEW_TYPE_SECTION_TITLE    = 1;
-    public static final int    VIEW_TYPE_CURRENT_CAMPAIGN = 2;
-    public static final int    VIEW_TYPE_PAST_CAMPAIGN    = 3;
-    public static final int    VIEW_TYPE_EXPIRE           = 4;
-    public static final String CURRENTLY_DOING            = "currently doing";
-    public static final String BEEN_THERE_DONE_GOOD       = "been there, done good";
+    private static final int    VIEW_TYPE_PROFILE          = 0;
+    private static final int    VIEW_TYPE_SECTION_TITLE    = 1;
+    private static final int    VIEW_TYPE_CURRENT_CAMPAIGN = 2;
+    private static final int    VIEW_TYPE_PAST_CAMPAIGN    = 3;
+    private static final int    VIEW_TYPE_EXPIRE           = 4;
+    private static final int    VIEW_TYPE_CURRENT_EMPTY    = 5;
+
+    private static final String BEEN_THERE_DONE_GOOD = "been there, done good";
+    private static final String CURRENT_EXPIRES_LABEL_STUB = "PLACEHOLDER: CURRENT_EXPIRES_LABEL_STUB";
+    private static final String CURRENT_CAMPAIGNS_EMPTY_STUB = "PLACEHOLDER: CURRENT_CAMPAIGNS_EMPTY_STUB";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private ArrayList<Object> hubList = new ArrayList<>();
-    private User                    user;
+    private User                    mUser;
     private HubAdapterClickListener hubAdapterClickListener;
     private boolean isPublic = false;
     private Campaign clickedCampaign;
+    private Context mContext;
 
-    public HubAdapter(HubAdapterClickListener hubAdapterClickListener, boolean isPublic)
+    public HubAdapter(Context context, HubAdapterClickListener hubAdapterClickListener, boolean isPublic)
     {
         super();
+        this.mContext = context;
         this.hubAdapterClickListener = hubAdapterClickListener;
         addUser(new User(null, ""));
-        hubList.add(CURRENTLY_DOING);
-        hubList.add(BEEN_THERE_DONE_GOOD);
+        hubList.add(CURRENT_EXPIRES_LABEL_STUB);
         this.isPublic = isPublic;
     }
 
     public void addUser(User user)
     {
-        this.user = user;
+        this.mUser = user;
         if(! hubList.isEmpty() && hubList.get(0) instanceof User)
         {
             hubList.set(0, user);
@@ -95,6 +102,10 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 View expireLayout = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_hub_expire, parent, false);
                 return new ExpireViewHolder(expireLayout);
+            case VIEW_TYPE_CURRENT_EMPTY:
+                View emptyLayout = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_hub_current_empty, parent, false);
+                return new EmptyViewHolder(emptyLayout);
             default:
                 return null;
         }
@@ -109,146 +120,124 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             SectionTitleViewHolder sectionTitleViewHolder = (SectionTitleViewHolder) holder;
             sectionTitleViewHolder.textView.setText(s);
         }
-        else if(getItemViewType(position) == VIEW_TYPE_PROFILE)
-        {
-            User user = (User) hubList.get(position);
+        else if (getItemViewType(position) == VIEW_TYPE_PROFILE) {
             ProfileViewHolder profileViewHolder = (ProfileViewHolder) holder;
 
-            if(user != null && user.avatarPath != null)
-            {
+            if (mUser != null && mUser.avatarPath != null) {
                 Picasso.with(((ProfileViewHolder) holder).userImage.getContext())
-                        .load(user.avatarPath).placeholder(R.drawable.ic_action_user)
+                        .load(mUser.avatarPath).placeholder(R.drawable.ic_action_user)
                         .resizeDimen(R.dimen.hub_avatar_height, R.dimen.hub_avatar_height)
                         .into(profileViewHolder.userImage);
             }
 
 
-            String first = user.first_name;
+            String first = mUser.first_name;
             String last = "";
-            if(user.last_name != null && user.last_name.length() > 0)
-            {
-                last = " " + user.last_name.charAt(0) + ".";
+            if (mUser.last_name != null && mUser.last_name.length() > 0) {
+                last = " " + mUser.last_name.charAt(0) + ".";
             }
 
             String displayName = String.format("%s%s", first, last);
             profileViewHolder.name.setText(displayName);
 
             // Convert from country code to display name
-            if (user.country != null) {
-                Locale locale = new Locale("", user.country);
+            if (mUser.country != null) {
+                Locale locale = new Locale("", mUser.country);
                 profileViewHolder.userCountry.setText(locale.getDisplayCountry());
             }
         }
-        else if(getItemViewType(position) == VIEW_TYPE_CURRENT_CAMPAIGN)
-        {
+        else if (getItemViewType(position) == VIEW_TYPE_CURRENT_CAMPAIGN) {
             final Campaign campaign = (Campaign) hubList.get(position);
             CurrentCampaignViewHolder viewHolder = (CurrentCampaignViewHolder) holder;
             viewHolder.title.setText(campaign.title);
-            viewHolder.callToAction.setText(campaign.callToAction);
-            viewHolder.count.setText(campaign.count);
+            viewHolder.taglineCaption.setText(campaign.callToAction);
 
             Resources res = viewHolder.title.getResources();
-            if(isPublic)
-            {
+            if (isPublic) {
                 viewHolder.actionButtons.setVisibility(View.GONE);
             }
 
-            Context context = viewHolder.image.getContext();
-            int height = context.getResources().getDimensionPixelSize(R.dimen.campaign_height);
-            Picasso.with(context).load(campaign.imagePath).resize(0, height).into(viewHolder.image);
-
-            ColorMatrix cm = new ColorMatrix();
-            cm.setSaturation(0);
-
-
-            int size = campaign.group.size();
-
-            if(campaign.showShare == Campaign.UploadShare.SHARE)
-            {
-                viewHolder.proveShare.setText(res.getString(R.string.share_photo));
+            if (campaign.showShare == Campaign.UploadShare.SHARE) {
+                viewHolder.share.setText(res.getString(R.string.share_photo));
             }
-            else if(campaign.showShare == Campaign.UploadShare.SHOW_OFF)
-            {
-                viewHolder.proveShare.setText(res.getString(R.string.show_off));
-            }
-            else if(campaign.showShare == Campaign.UploadShare.UPLOADING)
-            {
-                viewHolder.proveShare.setText(res.getString(R.string.uploading));
+            else {
+                viewHolder.share.setVisibility(View.GONE);
             }
 
-            viewHolder.proveShare.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    if(campaign.showShare == Campaign.UploadShare.SHARE)
-                    {
-                        hubAdapterClickListener.onShareClicked(campaign);
-                        clickedCampaign = campaign;
+            boolean hasReportBackImage = false;
+            String tmpRbItemId = "";
+            if (campaign.userReportBack != null) {
+                String count = String.format("%d %s %s", campaign.userReportBack.quantity,
+                        campaign.noun, campaign.verb);
+                viewHolder.count.setText(count);
+
+                ArrayList<UserReportBack.ReportBackItem> items = campaign.userReportBack.getItems();
+                if (items != null && items.size() > 0) {
+                    hasReportBackImage = true;
+
+                    // We'll just default to showing the first image in the reportback list
+                    String reportBackImage = items.get(0).getImagePath();
+                    tmpRbItemId = items.get(0).getId();
+
+                    int height = mContext.getResources().getDimensionPixelSize(R.dimen.campaign_height);
+                    Picasso.with(mContext).load(reportBackImage).resize(0, height)
+                            .into(viewHolder.reportbackImage);
+
+                    // And use this image's caption
+                    viewHolder.taglineCaption.setText(items.get(0).getCaption());
+                }
+            }
+
+            if (hasReportBackImage) {
+                final String rbItemId = tmpRbItemId;
+                viewHolder.addImage.setVisibility(View.GONE);
+                viewHolder.reportbackImage.setVisibility(View.VISIBLE);
+
+                // Clicking the reportback image should go to that reportback's detail screen
+                viewHolder.reportbackImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = ReportBackDetailsActivity.getLaunchIntent(mContext,
+                                Integer.parseInt(rbItemId), campaign.id);
+                        mContext.startActivity(intent);
                     }
-                    else if(campaign.showShare == Campaign.UploadShare.SHOW_OFF)
-                    {
+                });
+            }
+            else {
+                // Use campaign's call-to-action if no reportback
+                viewHolder.taglineCaption.setText(campaign.callToAction);
+
+                viewHolder.addImage.setVisibility(View.VISIBLE);
+                viewHolder.reportbackImage.setVisibility(View.GONE);
+
+                // Clicking the "add image" button should start the reportback flow
+                viewHolder.addImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
                         hubAdapterClickListener.onProveClicked(campaign);
                         clickedCampaign = campaign;
                     }
-                }
-            });
-
-            viewHolder.invite.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    hubAdapterClickListener.onInviteClicked(campaign.title, campaign.signupGroup);
-                }
-            });
-
-            if(size > 0)
-            {
-                int friendSize = context.getResources()
-                        .getDimensionPixelSize(R.dimen.friend_avatar);
-                viewHolder.friends.setVisibility(View.VISIBLE);
-                viewHolder.friendsCount.setText(Integer.toString(size));
-                viewHolder.friendsCount.setOnClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        hubAdapterClickListener.groupClicked(campaign.signupGroup);
-                    }
                 });
+            }
 
-                for(int i = 0; i < 4; i++)
-                {
-                    FrameLayout childAt = (FrameLayout) viewHolder.friendsContainer.getChildAt(i);
+            // Clicking on campaign title should go to the Campaign Details screen
+            viewHolder.title.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mContext.startActivity(CampaignDetailsActivity.getLaunchIntent(mContext, campaign.id));
+                }
+            });
 
-                    ImageView imageView = (ImageView) childAt.getChildAt(0);
-
-                    if(campaign.group.size() > i)
-                    {
-                        User friend = campaign.group.get(i);
-                        Picasso.with(context).load(friend.avatarPath)
-                                .placeholder(R.drawable.ic_action_user).resize(friendSize, 0)
-                                .into(imageView);
-                        childAt.setOnClickListener(new View.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View view)
-                            {
-                                hubAdapterClickListener.friendClicked(user.id);
-                            }
-                        });
-                    }
-                    else
-                    {
-                        imageView.setImageDrawable(null);
+            // Clicking on the Share button should share the reportback
+            viewHolder.share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (campaign.showShare == Campaign.UploadShare.SHARE) {
+                        hubAdapterClickListener.onShareClicked(campaign);
+                        clickedCampaign = campaign;
                     }
                 }
-            }
-            else
-            {
-                viewHolder.friends.setVisibility(View.GONE);
-            }
+            });
         }
         else if(getItemViewType(position) == VIEW_TYPE_PAST_CAMPAIGN)
         {
@@ -271,12 +260,9 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             // @todo Pretty sure I'm breaking whatever expired logic is going on here with the change
             // to using mobile_app.dates.end time for campaign end dates. Will want to fix this when
             // working on Hub stuff.
-            Long expire = (Long) hubList.get(position);
+            Long expire = TimeUtils.getStartOfNextMonth();
             List<String> campExpTime = TimeUtils.getTimeUntilExpiration(expire);
             int dayInt = Integer.parseInt(campExpTime.get(0));
-
-            Resources resources = viewHolder.itemView.getContext().getResources();
-            viewHolder.daysLabel.setText(resources.getQuantityString(R.plurals.days, dayInt));
 
             viewHolder.expire_label.setVisibility(View.VISIBLE);
             viewHolder.expired.setVisibility(View.GONE);
@@ -289,84 +275,95 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 viewHolder.expired.setVisibility(View.VISIBLE);
             }
         }
+        else if (getItemViewType(position) == VIEW_TYPE_CURRENT_EMPTY) {
+            EmptyViewHolder viewHolder = (EmptyViewHolder) holder;
+
+            viewHolder.actions.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    hubAdapterClickListener.onActionsButtonClicked();
+                }
+            });
+        }
     }
 
     @Override
-    public int getItemViewType(int position)
-    {
+    public int getItemViewType(int position) {
         Object currentObject = hubList.get(position);
-        if(currentObject instanceof String)
-        {
-            return VIEW_TYPE_SECTION_TITLE;
+
+        if (currentObject instanceof String) {
+            if (CURRENT_CAMPAIGNS_EMPTY_STUB.equals(currentObject)) {
+                return VIEW_TYPE_CURRENT_EMPTY;
+            }
+            else if (CURRENT_EXPIRES_LABEL_STUB.equals(currentObject)) {
+                return VIEW_TYPE_EXPIRE;
+            }
+            else {
+                return VIEW_TYPE_SECTION_TITLE;
+            }
         }
-        else if(currentObject instanceof User)
-        {
+        else if (currentObject instanceof User) {
             return VIEW_TYPE_PROFILE;
         }
-        else if(currentObject instanceof Campaign)
-        {
+        else if (currentObject instanceof Campaign) {
             int posOfPastHeader = hubList.indexOf(BEEN_THERE_DONE_GOOD);
-            if(position < posOfPastHeader)
-            {
-                return VIEW_TYPE_CURRENT_CAMPAIGN;
-            }
-            else
-            {
+
+            if (posOfPastHeader != -1 && position >= posOfPastHeader) {
                 return VIEW_TYPE_PAST_CAMPAIGN;
             }
+            else {
+                return VIEW_TYPE_CURRENT_CAMPAIGN;
+            }
         }
-        else if(currentObject instanceof Long)
-        {
-            return VIEW_TYPE_EXPIRE;
-        }
+
         return 0;
     }
 
-    public void addCurrentCampaign(List<Campaign> objects)
-    {
-        setExpirationView();
-        if(hubList.isEmpty())
-        {
-            setExpirationView();
-            int i = hubList.indexOf(BEEN_THERE_DONE_GOOD);
-            hubList.addAll(i, objects);
-            notifyItemRangeInserted(hubList.size() - objects.size(), hubList.size() - 1);
-        }
-        else
-        {
-            for(int i = 0, j = 3; i < objects.size(); i++)
-            {
-                Object o = hubList.get(j);
-                if(o instanceof Campaign)
-                {
-                    hubList.set(j, objects.get(i));
-                    j++;
-                }
-                else
-                {
-                    hubList.add(j, objects.get(i));
-                    j++;
+    /**
+     * Set the campaigns a user is currently doing.
+     *
+     * @param objects Campaigns the user is doing. Could be empty or null.
+     */
+    public void setCurrentCampaign(List<Campaign> objects) {
+        int indexCurrentLabel = hubList.indexOf(CURRENT_EXPIRES_LABEL_STUB);
+
+        if (objects != null && objects.size() > 0) {
+            // Remove empty stub if it's there
+            hubList.remove(CURRENT_CAMPAIGNS_EMPTY_STUB);
+
+            // Remove anything between the past campaigns label and current campaigns label
+            int indexPastLabel = hubList.indexOf(BEEN_THERE_DONE_GOOD);
+            if (indexPastLabel > indexCurrentLabel + 1) {
+                for (int i = indexPastLabel; i > indexCurrentLabel; i--) {
+                    hubList.remove(i);
                 }
             }
 
-            notifyItemRangeChanged(2, objects.size());
+            // Add the campaigns. + 1 to start after the "expires" label
+            int insertIndex = indexCurrentLabel + 1;
+            for (int i = 0; i < objects.size(); i++) {
+                hubList.add(insertIndex, objects.get(i));
+                insertIndex++;
+            }
         }
+        else {
+            // Add on the empty stub if it's not already there
+            if (hubList.indexOf(CURRENT_CAMPAIGNS_EMPTY_STUB) == -1) {
+                // + 1 to add after the expires label
+                hubList.add(indexCurrentLabel + 1, CURRENT_CAMPAIGNS_EMPTY_STUB);
+            }
+        }
+
+        notifyDataSetChanged();
     }
 
-    private void setExpirationView()
-    {
-        if(! isPublic)
-        {
-            Long expire = TimeUtils.getStartOfNextMonth();
-            int i = hubList.indexOf(CURRENTLY_DOING);
-            hubList.add(i + 1, expire);
+    public void addPastCampaign(List<Campaign> objects) {
+        if (hubList.indexOf(BEEN_THERE_DONE_GOOD) == -1) {
+            hubList.add(BEEN_THERE_DONE_GOOD);
         }
-    }
 
-    public void addPastCampaign(List<Campaign> objects)
-    {
         hubList.addAll(objects);
-        notifyItemRangeInserted(hubList.size() - objects.size(), hubList.size() - 1);
+        notifyItemRangeInserted(hubList.size() - objects.size() - 1, hubList.size() - 1);
     }
 
     @Override
@@ -415,28 +412,22 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public static class CurrentCampaignViewHolder extends RecyclerView.ViewHolder
     {
         protected final TextView     title;
-        protected final TextView     callToAction;
+        protected final TextView     taglineCaption;
         protected final TextView     count;
-        protected final ImageView    image;
-        protected final View         friends;
-        protected final TextView     friendsCount;
-        protected final LinearLayout friendsContainer;
-        protected final Button       proveShare;
-        protected final Button       invite;
+        protected final ImageView    addImage;
+        protected final ImageView    reportbackImage;
+        protected final Button       share;
         protected final View         actionButtons;
 
         public CurrentCampaignViewHolder(View itemView)
         {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
-            callToAction = (TextView) itemView.findViewById(R.id.call_to_action);
-            image = (ImageView) itemView.findViewById(R.id.image);
+            taglineCaption = (TextView) itemView.findViewById(R.id.tagline_caption);
+            addImage = (ImageView) itemView.findViewById(R.id.add_image);
+            reportbackImage = (ImageView) itemView.findViewById(R.id.reportback_image);
             count = (TextView) itemView.findViewById(R.id.count);
-            friends = itemView.findViewById(R.id.friends);
-            friendsCount = (TextView) itemView.findViewById(R.id.friends_count);
-            friendsContainer = (LinearLayout) itemView.findViewById(R.id.friends_container);
-            proveShare = (Button) itemView.findViewById(R.id.prove_share);
-            invite = (Button) itemView.findViewById(R.id.invite);
+            share = (Button) itemView.findViewById(R.id.prove_share);
             actionButtons = itemView.findViewById(R.id.action_buttons);
         }
     }
@@ -459,7 +450,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public          TextView expired;
         public          TextView expire_label;
         protected final TextView days;
-        protected final TextView daysLabel;
         protected final View     daysWrapper;
 
         public ExpireViewHolder(View itemView)
@@ -469,7 +459,16 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             expired = (TextView) itemView.findViewById(R.id.expired_already);
             daysWrapper = itemView.findViewById(R.id.days_wrapper);
             days = (TextView) itemView.findViewById(R.id.days);
-            daysLabel = (TextView) itemView.findViewById(R.id.days_label);
+        }
+    }
+
+    public static class EmptyViewHolder extends RecyclerView.ViewHolder {
+        public Button actions;
+
+        public EmptyViewHolder(View itemView) {
+            super(itemView);
+
+            actions = (Button) itemView.findViewById(R.id.actions);
         }
     }
 
@@ -484,5 +483,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         void onProveClicked(Campaign campaign);
 
         void onInviteClicked(String title, int signupGroup);
+
+        void onActionsButtonClicked();
     }
 }

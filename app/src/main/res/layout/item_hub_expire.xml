@@ -4,7 +4,7 @@
                 xmlns:tool="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@color/desertStorm"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal"
                 android:paddingBottom="@dimen/padding_small"
@@ -34,9 +34,9 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/padding_small"
             android:layout_weight="1"
-            android:text="@string/expires_in"
+            android:text="@string/hub_expire_current"
             android:textAllCaps="true"
-            android:textColor="@color/gray"
+            android:textColor="@color/dark_gray"
             android:textSize="@dimen/text_36"
             app:typeface="brandon_bold"/>
 
@@ -54,18 +54,20 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="@dimen/padding_tiny"
                 android:textColor="@color/dark_gray"
-                android:textSize="@dimen/text_33"
+                android:textSize="@dimen/text_large"
                 app:typeface="brandon_bold"
                 tool:text="30"/>
+
             <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
                 android:id="@+id/days_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/hub_expire_days_left"
                 android:textAllCaps="true"
                 android:textColor="@color/dark_gray"
-                android:textSize="@dimen/text_33"
-                app:typeface="brandon_bold"
-                tool:text="Days"/>
+                android:textSize="@dimen/text_large"
+                app:typeface="brandon_bold"/>
+
         </LinearLayout>
 
     </LinearLayout>

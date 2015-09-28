@@ -3,10 +3,11 @@ import android.content.Context;
 
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.DatabaseHelper;
+import org.dosomething.letsdothis.data.ReportBack;
+import org.dosomething.letsdothis.data.UserReportBack;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.ResponseCampaignList;
-import org.dosomething.letsdothis.network.models.ResponseGroupList;
 import org.dosomething.letsdothis.network.models.ResponseUserCampaign;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
@@ -21,72 +22,69 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
 /**
  * Created by toidiu on 4/16/15.
  */
-public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask
-{
+public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask {
+    // Campaigns a user is participating in
     public List<Campaign> currentCampaignList;
+
+    // Campaigns that have ended that a user participated in
     public List<Campaign> pastCampaignList;
 
-    public GetCurrentUserCampaignsTask()
-    {
+    public GetCurrentUserCampaignsTask() {
     }
 
     @Override
-    protected void run(Context context) throws Throwable
-    {
+    protected void run(Context context) throws Throwable {
         NorthstarAPI northstarAPIService = NetworkHelper.getNorthstarAPIService();
         ResponseUserCampaign userCampaigns = northstarAPIService
                 .getUserCampaigns(AppPrefs.getInstance(context).getCurrentUserId());
 
-
-        String currentUserId = AppPrefs.getInstance(context).getCurrentUserId();
-        getCurrentCampaign(northstarAPIService, userCampaigns, currentUserId);
+        getCurrentCampaign(userCampaigns);
         getPastCampaign(context, userCampaigns);
     }
 
-    private void getCurrentCampaign(NorthstarAPI northstarAPIService, ResponseUserCampaign userCampaigns, String currentUserId) throws NetworkException
-    {
+    private void getCurrentCampaign(ResponseUserCampaign userCampaigns) throws NetworkException {
         currentCampaignList = new ArrayList<>();
-        ArrayList<Integer> doneCampaigns = new ArrayList<Integer>();
 
-        //-------get user's campaign id list/ which ones have RB
+        // Key: campaign id. Value: user's reportback data
+        Map<Integer, UserReportBack> reportBacks = new HashMap<>();
+
+        // Comma-separated string of campaign ids the user is at least signed up for
         String campaignIds = "";
-        String signUpGroups = "";
-        for (ResponseUserCampaign.Wrapper campaignData : userCampaigns.data)
-        {
-            if (campaignData.reportback_data != null)
-            {
-                doneCampaigns.add(campaignData.drupal_id);
-            }
+
+        for (ResponseUserCampaign.Wrapper campaignData : userCampaigns.data) {
+            // Build query string for campaigns the user's signed up for
             campaignIds += campaignData.drupal_id + ",";
-            signUpGroups += campaignData.signup_group + ",";
+
+            // Cache off reportback data when available
+            if (campaignData.reportback_data != null) {
+                UserReportBack userReportBack = new UserReportBack();
+                userReportBack.id = campaignData.reportback_data.id;
+                userReportBack.quantity = campaignData.reportback_data.quantity;
+
+                for (ReportBack rb : campaignData.reportback_data.reportback_items.data) {
+                    userReportBack.addItem(String.valueOf(rb.id), rb.caption, rb.getImagePath());
+                }
+
+                reportBacks.put(campaignData.drupal_id, userReportBack);
+            }
         }
 
-        //-------get campaign and mark which have RB
-        Map<Integer, Campaign> campMap = new HashMap<>();
-        if (!campaignIds.isEmpty())
-        {
+        // Populate the currentCampaigns list
+        if (!campaignIds.isEmpty()) {
             ResponseCampaignList responseCampaignList = NetworkHelper.getDoSomethingAPIService()
                     .campaignListByIds(campaignIds);
             List<Campaign> campaigns = ResponseCampaignList.getCampaigns(responseCampaignList);
 
-            for (Campaign campaign : campaigns)
-            {
-                if (doneCampaigns.contains(campaign.id))
-                {
+            for (Campaign campaign : campaigns) {
+                // Add reportback data, if any
+                if (reportBacks.containsKey(campaign.id)) {
                     campaign.showShare = Campaign.UploadShare.SHARE;
+                    campaign.userReportBack = reportBacks.get(campaign.id);
                 }
-                campMap.put(campaign.id, campaign);
+
+                currentCampaignList.add(campaign);
             }
         }
-
-        //-------add group info for the campaign
-        if (!signUpGroups.isEmpty()) {
-            signUpGroups = signUpGroups.substring(0, signUpGroups.length() - 1);
-            ResponseGroupList response = northstarAPIService.groupList(signUpGroups);
-            ResponseGroupList.addUsers(campMap, response, currentUserId);
-        }
-
-        currentCampaignList.addAll(campMap.values());
     }
 
     private void getPastCampaign(Context context, ResponseUserCampaign userCampaigns) throws java.sql.SQLException, NetworkException
