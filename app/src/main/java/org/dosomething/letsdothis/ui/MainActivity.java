@@ -236,6 +236,14 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
      * Implements ReplaceFragmentListener
      */
     public void replaceWithActionsFragment() {
+        final String[] list = getResources().getStringArray(R.array.drawer_list);
+        for (int i = 0; i < list.length; i++) {
+            if (TextUtils.equals(list[i], getString(R.string.actions))) {
+                drawerListAdapter.selected = i;
+                break;
+            }
+        }
+
         replaceCurrentFragment(ActionsFragment.newInstance(), ActionsFragment.TAG);
     }
 

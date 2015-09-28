@@ -41,8 +41,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private static final int    VIEW_TYPE_EXPIRE           = 4;
     private static final int    VIEW_TYPE_CURRENT_EMPTY    = 5;
 
-    private static final String CURRENTLY_DOING            = "currently doing";
-    private static final String BEEN_THERE_DONE_GOOD       = "been there, done good";
+    private static final String BEEN_THERE_DONE_GOOD = "been there, done good";
+    private static final String CURRENT_EXPIRES_LABEL_STUB = "PLACEHOLDER: CURRENT_EXPIRES_LABEL_STUB";
     private static final String CURRENT_CAMPAIGNS_EMPTY_STUB = "PLACEHOLDER: CURRENT_CAMPAIGNS_EMPTY_STUB";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
@@ -59,7 +59,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.mContext = context;
         this.hubAdapterClickListener = hubAdapterClickListener;
         addUser(new User(null, ""));
-        hubList.add(CURRENTLY_DOING);
+        hubList.add(CURRENT_EXPIRES_LABEL_STUB);
         this.isPublic = isPublic;
     }
 
@@ -260,7 +260,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             // @todo Pretty sure I'm breaking whatever expired logic is going on here with the change
             // to using mobile_app.dates.end time for campaign end dates. Will want to fix this when
             // working on Hub stuff.
-            Long expire = (Long) hubList.get(position);
+            Long expire = TimeUtils.getStartOfNextMonth();
             List<String> campExpTime = TimeUtils.getTimeUntilExpiration(expire);
             int dayInt = Integer.parseInt(campExpTime.get(0));
 
@@ -295,6 +295,9 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if (CURRENT_CAMPAIGNS_EMPTY_STUB.equals(currentObject)) {
                 return VIEW_TYPE_CURRENT_EMPTY;
             }
+            else if (CURRENT_EXPIRES_LABEL_STUB.equals(currentObject)) {
+                return VIEW_TYPE_EXPIRE;
+            }
             else {
                 return VIEW_TYPE_SECTION_TITLE;
             }
@@ -312,9 +315,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 return VIEW_TYPE_CURRENT_CAMPAIGN;
             }
         }
-        else if (currentObject instanceof Long) {
-            return VIEW_TYPE_EXPIRE;
-        }
 
         return 0;
     }
@@ -325,7 +325,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
      * @param objects Campaigns the user is doing. Could be empty or null.
      */
     public void setCurrentCampaign(List<Campaign> objects) {
-        int indexCurrentLabel = hubList.indexOf(CURRENTLY_DOING);
+        int indexCurrentLabel = hubList.indexOf(CURRENT_EXPIRES_LABEL_STUB);
 
         if (objects != null && objects.size() > 0) {
             // Remove empty stub if it's there
@@ -339,37 +339,22 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }
             }
 
-            // Set the expires label
-            setExpirationView();
-
-            // Add the campaigns
-            int insertIndex = indexCurrentLabel + 2;
+            // Add the campaigns. + 1 to start after the "expires" label
+            int insertIndex = indexCurrentLabel + 1;
             for (int i = 0; i < objects.size(); i++) {
                 hubList.add(insertIndex, objects.get(i));
                 insertIndex++;
             }
         }
         else {
-            setExpirationView();
-
             // Add on the empty stub if it's not already there
             if (hubList.indexOf(CURRENT_CAMPAIGNS_EMPTY_STUB) == -1) {
-                // + 2 to add after the expires label
-                hubList.add(indexCurrentLabel + 2, CURRENT_CAMPAIGNS_EMPTY_STUB);
+                // + 1 to add after the expires label
+                hubList.add(indexCurrentLabel + 1, CURRENT_CAMPAIGNS_EMPTY_STUB);
             }
         }
 
         notifyDataSetChanged();
-    }
-
-    private void setExpirationView()
-    {
-        if(! isPublic)
-        {
-            Long expire = TimeUtils.getStartOfNextMonth();
-            int i = hubList.indexOf(CURRENTLY_DOING);
-            hubList.add(i + 1, expire);
-        }
     }
 
     public void addPastCampaign(List<Campaign> objects) {
