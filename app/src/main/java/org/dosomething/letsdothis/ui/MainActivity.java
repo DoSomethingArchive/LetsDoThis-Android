@@ -24,7 +24,7 @@ import org.dosomething.letsdothis.ui.fragments.ActionsFragment;
 import org.dosomething.letsdothis.ui.fragments.HubFragment;
 import org.dosomething.letsdothis.ui.fragments.InvitesFragment;
 import org.dosomething.letsdothis.ui.fragments.JoinGroupDialogFragment;
-import org.dosomething.letsdothis.ui.fragments.NotificationsFragment;
+import org.dosomething.letsdothis.ui.fragments.ReplaceFragmentListener;
 import org.dosomething.letsdothis.ui.fragments.SetTitleListener;
 import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
 import org.dosomething.letsdothis.utils.AppPrefs;
@@ -33,7 +33,7 @@ import co.touchlab.android.threading.errorcontrol.NetworkException;
 import retrofit.RetrofitError;
 
 
-public class MainActivity extends BaseActivity implements SetTitleListener
+public class MainActivity extends BaseActivity implements SetTitleListener, ReplaceFragmentListener
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String GROUP_ID       = "GROUP_ID";
@@ -141,11 +141,9 @@ public class MainActivity extends BaseActivity implements SetTitleListener
         });
 
         View setting = findViewById(R.id.setting);
-        setting.setOnClickListener(new View.OnClickListener()
-        {
+        setting.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 startActivity(SettingsActivity.getLaunchIntent(MainActivity.this));
                 drawerLayout.closeDrawer(drawer);
             }
@@ -221,9 +219,24 @@ public class MainActivity extends BaseActivity implements SetTitleListener
         drawerListAdapter.notifyDataSetChanged();
     }
 
-    public void setTitle(String title)
-    {
+    /**
+     * Set the Toolbar title.
+     *
+     * Implements SetTitleListener
+     *
+     * @param title Toolbar title
+     */
+    public void setTitle(String title) {
         toolbar.setTitle(title);
+    }
+
+    /**
+     * Replace the current fragment with an ActionsFragment.
+     *
+     * Implements ReplaceFragmentListener
+     */
+    public void replaceWithActionsFragment() {
+        replaceCurrentFragment(ActionsFragment.newInstance(), ActionsFragment.TAG);
     }
 
 

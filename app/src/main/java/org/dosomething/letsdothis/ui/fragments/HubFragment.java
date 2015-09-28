@@ -55,6 +55,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     private HubAdapter       adapter;
     private Uri              imageUri;
     private SetTitleListener titleListener;
+    private ReplaceFragmentListener replaceFragmentListener;
     private ProgressBar      progress;
 
     public static HubFragment newInstance(String id)
@@ -85,6 +86,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     {
         super.onAttach(activity);
         titleListener = (SetTitleListener) getActivity();
+        replaceFragmentListener = (ReplaceFragmentListener) activity;
         refreshUserCampaign();
     }
 
@@ -191,6 +193,16 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     {
         startActivity(CampaignInviteActivity
                               .getLaunchIntent(getActivity(), title, signupGroup));
+    }
+
+    /**
+     * When Action button is clicked in an empty Hub, go to the Actions screen.
+     *
+     * Implements HubAdapter.HubAdapterClickListener
+     */
+    @Override
+    public void onActionsButtonClicked() {
+        replaceFragmentListener.replaceWithActionsFragment();
     }
 
     @Override

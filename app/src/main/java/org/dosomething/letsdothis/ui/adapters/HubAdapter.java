@@ -281,8 +281,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             viewHolder.actions.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // @TODO go to Actions fragment
-                    Toast.makeText(mContext, "TODO: Go to Actions fragment", Toast.LENGTH_SHORT).show();
+                    hubAdapterClickListener.onActionsButtonClicked();
                 }
             });
         }
@@ -499,5 +498,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         void onProveClicked(Campaign campaign);
 
         void onInviteClicked(String title, int signupGroup);
+
+        void onActionsButtonClicked();
     }
 }
