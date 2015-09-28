@@ -47,6 +47,8 @@ public class Campaign
 
     public boolean userIsSignedUp = false;
 
+    public UserReportBack userReportBack;
+
     public enum UploadShare
     {
         UPLOADING,
