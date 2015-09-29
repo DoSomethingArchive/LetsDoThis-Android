@@ -105,6 +105,7 @@
     <string name="notification_friend">notification_friend</string>
     <string name="notification_campaign">notification_campaign</string>
     <string name="notification_pref">Notification Preferences</string>
+    <string name="pref_suggestion_link">Have your own ideas? Fill out this form and let us know.</string>
     <string name="expired_already">Oof - this action has expired. Let’s freshen things up.</string>
     <string name="max_kudos">99+</string>
     <string name="log_in_with_facebook">Log in with Facebook</string>

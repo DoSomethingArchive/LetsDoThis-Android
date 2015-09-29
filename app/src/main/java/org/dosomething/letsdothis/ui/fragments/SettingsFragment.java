@@ -31,6 +31,7 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
         initRate();
         initLogout();
         initChangePhoto();
+        initSuggestionLink();
     }
 
     @Override
@@ -93,6 +94,20 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                             intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
                             startActivity(intent);
                         }
+
+                        return true;
+                    }
+                });
+    }
+
+    private void initSuggestionLink() {
+        findPreference(getString(R.string.pref_suggestion_link))
+                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse("https://www.dosomething.org/campaigns/submit-your-idea"));
+                        startActivity(intent);
 
                         return true;
                     }

@@ -49,5 +49,14 @@
             android:title="We'll never interrupt you to ask for ratings."/>
     </org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory>
 
+    <!--
+        UGC
+    -->
+    <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory>
+        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference
+            android:enabled="true"
+            android:key="@string/pref_suggestion_link"
+            android:title="@string/pref_suggestion_link"/>
+    </org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory>
 
 </PreferenceScreen>
