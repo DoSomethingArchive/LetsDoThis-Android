@@ -210,15 +210,6 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     }
                 }
             });
-
-            campaignViewHolder.invite.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    detailsAdapterClickListener.inviteClicked();
-                }
-            });
         }
         else if(getItemViewType(position) == VIEW_TYPE_REPORT_BACK)
         {
@@ -307,7 +298,6 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         protected TextView  title;
         protected TextView  callToAction;
         protected Button    proveShare;
-        protected Button    invite;
         public    View      solutionWrapper;
 
         public CampaignViewHolder(View itemView)
@@ -320,7 +310,6 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.solutionCopy = (TextView) itemView.findViewById(R.id.solutionCopy);
             this.solutionSupport = (TextView) itemView.findViewById(R.id.solutionSupport);
             this.proveShare = (Button) itemView.findViewById(R.id.prove_share);
-            this.invite = (Button) itemView.findViewById(R.id.invite);
         }
     }
 
