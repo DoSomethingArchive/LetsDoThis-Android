@@ -5,6 +5,7 @@
     <string name="actions">Actions</string>
     <string name="hub">Me</string>
     <string name="hub_empty_action_button">Take Me There</string>
+    <string name="hub_empty_public">Hm, we aren\'t able to find any activity for this user.</string>
     <string name="hub_empty_text1">You aren\'t doing anything right now!</string>
     <string name="hub_empty_text2">We have 12 fresh ideas every month, check them out in the Actions tab.</string>
     <string name="hub_expire_current">Current:</string>

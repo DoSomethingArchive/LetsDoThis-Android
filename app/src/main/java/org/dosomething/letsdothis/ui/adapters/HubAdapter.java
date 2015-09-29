@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -40,6 +39,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private static final int    VIEW_TYPE_PAST_CAMPAIGN    = 3;
     private static final int    VIEW_TYPE_EXPIRE           = 4;
     private static final int    VIEW_TYPE_CURRENT_EMPTY    = 5;
+    private static final int    VIEW_TYPE_PUBLIC_EMPTY     = 6;
 
     private static final String BEEN_THERE_DONE_GOOD = "been there, done good";
     private static final String CURRENT_EXPIRES_LABEL_STUB = "PLACEHOLDER: CURRENT_EXPIRES_LABEL_STUB";
@@ -104,8 +104,12 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 return new ExpireViewHolder(expireLayout);
             case VIEW_TYPE_CURRENT_EMPTY:
                 View emptyLayout = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_hub_current_empty, parent, false);
+                            .inflate(R.layout.item_hub_current_empty, parent, false);
                 return new EmptyViewHolder(emptyLayout);
+            case VIEW_TYPE_PUBLIC_EMPTY:
+                View publicEmptyLayout = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_hub_public_empty, parent, false);
+                return new PublicEmptyViewHolder(publicEmptyLayout);
             default:
                 return null;
         }
@@ -153,12 +157,20 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             viewHolder.taglineCaption.setText(campaign.callToAction);
 
             Resources res = viewHolder.title.getResources();
-            if (isPublic) {
-                viewHolder.actionButtons.setVisibility(View.GONE);
-            }
 
-            if (campaign.showShare == Campaign.UploadShare.SHARE) {
+            if (!isPublic && campaign.showShare == Campaign.UploadShare.SHARE) {
                 viewHolder.share.setText(res.getString(R.string.share_photo));
+
+                // Clicking on the Share button should share the reportback
+                viewHolder.share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (campaign.showShare == Campaign.UploadShare.SHARE) {
+                            hubAdapterClickListener.onShareClicked(campaign);
+                            clickedCampaign = campaign;
+                        }
+                    }
+                });
             }
             else {
                 viewHolder.share.setVisibility(View.GONE);
@@ -190,6 +202,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             if (hasReportBackImage) {
                 final String rbItemId = tmpRbItemId;
+                viewHolder.imageContainer.setVisibility(View.VISIBLE);
                 viewHolder.addImage.setVisibility(View.GONE);
                 viewHolder.reportbackImage.setVisibility(View.VISIBLE);
 
@@ -207,17 +220,24 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 // Use campaign's call-to-action if no reportback
                 viewHolder.taglineCaption.setText(campaign.callToAction);
 
-                viewHolder.addImage.setVisibility(View.VISIBLE);
-                viewHolder.reportbackImage.setVisibility(View.GONE);
+                if (!isPublic) {
+                    viewHolder.imageContainer.setVisibility(View.VISIBLE);
+                    viewHolder.addImage.setVisibility(View.VISIBLE);
+                    viewHolder.reportbackImage.setVisibility(View.GONE);
 
-                // Clicking the "add image" button should start the reportback flow
-                viewHolder.addImage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        hubAdapterClickListener.onProveClicked(campaign);
-                        clickedCampaign = campaign;
-                    }
-                });
+                    // Clicking the "add image" button should start the reportback flow
+                    viewHolder.addImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            hubAdapterClickListener.onProveClicked(campaign);
+                            clickedCampaign = campaign;
+                        }
+                    });
+                }
+                else {
+                    // Hide the image container if it's a public profile with no reportback
+                    viewHolder.imageContainer.setVisibility(View.GONE);
+                }
             }
 
             // Clicking on campaign title should go to the Campaign Details screen
@@ -225,17 +245,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View v) {
                     mContext.startActivity(CampaignDetailsActivity.getLaunchIntent(mContext, campaign.id));
-                }
-            });
-
-            // Clicking on the Share button should share the reportback
-            viewHolder.share.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (campaign.showShare == Campaign.UploadShare.SHARE) {
-                        hubAdapterClickListener.onShareClicked(campaign);
-                        clickedCampaign = campaign;
-                    }
                 }
             });
         }
@@ -293,7 +302,12 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         if (currentObject instanceof String) {
             if (CURRENT_CAMPAIGNS_EMPTY_STUB.equals(currentObject)) {
-                return VIEW_TYPE_CURRENT_EMPTY;
+                if (isPublic) {
+                    return VIEW_TYPE_PUBLIC_EMPTY;
+                }
+                else {
+                    return VIEW_TYPE_CURRENT_EMPTY;
+                }
             }
             else if (CURRENT_EXPIRES_LABEL_STUB.equals(currentObject)) {
                 return VIEW_TYPE_EXPIRE;
@@ -414,21 +428,21 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         protected final TextView     title;
         protected final TextView     taglineCaption;
         protected final TextView     count;
+        protected final View         imageContainer;
         protected final ImageView    addImage;
         protected final ImageView    reportbackImage;
         protected final Button       share;
-        protected final View         actionButtons;
 
         public CurrentCampaignViewHolder(View itemView)
         {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
             taglineCaption = (TextView) itemView.findViewById(R.id.tagline_caption);
+            imageContainer = itemView.findViewById(R.id.image_container);
             addImage = (ImageView) itemView.findViewById(R.id.add_image);
             reportbackImage = (ImageView) itemView.findViewById(R.id.reportback_image);
             count = (TextView) itemView.findViewById(R.id.count);
             share = (Button) itemView.findViewById(R.id.prove_share);
-            actionButtons = itemView.findViewById(R.id.action_buttons);
         }
     }
 
@@ -469,6 +483,12 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             super(itemView);
 
             actions = (Button) itemView.findViewById(R.id.actions);
+        }
+    }
+
+    public static class PublicEmptyViewHolder extends RecyclerView.ViewHolder {
+        public PublicEmptyViewHolder(View itemView) {
+            super(itemView);
         }
     }
 

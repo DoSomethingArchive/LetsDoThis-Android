@@ -9,7 +9,6 @@ import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.ResponseCampaignList;
 import org.dosomething.letsdothis.network.models.ResponseUserCampaign;
-import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,21 +21,24 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
 /**
  * Created by toidiu on 4/16/15.
  */
-public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask {
+public class GetUserCampaignsTask extends BaseNetworkErrorHandlerTask {
+    // User id we're getting campaigns info for
+    private String mUserId;
+
     // Campaigns a user is participating in
     public List<Campaign> currentCampaignList;
 
     // Campaigns that have ended that a user participated in
     public List<Campaign> pastCampaignList;
 
-    public GetCurrentUserCampaignsTask() {
+    public GetUserCampaignsTask(String id) {
+        mUserId = id;
     }
 
     @Override
     protected void run(Context context) throws Throwable {
         NorthstarAPI northstarAPIService = NetworkHelper.getNorthstarAPIService();
-        ResponseUserCampaign userCampaigns = northstarAPIService
-                .getUserCampaigns(AppPrefs.getInstance(context).getCurrentUserId());
+        ResponseUserCampaign userCampaigns = northstarAPIService.getUserCampaigns(mUserId);
 
         getCurrentCampaign(userCampaigns);
         getPastCampaign(context, userCampaigns);

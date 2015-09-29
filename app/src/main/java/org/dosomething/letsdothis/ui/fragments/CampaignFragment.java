@@ -21,7 +21,7 @@ import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.tasks.BaseReportBackListTask;
 import org.dosomething.letsdothis.tasks.CampaignSignUpTask;
 import org.dosomething.letsdothis.tasks.DbInterestGroupCampaignListTask;
-import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignsTask;
+import org.dosomething.letsdothis.tasks.GetUserCampaignsTask;
 import org.dosomething.letsdothis.tasks.InterestReportBackListTask;
 import org.dosomething.letsdothis.tasks.UpdateInterestGroupCampaignTask;
 import org.dosomething.letsdothis.tasks.UpdateInterestGroupCampaignTask.IdQuery;
@@ -29,6 +29,7 @@ import org.dosomething.letsdothis.ui.CampaignDetailsActivity;
 import org.dosomething.letsdothis.ui.ReportBackDetailsActivity;
 import org.dosomething.letsdothis.ui.adapters.CampaignAdapter;
 import org.dosomething.letsdothis.ui.views.ActionGridSpacingDecoration;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -279,7 +280,8 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
                         FIRST_PAGE, BaseReportBackListTask.STATUS_PROMOTED));
 
                 // Now that we have campaigns, get user info to find out what they've participated in
-                TaskQueue.loadQueueDefault(getActivity()).execute(new GetCurrentUserCampaignsTask());
+                String userId = AppPrefs.getInstance(getActivity()).getCurrentUserId();
+                TaskQueue.loadQueueDefault(getActivity()).execute(new GetUserCampaignsTask(userId));
             }
         }
     }
@@ -300,7 +302,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
      * @param task Result of getting current user's campaign activity
      */
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(GetCurrentUserCampaignsTask task) {
+    public void onEventMainThread(GetUserCampaignsTask task) {
         List<Campaign> allCampaigns = new ArrayList<>();
         if (task.currentCampaignList != null) {
             allCampaigns.addAll(task.currentCampaignList);
