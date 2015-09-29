@@ -224,43 +224,51 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         {
             final ReportBack reportBack = (ReportBack) dataSet.get(position);
             final ReportBackViewHolder reportBackViewHolder = (ReportBackViewHolder) holder;
-
-            //FIXME get real avatar
-            reportBackViewHolder.avatar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    detailsAdapterClickListener.onUserClicked(reportBack.user.id);
-                }
-            });
-
             final Context context = reportBackViewHolder.itemView.getContext();
+
+            // Report back photo
             Picasso.with(context).
                     load(reportBack.getImagePath()).into(reportBackViewHolder.imageView);
 
+            // User name
             String reportbackName = reportBack.user.first_name;
             if (reportBack.user.last_name != null && !reportBack.user.last_name.isEmpty()) {
                 reportbackName += " " + reportBack.user.last_name.charAt(0) + ".";
             }
             reportBackViewHolder.name.setText(reportbackName);
 
+            // User country location
             if (reportBack.user.country != null && !reportBack.user.country.isEmpty()) {
                 Locale locale = new Locale("", reportBack.user.country);
                 reportBackViewHolder.location.setText(locale.getDisplayCountry());
             }
 
+            // User profile photo
+            if (reportBack.user.avatarPath != null && !reportBack.user.avatarPath.isEmpty()) {
+                Picasso.with(context).load(reportBack.user.avatarPath)
+                        .placeholder(R.drawable.default_profile_photo)
+                        .resizeDimen(R.dimen.friend_avatar, R.dimen.friend_avatar)
+                        .into(reportBackViewHolder.avatar);
+            }
+
+            // Report back campaign name and details
             reportBackViewHolder.title.setText(currentCampaign.title);
             reportBackViewHolder.caption.setText(reportBack.caption);
 
             String impactText = String.format("%s %s %s", String.valueOf(reportBack.reportback.quantity),
                     currentCampaign.noun, currentCampaign.verb);
             reportBackViewHolder.impact.setText(impactText);
+
+            // Click listeners on the user name and user photo
+            OnUserClickListener onUserClickListener = new OnUserClickListener(reportBack.user.id);
+            reportBackViewHolder.avatar.setOnClickListener(onUserClickListener);
+            reportBackViewHolder.name.setOnClickListener(onUserClickListener);
         }
         else if(getItemViewType(position) == VIEW_TYPE_CAMPAIGN_FOOTER)
         {
             SectionTitleViewHolder sectionTitleViewHolder = (SectionTitleViewHolder) holder;
             sectionTitleViewHolder.textView.setText(sectionTitleViewHolder.textView.getContext()
-                                                                                   .getString(
-                                                                                           R.string.people_doing_it));
+                                                                                   .getString(R.string.people_doing_it));
         }
 
     }
@@ -336,6 +344,22 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.caption = (TextView) view.findViewById(R.id.caption);
             this.impact = (TextView) view.findViewById(R.id.impact);
             this.title = (TextView) view.findViewById(R.id.title);
+        }
+    }
+
+    /**
+     * OnClickListener to open up a user's public profile screen.
+     */
+    private class OnUserClickListener implements View.OnClickListener {
+        private String mUserId;
+
+        public OnUserClickListener(String id) {
+            mUserId = id;
+        }
+
+        @Override
+        public void onClick(View v) {
+            detailsAdapterClickListener.onUserClicked(mUserId);
         }
     }
 

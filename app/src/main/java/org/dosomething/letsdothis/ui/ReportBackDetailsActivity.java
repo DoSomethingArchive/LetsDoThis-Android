@@ -158,14 +158,10 @@ public class ReportBackDetailsActivity extends BaseActivity
         actionQuantity = String.valueOf(reportBack.reportback.quantity);
         setImpactTextIfReady();
 
-        // Tapping on user's name should open up that user's profile
-        name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = PublicProfileActivity.getLaunchIntent(ReportBackDetailsActivity.this, reportBack.user.id);
-                startActivity(i);
-            }
-        });
+        // Tapping on user's name or picture should open up that user's profile
+        OnUserClickListener onUserClickListener = new OnUserClickListener(reportBack.user.id);
+        name.setOnClickListener(onUserClickListener);
+        avatar.setOnClickListener(onUserClickListener);
 
     }
 
@@ -178,5 +174,22 @@ public class ReportBackDetailsActivity extends BaseActivity
         actionNoun = task.campaign.noun;
         actionVerb = task.campaign.verb;
         setImpactTextIfReady();
+    }
+
+    /**
+     * OnClickListener to open up a user's public profile screen.
+     */
+    private class OnUserClickListener implements View.OnClickListener {
+        private String mUserId;
+
+        public OnUserClickListener(String id) {
+            mUserId = id;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent i = PublicProfileActivity.getLaunchIntent(ReportBackDetailsActivity.this, mUserId);
+            startActivity(i);
+        }
     }
 }
