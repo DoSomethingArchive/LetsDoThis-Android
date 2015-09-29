@@ -13,15 +13,11 @@ import android.widget.ProgressBar;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Notification;
-import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignsTask;
 import org.dosomething.letsdothis.ui.adapters.NotificationAdapter;
 import org.dosomething.letsdothis.ui.views.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import co.touchlab.android.threading.tasks.TaskQueue;
-import co.touchlab.android.threading.tasks.utils.TaskQueueHelper;
 
 /**
  * Created by izzyoji :) on 4/15/15.

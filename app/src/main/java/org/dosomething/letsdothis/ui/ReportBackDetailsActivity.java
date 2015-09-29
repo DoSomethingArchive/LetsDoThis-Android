@@ -32,6 +32,7 @@ public class ReportBackDetailsActivity extends BaseActivity
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private ImageView image;
+    private ImageView avatar;
     private TextView  location;
     private TextView  title;
     private TextView  caption;
@@ -51,6 +52,7 @@ public class ReportBackDetailsActivity extends BaseActivity
         setContentView(R.layout.activity_report_back_details);
 
         image = (ImageView) findViewById(R.id.image);
+        avatar = (ImageView) findViewById(R.id.avatar);
         location = (TextView) findViewById(R.id.location);
         title = (TextView) findViewById(R.id.title);
         caption = (TextView) findViewById(R.id.caption);
@@ -104,47 +106,63 @@ public class ReportBackDetailsActivity extends BaseActivity
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(ReportBackDetailsTask task)
-    {
-        if(task.reportBack != null)
-        {
-            final ReportBack reportBack = task.reportBack;
-
-            Picasso.with(this).load(reportBack.getImagePath()).resize(image.getWidth(), 0)
-                   .into(image);
-
-            if (reportBack.user.country != null && !reportBack.user.country.isEmpty()) {
-                Locale locale = new Locale("", reportBack.user.country);
-                location.setText(locale.getDisplayCountry());
-            }
-
-            title.setText(reportBack.campaign.title);
-            title.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(CampaignDetailsActivity
-                            .getLaunchIntent(ReportBackDetailsActivity.this,
-                                    reportBack.campaign.id));
-                }
-            });
-
-            caption.setText(reportBack.caption);
-
-            String username = reportBack.user.first_name;
-            if (reportBack.user.last_name != null && !reportBack.user.last_name.isEmpty()) {
-                username += " " + reportBack.user.last_name.charAt(0) + ".";
-            }
-            name.setText(username);
-
-            toolbar.setTitle(reportBack.campaign.title);
-
-            actionQuantity = String.valueOf(reportBack.reportback.quantity);
-            setImpactTextIfReady();
-        }
-        else
-        {
+    public void onEventMainThread(ReportBackDetailsTask task) {
+        if (task.reportBack == null) {
             Toast.makeText(this, "report back data failed", Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        final ReportBack reportBack = task.reportBack;
+
+        // Report back photo
+        Picasso.with(this).load(reportBack.getImagePath()).resize(image.getWidth(), 0)
+               .into(image);
+
+        // Campaign title
+        title.setText(reportBack.campaign.title);
+        title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(CampaignDetailsActivity
+                        .getLaunchIntent(ReportBackDetailsActivity.this,
+                                reportBack.campaign.id));
+            }
+        });
+
+        // Report back caption
+        caption.setText(reportBack.caption);
+
+        // User name
+        String username = reportBack.user.first_name;
+        if (reportBack.user.last_name != null && !reportBack.user.last_name.isEmpty()) {
+            username += " " + reportBack.user.last_name.charAt(0) + ".";
+        }
+        name.setText(username);
+
+        // User country location
+        if (reportBack.user.country != null && !reportBack.user.country.isEmpty()) {
+            Locale locale = new Locale("", reportBack.user.country);
+            location.setText(locale.getDisplayCountry());
+        }
+
+        // User profile photo
+        if (reportBack.user.avatarPath != null && !reportBack.user.avatarPath.isEmpty()) {
+            Picasso.with(this).load(reportBack.user.avatarPath)
+                    .placeholder(R.drawable.default_profile_photo)
+                    .resizeDimen(R.dimen.friend_avatar, R.dimen.friend_avatar)
+                    .into(avatar);
+        }
+
+        toolbar.setTitle(reportBack.campaign.title);
+
+        actionQuantity = String.valueOf(reportBack.reportback.quantity);
+        setImpactTextIfReady();
+
+        // Tapping on user's name or picture should open up that user's profile
+        OnUserClickListener onUserClickListener = new OnUserClickListener(reportBack.user.id);
+        name.setOnClickListener(onUserClickListener);
+        avatar.setOnClickListener(onUserClickListener);
+
     }
 
     @SuppressWarnings("UnusedDeclarations")
@@ -156,5 +174,22 @@ public class ReportBackDetailsActivity extends BaseActivity
         actionNoun = task.campaign.noun;
         actionVerb = task.campaign.verb;
         setImpactTextIfReady();
+    }
+
+    /**
+     * OnClickListener to open up a user's public profile screen.
+     */
+    private class OnUserClickListener implements View.OnClickListener {
+        private String mUserId;
+
+        public OnUserClickListener(String id) {
+            mUserId = id;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent i = PublicProfileActivity.getLaunchIntent(ReportBackDetailsActivity.this, mUserId);
+            startActivity(i);
+        }
     }
 }

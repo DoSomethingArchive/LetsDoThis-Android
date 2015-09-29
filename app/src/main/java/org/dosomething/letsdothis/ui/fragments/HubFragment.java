@@ -21,7 +21,7 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.tasks.DbGetUserTask;
-import org.dosomething.letsdothis.tasks.GetCurrentUserCampaignsTask;
+import org.dosomething.letsdothis.tasks.GetUserCampaignsTask;
 import org.dosomething.letsdothis.tasks.GetUserTask;
 import org.dosomething.letsdothis.tasks.RbShareDataTask;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
@@ -86,7 +86,11 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     {
         super.onAttach(activity);
         titleListener = (SetTitleListener) getActivity();
-        replaceFragmentListener = (ReplaceFragmentListener) activity;
+
+        if (activity instanceof ReplaceFragmentListener) {
+            replaceFragmentListener = (ReplaceFragmentListener) activity;
+        }
+
         refreshUserCampaign();
     }
 
@@ -263,16 +267,20 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
 
-    private void refreshUserCampaign()
-    {
-        TaskQueue.loadQueueDefault(getActivity()).execute(new GetCurrentUserCampaignsTask());
+    private void refreshUserCampaign() {
+        String userId = getArguments().getString(EXTRA_ID, null);
+        if (userId == null) {
+            userId = AppPrefs.getInstance(getActivity()).getCurrentUserId();
+        }
+
+        TaskQueue.loadQueueDefault(getActivity()).execute(new GetUserCampaignsTask(userId));
         refreshProgressBar();
     }
 
     private void refreshProgressBar()
     {
         boolean b = TaskQueueHelper.hasTasksOfType(TaskQueue.loadQueueDefault(getActivity()),
-                                                   GetCurrentUserCampaignsTask.class);
+                                                   GetUserCampaignsTask.class);
         if(b)
         {
             if(progress != null)
@@ -290,7 +298,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(GetCurrentUserCampaignsTask task) {
+    public void onEventMainThread(GetUserCampaignsTask task) {
         refreshProgressBar();
         adapter.setCurrentCampaign(task.currentCampaignList);
 
