@@ -7,6 +7,7 @@ import org.dosomething.letsdothis.network.models.RequestCampaignSignup;
 import org.dosomething.letsdothis.network.models.ResponseCampaignSignUp;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
+import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.Task;
 
 /**
@@ -25,6 +26,7 @@ public class CampaignSignUpTask extends Task
     @Override
     protected void onComplete(Context context)
     {
+        EventBusExt.getDefault().post(this);
         super.onComplete(context);
     }
 

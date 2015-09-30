@@ -202,8 +202,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
      */
     @Override
     public void onSignupClicked(int campaignId) {
-        Toast.makeText(this, "TODO: execute signup", Toast.LENGTH_SHORT).show();
-        // TaskQueue.loadQueueDefault(this).execute(new CampaignSignUpTask(campaignId));
+         TaskQueue.loadQueueDefault(this).execute(new CampaignSignUpTask(campaignId));
     }
 
     @Override
@@ -349,6 +348,6 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(CampaignSignUpTask task) {
-        // @TODO update the view in the adapter after a successful signup
+        adapter.refreshOnSignup();
     }
 }

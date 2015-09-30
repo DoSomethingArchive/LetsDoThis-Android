@@ -36,7 +36,6 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private final int slantHeight;
     private final int widthOvershoot;
     private final int heightShadowOvershoot;
-    private final boolean mUserIsSignedUp;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private ArrayList<Object> dataSet = new ArrayList<>();
@@ -44,6 +43,11 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     private Campaign currentCampaign;
 
+    // Flag indicating if the current user is signed up for this campaign
+    private boolean mUserIsSignedUp;
+
+    // Flag indicating a signup is in progress
+    private boolean mSignupInProgress;
 
     public CampaignDetailsAdapter(DetailsAdapterClickListener detailsAdapterClickListener,
                                   Resources resources, boolean isSignedUp) {
@@ -55,6 +59,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         widthOvershoot = resources.getDimensionPixelSize(R.dimen.space_50);
         heightShadowOvershoot = resources.getDimensionPixelSize(R.dimen.padding_tiny);
         mUserIsSignedUp = isSignedUp;
+        mSignupInProgress = false;
     }
 
     public void updateCampaign(Campaign campaign)
@@ -101,6 +106,16 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             dataSet.set(0, currentCampaign);
             notifyItemChanged(0);
         }
+    }
+
+    /**
+     * Update the view of the adapter when the
+     */
+    public void refreshOnSignup() {
+        mUserIsSignedUp = true;
+        mSignupInProgress = false;
+
+        notifyDataSetChanged();
     }
 
     public interface DetailsAdapterClickListener
@@ -159,6 +174,14 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             campaignViewHolder.title.setText(campaign.title);
             campaignViewHolder.callToAction.setText(campaign.callToAction);
 
+            // Signup progress bar
+            if (mSignupInProgress) {
+                campaignViewHolder.signupProgress.setVisibility(View.VISIBLE);
+            }
+            else {
+                campaignViewHolder.signupProgress.setVisibility(View.GONE);
+            }
+
             // Solution section
             if (!mUserIsSignedUp) {
                 campaignViewHolder.solutionWrapper.setVisibility(View.GONE);
@@ -206,6 +229,9 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 @Override
                 public void onClick(View v) {
                     if (!mUserIsSignedUp) {
+                        mSignupInProgress = true;
+                        notifyDataSetChanged();
+
                         detailsAdapterClickListener.onSignupClicked(campaign.id);
                     }
                     else if(campaign.showShare == Campaign.UploadShare.SHARE) {
@@ -304,6 +330,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         protected TextView  title;
         protected TextView  callToAction;
         protected Button    actionButton;
+        protected View      signupProgress;
         public    View      solutionWrapper;
 
         public CampaignViewHolder(View itemView)
@@ -316,6 +343,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.solutionCopy = (TextView) itemView.findViewById(R.id.solutionCopy);
             this.solutionSupport = (TextView) itemView.findViewById(R.id.solutionSupport);
             this.actionButton = (Button) itemView.findViewById(R.id.action_button);
+            this.signupProgress = itemView.findViewById(R.id.progress);
         }
     }
 
