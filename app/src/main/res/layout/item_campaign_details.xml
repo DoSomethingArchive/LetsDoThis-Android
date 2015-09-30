@@ -22,6 +22,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/gradient_270"/>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_gravity="bottom|center"
+            android:background="@drawable/bg_progress"
+            android:indeterminate="true"
+            android:visibility="visible"/>
     </FrameLayout>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
@@ -44,7 +54,7 @@
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:id="@+id/call_to_action"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/image_container"
         android:gravity="center"
@@ -97,39 +107,20 @@
             tool:text="solution support"/>
     </LinearLayout>
 
-    <LinearLayout
+    <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+        android:id="@+id/action_button"
+        style="@style/PrimaryButton"
+        app:typeface="brandon_bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/padding_medium"
+        android:layout_below="@id/solutionWrapper"
         android:layout_marginBottom="@dimen/padding_medium"
-        android:layout_below="@id/solutionWrapper">
-
-        <org.dosomething.letsdothis.ui.views.typeface.CustomButton
-            android:id="@+id/prove_share"
-            style="@style/SecondaryButton"
-            app:typeface="brandon_bold"
-            android:textAllCaps="true"
-            android:textSize="@dimen/text_36"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginLeft="@dimen/padding_tiny"
-            android:layout_marginRight="@dimen/padding_tiny"
-            android:text="@string/show_off"/>
-
-        <org.dosomething.letsdothis.ui.views.typeface.CustomButton
-            style="@style/PrimaryButton"
-            android:id="@+id/invite"
-            app:typeface="brandon_bold"
-            android:textAllCaps="true"
-            android:textSize="@dimen/text_36"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/padding_tiny"
-            android:layout_marginRight="@dimen/padding_tiny"
-            android:text="@string/invite_friends"/>
-    </LinearLayout>
+        android:layout_marginLeft="@dimen/padding_tiny"
+        android:layout_marginRight="@dimen/padding_tiny"
+        android:layout_marginTop="@dimen/padding_medium"
+        android:layout_weight="1"
+        android:textAllCaps="true"
+        android:textSize="@dimen/text_36"
+        android:text="@string/show_off"/>
 
 </RelativeLayout>
