@@ -44,7 +44,7 @@
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:id="@+id/call_to_action"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/image_container"
         android:gravity="center"
@@ -98,7 +98,7 @@
     </LinearLayout>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomButton
-        android:id="@+id/prove_share"
+        android:id="@+id/action_button"
         style="@style/PrimaryButton"
         app:typeface="brandon_bold"
         android:layout_width="match_parent"

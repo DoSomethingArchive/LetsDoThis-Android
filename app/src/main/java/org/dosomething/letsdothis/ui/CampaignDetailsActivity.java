@@ -5,29 +5,28 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.data.CampaignActions;
 import org.dosomething.letsdothis.data.Kudos;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.tasks.BaseReportBackListTask;
 import org.dosomething.letsdothis.tasks.CampaignDetailsTask;
+import org.dosomething.letsdothis.tasks.CampaignSignUpTask;
 import org.dosomething.letsdothis.tasks.IndividualCampaignReportBackList;
 import org.dosomething.letsdothis.tasks.RbShareDataTask;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
 import org.dosomething.letsdothis.ui.adapters.CampaignDetailsAdapter;
-import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.io.File;
 import java.util.List;
@@ -74,13 +73,26 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
+        int campaignId = getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1);
+        boolean userIsSignedUp = false;
+
+        // Determine if user is signed up for this campaign
+        try {
+            if (CampaignActions.queryForId(this, campaignId) != null) {
+                userIsSignedUp = true;
+            }
+        }
+        catch (Exception e) {
+            Log.e("CampaignActions", "Exception while checking database for campaign id: " + campaignId);
+        }
+
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        adapter = new CampaignDetailsAdapter(this, getResources(), AppPrefs.getInstance(this).getCurrentDrupalId());
+        adapter = new CampaignDetailsAdapter(this, getResources(), userIsSignedUp);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        int campaignId = getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1);
+        // Refresh the campaign's information from the server
         refreshCampaign(campaignId);
 
         // First query for only "promoted" reportbacks to show in the reportback feed
@@ -179,6 +191,19 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     public void onKudosClicked(ReportBack reportBack, Kudos kudos)
     {
         TaskQueue.loadQueueDefault(this).execute(new SubmitKudosTask(kudos.id, reportBack.id));
+    }
+
+    /**
+     * Run when the signup button is clicked.
+     *
+     * Implements CampaignDetailsAdapter.DetailsAdapterClickListener
+     *
+     * @param campaignId
+     */
+    @Override
+    public void onSignupClicked(int campaignId) {
+        Toast.makeText(this, "TODO: execute signup", Toast.LENGTH_SHORT).show();
+        // TaskQueue.loadQueueDefault(this).execute(new CampaignSignUpTask(campaignId));
     }
 
     @Override
@@ -320,5 +345,10 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
 
             fetchMoreReportbacks();
         }
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(CampaignSignUpTask task) {
+        // @TODO update the view in the adapter after a successful signup
     }
 }

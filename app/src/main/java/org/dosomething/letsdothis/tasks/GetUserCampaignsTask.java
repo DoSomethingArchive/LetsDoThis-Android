@@ -2,6 +2,7 @@ package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
 import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.data.CampaignActions;
 import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.data.UserReportBack;
@@ -9,6 +10,7 @@ import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.NorthstarAPI;
 import org.dosomething.letsdothis.network.models.ResponseCampaignList;
 import org.dosomething.letsdothis.network.models.ResponseUserCampaign;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +44,8 @@ public class GetUserCampaignsTask extends BaseNetworkErrorHandlerTask {
 
         getCurrentCampaign(userCampaigns);
         getPastCampaign(context, userCampaigns);
+
+        updateCurrentUserActions(context, userCampaigns);
     }
 
     private void getCurrentCampaign(ResponseUserCampaign userCampaigns) throws NetworkException {
@@ -115,6 +119,29 @@ public class GetUserCampaignsTask extends BaseNetworkErrorHandlerTask {
             ResponseCampaignList responseCampaignList = NetworkHelper.getDoSomethingAPIService()
                     .campaignListByIds(pastIds);
             pastCampaignList = ResponseCampaignList.getCampaigns(responseCampaignList);
+        }
+    }
+
+    /**
+     * Updates the local cache of user actions if these results are for our current logged in user.
+     *
+     * @param context
+     * @param userCampaigns
+     */
+    private void updateCurrentUserActions(Context context, ResponseUserCampaign userCampaigns) throws Throwable {
+        if (!mUserId.equals(AppPrefs.getInstance(context).getCurrentUserId())) {
+            return;
+        }
+
+        for (ResponseUserCampaign.Wrapper campaignData : userCampaigns.data) {
+            CampaignActions actions = new CampaignActions();
+            actions.campaignId = campaignData.drupal_id;
+            actions.signUpId = campaignData.signup_id;
+            if (campaignData.reportback_data != null) {
+                actions.reportBackId = Integer.parseInt(campaignData.reportback_data.id);
+            }
+
+            CampaignActions.save(context, actions);
         }
     }
 
