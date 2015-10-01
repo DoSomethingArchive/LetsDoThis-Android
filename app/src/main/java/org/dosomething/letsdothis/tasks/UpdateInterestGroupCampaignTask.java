@@ -8,8 +8,9 @@ import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.ResponseCampaignList;
-import org.dosomething.letsdothis.utils.TimeUtils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
@@ -21,7 +22,10 @@ import co.touchlab.android.threading.tasks.Task;
  */
 public class UpdateInterestGroupCampaignTask extends BaseNetworkErrorHandlerTask
 {
-    public int            interestGroupId;
+    // Interest group id
+    public int interestGroupId;
+
+    // Resulting campaigns
     public List<Campaign> campaigns;
 
     public UpdateInterestGroupCampaignTask(int interestGroupId)
@@ -30,10 +34,11 @@ public class UpdateInterestGroupCampaignTask extends BaseNetworkErrorHandlerTask
     }
 
     @Override
-    protected void run(Context context) throws Throwable
-    {
+    protected void run(Context context) throws Throwable {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDate = df.format(new Date());
         ResponseCampaignList response = NetworkHelper.getDoSomethingAPIService()
-                .campaignList(interestGroupId);
+                .campaignList(interestGroupId, currentDate);
         campaigns = ResponseCampaignList.getCampaigns(response);
 
         Dao<Campaign, String> campDao = DatabaseHelper.getInstance(context).getCampDao();
@@ -42,8 +47,7 @@ public class UpdateInterestGroupCampaignTask extends BaseNetworkErrorHandlerTask
         db.where().eq(Campaign.INTEREST_GROUP, interestGroupId);
         campDao.delete(db.prepare());
 
-        for(Campaign c : campaigns)
-        {
+        for(Campaign c : campaigns) {
             c.interestGroup = interestGroupId;
             campDao.createOrUpdate(c);
         }
