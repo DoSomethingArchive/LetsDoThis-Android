@@ -39,8 +39,10 @@ public interface DoSomethingAPI
     ResponseReportBack reportBack(@Path("id") int id) throws NetworkException;
 
     @Headers("Content-Type: application/json")
-    @GET("/campaigns.json?mobile_app=1")
-    ResponseCampaignList campaignList(@Query("term_ids")int interestGroupId) throws NetworkException;
+    @GET("/campaigns.json")
+    ResponseCampaignList campaignList(
+            @Query("term_ids") int interestGroupId,
+            @Query("mobile_app_date") String currentDate) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @GET("/campaigns.json?mobile_app=1")
