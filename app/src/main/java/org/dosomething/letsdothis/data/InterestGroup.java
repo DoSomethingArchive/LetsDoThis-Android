@@ -5,8 +5,7 @@ import org.dosomething.letsdothis.R;
 /**
  * Created by izzyoji :) on 6/23/15.
  */
-public enum InterestGroup
-{
+public enum InterestGroup {
     A(R.string.interest_0, BuildConfig.DEBUG
             ? 667
             : 1300),
@@ -23,11 +22,13 @@ public enum InterestGroup
             ? 670
             : 1303);
 
+    // Initial display name resource id
     public int nameResId;
+
+    // Group term id
     public int id;
 
-    private InterestGroup(int nameResId, int id)
-    {
+    InterestGroup(int nameResId, int id) {
         this.nameResId = nameResId;
         this.id = id;
     }

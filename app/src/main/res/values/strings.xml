@@ -97,9 +97,9 @@
     <string name="change_password1_hint">Enter the new password</string>
     <string name="change_password2_hint">Re-enter the new password</string>
     <string name="interest_0">Hot</string>
-    <string name="interest_1">Music</string>
-    <string name="interest_2">Crafts</string>
-    <string name="interest_3">Sports</string>
+    <string name="interest_1">...</string>
+    <string name="interest_2">...</string>
+    <string name="interest_3">...</string>
     <string name="forgot_pw">Forgot Password?</string>
     <string name="notification_kudos">notification_kudos</string>
     <string name="notification_friend">notification_friend</string>

@@ -4,6 +4,7 @@ import org.dosomething.letsdothis.network.models.ResponseCampaignList;
 import org.dosomething.letsdothis.network.models.ResponseCampaignWrapper;
 import org.dosomething.letsdothis.network.models.ResponseReportBack;
 import org.dosomething.letsdothis.network.models.ResponseReportBackList;
+import org.dosomething.letsdothis.network.models.ResponseTaxonomyTerm;
 
 import co.touchlab.android.threading.errorcontrol.NetworkException;
 import retrofit.http.GET;
@@ -47,4 +48,7 @@ public interface DoSomethingAPI
     @Headers("Content-Type: application/json")
     @GET("/campaigns.json?mobile_app=1")
     ResponseCampaignList campaignListByIds(@Query("ids") String ids) throws NetworkException;
+
+    @GET("/taxonomy_term/{id}.json")
+    ResponseTaxonomyTerm taxonomyTerm(@Path("id") int id) throws NetworkException;
 }
