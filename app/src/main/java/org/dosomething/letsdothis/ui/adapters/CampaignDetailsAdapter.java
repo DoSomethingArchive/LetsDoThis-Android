@@ -18,10 +18,8 @@ import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.ui.views.SlantedBackgroundDrawable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 /**
  * Created by izzyoji :) on 4/30/15.
@@ -38,27 +36,30 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private final int slantHeight;
     private final int widthOvershoot;
     private final int heightShadowOvershoot;
-    private final int drupalId;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private ArrayList<Object> dataSet = new ArrayList<>();
     private DetailsAdapterClickListener detailsAdapterClickListener;
 
     private Campaign currentCampaign;
-    private int                    selectedPosition = - 1;
-    private Random                 random           = new Random();
-    private HashMap<Integer, Kudos> kudosedMap       = new HashMap<>();
 
-    public CampaignDetailsAdapter(DetailsAdapterClickListener detailsAdapterClickListener, Resources resources, int drupalId)
-    {
+    // Flag indicating if the current user is signed up for this campaign
+    private boolean mUserIsSignedUp;
+
+    // Flag indicating a signup is in progress
+    private boolean mSignupInProgress;
+
+    public CampaignDetailsAdapter(DetailsAdapterClickListener detailsAdapterClickListener,
+                                  Resources resources, boolean isSignedUp) {
         super();
         this.detailsAdapterClickListener = detailsAdapterClickListener;
-        this.drupalId = drupalId;
         webOrange = resources.getColor(R.color.web_orange);
         shadowColor = resources.getColor(R.color.black_10);
         slantHeight = resources.getDimensionPixelSize(R.dimen.height_xtiny);
         widthOvershoot = resources.getDimensionPixelSize(R.dimen.space_50);
         heightShadowOvershoot = resources.getDimensionPixelSize(R.dimen.padding_tiny);
+        mUserIsSignedUp = isSignedUp;
+        mSignupInProgress = false;
     }
 
     public void updateCampaign(Campaign campaign)
@@ -107,6 +108,16 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
+    /**
+     * Update the view of the adapter when the
+     */
+    public void refreshOnSignup() {
+        mUserIsSignedUp = true;
+        mSignupInProgress = false;
+
+        notifyDataSetChanged();
+    }
+
     public interface DetailsAdapterClickListener
     {
         void onScrolledToBottom();
@@ -120,6 +131,8 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         void onUserClicked(String id);
 
         void onKudosClicked(ReportBack reportBack, Kudos kudos);
+
+        void onSignupClicked(int campaignId);
     }
 
     @Override
@@ -150,8 +163,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             detailsAdapterClickListener.onScrolledToBottom();
         }
 
-        if(getItemViewType(position) == VIEW_TYPE_CAMPAIGN)
-        {
+        if (getItemViewType(position) == VIEW_TYPE_CAMPAIGN) {
             final Campaign campaign = (Campaign) dataSet.get(position);
             CampaignViewHolder campaignViewHolder = (CampaignViewHolder) holder;
 
@@ -162,61 +174,72 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             campaignViewHolder.title.setText(campaign.title);
             campaignViewHolder.callToAction.setText(campaign.callToAction);
 
-            if (campaign.solutionCopy != null) {
-                campaignViewHolder.solutionCopy.setText(campaign.solutionCopy.trim());
+            // Signup progress bar
+            if (mSignupInProgress) {
+                campaignViewHolder.signupProgress.setVisibility(View.VISIBLE);
             }
             else {
-                campaignViewHolder.solutionCopy.setVisibility(View.GONE);
+                campaignViewHolder.signupProgress.setVisibility(View.GONE);
             }
 
-            if (campaign.solutionSupport != null) {
-                campaignViewHolder.solutionSupport.setText(campaign.solutionSupport.trim());
+            // Solution section
+            if (!mUserIsSignedUp) {
+                campaignViewHolder.solutionWrapper.setVisibility(View.GONE);
             }
             else {
-                campaignViewHolder.solutionSupport.setVisibility(View.GONE);
+                SlantedBackgroundDrawable background = new SlantedBackgroundDrawable(true, webOrange,
+                        shadowColor,
+                        slantHeight,
+                        widthOvershoot,
+                        heightShadowOvershoot);
+
+                campaignViewHolder.solutionWrapper.setVisibility(View.VISIBLE);
+                campaignViewHolder.solutionWrapper.setBackground(background);
+
+                if (campaign.solutionCopy != null) {
+                    campaignViewHolder.solutionCopy.setText(campaign.solutionCopy.trim());
+                }
+                else {
+                    campaignViewHolder.solutionCopy.setVisibility(View.GONE);
+                }
+
+                if (campaign.solutionSupport != null) {
+                    campaignViewHolder.solutionSupport.setText(campaign.solutionSupport.trim());
+                }
+                else {
+                    campaignViewHolder.solutionSupport.setVisibility(View.GONE);
+                }
             }
 
-            SlantedBackgroundDrawable background = new SlantedBackgroundDrawable(true, webOrange,
-                                                                                 shadowColor,
-                                                                                 slantHeight,
-                                                                                 widthOvershoot,
-                                                                                 heightShadowOvershoot);
-            campaignViewHolder.solutionWrapper.setBackground(background);
-            if(campaign.showShare == Campaign.UploadShare.SHARE)
-            {
-                campaignViewHolder.proveShare.setText(res.getString(R.string.share_photo));
+            // Action button
+            if (!mUserIsSignedUp) {
+                campaignViewHolder.actionButton.setText(res.getString(R.string.stop_being_bored));
             }
-            else if(campaign.showShare == Campaign.UploadShare.UPLOADING)
-            {
-                campaignViewHolder.proveShare.setText(res.getString(R.string.uploading));
+            else if (campaign.showShare == Campaign.UploadShare.SHARE) {
+                campaignViewHolder.actionButton.setText(res.getString(R.string.share_photo));
             }
-            else if(campaign.showShare == Campaign.UploadShare.SHOW_OFF)
-            {
-                campaignViewHolder.proveShare.setText(res.getString(R.string.show_off));
+            else if (campaign.showShare == Campaign.UploadShare.UPLOADING) {
+                campaignViewHolder.actionButton.setText(res.getString(R.string.uploading));
+            }
+            else if (campaign.showShare == Campaign.UploadShare.SHOW_OFF) {
+                campaignViewHolder.actionButton.setText(res.getString(R.string.show_off));
             }
 
-            campaignViewHolder.proveShare.setOnClickListener(new View.OnClickListener()
-            {
+            campaignViewHolder.actionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
-                    if(campaign.showShare == Campaign.UploadShare.SHARE)
-                    {
+                public void onClick(View v) {
+                    if (!mUserIsSignedUp) {
+                        mSignupInProgress = true;
+                        notifyDataSetChanged();
+
+                        detailsAdapterClickListener.onSignupClicked(campaign.id);
+                    }
+                    else if(campaign.showShare == Campaign.UploadShare.SHARE) {
                         detailsAdapterClickListener.shareClicked(campaign);
                     }
-                    else if(campaign.showShare == Campaign.UploadShare.SHOW_OFF)
-                    {
+                    else if(campaign.showShare == Campaign.UploadShare.SHOW_OFF) {
                         detailsAdapterClickListener.proveClicked();
                     }
-                }
-            });
-
-            campaignViewHolder.invite.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    detailsAdapterClickListener.inviteClicked();
                 }
             });
         }
@@ -224,43 +247,51 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         {
             final ReportBack reportBack = (ReportBack) dataSet.get(position);
             final ReportBackViewHolder reportBackViewHolder = (ReportBackViewHolder) holder;
-
-            //FIXME get real avatar
-            reportBackViewHolder.avatar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    detailsAdapterClickListener.onUserClicked(reportBack.user.id);
-                }
-            });
-
             final Context context = reportBackViewHolder.itemView.getContext();
+
+            // Report back photo
             Picasso.with(context).
                     load(reportBack.getImagePath()).into(reportBackViewHolder.imageView);
 
+            // User name
             String reportbackName = reportBack.user.first_name;
             if (reportBack.user.last_name != null && !reportBack.user.last_name.isEmpty()) {
                 reportbackName += " " + reportBack.user.last_name.charAt(0) + ".";
             }
             reportBackViewHolder.name.setText(reportbackName);
 
+            // User country location
             if (reportBack.user.country != null && !reportBack.user.country.isEmpty()) {
                 Locale locale = new Locale("", reportBack.user.country);
                 reportBackViewHolder.location.setText(locale.getDisplayCountry());
             }
 
+            // User profile photo
+            if (reportBack.user.avatarPath != null && !reportBack.user.avatarPath.isEmpty()) {
+                Picasso.with(context).load(reportBack.user.avatarPath)
+                        .placeholder(R.drawable.default_profile_photo)
+                        .resizeDimen(R.dimen.friend_avatar, R.dimen.friend_avatar)
+                        .into(reportBackViewHolder.avatar);
+            }
+
+            // Report back campaign name and details
             reportBackViewHolder.title.setText(currentCampaign.title);
             reportBackViewHolder.caption.setText(reportBack.caption);
 
             String impactText = String.format("%s %s %s", String.valueOf(reportBack.reportback.quantity),
                     currentCampaign.noun, currentCampaign.verb);
             reportBackViewHolder.impact.setText(impactText);
+
+            // Click listeners on the user name and user photo
+            OnUserClickListener onUserClickListener = new OnUserClickListener(reportBack.user.id);
+            reportBackViewHolder.avatar.setOnClickListener(onUserClickListener);
+            reportBackViewHolder.name.setOnClickListener(onUserClickListener);
         }
         else if(getItemViewType(position) == VIEW_TYPE_CAMPAIGN_FOOTER)
         {
             SectionTitleViewHolder sectionTitleViewHolder = (SectionTitleViewHolder) holder;
             sectionTitleViewHolder.textView.setText(sectionTitleViewHolder.textView.getContext()
-                                                                                   .getString(
-                                                                                           R.string.people_doing_it));
+                                                                                   .getString(R.string.people_doing_it));
         }
 
     }
@@ -298,8 +329,8 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         protected ImageView imageView;
         protected TextView  title;
         protected TextView  callToAction;
-        protected Button    proveShare;
-        protected Button    invite;
+        protected Button    actionButton;
+        protected View      signupProgress;
         public    View      solutionWrapper;
 
         public CampaignViewHolder(View itemView)
@@ -311,8 +342,8 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.callToAction = (TextView) itemView.findViewById(R.id.call_to_action);
             this.solutionCopy = (TextView) itemView.findViewById(R.id.solutionCopy);
             this.solutionSupport = (TextView) itemView.findViewById(R.id.solutionSupport);
-            this.proveShare = (Button) itemView.findViewById(R.id.prove_share);
-            this.invite = (Button) itemView.findViewById(R.id.invite);
+            this.actionButton = (Button) itemView.findViewById(R.id.action_button);
+            this.signupProgress = itemView.findViewById(R.id.progress);
         }
     }
 
@@ -336,6 +367,22 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.caption = (TextView) view.findViewById(R.id.caption);
             this.impact = (TextView) view.findViewById(R.id.impact);
             this.title = (TextView) view.findViewById(R.id.title);
+        }
+    }
+
+    /**
+     * OnClickListener to open up a user's public profile screen.
+     */
+    private class OnUserClickListener implements View.OnClickListener {
+        private String mUserId;
+
+        public OnUserClickListener(String id) {
+            mUserId = id;
+        }
+
+        @Override
+        public void onClick(View v) {
+            detailsAdapterClickListener.onUserClicked(mUserId);
         }
     }
 

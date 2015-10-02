@@ -43,8 +43,8 @@ public interface NorthstarAPI
 {
 
     String BASE_URL = BuildConfig.DEBUG
-            ? "http://northstar-qa.dosomething.org/v1"
-            : "http://northstar.dosomething.org/v1";
+            ? "https://northstar-qa.dosomething.org/v1"
+            : "https://northstar.dosomething.org/v1";
 
     @FormUrlEncoded
     @Headers("Accept: application/json")

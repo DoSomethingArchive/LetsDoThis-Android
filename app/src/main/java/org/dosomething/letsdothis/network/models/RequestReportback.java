@@ -9,5 +9,5 @@ public class RequestReportback
     public String file;
     public final String why_participated = "(why_participated not provided in reportback submissions from the Android app)";
     public String caption;
-    public final String source = "android";
+    public final String source = "letsdothis_android";
 }

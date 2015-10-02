@@ -29,6 +29,7 @@ public class GetUserTask extends BaseNetworkErrorHandlerTask
 
         user = ResponseUser.getUser(response);
 
+        // @TODO we should maybe not allow this to run if id != user current id
         DatabaseHelper.getInstance(context).getUserDao().createOrUpdate(user);
     }
 

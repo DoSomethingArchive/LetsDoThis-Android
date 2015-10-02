@@ -2,6 +2,7 @@ package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 
 import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.data.CampaignActions;
 import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.data.UserReportBack;
@@ -22,24 +23,29 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
 /**
  * Created by toidiu on 4/16/15.
  */
-public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask {
+public class GetUserCampaignsTask extends BaseNetworkErrorHandlerTask {
+    // User id we're getting campaigns info for
+    private String mUserId;
+
     // Campaigns a user is participating in
     public List<Campaign> currentCampaignList;
 
     // Campaigns that have ended that a user participated in
     public List<Campaign> pastCampaignList;
 
-    public GetCurrentUserCampaignsTask() {
+    public GetUserCampaignsTask(String id) {
+        mUserId = id;
     }
 
     @Override
     protected void run(Context context) throws Throwable {
         NorthstarAPI northstarAPIService = NetworkHelper.getNorthstarAPIService();
-        ResponseUserCampaign userCampaigns = northstarAPIService
-                .getUserCampaigns(AppPrefs.getInstance(context).getCurrentUserId());
+        ResponseUserCampaign userCampaigns = northstarAPIService.getUserCampaigns(mUserId);
 
         getCurrentCampaign(userCampaigns);
         getPastCampaign(context, userCampaigns);
+
+        updateCurrentUserActions(context, userCampaigns);
     }
 
     private void getCurrentCampaign(ResponseUserCampaign userCampaigns) throws NetworkException {
@@ -113,6 +119,29 @@ public class GetCurrentUserCampaignsTask extends BaseNetworkErrorHandlerTask {
             ResponseCampaignList responseCampaignList = NetworkHelper.getDoSomethingAPIService()
                     .campaignListByIds(pastIds);
             pastCampaignList = ResponseCampaignList.getCampaigns(responseCampaignList);
+        }
+    }
+
+    /**
+     * Updates the local cache of user actions if these results are for our current logged in user.
+     *
+     * @param context
+     * @param userCampaigns
+     */
+    private void updateCurrentUserActions(Context context, ResponseUserCampaign userCampaigns) throws Throwable {
+        if (!mUserId.equals(AppPrefs.getInstance(context).getCurrentUserId())) {
+            return;
+        }
+
+        for (ResponseUserCampaign.Wrapper campaignData : userCampaigns.data) {
+            CampaignActions actions = new CampaignActions();
+            actions.campaignId = campaignData.drupal_id;
+            actions.signUpId = campaignData.signup_id;
+            if (campaignData.reportback_data != null) {
+                actions.reportBackId = Integer.parseInt(campaignData.reportback_data.id);
+            }
+
+            CampaignActions.save(context, actions);
         }
     }
 

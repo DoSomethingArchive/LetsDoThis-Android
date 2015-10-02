@@ -35,23 +35,6 @@
     </org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory>
 
     <!--
-        NOTIFICATIONS
-    -->
-    <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory
-        android:title="@string/notifications">
-        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomSwitchPreference
-            android:defaultValue="true"
-            android:enabled="true"
-            android:key="@string/receive_notifications"
-            android:title="@string/receive_notifications"/>
-
-        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference
-            android:enabled="true"
-            android:key="@string/change_notifications_prefs"
-            android:title="@string/change_notifications_prefs"/>
-    </org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory>
-
-    <!--
         RATE
     -->
     <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory>
@@ -66,5 +49,14 @@
             android:title="We'll never interrupt you to ask for ratings."/>
     </org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory>
 
+    <!--
+        UGC
+    -->
+    <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory>
+        <org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreference
+            android:enabled="true"
+            android:key="@string/pref_suggestion_link"
+            android:title="@string/pref_suggestion_link"/>
+    </org.dosomething.letsdothis.ui.views.typeface.preferences.CustomPreferenceCategory>
 
 </PreferenceScreen>

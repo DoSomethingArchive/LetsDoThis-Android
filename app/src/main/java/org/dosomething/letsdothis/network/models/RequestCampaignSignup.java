@@ -4,7 +4,7 @@ package org.dosomething.letsdothis.network.models;
  */
 public class RequestCampaignSignup
 {
-    public final String source = "android";
+    public final String source = "letsdothis_android";
     public Integer group;
 
     public RequestCampaignSignup(Integer groupId)
