@@ -217,7 +217,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
             if(requestCode == SELECT_PICTURE)
             {
                 final boolean isCamera;
-                if(data.getData() == null)
+                if(data == null && data.getData() == null)
                 {
                     isCamera = true;
                 }
