@@ -54,6 +54,7 @@
         %2$s.
     </string>
     <string name="done">Done</string>
+    <string name="error_avatar_upload">There was an error uploading your photo</string>
     <string name="error_code_length">An invite code should be 15 characters long!</string>
     <string name="error_login_phone_email">Must not be empty</string>
     <string name="error_login_password">Must not be empty</string>
