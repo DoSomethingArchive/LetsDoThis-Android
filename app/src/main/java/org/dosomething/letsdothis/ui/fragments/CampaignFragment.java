@@ -36,6 +36,7 @@ import java.util.List;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
+import co.touchlab.android.threading.tasks.utils.TaskQueueHelper;
 
 /**
  * Created by izzyoji :) on 4/14/15.
@@ -56,7 +57,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     private int             totalPages;
     private String          currentRbQueryStatus;
     private ArrayList<Integer> campaignIds = new ArrayList<>();
-    private ProgressBar progress;
+    private ProgressBar mProgress;
 
     public static CampaignFragment newInstance(int position)
     {
@@ -85,8 +86,8 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     {
         super.onActivityCreated(savedInstanceState);
         position = getArguments().getInt(KEY_POSITION);
-        progress = (ProgressBar) getView().findViewById(R.id.progress);
-        progress.getIndeterminateDrawable()
+        mProgress = (ProgressBar) getView().findViewById(R.id.progress);
+        mProgress.getIndeterminateDrawable()
                 .setColorFilter(getResources().getColor(R.color.cerulean_1),
                                 PorterDuff.Mode.SRC_IN);
 
@@ -134,7 +135,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
             TaskQueue.loadQueueDefault(getActivity()).execute(new CampaignSignUpTask(campaignId));
         }
 
-        startActivity(CampaignDetailsActivity.getLaunchIntent(getActivity(), campaignId));
+        refreshProgressBar();
     }
 
     @Override
@@ -212,20 +213,32 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         return InterestGroup.values()[position].id;
     }
 
-    private void refreshProgressBar()
-    {
-        if(progress != null)
-        {
+    /**
+     * Show or hide progress bar based on status of tasks.
+     */
+    private void refreshProgressBar() {
+        if (mProgress != null) {
+            boolean showProgress = false;
+
+            // Check if there is a query for interest groups in progress
             IdQuery queueQuery = new IdQuery(findGroupId());
             getCampaignQueue().query(queueQuery);
 
-            if(queueQuery.found)
-            {
-                progress.setVisibility(View.VISIBLE);
+            if (queueQuery.found) {
+                showProgress = true;
             }
-            else
-            {
-                progress.setVisibility(View.GONE);
+
+            // Check if there is a signup in progress
+            TaskQueue defaultQueue = TaskQueue.loadQueueDefault(getActivity());
+            if (TaskQueueHelper.hasTasksOfType(defaultQueue, CampaignSignUpTask.class)) {
+                showProgress = true;
+            }
+
+            if (showProgress) {
+                mProgress.setVisibility(View.VISIBLE);
+            }
+            else {
+                mProgress.setVisibility(View.GONE);
             }
         }
     }
@@ -317,6 +330,19 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
             if (match >= 0) {
                 adapter.userSignedUpForCampaign(campaign.id);
             }
+        }
+    }
+
+    /**
+     * If signup task succeeds, open campaign detail screen.
+     *
+     * @param task
+     */
+    public void onEventMainThread(CampaignSignUpTask task) {
+        refreshProgressBar();
+
+        if (task != null && !task.hasError()) {
+            startActivity(CampaignDetailsActivity.getLaunchIntent(getActivity(), task.getCampaignId()));
         }
     }
 
