@@ -52,7 +52,9 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private CampaignAdapter adapter;
-    private int             position;
+
+    // Position of this fragment in the pager
+    private int             mPagerPosition;
     private int             currentPage;
     private int             totalPages;
     private String          currentRbQueryStatus;
@@ -85,7 +87,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        position = getArguments().getInt(KEY_POSITION);
+        mPagerPosition = getArguments().getInt(KEY_POSITION);
         mProgress = (ProgressBar) getView().findViewById(R.id.progress);
         mProgress.getIndeterminateDrawable()
                 .setColorFilter(getResources().getColor(R.color.cerulean_1),
@@ -134,6 +136,9 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         if (!alreadySignedUp) {
             TaskQueue.loadQueueDefault(getActivity()).execute(new CampaignSignUpTask(campaignId));
         }
+        else {
+            startActivity(CampaignDetailsActivity.getLaunchIntent(getActivity(), campaignId));
+        }
 
         refreshProgressBar();
     }
@@ -170,7 +175,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
                 Toast.makeText(getActivity(), "get more data", Toast.LENGTH_SHORT).show();
             }
 
-            InterestReportBackListTask task = new InterestReportBackListTask(position, StringUtils
+            InterestReportBackListTask task = new InterestReportBackListTask(mPagerPosition, StringUtils
                     .join(campaignIds, ","), currentPage + 1, currentRbQueryStatus);
             getCampaignQueue().execute(task);
         }
@@ -210,7 +215,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
 
     private int findGroupId()
     {
-        return InterestGroup.values()[position].id;
+        return InterestGroup.values()[mPagerPosition].id;
     }
 
     /**
@@ -246,7 +251,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(InterestReportBackListTask task)
     {
-        if (task.pagerPosition != position) {
+        if (task.pagerPosition != mPagerPosition) {
             return;
         }
 
@@ -259,7 +264,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         else if (task.error != null && task.status == BaseReportBackListTask.STATUS_PROMOTED) {
             // A search for promoted reportbacks yielded nothing. Search again for approved photos.
             String campaigns = StringUtils.join(campaignIds, ",");
-            getCampaignQueue().execute(new InterestReportBackListTask(position, campaigns,
+            getCampaignQueue().execute(new InterestReportBackListTask(mPagerPosition, campaigns,
                     FIRST_PAGE, BaseReportBackListTask.STATUS_APPROVED));
             currentPage = 0;
         }
@@ -289,7 +294,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
 
                 // On initial query of reportback photos, set page to 1 and status to "promoted"
                 String campaigns = StringUtils.join(campaignIds, ",");
-                getCampaignQueue().execute(new InterestReportBackListTask(position, campaigns,
+                getCampaignQueue().execute(new InterestReportBackListTask(mPagerPosition, campaigns,
                         FIRST_PAGE, BaseReportBackListTask.STATUS_PROMOTED));
 
                 // Now that we have campaigns, get user info to find out what they've participated in
@@ -339,10 +344,13 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
      * @param task
      */
     public void onEventMainThread(CampaignSignUpTask task) {
-        refreshProgressBar();
+        if (task.getPagerPosition() == mPagerPosition) {
+            refreshProgressBar();
 
-        if (task != null && !task.hasError()) {
-            startActivity(CampaignDetailsActivity.getLaunchIntent(getActivity(), task.getCampaignId()));
+            if (task != null && !task.hasError()) {
+                adapter.userSignedUpForCampaign(task.getCampaignId());
+                startActivity(CampaignDetailsActivity.getLaunchIntent(getActivity(), task.getCampaignId()));
+            }
         }
     }
 

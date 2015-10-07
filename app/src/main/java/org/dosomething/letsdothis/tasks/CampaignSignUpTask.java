@@ -17,24 +17,38 @@ import co.touchlab.android.threading.tasks.Task;
  */
 //todo should this be persisted
 public class CampaignSignUpTask extends Task {
-    private int campaignId;
+    // Campaign ID the signup is for
+    private int mCampaignId;
 
-    private boolean hasError;
+    // Pager position the signup came from
+    private int mPagerPosition;
+
+    // Set to true if an error occurs
+    private boolean mHasError;
 
     public CampaignSignUpTask(int campaignId) {
-        this.campaignId = campaignId;
-        this.hasError = false;
+        this.mCampaignId = campaignId;
+    }
+
+    public CampaignSignUpTask(int campaignId, int pagerPosition) {
+        this.mCampaignId = campaignId;
+        this.mPagerPosition = pagerPosition;
+        this.mHasError = false;
     }
 
     //
     // Getters
     //
     public int getCampaignId() {
-        return campaignId;
+        return mCampaignId;
+    }
+
+    public int getPagerPosition() {
+        return mPagerPosition;
     }
 
     public boolean hasError() {
-        return hasError;
+        return mHasError;
     }
 
     @Override
@@ -45,15 +59,15 @@ public class CampaignSignUpTask extends Task {
 
     @Override
     protected void run(Context context) throws Throwable {
-        CampaignActions actions = CampaignActions.queryForId(context, campaignId);
+        CampaignActions actions = CampaignActions.queryForId(context, mCampaignId);
         if (actions == null || actions.signUpId <= 0) {
             String sessionToken = AppPrefs.getInstance(context).getSessionToken();
             RequestCampaignSignup requestCampaignSignup = new RequestCampaignSignup(null);
             ResponseCampaignSignUp response = NetworkHelper.getNorthstarAPIService()
                                                            .campaignSignUp(requestCampaignSignup,
-                                                                           campaignId, sessionToken);
+                                                                           mCampaignId, sessionToken);
             CampaignActions campaignActions = new CampaignActions();
-            campaignActions.campaignId = campaignId;
+            campaignActions.campaignId = mCampaignId;
             campaignActions.signUpId = ResponseCampaignSignUp.getSignUpId(response);
             CampaignActions.save(context, campaignActions);
         }
@@ -62,7 +76,7 @@ public class CampaignSignUpTask extends Task {
     @Override
     protected boolean handleError(Context context, Throwable throwable) {
         Toast.makeText(context, context.getString(R.string.error_signup), Toast.LENGTH_SHORT).show();
-        hasError = true;
+        mHasError = true;
         return true;
     }
 }
