@@ -1,9 +1,10 @@
 package org.dosomething.letsdothis.network;
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
 
-import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.network.deserializers.ResponseCampaignDeserializer;
@@ -39,12 +40,11 @@ public class NetworkHelper
             @Override
             public void intercept(RequestFacade request)
             {
-                String id = BuildConfig.DEBUG
-                        ? "456"
-                        : "android";
-                request.addHeader("X-DS-Application-Id", id);
-                request.addHeader("X-DS-REST-API-Key",
-                                  LDTApplication.getContext().getString(R.string.api_key));
+                Context context = LDTApplication.getContext();
+                String northstarAppId = context.getString(R.string.northstar_app_id);
+                String northstarApiKey = context.getString(R.string.northstar_api_key);
+                request.addHeader("X-DS-Application-Id", northstarAppId);
+                request.addHeader("X-DS-REST-API-Key", northstarApiKey);
             }
         };
 
