@@ -54,12 +54,15 @@
         %2$s.
     </string>
     <string name="done">Done</string>
+    <string name="error_avatar_upload">There was an error uploading your photo</string>
     <string name="error_code_length">An invite code should be 15 characters long!</string>
+    <string name="error_interest_group_titles">There was an error getting campaign info</string>
     <string name="error_login_phone_email">Must not be empty</string>
     <string name="error_login_password">Must not be empty</string>
     <string name="error_registration_email">We need a valid email</string>
     <string name="error_registration_first_name">We need your first name</string>
     <string name="error_registration_password">Your password must be 6+ characters</string>
+    <string name="error_signup">There was an error signing up for the campaign</string>
     <string name="tell_us">Tell us about yourself!</string>
     <string name="footer_register">Have a DoSomething.org account? Sign in</string>
     <string name="footer_forgot_pw">Forgot Password</string>
