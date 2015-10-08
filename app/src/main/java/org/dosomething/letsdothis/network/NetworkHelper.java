@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
 
+import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.network.deserializers.ResponseCampaignDeserializer;
@@ -78,22 +79,42 @@ public class NetworkHelper
         return okHttpClient;
     }
 
-    public static DoSomethingAPI getDoSomethingAPIService()
-    {
+    public static DoSomethingAPI getDoSomethingAPIService() {
+        String baseUrl;
+        if (BuildConfig.BUILD_TYPE.equals("release")) {
+            baseUrl = DoSomethingAPI.PRODUCTION_URL;
+        }
+        else if (BuildConfig.BUILD_TYPE.equals("internal")) {
+            baseUrl = DoSomethingAPI.THOR_URL;
+        }
+        else {
+            baseUrl = DoSomethingAPI.QA_URL;
+        }
+
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(ResponseCampaign.class, new ResponseCampaignDeserializer<ResponseCampaign>())
                 .setDateFormat(JSON_DATE_FORMAT_DO_SOMETHING).create();
         GsonConverter gsonConverter = new GsonConverter(gson);
         return getRequestAdapterBuilder().setConverter(gsonConverter)
-                .setEndpoint(DoSomethingAPI.BASE_URL).build().create(DoSomethingAPI.class);
+                .setEndpoint(baseUrl).build().create(DoSomethingAPI.class);
     }
 
-    public static NorthstarAPI getNorthstarAPIService()
-    {
+    public static NorthstarAPI getNorthstarAPIService() {
+        String baseUrl;
+        if (BuildConfig.BUILD_TYPE.equals("release")) {
+            baseUrl = NorthstarAPI.PRODUCTION_URL;
+        }
+        else if (BuildConfig.BUILD_TYPE.equals("internal")) {
+            baseUrl = NorthstarAPI.THOR_URL;
+        }
+        else {
+            baseUrl = NorthstarAPI.QA_URL;
+        }
+
         Gson gson = new GsonBuilder().setDateFormat(JSON_DATE_FORMAT_NORTHSTAR).create();
         GsonConverter gsonConverter = new GsonConverter(gson);
         return getRequestAdapterBuilder().setConverter(gsonConverter)
-                .setEndpoint(NorthstarAPI.BASE_URL).build().create(NorthstarAPI.class);
+                .setEndpoint(baseUrl).build().create(NorthstarAPI.class);
     }
 
 }
