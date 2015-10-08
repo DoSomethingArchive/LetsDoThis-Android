@@ -132,7 +132,7 @@
     <string name="fail_login">Your username or password was incorrect.</string>
     <string name="success_login">Login successful</string>
     <string name="success_register">Register successful</string>
-    <string name="bad_connection">Uh oh. There was a network connection error.</string>
+    <string name="bad_connection">Uh oh. There was a connection error.</string>
     <string name="reportback_success">Reportback uploaded</string>
     <string name="drawer_desc_open">Drawer Open</string>
     <string name="drawer_desc_closed">Drawer Closed</string>

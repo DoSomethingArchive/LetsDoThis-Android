@@ -1,8 +1,5 @@
 package org.dosomething.letsdothis.ui.fragments;
 import android.app.Activity;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -26,6 +23,7 @@ import java.util.HashMap;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
+import co.touchlab.android.threading.tasks.utils.NetworkUtils;
 
 /**
  * Created by izzyoji :) on 4/15/15.
@@ -127,7 +125,7 @@ public class ActionsFragment extends Fragment
         mPager.setAdapter(pagerAdapter);
         mIndicator.setViewPager(mPager);
 
-        if (isOnline()) {
+        if (NetworkUtils.isOnline(getActivity())) {
             fetchGroupNames();
         }
         else {
@@ -166,18 +164,6 @@ public class ActionsFragment extends Fragment
     }
 
     /**
-     * Determine if the device is connected to the network.
-     *
-     * @return true if the device is connected
-     */
-    private boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-
-        return networkInfo != null && networkInfo.isConnectedOrConnecting();
-    }
-
-    /**
      * Handle completion of the GetInterestGroupTitleTask.
      *
      * @param task
@@ -190,7 +176,7 @@ public class ActionsFragment extends Fragment
             mIndicator.notifyDataSetChanged();
         }
 
-        if (isOnline()) {
+        if (NetworkUtils.isOnline(getActivity())) {
             mNoNetworkView.setVisibility(View.GONE);
             mIndicator.setVisibility(View.VISIBLE);
             mPager.setVisibility(View.VISIBLE);
