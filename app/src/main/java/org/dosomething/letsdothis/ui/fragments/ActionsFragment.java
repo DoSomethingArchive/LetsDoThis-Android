@@ -141,7 +141,7 @@ public class ActionsFragment extends Fragment
         mRetryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // @TODO implement me
+                fetchGroupNames();
             }
         });
     }
@@ -184,9 +184,17 @@ public class ActionsFragment extends Fragment
      */
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(GetInterestGroupTitleTask task) {
-        mTitleOverrides = task.mTermResults;
+        if (!task.mTermResults.isEmpty()) {
+            mTitleOverrides = task.mTermResults;
 
-        mIndicator.notifyDataSetChanged();
+            mIndicator.notifyDataSetChanged();
+        }
+
+        if (isOnline()) {
+            mNoNetworkView.setVisibility(View.GONE);
+            mIndicator.setVisibility(View.VISIBLE);
+            mPager.setVisibility(View.VISIBLE);
+        }
     }
 
 }

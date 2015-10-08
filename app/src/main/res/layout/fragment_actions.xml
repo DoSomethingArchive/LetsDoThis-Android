@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/padding_medium"
             android:gravity="center_horizontal"
-            android:text="No network connection!"
+            android:text="@string/actions_no_network_text1"
             android:textColor="@color/gray"
             android:textSize="@dimen/text_large"
             android:textStyle="bold"
@@ -50,14 +50,14 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/padding_large"
             android:gravity="center_horizontal"
-            android:text="We can't connect to the internet, please check your connection and try again."
+            android:text="@string/actions_no_network_text2"
             app:typeface="brandon_bold"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomButton
             android:id="@+id/retry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Try Again"
+            android:text="@string/actions_no_network_retry"
             android:textAllCaps="true"
             app:typeface="brandon_bold"
             style="@style/TertiaryButton"/>
