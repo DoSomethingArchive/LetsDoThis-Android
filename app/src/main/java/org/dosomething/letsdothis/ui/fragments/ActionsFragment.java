@@ -1,5 +1,8 @@
 package org.dosomething.letsdothis.ui.fragments;
 import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.viewpagerindicator.TabPageIndicator;
 
@@ -41,6 +45,15 @@ public class ActionsFragment extends Fragment
     // Page titles retrieved from the server
     private HashMap<Integer, String> mTitleOverrides = new HashMap<>();
 
+    // Pager
+    private ViewPager mPager;
+
+    // No network view
+    private View mNoNetworkView;
+
+    // Retry button
+    private Button mRetryButton;
+
     public static ActionsFragment newInstance()
     {
         return new ActionsFragment();
@@ -72,12 +85,16 @@ public class ActionsFragment extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+
         mIndicator = (TabPageIndicator) view.findViewById(R.id.indicator);
+        mPager = (ViewPager) view.findViewById(R.id.pager);
+        mNoNetworkView = view.findViewById(R.id.no_network_view);
+        mRetryButton = (Button) view.findViewById(R.id.retry);
+
         int pxFromDip = ViewUtils.getPxFromDip(getResources(), INDICATOR_SPACING).intValue();
         mIndicator.setPadding(pxFromDip, pxFromDip, pxFromDip, pxFromDip);
 
-        ViewPager pager = (ViewPager) view.findViewById(R.id.pager);
-        pager.setOffscreenPageLimit(3);
+        mPager.setOffscreenPageLimit(3);
 
         FragmentStatePagerAdapter pagerAdapter = new FragmentStatePagerAdapter(getChildFragmentManager()) {
             @Override
@@ -107,9 +124,38 @@ public class ActionsFragment extends Fragment
             }
         };
 
-        pager.setAdapter(pagerAdapter);
-        mIndicator.setViewPager(pager);
+        mPager.setAdapter(pagerAdapter);
+        mIndicator.setViewPager(mPager);
 
+        if (isOnline()) {
+            fetchGroupNames();
+        }
+        else {
+            // Show the no-network view and hide the rest if the device isn't online
+            mNoNetworkView.setVisibility(View.VISIBLE);
+            mIndicator.setVisibility(View.GONE);
+            mPager.setVisibility(View.GONE);
+        }
+
+        // Retry button listener
+        mRetryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // @TODO implement me
+            }
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBusExt.getDefault().unregister(this);
+    }
+
+    /**
+     * Execute task to get the interest group names from the server.
+     */
+    private void fetchGroupNames() {
         // Task to get group names from the server
         TaskQueue.loadQueueDefault(getActivity()).execute(new GetInterestGroupTitleTask(
                 InterestGroup.values()[0].id,
@@ -119,12 +165,23 @@ public class ActionsFragment extends Fragment
         ));
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBusExt.getDefault().unregister(this);
+    /**
+     * Determine if the device is connected to the network.
+     *
+     * @return true if the device is connected
+     */
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
+    /**
+     * Handle completion of the GetInterestGroupTitleTask.
+     *
+     * @param task
+     */
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(GetInterestGroupTitleTask task) {
         mTitleOverrides = task.mTermResults;

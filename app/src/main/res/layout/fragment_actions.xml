@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <com.viewpagerindicator.TabPageIndicator
         android:id="@+id/indicator"
         android:layout_width="fill_parent"
-        android:layout_height="@dimen/height_actions_nav_bar"/>
+        android:layout_height="@dimen/height_actions_nav_bar"
+        android:layout_alignParentTop="true"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
@@ -16,5 +16,52 @@
         android:layout_height="fill_parent"
         android:layout_below="@id/indicator"
         android:layout_weight="1"/>
+
+    <LinearLayout
+        android:id="@+id/no_network_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/indicator"
+        android:gravity="center"
+        android:paddingLeft="@dimen/padding_xxlarge"
+        android:paddingRight="@dimen/padding_xxlarge"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <org.dosomething.letsdothis.ui.views.CircleImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_large"
+            android:src="@drawable/default_profile_photo"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_medium"
+            android:gravity="center_horizontal"
+            android:text="No network connection!"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/text_large"
+            android:textStyle="bold"
+            app:typeface="brandon_bold"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_large"
+            android:gravity="center_horizontal"
+            android:text="We can't connect to the internet, please check your connection and try again."
+            app:typeface="brandon_bold"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+            android:id="@+id/retry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Try Again"
+            android:textAllCaps="true"
+            app:typeface="brandon_bold"
+            style="@style/TertiaryButton"/>
+
+    </LinearLayout>
 
 </RelativeLayout>
