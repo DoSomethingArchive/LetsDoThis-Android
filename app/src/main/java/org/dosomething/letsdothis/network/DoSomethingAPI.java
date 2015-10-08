@@ -1,5 +1,4 @@
 package org.dosomething.letsdothis.network;
-import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.network.models.ResponseCampaignList;
 import org.dosomething.letsdothis.network.models.ResponseCampaignWrapper;
 import org.dosomething.letsdothis.network.models.ResponseReportBack;
@@ -15,12 +14,10 @@ import retrofit.http.Query;
 /**
  * Created by izzyoji :) on 4/20/15.
  */
-public interface DoSomethingAPI
-{
-
-   String BASE_URL = BuildConfig.DEBUG
-        ? "https://staging.dosomething.org/api/v1/"
-        : "https://www.dosomething.org/api/v1/";
+public interface DoSomethingAPI {
+    String PRODUCTION_URL = "https://www.dosomething.org/api/v1/";
+    String THOR_URL = "https://thor.dosomething.org/api/v1";
+    String QA_URL = "https://staging.dosomething.org/api/v1";
 
     @Headers("Content-Type: application/json")
     @GET("/campaigns/{id}.json")

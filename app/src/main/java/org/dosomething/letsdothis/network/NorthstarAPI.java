@@ -1,5 +1,4 @@
 package org.dosomething.letsdothis.network;
-import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.models.ParseInstallationRequest;
 import org.dosomething.letsdothis.network.models.RequestCampaignSignup;
@@ -39,12 +38,10 @@ import retrofit.mime.TypedInput;
 /**
  * Created by izzyoji :) on 4/14/15.
  */
-public interface NorthstarAPI
-{
-
-    String BASE_URL = BuildConfig.DEBUG
-            ? "https://northstar-qa.dosomething.org/v1"
-            : "https://northstar.dosomething.org/v1";
+public interface NorthstarAPI {
+    String PRODUCTION_URL = "https://northstar.dosomething.org/v1";
+    String THOR_URL = "https://northstar-thor.dosomething.org/v1";
+    String QA_URL = "https://northstar-qa.dosomething.org/v1";
 
     @FormUrlEncoded
     @Headers("Accept: application/json")
