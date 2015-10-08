@@ -11,6 +11,7 @@ import org.dosomething.letsdothis.utils.AppPrefs;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.Task;
+import co.touchlab.android.threading.tasks.utils.NetworkUtils;
 
 /**
  * Created by izzyoji :) on 6/26/15.
@@ -59,6 +60,10 @@ public class CampaignSignUpTask extends Task {
 
     @Override
     protected void run(Context context) throws Throwable {
+        if (!NetworkUtils.isOnline(context)) {
+            throw new Exception();
+        }
+
         CampaignActions actions = CampaignActions.queryForId(context, mCampaignId);
         if (actions == null || actions.signUpId <= 0) {
             String sessionToken = AppPrefs.getInstance(context).getSessionToken();

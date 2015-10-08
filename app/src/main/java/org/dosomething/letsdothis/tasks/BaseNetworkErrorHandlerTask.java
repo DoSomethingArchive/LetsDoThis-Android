@@ -12,24 +12,18 @@ import retrofit.RetrofitError;
 /**
  * Created by toidiu on 4/16/15.
  */
-public abstract class BaseNetworkErrorHandlerTask extends Task
-{
+public abstract class BaseNetworkErrorHandlerTask extends Task {
     @Override
-    protected boolean handleError(Context context, Throwable throwable)
-    {
-        if(throwable instanceof RetrofitError)
-        {
+    protected boolean handleError(Context context, Throwable throwable) {
+        if (throwable instanceof RetrofitError) {
             RetrofitError retrofitError = (RetrofitError) throwable;
             int status = retrofitError.getResponse().getStatus();
-            if(status == HttpURLConnection.HTTP_UNAUTHORIZED || status == HttpURLConnection.HTTP_NOT_FOUND)
-            {
+            if (status == HttpURLConnection.HTTP_UNAUTHORIZED || status == HttpURLConnection.HTTP_NOT_FOUND) {
                 return true;
             }
         }
 
-        Toast.makeText(context, context.getString(R.string.bad_connection), Toast.LENGTH_SHORT)
-                .show();
+        Toast.makeText(context, context.getString(R.string.bad_connection), Toast.LENGTH_SHORT).show();
         return true;
-        //        return throwable.getCause() instanceof NetworkException;
     }
 }
