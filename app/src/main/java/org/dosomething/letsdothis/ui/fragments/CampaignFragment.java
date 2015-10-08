@@ -171,10 +171,6 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         }
 
         if (getMoreData) {
-            if (BuildConfig.DEBUG) {
-                Toast.makeText(getActivity(), "get more data", Toast.LENGTH_SHORT).show();
-            }
-
             InterestReportBackListTask task = new InterestReportBackListTask(mPagerPosition, StringUtils
                     .join(campaignIds, ","), currentPage + 1, currentRbQueryStatus);
             getCampaignQueue().execute(task);
