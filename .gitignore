@@ -49,6 +49,3 @@ brandon_reg.otf
 proxima_nova_bold.otf
 proxima_nova_reg.otf
 
-# Secrets
-app/fabric.properties
-app/secrets.properties
