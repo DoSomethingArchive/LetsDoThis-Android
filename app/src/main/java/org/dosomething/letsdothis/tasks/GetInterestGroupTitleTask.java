@@ -1,7 +1,9 @@
 package org.dosomething.letsdothis.tasks;
 
 import android.content.Context;
+import android.widget.Toast;
 
+import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.network.DoSomethingAPI;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.ResponseTaxonomyTerm;
@@ -52,6 +54,7 @@ public class GetInterestGroupTitleTask extends BaseNetworkErrorHandlerTask {
     protected boolean handleError(Context context, Throwable throwable) {
         super.handleError(context, throwable);
 
-        return false;
+        Toast.makeText(context, context.getString(R.string.error_interest_group_titles), Toast.LENGTH_SHORT).show();
+        return true;
     }
 }

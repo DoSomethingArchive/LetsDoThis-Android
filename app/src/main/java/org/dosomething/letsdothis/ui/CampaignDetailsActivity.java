@@ -151,10 +151,6 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
      * next. Should occur when gallery scrolling nears the bottom or if no reportbacks are promoted.
      */
     private void fetchMoreReportbacks() {
-        if(BuildConfig.DEBUG) {
-            Toast.makeText(CampaignDetailsActivity.this, "get more data", Toast.LENGTH_SHORT).show();
-        }
-
         String campaigns = Integer.toString(getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1));
         IndividualCampaignReportBackList task = new IndividualCampaignReportBackList(campaigns,
                 currentPage + 1, currentRbQueryStatus);

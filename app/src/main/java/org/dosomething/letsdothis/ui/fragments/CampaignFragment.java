@@ -36,6 +36,7 @@ import java.util.List;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
+import co.touchlab.android.threading.tasks.utils.TaskQueueHelper;
 
 /**
  * Created by izzyoji :) on 4/14/15.
@@ -51,12 +52,14 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private CampaignAdapter adapter;
-    private int             position;
+
+    // Position of this fragment in the pager
+    private int             mPagerPosition;
     private int             currentPage;
     private int             totalPages;
     private String          currentRbQueryStatus;
     private ArrayList<Integer> campaignIds = new ArrayList<>();
-    private ProgressBar progress;
+    private ProgressBar mProgress;
 
     public static CampaignFragment newInstance(int position)
     {
@@ -84,9 +87,9 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        position = getArguments().getInt(KEY_POSITION);
-        progress = (ProgressBar) getView().findViewById(R.id.progress);
-        progress.getIndeterminateDrawable()
+        mPagerPosition = getArguments().getInt(KEY_POSITION);
+        mProgress = (ProgressBar) getView().findViewById(R.id.progress);
+        mProgress.getIndeterminateDrawable()
                 .setColorFilter(getResources().getColor(R.color.cerulean_1),
                                 PorterDuff.Mode.SRC_IN);
 
@@ -133,8 +136,11 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         if (!alreadySignedUp) {
             TaskQueue.loadQueueDefault(getActivity()).execute(new CampaignSignUpTask(campaignId));
         }
+        else {
+            startActivity(CampaignDetailsActivity.getLaunchIntent(getActivity(), campaignId));
+        }
 
-        startActivity(CampaignDetailsActivity.getLaunchIntent(getActivity(), campaignId));
+        refreshProgressBar();
     }
 
     @Override
@@ -165,11 +171,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         }
 
         if (getMoreData) {
-            if (BuildConfig.DEBUG) {
-                Toast.makeText(getActivity(), "get more data", Toast.LENGTH_SHORT).show();
-            }
-
-            InterestReportBackListTask task = new InterestReportBackListTask(position, StringUtils
+            InterestReportBackListTask task = new InterestReportBackListTask(mPagerPosition, StringUtils
                     .join(campaignIds, ","), currentPage + 1, currentRbQueryStatus);
             getCampaignQueue().execute(task);
         }
@@ -209,23 +211,35 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
 
     private int findGroupId()
     {
-        return InterestGroup.values()[position].id;
+        return InterestGroup.values()[mPagerPosition].id;
     }
 
-    private void refreshProgressBar()
-    {
-        if(progress != null)
-        {
+    /**
+     * Show or hide progress bar based on status of tasks.
+     */
+    private void refreshProgressBar() {
+        if (mProgress != null) {
+            boolean showProgress = false;
+
+            // Check if there is a query for interest groups in progress
             IdQuery queueQuery = new IdQuery(findGroupId());
             getCampaignQueue().query(queueQuery);
 
-            if(queueQuery.found)
-            {
-                progress.setVisibility(View.VISIBLE);
+            if (queueQuery.found) {
+                showProgress = true;
             }
-            else
-            {
-                progress.setVisibility(View.GONE);
+
+            // Check if there is a signup in progress
+            TaskQueue defaultQueue = TaskQueue.loadQueueDefault(getActivity());
+            if (TaskQueueHelper.hasTasksOfType(defaultQueue, CampaignSignUpTask.class)) {
+                showProgress = true;
+            }
+
+            if (showProgress) {
+                mProgress.setVisibility(View.VISIBLE);
+            }
+            else {
+                mProgress.setVisibility(View.GONE);
             }
         }
     }
@@ -233,7 +247,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(InterestReportBackListTask task)
     {
-        if (task.pagerPosition != position) {
+        if (task.pagerPosition != mPagerPosition) {
             return;
         }
 
@@ -246,7 +260,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         else if (task.error != null && task.status == BaseReportBackListTask.STATUS_PROMOTED) {
             // A search for promoted reportbacks yielded nothing. Search again for approved photos.
             String campaigns = StringUtils.join(campaignIds, ",");
-            getCampaignQueue().execute(new InterestReportBackListTask(position, campaigns,
+            getCampaignQueue().execute(new InterestReportBackListTask(mPagerPosition, campaigns,
                     FIRST_PAGE, BaseReportBackListTask.STATUS_APPROVED));
             currentPage = 0;
         }
@@ -276,7 +290,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
 
                 // On initial query of reportback photos, set page to 1 and status to "promoted"
                 String campaigns = StringUtils.join(campaignIds, ",");
-                getCampaignQueue().execute(new InterestReportBackListTask(position, campaigns,
+                getCampaignQueue().execute(new InterestReportBackListTask(mPagerPosition, campaigns,
                         FIRST_PAGE, BaseReportBackListTask.STATUS_PROMOTED));
 
                 // Now that we have campaigns, get user info to find out what they've participated in
@@ -316,6 +330,22 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
             int match = campaignIds.indexOf(campaign.id);
             if (match >= 0) {
                 adapter.userSignedUpForCampaign(campaign.id);
+            }
+        }
+    }
+
+    /**
+     * If signup task succeeds, open campaign detail screen.
+     *
+     * @param task
+     */
+    public void onEventMainThread(CampaignSignUpTask task) {
+        if (task.getPagerPosition() == mPagerPosition) {
+            refreshProgressBar();
+
+            if (task != null && !task.hasError()) {
+                adapter.userSignedUpForCampaign(task.getCampaignId());
+                startActivity(CampaignDetailsActivity.getLaunchIntent(getActivity(), task.getCampaignId()));
             }
         }
     }

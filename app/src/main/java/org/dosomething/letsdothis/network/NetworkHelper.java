@@ -1,4 +1,6 @@
 package org.dosomething.letsdothis.network;
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
@@ -39,12 +41,11 @@ public class NetworkHelper
             @Override
             public void intercept(RequestFacade request)
             {
-                String id = BuildConfig.DEBUG
-                        ? "456"
-                        : "android";
-                request.addHeader("X-DS-Application-Id", id);
-                request.addHeader("X-DS-REST-API-Key",
-                                  LDTApplication.getContext().getString(R.string.api_key));
+                Context context = LDTApplication.getContext();
+                String northstarAppId = context.getString(R.string.northstar_app_id);
+                String northstarApiKey = context.getString(R.string.northstar_api_key);
+                request.addHeader("X-DS-Application-Id", northstarAppId);
+                request.addHeader("X-DS-REST-API-Key", northstarApiKey);
             }
         };
 
@@ -78,22 +79,42 @@ public class NetworkHelper
         return okHttpClient;
     }
 
-    public static DoSomethingAPI getDoSomethingAPIService()
-    {
+    public static DoSomethingAPI getDoSomethingAPIService() {
+        String baseUrl;
+        if (BuildConfig.BUILD_TYPE.equals("release")) {
+            baseUrl = DoSomethingAPI.PRODUCTION_URL;
+        }
+        else if (BuildConfig.BUILD_TYPE.equals("internal")) {
+            baseUrl = DoSomethingAPI.THOR_URL;
+        }
+        else {
+            baseUrl = DoSomethingAPI.QA_URL;
+        }
+
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(ResponseCampaign.class, new ResponseCampaignDeserializer<ResponseCampaign>())
                 .setDateFormat(JSON_DATE_FORMAT_DO_SOMETHING).create();
         GsonConverter gsonConverter = new GsonConverter(gson);
         return getRequestAdapterBuilder().setConverter(gsonConverter)
-                .setEndpoint(DoSomethingAPI.BASE_URL).build().create(DoSomethingAPI.class);
+                .setEndpoint(baseUrl).build().create(DoSomethingAPI.class);
     }
 
-    public static NorthstarAPI getNorthstarAPIService()
-    {
+    public static NorthstarAPI getNorthstarAPIService() {
+        String baseUrl;
+        if (BuildConfig.BUILD_TYPE.equals("release")) {
+            baseUrl = NorthstarAPI.PRODUCTION_URL;
+        }
+        else if (BuildConfig.BUILD_TYPE.equals("internal")) {
+            baseUrl = NorthstarAPI.THOR_URL;
+        }
+        else {
+            baseUrl = NorthstarAPI.QA_URL;
+        }
+
         Gson gson = new GsonBuilder().setDateFormat(JSON_DATE_FORMAT_NORTHSTAR).create();
         GsonConverter gsonConverter = new GsonConverter(gson);
         return getRequestAdapterBuilder().setConverter(gsonConverter)
-                .setEndpoint(NorthstarAPI.BASE_URL).build().create(NorthstarAPI.class);
+                .setEndpoint(baseUrl).build().create(NorthstarAPI.class);
     }
 
 }

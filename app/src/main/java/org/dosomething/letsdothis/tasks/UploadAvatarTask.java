@@ -1,9 +1,11 @@
 package org.dosomething.letsdothis.tasks;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.j256.ormlite.dao.Dao;
 
+import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.NetworkHelper;
@@ -51,7 +53,8 @@ public class UploadAvatarTask extends Task
     @Override
     protected boolean handleError(Context context, Throwable e)
     {
-        return false;
+        Toast.makeText(context, context.getString(R.string.error_avatar_upload), Toast.LENGTH_SHORT).show();
+        return true;
     }
 
     @Override
