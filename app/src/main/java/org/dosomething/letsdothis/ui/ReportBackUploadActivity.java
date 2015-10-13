@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.BuildConfig;
@@ -31,7 +33,12 @@ public class ReportBackUploadActivity extends AppCompatActivity
     public static final  String EXTRA_TITLE  = "EXTRA_TITLE";
     private static final String EXTRA_CAM_ID = "EXTRA_CAM_ID";
     private static final String EXTRA_COPY   = "EXTRA_COPY";
+    private final String TRACKER_SCREEN_TAG = "campaign/%1$d/reportbackform";
+
     private int campaignId;
+
+    // Google Analytics tracker
+    private Tracker mTracker;
 
     public static Intent getLaunchIntent(Context context, String filePath, String title, int id, String copy)
     {
@@ -65,6 +72,18 @@ public class ReportBackUploadActivity extends AppCompatActivity
 
         String croppedImage = getIntent().getStringExtra(FILE_PATH);
         initView(croppedImage);
+
+        mTracker = ((LDTApplication)getApplication()).getDefaultTracker();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Submit screen view to Google Analytics
+        String screenName = String.format(TRACKER_SCREEN_TAG, campaignId);
+        mTracker.setScreenName(screenName);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     private void initView(String croppedImage)
