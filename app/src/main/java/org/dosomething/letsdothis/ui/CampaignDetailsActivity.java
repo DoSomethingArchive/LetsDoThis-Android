@@ -13,7 +13,11 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import org.dosomething.letsdothis.BuildConfig;
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.CampaignActions;
@@ -44,6 +48,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String EXTRA_CAMPAIGN_ID = "campaign_id";
     public static final int    SELECT_PICTURE    = 23123;
+    private final String TRACKER_SCREEN_TAG = "campaign/%1$d/%2$s";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private Uri                    imageUri;
@@ -52,6 +57,9 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     private int currentPage = 1;
     private String currentRbQueryStatus;
     //    private ResponseCampaign.ReportBackInfo rBInfo;
+
+    // Google Analytics tracker
+    private Tracker mTracker;
 
     public static Intent getLaunchIntent(Context context, int campaignId)
     {
@@ -65,6 +73,8 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_quickreturn_recycler);
         EventBusExt.getDefault().register(this);
+
+        mTracker = ((LDTApplication)getApplication()).getDefaultTracker();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
@@ -293,6 +303,36 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         TaskQueue.loadQueueDefault(this).execute(new CampaignDetailsTask(campaignId));
     }
 
+    /**
+     * Sends screen view to analytics.
+     *
+     * This one's a little less than ordinary since we're not sending the screen hit in onResume().
+     * We want to know the state of this view when we track this screen, and that requires we wait
+     * for several async tasks to return first before we send.
+     *
+     * @param campaignId int Campaign id
+     * @param isSignedUp boolean User is signed up for this campaign
+     * @param isComplete boolean User has submitted a reportback for this campaign
+     */
+    private void sendScreenViewToAnalytics(int campaignId, boolean isSignedUp, boolean isComplete) {
+        String state;
+        if (isSignedUp) {
+            if (isComplete) {
+                state = "completed";
+            }
+            else {
+                state = "proveit";
+            }
+        }
+        else {
+            state = "pitch";
+        }
+
+        String screenName = String.format(TRACKER_SCREEN_TAG, campaignId, state);
+        mTracker.setScreenName(screenName);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
+
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(ReportbackUploadTask task)
     {
@@ -300,16 +340,34 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(CampaignDetailsTask task)
-    {
-        if(task.campaign != null)
-        {
+    public void onEventMainThread(CampaignDetailsTask task) {
+        int campaignId = -1;
+        boolean isComplete = false;
+        boolean isSignedUp = false;
+
+        if(task.campaign != null) {
+            // Update the view in the adapter
             adapter.updateCampaign(task.campaign);
+
+            // Set vars for the tracker
+            campaignId = task.campaign.id;
+
+            try {
+                if (CampaignActions.queryForId(this, campaignId) != null) {
+                    isSignedUp = true;
+                }
+            }
+            catch (Exception e) {
+                isSignedUp = false;
+            }
+
+            isComplete = task.campaign.showShare == Campaign.UploadShare.SHARE;
         }
-        else
-        {
+        else {
             Toast.makeText(this, "campaign data failed", Toast.LENGTH_SHORT).show();
         }
+
+        sendScreenViewToAnalytics(campaignId, isSignedUp, isComplete);
     }
 
     @SuppressWarnings("UnusedDeclaration")
