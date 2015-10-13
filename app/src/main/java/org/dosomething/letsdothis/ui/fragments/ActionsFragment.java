@@ -10,8 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.viewpagerindicator.TabPageIndicator;
 
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.InterestGroup;
 import org.dosomething.letsdothis.tasks.GetInterestGroupTitleTask;
@@ -33,6 +36,7 @@ public class ActionsFragment extends Fragment
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String TAG = ActionsFragment.class.getSimpleName();
     public static final int INDICATOR_SPACING = 8;
+    private static final String SCREEN_NAME = "taxonomy_term/%1$s";
 
     // Listener to update title on the toolbar
     private SetTitleListener titleListener;
@@ -51,6 +55,9 @@ public class ActionsFragment extends Fragment
 
     // Retry button
     private Button mRetryButton;
+
+    // Google Analytics tracker
+    private Tracker mTracker;
 
     public static ActionsFragment newInstance()
     {
@@ -71,6 +78,14 @@ public class ActionsFragment extends Fragment
         titleListener.setTitle("Actions");
 
         EventBusExt.getDefault().register(this);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        LDTApplication application = (LDTApplication)getActivity().getApplication();
+        mTracker = application.getDefaultTracker();
     }
 
     @Override
@@ -122,8 +137,30 @@ public class ActionsFragment extends Fragment
             }
         };
 
+        ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+            @Override
+            public void onPageSelected(int position) {
+                // Submit screen view to Google Analytics
+                String screenName = String.format(SCREEN_NAME, InterestGroup.values()[position].id);
+                mTracker.setScreenName(screenName);
+                mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        };
+
+        // Log initial screen into analytics
+        String screenName = String.format(SCREEN_NAME, InterestGroup.values()[0].id);
+        mTracker.setScreenName(screenName);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
         mPager.setAdapter(pagerAdapter);
         mIndicator.setViewPager(mPager);
+        mIndicator.setOnPageChangeListener(pageChangeListener);
 
         if (NetworkUtils.isOnline(getActivity())) {
             fetchGroupNames();
