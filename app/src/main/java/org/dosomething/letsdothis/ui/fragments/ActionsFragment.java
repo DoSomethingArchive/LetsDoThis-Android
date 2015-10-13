@@ -36,7 +36,7 @@ public class ActionsFragment extends Fragment
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String TAG = ActionsFragment.class.getSimpleName();
     public static final int INDICATOR_SPACING = 8;
-    private static final String SCREEN_NAME = "taxonomy_term/%1$s";
+    private static final String TRACKER_SCREEN_TAG = "taxonomy_term/%1$d";
 
     // Listener to update title on the toolbar
     private SetTitleListener titleListener;
@@ -144,7 +144,7 @@ public class ActionsFragment extends Fragment
             @Override
             public void onPageSelected(int position) {
                 // Submit screen view to Google Analytics
-                String screenName = String.format(SCREEN_NAME, InterestGroup.values()[position].id);
+                String screenName = String.format(TRACKER_SCREEN_TAG, InterestGroup.values()[position].id);
                 mTracker.setScreenName(screenName);
                 mTracker.send(new HitBuilders.ScreenViewBuilder().build());
             }
@@ -154,7 +154,7 @@ public class ActionsFragment extends Fragment
         };
 
         // Log initial screen into analytics
-        String screenName = String.format(SCREEN_NAME, InterestGroup.values()[0].id);
+        String screenName = String.format(TRACKER_SCREEN_TAG, InterestGroup.values()[0].id);
         mTracker.setScreenName(screenName);
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 

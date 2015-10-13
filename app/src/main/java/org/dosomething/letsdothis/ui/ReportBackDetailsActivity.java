@@ -8,8 +8,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Picasso;
 
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.tasks.DbGetCampaignTask;
@@ -29,6 +32,7 @@ public class ReportBackDetailsActivity extends BaseActivity
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String EXTRA_REPORT_BACK_ID = "report_back_id";
     public static final String EXTRA_CAMPAIGN_ID = "campaign_id";
+    private static final String TRACKER_SCREEN_TAG = "reportback-item/%1$d";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private ImageView image;
@@ -44,6 +48,9 @@ public class ReportBackDetailsActivity extends BaseActivity
     private String actionNoun;
     private String actionVerb;
     private String actionQuantity;
+
+    // Google Analytics tracker
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -65,11 +72,24 @@ public class ReportBackDetailsActivity extends BaseActivity
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mTracker = ((LDTApplication)getApplication()).getDefaultTracker();
+
         TaskQueue.loadQueueDefault(this).execute(
                 new ReportBackDetailsTask(getIntent().getIntExtra(EXTRA_REPORT_BACK_ID, -1)));
 
         TaskQueue.loadQueueDefault(this).execute(
                 new DbGetCampaignTask(getIntent().getStringExtra(EXTRA_CAMPAIGN_ID)));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Submit screen view to Google Analytics
+        int id = getIntent().getIntExtra(EXTRA_REPORT_BACK_ID, -1);
+        String screenName = String.format(TRACKER_SCREEN_TAG, id);
+        mTracker.setScreenName(screenName);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     public static Intent getLaunchIntent(Context context, int reportBackId, int campaignId)
