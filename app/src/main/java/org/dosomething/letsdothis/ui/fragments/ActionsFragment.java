@@ -144,9 +144,7 @@ public class ActionsFragment extends Fragment
             @Override
             public void onPageSelected(int position) {
                 // Submit screen view to Google Analytics
-                String screenName = String.format(TRACKER_SCREEN_TAG, InterestGroup.values()[position].id);
-                mTracker.setScreenName(screenName);
-                mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+                sendScreenViewToAnalytics(position);
             }
 
             @Override
@@ -154,9 +152,7 @@ public class ActionsFragment extends Fragment
         };
 
         // Log initial screen into analytics
-        String screenName = String.format(TRACKER_SCREEN_TAG, InterestGroup.values()[0].id);
-        mTracker.setScreenName(screenName);
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        sendScreenViewToAnalytics(0);
 
         mPager.setAdapter(pagerAdapter);
         mIndicator.setViewPager(mPager);
@@ -185,6 +181,21 @@ public class ActionsFragment extends Fragment
     public void onDestroy() {
         super.onDestroy();
         EventBusExt.getDefault().unregister(this);
+    }
+
+    /**
+     * Send screen view to analytics.
+     *
+     * @param position int Pager position
+     */
+    protected void sendScreenViewToAnalytics(int position) {
+        if (mTracker == null) {
+            return;
+        }
+
+        String screenName = String.format(TRACKER_SCREEN_TAG, InterestGroup.values()[position].id);
+        mTracker.setScreenName(screenName);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     /**

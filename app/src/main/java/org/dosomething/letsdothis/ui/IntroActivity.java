@@ -8,9 +8,12 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import org.dosomething.letsdothis.BuildConfig;
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.fragments.IntroFragment;
 import org.dosomething.letsdothis.ui.fragments.RegisterLoginFragment;
@@ -24,6 +27,13 @@ public class IntroActivity extends BaseActivity
     private static final String TAG = IntroActivity.class.getSimpleName();
     public static final int INTRO_FRAGMENT_COUNT = 3;
 
+    // Screen names to use for analytics tracking. Array index corresponds to pager position.
+    private final String[] TRACKER_SCREEN_NAMES = {
+        "onboarding-first",
+        "onboarding-second",
+        "user-connect"
+    };
+
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private ViewPager           pager;
     private CirclePageIndicator indicator;
@@ -31,6 +41,9 @@ public class IntroActivity extends BaseActivity
     private ImageView           lightning;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
+
+    // Google Analytics tracker
+    private Tracker mTracker;
 
     public static Intent getLaunchIntent(Context context)
     {
@@ -43,6 +56,7 @@ public class IntroActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
 
+        mTracker = ((LDTApplication)getApplication()).getDefaultTracker();
         initPager();
     }
 
@@ -77,41 +91,52 @@ public class IntroActivity extends BaseActivity
         indicator = (CirclePageIndicator) findViewById(R.id.indicator);
         indicator.setViewPager(pager);
         indicatorTop = indicator.getTop();
-        indicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener()
-        {
+        indicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
-            {
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 int measuredWidth = getWindow().getDecorView().getMeasuredWidth();
-                int translateX = (- position * measuredWidth - positionOffsetPixels) / LIGHTNING_OFFSET;
+                int translateX = (-position * measuredWidth - positionOffsetPixels) / LIGHTNING_OFFSET;
                 lightning.setTranslationX(translateX);
 
-                if(position == (INTRO_FRAGMENT_COUNT - 2))
-                {
+                if (position == (INTRO_FRAGMENT_COUNT - 2)) {
                     indicator.setTranslationY(indicatorTop + positionOffsetPixels / 2);
                 }
-                if(BuildConfig.DEBUG)
-                {
-                    Log.d("--",
-                          "pagerPosition " + position + " px " + positionOffsetPixels + " width " + measuredWidth + " translateX " + translateX);
+                if (BuildConfig.DEBUG) {
+                    Log.d("--", "pagerPosition " + position + " px " + positionOffsetPixels + " width " + measuredWidth + " translateX " + translateX);
                 }
             }
 
             @Override
-            public void onPageSelected(int position)
-            {
+            public void onPageSelected(int position) {
+                sendScreenViewToAnalytics(position);
             }
 
             @Override
-            public void onPageScrollStateChanged(int state)
-            {
+            public void onPageScrollStateChanged(int state) {
             }
         });
+
+        // Send initial screen view
+        sendScreenViewToAnalytics(0);
     }
 
     @Override
     protected void onDestroy()
     {
         super.onDestroy();
+    }
+
+    /**
+     * Send screen view to analytics.
+     *
+     * @param position int Pager position
+     */
+    protected void sendScreenViewToAnalytics(int position) {
+        if (position >= TRACKER_SCREEN_NAMES.length) {
+            return;
+        }
+
+        mTracker.setScreenName(TRACKER_SCREEN_NAMES[position]);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 }
