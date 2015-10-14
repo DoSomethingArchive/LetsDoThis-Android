@@ -8,7 +8,10 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
-import org.dosomething.letsdothis.BuildConfig;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.LoginTask;
 import org.dosomething.letsdothis.tasks.UpdateUserTask;
@@ -22,11 +25,14 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 public class LoginActivity extends BaseActivity
 {
     private static final String TAG = LoginActivity.class.getSimpleName();
+    private final String TRACKER_SCREEN_TAG = "user-login";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private EditText phoneEmail;
     private EditText password;
 
+    // Google Analytics tracker
+    private Tracker mTracker;
 
     public static Intent getLaunchIntent(Context context)
     {
@@ -42,11 +48,9 @@ public class LoginActivity extends BaseActivity
         initLoginListener();
         initLightning();
 
-        findViewById(R.id.register).setOnClickListener(new View.OnClickListener()
-        {
+        findViewById(R.id.register).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 startActivity(RegisterActivity.getLaunchIntent(LoginActivity.this, null));
                 finish();
             }
@@ -63,6 +67,16 @@ public class LoginActivity extends BaseActivity
                 startActivity(browserIntent);
             }
         });
+
+        mTracker = ((LDTApplication)getApplication()).getDefaultTracker();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mTracker.setScreenName(TRACKER_SCREEN_TAG);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     private void initLoginListener()

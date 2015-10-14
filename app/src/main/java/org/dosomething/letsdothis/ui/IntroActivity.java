@@ -28,7 +28,7 @@ public class IntroActivity extends BaseActivity
     public static final int INTRO_FRAGMENT_COUNT = 3;
 
     // Screen names to use for analytics tracking. Array index corresponds to pager position.
-    private final String[] TRACKER_SCREEN_NAMES = {
+    private final String[] TRACKER_SCREEN_TAGS = {
         "onboarding-first",
         "onboarding-second",
         "user-connect"
@@ -132,11 +132,11 @@ public class IntroActivity extends BaseActivity
      * @param position int Pager position
      */
     protected void sendScreenViewToAnalytics(int position) {
-        if (position >= TRACKER_SCREEN_NAMES.length) {
+        if (position >= TRACKER_SCREEN_TAGS.length) {
             return;
         }
 
-        mTracker.setScreenName(TRACKER_SCREEN_NAMES[position]);
+        mTracker.setScreenName(TRACKER_SCREEN_TAGS[position]);
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 }
