@@ -43,6 +43,7 @@ public class AnalyticsUtils {
     public static final String SCREEN_INTEREST_GROUP = "taxonomy_term/%1$d";
     public static final String SCREEN_REPORTBACK_FORM = "campaign/%1$d/reportbackform";
     public static final String SCREEN_REPORTBACK_ITEM = "reportback-item/%1$d";
+    public static final String SCREEN_SETTINGS = "settings";
     public static final String SCREEN_USER_CONNECT = "user-connect";
     public static final String SCREEN_USER_LOGIN = "user-login";
     public static final String SCREEN_USER_PROFILE = "user-profile/%1$s";
