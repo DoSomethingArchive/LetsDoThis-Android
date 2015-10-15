@@ -98,6 +98,19 @@ public class RegisterActivity extends BaseActivity
             }
         });
 
+        // Click listener on the privacy policy / CTIA text
+        findViewById(R.id.ctia).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("https://www.dosomething.org/about/privacy-policy"));
+                startActivity(intent);
+
+                AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR,
+                        AnalyticsUtils.ACTION_TAP_PRIVACY_POLICY);
+            }
+        });
+
         initRegisterListener();
         initUI(fbUser);
 

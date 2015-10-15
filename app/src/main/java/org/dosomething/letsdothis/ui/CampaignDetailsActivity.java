@@ -175,9 +175,10 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     }
 
     @Override
-    public void shareClicked(Campaign campaign)
-    {
+    public void shareClicked(Campaign campaign) {
         TaskQueue.loadQueueDefault(this).execute(new RbShareDataTask(campaign));
+
+        AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR, AnalyticsUtils.ACTION_SHARE_PHOTO);
     }
 
     @Override

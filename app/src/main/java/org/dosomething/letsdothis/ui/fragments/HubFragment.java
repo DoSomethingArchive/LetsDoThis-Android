@@ -36,6 +36,7 @@ import org.dosomething.letsdothis.ui.PhotoCropActivity;
 import org.dosomething.letsdothis.ui.PublicProfileActivity;
 import org.dosomething.letsdothis.ui.ReportBackUploadActivity;
 import org.dosomething.letsdothis.ui.adapters.HubAdapter;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.io.File;
@@ -178,9 +179,10 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @Override
-    public void onShareClicked(Campaign campaign)
-    {
+    public void onShareClicked(Campaign campaign) {
         TaskQueue.loadQueueDefault(getActivity()).execute(new RbShareDataTask(campaign));
+
+        AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR, AnalyticsUtils.ACTION_SHARE_PHOTO);
     }
 
     @Override

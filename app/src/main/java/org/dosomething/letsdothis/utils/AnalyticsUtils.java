@@ -36,7 +36,6 @@ public class AnalyticsUtils {
     public static final String ACTION_TAP_FEEDBACK_FORM = "tap on feedback form";
     public static final String ACTION_TAP_PRIVACY_POLICY = "tap on privacy policy";
     public static final String ACTION_TAP_REVIEW_APP_BUTTON = "tap on review app button";
-    public static final String ACTION_TAP_NOTIF_SWITCH = "tap on notif switch";
 
     // Screen names
     public static final String SCREEN_CAMPAIGN = "campaign/%1$d/%2$s";

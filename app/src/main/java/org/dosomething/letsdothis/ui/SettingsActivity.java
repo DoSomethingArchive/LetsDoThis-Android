@@ -67,10 +67,11 @@ public class SettingsActivity extends BaseActivity implements SetTitleListener
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(LogoutTask task)
-    {
+    public void onEventMainThread(LogoutTask task) {
         sendBroadcast(new Intent(BaseActivity.LOGOUT_SUCCESS));
         startActivity(RegisterLoginActivity.getLaunchIntent(this));
+
+        AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR, AnalyticsUtils.ACTION_LOG_OUT);
     }
 
     @Override
