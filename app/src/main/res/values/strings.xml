@@ -124,10 +124,12 @@
     <string name="cancel_search">Cancel Search</string>
     <string name="search_for_group">Search For Group</string>
     <string name="join_this_group">Join This Group</string>
-    <string name="intro_title_1">Let\'s Do This</string>
-    <string name="intro_desc_1">Discover new (monthly!) ways to have fun</string>
-    <string name="intro_title_2">Get Social</string>
-    <string name="intro_desc_2">&lt;Placeholder TODO social description string&gt;</string>
+    <string name="intro_title_1">Stop Being Bored</string>
+    <string name="intro_desc_1">Are you into sports? Crafting? Whatever your interest, you can do
+        fun stuff and social good at the same time</string>
+    <string name="intro_title_2">Prove It</string>
+    <string name="intro_desc_2">Submit and share photos of yourself in action -- and see other
+        people\'s photos too. #picsoritdidnthappen</string>
     <string name="fail_register">Register failed</string>
     <string name="fail_login">Your username or password was incorrect.</string>
     <string name="success_login">Login successful</string>
