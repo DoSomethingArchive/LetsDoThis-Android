@@ -3,6 +3,3 @@
 # Secrets
 fabric.properties
 secrets.properties
-
-# Google Services
-google-services.json
