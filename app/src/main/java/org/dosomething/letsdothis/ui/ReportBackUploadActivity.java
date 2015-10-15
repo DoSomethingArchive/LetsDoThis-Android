@@ -20,6 +20,7 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.network.models.RequestReportback;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
 import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.io.File;
@@ -97,36 +98,39 @@ public class ReportBackUploadActivity extends AppCompatActivity
         final EditText number = (EditText) findViewById(R.id.number);
         number.setHint(getIntent().getStringExtra(EXTRA_COPY));
 
-        this.getWindow()
-                .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        findViewById(R.id.upload).setOnClickListener(new View.OnClickListener()
-        {
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+
+        findViewById(R.id.upload).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 RequestReportback req = new RequestReportback();
                 req.caption = caption.getText().toString();
-                if(req.caption.equals(""))
-                {
+                if (req.caption.equals("")) {
                     Toast.makeText(ReportBackUploadActivity.this, "Please enter a valid caption.",
                                    Toast.LENGTH_SHORT).show();
                 }
-                try
-                {
+
+                try {
                     Integer.parseInt(number.getText().toString());
                 }
-                catch(NumberFormatException e)
-                {
+                catch (NumberFormatException e) {
                     Toast.makeText(ReportBackUploadActivity.this, "Enter a valid number.",
                                    Toast.LENGTH_SHORT).show();
                     return;
                 }
+
                 req.quantity = number.getText().toString();
                 req.uid = AppPrefs.getInstance(ReportBackUploadActivity.this).getCurrentUserId();
 
                 String filePath = getIntent().getStringExtra(FILE_PATH);
-                ReportbackUploadTask
-                        .uploadReport(LDTApplication.getContext(), req, campaignId, filePath);
+
+                // Upload reportback to server
+                ReportbackUploadTask.uploadReport(LDTApplication.getContext(), req, campaignId, filePath);
+
+                // Log to analytics
+                AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_CAMPAIGN,
+                        AnalyticsUtils.ACTION_SUBMIT_REPORTBACK, Integer.toString(campaignId));
+
                 finish();
             }
         });

@@ -31,6 +31,7 @@ import org.dosomething.letsdothis.tasks.RbShareDataTask;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
 import org.dosomething.letsdothis.ui.adapters.CampaignDetailsAdapter;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 import java.io.File;
 import java.util.List;
@@ -403,5 +404,8 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(CampaignSignUpTask task) {
         adapter.refreshOnSignup();
+
+        AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_CAMPAIGN,
+                AnalyticsUtils.ACTION_SUBMIT_SIGNUP, Integer.toString(task.getCampaignId()));
     }
 }

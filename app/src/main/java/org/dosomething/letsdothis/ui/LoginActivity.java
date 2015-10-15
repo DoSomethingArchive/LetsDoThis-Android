@@ -15,6 +15,7 @@ import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.LoginTask;
 import org.dosomething.letsdothis.tasks.UpdateUserTask;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import co.touchlab.android.threading.tasks.TaskQueue;
@@ -65,6 +66,9 @@ public class LoginActivity extends BaseActivity
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                                                   Uri.parse(getString(R.string.forgot_pw_link)));
                 startActivity(browserIntent);
+
+                AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_ACCOUNT,
+                        AnalyticsUtils.ACTION_FORGOT_PASSWORD);
             }
         });
 

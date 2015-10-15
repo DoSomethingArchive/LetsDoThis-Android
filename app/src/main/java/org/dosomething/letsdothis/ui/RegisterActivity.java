@@ -22,6 +22,7 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.FbUser;
 import org.dosomething.letsdothis.tasks.RegisterTask;
 import org.dosomething.letsdothis.tasks.UploadAvatarTask;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 import org.dosomething.letsdothis.utils.AppPrefs;
 import org.dosomething.letsdothis.utils.ViewUtils;
 
@@ -82,6 +83,10 @@ public class RegisterActivity extends BaseActivity
             public void onClick(View v)
             {
                 choosePicture();
+
+                // Track avatar tap event
+                AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_ACCOUNT,
+                        AnalyticsUtils.ACTION_TAP_AVATAR_BUTTON);
             }
         });
 
@@ -234,6 +239,12 @@ public class RegisterActivity extends BaseActivity
 
                     TaskQueue.loadQueueDefault(RegisterActivity.this).execute(
                             new RegisterTask(emailText, phoneText, passText, firstText));
+
+                    // Track if user provided mobile # in registration
+                    if (!phoneText.isEmpty()) {
+                        AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_ACCOUNT,
+                                AnalyticsUtils.ACTION_PROVIDE_MOBILE_NUMBER);
+                    }
                 }
             }
         });

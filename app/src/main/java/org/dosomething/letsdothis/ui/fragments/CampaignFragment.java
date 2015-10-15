@@ -9,10 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+
+import com.google.android.gms.analytics.Tracker;
 
 import org.apache.commons.lang3.StringUtils;
-import org.dosomething.letsdothis.BuildConfig;
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.DatabaseHelper;
@@ -29,6 +30,7 @@ import org.dosomething.letsdothis.ui.CampaignDetailsActivity;
 import org.dosomething.letsdothis.ui.ReportBackDetailsActivity;
 import org.dosomething.letsdothis.ui.adapters.CampaignAdapter;
 import org.dosomething.letsdothis.ui.views.ActionGridSpacingDecoration;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.util.ArrayList;
@@ -346,6 +348,11 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
             if (task != null && !task.hasError()) {
                 adapter.userSignedUpForCampaign(task.getCampaignId());
                 startActivity(CampaignDetailsActivity.getLaunchIntent(getActivity(), task.getCampaignId()));
+
+                // Log the successful signup to analytics
+                Tracker tracker = ((LDTApplication)getActivity().getApplication()).getDefaultTracker();
+                AnalyticsUtils.sendEvent(tracker, AnalyticsUtils.CATEGORY_CAMPAIGN,
+                        AnalyticsUtils.ACTION_SUBMIT_SIGNUP, Integer.toString(task.getCampaignId()));
             }
         }
     }
