@@ -16,7 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.analytics.Tracker;
+
 import org.dosomething.letsdothis.BuildConfig;
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.DatabaseHelper;
@@ -32,6 +35,7 @@ import org.dosomething.letsdothis.ui.PhotoCropActivity;
 import org.dosomething.letsdothis.ui.PublicProfileActivity;
 import org.dosomething.letsdothis.ui.ReportBackUploadActivity;
 import org.dosomething.letsdothis.ui.adapters.HubAdapter;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.io.File;
@@ -58,6 +62,9 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     private ReplaceFragmentListener replaceFragmentListener;
     private ProgressBar      progress;
 
+    // Google Analytics tracker
+    private Tracker mTracker;
+
     public static HubFragment newInstance(String id)
     {
         Bundle bundle = new Bundle();
@@ -73,6 +80,9 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        LDTApplication application = (LDTApplication)getActivity().getApplication();
+        mTracker = application.getDefaultTracker();
     }
 
     @Override
@@ -102,33 +112,37 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
 
-        if(! EventBusExt.getDefault().isRegistered(this))
-        {
+        if (!EventBusExt.getDefault().isRegistered(this)) {
             EventBusExt.getDefault().register(this);
         }
 
         titleListener.setTitle("Hub");
 
+        String trackerIdentifier;
         String publicId = getArguments().getString(EXTRA_ID, null);
-        if(publicId != null)
-        {
+        if (publicId != null) {
             TaskQueue.loadQueueDefault(getActivity()).execute(new GetUserTask(publicId));
+
+            trackerIdentifier = publicId;
         }
-        else
-        {
+        else {
             DatabaseHelper.defaultDatabaseQueue(getActivity()).execute(
                     new DbGetUserTask(AppPrefs.getInstance(getActivity()).getCurrentUserId()));
+
+            trackerIdentifier = "self";
         }
 
-        if(TaskQueueHelper.hasTasksOfType(ReportbackUploadTask.getQueue(getActivity()),
-                                          ReportbackUploadTask.class))
-        {
+        if (TaskQueueHelper.hasTasksOfType(ReportbackUploadTask.getQueue(getActivity()),
+                                          ReportbackUploadTask.class)) {
             adapter.processingUpload();
         }
+
+        // Submit screen view to Google Analytics
+        String screenName = String.format(AnalyticsUtils.SCREEN_USER_PROFILE, trackerIdentifier);
+        AnalyticsUtils.sendScreen(mTracker, screenName);
     }
 
     @Override
@@ -162,9 +176,10 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @Override
-    public void onShareClicked(Campaign campaign)
-    {
+    public void onShareClicked(Campaign campaign) {
         TaskQueue.loadQueueDefault(getActivity()).execute(new RbShareDataTask(campaign));
+
+        AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR, AnalyticsUtils.ACTION_SHARE_PHOTO);
     }
 
     @Override

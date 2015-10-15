@@ -5,11 +5,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.MenuItem;
 
+import com.google.android.gms.analytics.Tracker;
+
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.LogoutTask;
 import org.dosomething.letsdothis.ui.fragments.SetTitleListener;
 import org.dosomething.letsdothis.ui.fragments.SettingsFragment;
 import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 /**
  * Created by izzyoji :) on 4/29/15.
@@ -19,14 +23,16 @@ public class SettingsActivity extends BaseActivity implements SetTitleListener
 
     private CustomToolbar toolbar;
 
+    // Google Analytics tracker
+    private Tracker mTracker;
+
     public static Intent getLaunchIntent(Context context)
     {
         return new Intent(context, SettingsActivity.class);
     }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_settings);
         toolbar = (CustomToolbar) findViewById(R.id.toolbar);
@@ -36,6 +42,15 @@ public class SettingsActivity extends BaseActivity implements SetTitleListener
 
         getFragmentManager().beginTransaction()
                 .replace(R.id.container, SettingsFragment.newInstance()).commit();
+
+        mTracker = ((LDTApplication)getApplication()).getDefaultTracker();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        AnalyticsUtils.sendScreen(mTracker, AnalyticsUtils.SCREEN_SETTINGS);
     }
 
     @Override
@@ -52,10 +67,11 @@ public class SettingsActivity extends BaseActivity implements SetTitleListener
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(LogoutTask task)
-    {
+    public void onEventMainThread(LogoutTask task) {
         sendBroadcast(new Intent(BaseActivity.LOGOUT_SUCCESS));
         startActivity(RegisterLoginActivity.getLaunchIntent(this));
+
+        AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR, AnalyticsUtils.ACTION_LOG_OUT);
     }
 
     @Override

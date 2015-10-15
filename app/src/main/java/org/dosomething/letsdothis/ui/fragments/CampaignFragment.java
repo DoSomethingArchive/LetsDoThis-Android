@@ -9,10 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+
+import com.google.android.gms.analytics.Tracker;
 
 import org.apache.commons.lang3.StringUtils;
-import org.dosomething.letsdothis.BuildConfig;
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.DatabaseHelper;
@@ -29,6 +30,7 @@ import org.dosomething.letsdothis.ui.CampaignDetailsActivity;
 import org.dosomething.letsdothis.ui.ReportBackDetailsActivity;
 import org.dosomething.letsdothis.ui.adapters.CampaignAdapter;
 import org.dosomething.letsdothis.ui.views.ActionGridSpacingDecoration;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.util.ArrayList;
@@ -61,6 +63,9 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     private ArrayList<Integer> campaignIds = new ArrayList<>();
     private ProgressBar mProgress;
 
+    // Google Analytics tracker
+    private Tracker mTracker;
+
     public static CampaignFragment newInstance(int position)
     {
         Bundle args = new Bundle();
@@ -71,8 +76,14 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mTracker = ((LDTApplication)getActivity().getApplication()).getDefaultTracker();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_fragment_recycler, container, false);
     }
 
@@ -144,9 +155,17 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     }
 
     @Override
-    public void onCampaignExpanded(int position)
-    {
+    public void onCampaignCollapsed() {
+        AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR,
+                AnalyticsUtils.ACTION_COLLAPSE_CAMPAIGN_CELL);
+    }
+
+    @Override
+    public void onCampaignExpanded(int position) {
         recyclerView.smoothScrollToPosition(position);
+
+        AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR,
+                AnalyticsUtils.ACTION_EXPAND_CAMPAIGN_CELL);
     }
 
     @Override
@@ -174,6 +193,9 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
             InterestReportBackListTask task = new InterestReportBackListTask(mPagerPosition, StringUtils
                     .join(campaignIds, ","), currentPage + 1, currentRbQueryStatus);
             getCampaignQueue().execute(task);
+
+            AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR,
+                    AnalyticsUtils.ACTION_LOAD_MORE_PHOTOS);
         }
     }
 
@@ -346,6 +368,11 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
             if (task != null && !task.hasError()) {
                 adapter.userSignedUpForCampaign(task.getCampaignId());
                 startActivity(CampaignDetailsActivity.getLaunchIntent(getActivity(), task.getCampaignId()));
+
+                // Log the successful signup to analytics
+                Tracker tracker = ((LDTApplication)getActivity().getApplication()).getDefaultTracker();
+                AnalyticsUtils.sendEvent(tracker, AnalyticsUtils.CATEGORY_CAMPAIGN,
+                        AnalyticsUtils.ACTION_SUBMIT_SIGNUP, Integer.toString(task.getCampaignId()));
             }
         }
     }

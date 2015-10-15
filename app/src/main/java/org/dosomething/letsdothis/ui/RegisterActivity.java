@@ -10,16 +10,18 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
+import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.BuildConfig;
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.FbUser;
 import org.dosomething.letsdothis.tasks.RegisterTask;
 import org.dosomething.letsdothis.tasks.UploadAvatarTask;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 import org.dosomething.letsdothis.utils.AppPrefs;
 import org.dosomething.letsdothis.utils.ViewUtils;
 
@@ -45,9 +47,11 @@ public class RegisterActivity extends BaseActivity
     private EditText  firstName;
     private ImageView avatar;
 
-
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private Uri imageUri;
+
+    // Google Analytics tracker
+    private Tracker mTracker;
 
     public static Intent getLaunchIntent(Context context, FbUser user)
     {
@@ -77,21 +81,45 @@ public class RegisterActivity extends BaseActivity
             public void onClick(View v)
             {
                 choosePicture();
+
+                // Track avatar tap event
+                AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_ACCOUNT,
+                        AnalyticsUtils.ACTION_TAP_AVATAR_BUTTON);
             }
         });
 
-        findViewById(R.id.sign_in).setOnClickListener(new View.OnClickListener()
-        {
+        findViewById(R.id.sign_in).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 startActivity(LoginActivity.getLaunchIntent(RegisterActivity.this));
                 finish();
             }
         });
 
+        // Click listener on the privacy policy / CTIA text
+        findViewById(R.id.ctia).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("https://www.dosomething.org/about/privacy-policy"));
+                startActivity(intent);
+
+                AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR,
+                        AnalyticsUtils.ACTION_TAP_PRIVACY_POLICY);
+            }
+        });
+
         initRegisterListener();
         initUI(fbUser);
+
+        mTracker = ((LDTApplication)getApplication()).getDefaultTracker();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        AnalyticsUtils.sendScreen(mTracker, AnalyticsUtils.SCREEN_USER_REGISTER);
     }
 
     public void choosePicture()
@@ -221,6 +249,12 @@ public class RegisterActivity extends BaseActivity
 
                     TaskQueue.loadQueueDefault(RegisterActivity.this).execute(
                             new RegisterTask(emailText, phoneText, passText, firstText));
+
+                    // Track if user provided mobile # in registration
+                    if (!phoneText.isEmpty()) {
+                        AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_ACCOUNT,
+                                AnalyticsUtils.ACTION_PROVIDE_MOBILE_NUMBER);
+                    }
                 }
             }
         });

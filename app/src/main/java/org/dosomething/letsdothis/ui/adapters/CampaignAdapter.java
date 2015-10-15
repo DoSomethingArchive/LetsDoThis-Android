@@ -55,6 +55,8 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     {
         void onCampaignClicked(int campaignId, boolean alreadySignedUp);
 
+        void onCampaignCollapsed();
+
         void onCampaignExpanded(int position);
 
         void onReportBackClicked(int reportBackId, int campaignId);
@@ -266,6 +268,8 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 public void onClick(View v) {
                     selectedPosition = -1;
                     notifyItemChanged(position);
+
+                    campaignAdapterClickListener.onCampaignCollapsed();
                 }
             });
 
@@ -313,6 +317,8 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 {
                     selectedPosition = - 1;
                     notifyItemChanged(position);
+
+                    campaignAdapterClickListener.onCampaignCollapsed();
                 }
             });
 

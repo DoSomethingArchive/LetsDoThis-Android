@@ -13,7 +13,10 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.Tracker;
+
 import org.dosomething.letsdothis.BuildConfig;
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.CampaignActions;
@@ -27,6 +30,7 @@ import org.dosomething.letsdothis.tasks.RbShareDataTask;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
 import org.dosomething.letsdothis.ui.adapters.CampaignDetailsAdapter;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 import java.io.File;
 import java.util.List;
@@ -53,6 +57,9 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     private String currentRbQueryStatus;
     //    private ResponseCampaign.ReportBackInfo rBInfo;
 
+    // Google Analytics tracker
+    private Tracker mTracker;
+
     public static Intent getLaunchIntent(Context context, int campaignId)
     {
         return new Intent(context, CampaignDetailsActivity.class)
@@ -65,6 +72,8 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_quickreturn_recycler);
         EventBusExt.getDefault().register(this);
+
+        mTracker = ((LDTApplication)getApplication()).getDefaultTracker();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
@@ -164,9 +173,10 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     }
 
     @Override
-    public void shareClicked(Campaign campaign)
-    {
+    public void shareClicked(Campaign campaign) {
         TaskQueue.loadQueueDefault(this).execute(new RbShareDataTask(campaign));
+
+        AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR, AnalyticsUtils.ACTION_SHARE_PHOTO);
     }
 
     @Override
@@ -293,6 +303,35 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         TaskQueue.loadQueueDefault(this).execute(new CampaignDetailsTask(campaignId));
     }
 
+    /**
+     * Sends screen view to analytics.
+     *
+     * This one's a little less than ordinary since we're not sending the screen hit in onResume().
+     * We want to know the state of this view when we track this screen, and that requires we wait
+     * for several async tasks to return first before we send.
+     *
+     * @param campaignId int Campaign id
+     * @param isSignedUp boolean User is signed up for this campaign
+     * @param isComplete boolean User has submitted a reportback for this campaign
+     */
+    private void sendScreenViewToAnalytics(int campaignId, boolean isSignedUp, boolean isComplete) {
+        String state;
+        if (isSignedUp) {
+            if (isComplete) {
+                state = "completed";
+            }
+            else {
+                state = "proveit";
+            }
+        }
+        else {
+            state = "pitch";
+        }
+
+        String screenName = String.format(AnalyticsUtils.SCREEN_CAMPAIGN, campaignId, state);
+        AnalyticsUtils.sendScreen(mTracker, screenName);
+    }
+
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(ReportbackUploadTask task)
     {
@@ -300,16 +339,34 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(CampaignDetailsTask task)
-    {
-        if(task.campaign != null)
-        {
+    public void onEventMainThread(CampaignDetailsTask task) {
+        int campaignId = -1;
+        boolean isComplete = false;
+        boolean isSignedUp = false;
+
+        if(task.campaign != null) {
+            // Update the view in the adapter
             adapter.updateCampaign(task.campaign);
+
+            // Set vars for the tracker
+            campaignId = task.campaign.id;
+
+            try {
+                if (CampaignActions.queryForId(this, campaignId) != null) {
+                    isSignedUp = true;
+                }
+            }
+            catch (Exception e) {
+                isSignedUp = false;
+            }
+
+            isComplete = task.campaign.showShare == Campaign.UploadShare.SHARE;
         }
-        else
-        {
+        else {
             Toast.makeText(this, "campaign data failed", Toast.LENGTH_SHORT).show();
         }
+
+        sendScreenViewToAnalytics(campaignId, isSignedUp, isComplete);
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -345,5 +402,8 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(CampaignSignUpTask task) {
         adapter.refreshOnSignup();
+
+        AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_CAMPAIGN,
+                AnalyticsUtils.ACTION_SUBMIT_SIGNUP, Integer.toString(task.getCampaignId()));
     }
 }

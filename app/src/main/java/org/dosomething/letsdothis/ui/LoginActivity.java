@@ -8,10 +8,13 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
-import org.dosomething.letsdothis.BuildConfig;
+import com.google.android.gms.analytics.Tracker;
+
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.LoginTask;
 import org.dosomething.letsdothis.tasks.UpdateUserTask;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import co.touchlab.android.threading.tasks.TaskQueue;
@@ -27,6 +30,8 @@ public class LoginActivity extends BaseActivity
     private EditText phoneEmail;
     private EditText password;
 
+    // Google Analytics tracker
+    private Tracker mTracker;
 
     public static Intent getLaunchIntent(Context context)
     {
@@ -42,11 +47,9 @@ public class LoginActivity extends BaseActivity
         initLoginListener();
         initLightning();
 
-        findViewById(R.id.register).setOnClickListener(new View.OnClickListener()
-        {
+        findViewById(R.id.register).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 startActivity(RegisterActivity.getLaunchIntent(LoginActivity.this, null));
                 finish();
             }
@@ -61,8 +64,20 @@ public class LoginActivity extends BaseActivity
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                                                   Uri.parse(getString(R.string.forgot_pw_link)));
                 startActivity(browserIntent);
+
+                AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_ACCOUNT,
+                        AnalyticsUtils.ACTION_FORGOT_PASSWORD);
             }
         });
+
+        mTracker = ((LDTApplication)getApplication()).getDefaultTracker();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        AnalyticsUtils.sendScreen(mTracker, AnalyticsUtils.SCREEN_USER_LOGIN);
     }
 
     private void initLoginListener()
