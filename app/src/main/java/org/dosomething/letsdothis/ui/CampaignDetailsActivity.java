@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import org.dosomething.letsdothis.BuildConfig;
@@ -49,7 +48,6 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String EXTRA_CAMPAIGN_ID = "campaign_id";
     public static final int    SELECT_PICTURE    = 23123;
-    private final String TRACKER_SCREEN_TAG = "campaign/%1$d/%2$s";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private Uri                    imageUri;
@@ -330,9 +328,8 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
             state = "pitch";
         }
 
-        String screenName = String.format(TRACKER_SCREEN_TAG, campaignId, state);
-        mTracker.setScreenName(screenName);
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        String screenName = String.format(AnalyticsUtils.SCREEN_CAMPAIGN, campaignId, state);
+        AnalyticsUtils.sendScreen(mTracker, screenName);
     }
 
     @SuppressWarnings("UnusedDeclaration")

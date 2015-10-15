@@ -17,6 +17,7 @@ import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.fragments.IntroFragment;
 import org.dosomething.letsdothis.ui.fragments.RegisterLoginFragment;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 /**
  * Created by toidiu on 4/15/15.
@@ -29,9 +30,9 @@ public class IntroActivity extends BaseActivity
 
     // Screen names to use for analytics tracking. Array index corresponds to pager position.
     private final String[] TRACKER_SCREEN_TAGS = {
-        "onboarding-first",
-        "onboarding-second",
-        "user-connect"
+            AnalyticsUtils.SCREEN_ONBOARDING_1,
+            AnalyticsUtils.SCREEN_ONBOARDING_2,
+            AnalyticsUtils.SCREEN_USER_CONNECT
     };
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views

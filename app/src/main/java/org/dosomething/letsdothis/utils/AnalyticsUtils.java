@@ -40,6 +40,8 @@ public class AnalyticsUtils {
     // Screen names
     public static final String SCREEN_CAMPAIGN = "campaign/%1$d/%2$s";
     public static final String SCREEN_INTEREST_GROUP = "taxonomy_term/%1$d";
+    public static final String SCREEN_ONBOARDING_1 = "onboarding-first";
+    public static final String SCREEN_ONBOARDING_2 = "onboarding-second";
     public static final String SCREEN_REPORTBACK_FORM = "campaign/%1$d/reportbackform";
     public static final String SCREEN_REPORTBACK_ITEM = "reportback-item/%1$d";
     public static final String SCREEN_SETTINGS = "settings";

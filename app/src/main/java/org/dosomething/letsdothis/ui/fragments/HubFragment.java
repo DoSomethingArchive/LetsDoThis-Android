@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import org.dosomething.letsdothis.BuildConfig;
@@ -55,7 +54,6 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     public static final  String TAG            = HubFragment.class.getSimpleName();
     private static final int    SELECT_PICTURE = 52345;
     public static final  String EXTRA_ID       = "id";
-    private final String TRACKER_SCREEN_TAG = "user-profile/%1$s";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private HubAdapter       adapter;
@@ -143,9 +141,8 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         }
 
         // Submit screen view to Google Analytics
-        String screenName = String.format(TRACKER_SCREEN_TAG, trackerIdentifier);
-        mTracker.setScreenName(screenName);
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        String screenName = String.format(AnalyticsUtils.SCREEN_USER_PROFILE, trackerIdentifier);
+        AnalyticsUtils.sendScreen(mTracker, screenName);
     }
 
     @Override

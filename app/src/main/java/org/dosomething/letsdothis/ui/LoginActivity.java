@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import org.dosomething.letsdothis.LDTApplication;
@@ -26,7 +25,6 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 public class LoginActivity extends BaseActivity
 {
     private static final String TAG = LoginActivity.class.getSimpleName();
-    private final String TRACKER_SCREEN_TAG = "user-login";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private EditText phoneEmail;
@@ -79,8 +77,7 @@ public class LoginActivity extends BaseActivity
     public void onResume() {
         super.onResume();
 
-        mTracker.setScreenName(TRACKER_SCREEN_TAG);
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        AnalyticsUtils.sendScreen(mTracker, AnalyticsUtils.SCREEN_USER_LOGIN);
     }
 
     private void initLoginListener()

@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Picasso;
 
@@ -19,6 +18,7 @@ import org.dosomething.letsdothis.tasks.DbGetCampaignTask;
 import org.dosomething.letsdothis.tasks.ReportBackDetailsTask;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
 import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 import java.util.Locale;
 
@@ -32,7 +32,6 @@ public class ReportBackDetailsActivity extends BaseActivity
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String EXTRA_REPORT_BACK_ID = "report_back_id";
     public static final String EXTRA_CAMPAIGN_ID = "campaign_id";
-    private static final String TRACKER_SCREEN_TAG = "reportback-item/%1$d";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private ImageView image;
@@ -87,9 +86,8 @@ public class ReportBackDetailsActivity extends BaseActivity
 
         // Submit screen view to Google Analytics
         int id = getIntent().getIntExtra(EXTRA_REPORT_BACK_ID, -1);
-        String screenName = String.format(TRACKER_SCREEN_TAG, id);
-        mTracker.setScreenName(screenName);
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        String screenName = String.format(AnalyticsUtils.SCREEN_REPORTBACK_ITEM, id);
+        AnalyticsUtils.sendScreen(mTracker, screenName);
     }
 
     public static Intent getLaunchIntent(Context context, int reportBackId, int campaignId)

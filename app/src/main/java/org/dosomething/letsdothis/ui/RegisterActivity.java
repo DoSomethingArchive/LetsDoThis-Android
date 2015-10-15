@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.facebook.login.LoginManager;
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Picasso;
 
@@ -40,7 +39,6 @@ public class RegisterActivity extends BaseActivity
     public static final  String FB_USER        = "FB_USER";
     public static final  int    SELECT_PICTURE = 321;
     private static final String TAG            = RegisterActivity.class.getSimpleName();
-    private final String TRACKER_SCREEN_TAG = "user-register";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Views
     private EditText  email;
@@ -121,8 +119,7 @@ public class RegisterActivity extends BaseActivity
     public void onResume() {
         super.onResume();
 
-        mTracker.setScreenName(TRACKER_SCREEN_TAG);
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        AnalyticsUtils.sendScreen(mTracker, AnalyticsUtils.SCREEN_USER_REGISTER);
     }
 
     public void choosePicture()

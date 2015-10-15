@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.viewpagerindicator.TabPageIndicator;
 
@@ -20,6 +19,7 @@ import org.dosomething.letsdothis.data.InterestGroup;
 import org.dosomething.letsdothis.tasks.GetInterestGroupTitleTask;
 import org.dosomething.letsdothis.ui.views.typeface.CustomTypefaceSpan;
 import org.dosomething.letsdothis.ui.views.typeface.TypefaceManager;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 import org.dosomething.letsdothis.utils.ViewUtils;
 
 import java.util.HashMap;
@@ -36,7 +36,6 @@ public class ActionsFragment extends Fragment
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String TAG = ActionsFragment.class.getSimpleName();
     public static final int INDICATOR_SPACING = 8;
-    private static final String TRACKER_SCREEN_TAG = "taxonomy_term/%1$d";
 
     // Listener to update title on the toolbar
     private SetTitleListener titleListener;
@@ -193,9 +192,8 @@ public class ActionsFragment extends Fragment
             return;
         }
 
-        String screenName = String.format(TRACKER_SCREEN_TAG, InterestGroup.values()[position].id);
-        mTracker.setScreenName(screenName);
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        String screenName = String.format(AnalyticsUtils.SCREEN_INTEREST_GROUP, InterestGroup.values()[position].id);
+        AnalyticsUtils.sendScreen(mTracker, screenName);
     }
 
     /**

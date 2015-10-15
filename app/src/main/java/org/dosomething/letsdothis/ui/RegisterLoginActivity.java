@@ -3,12 +3,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.fragments.RegisterLoginFragment;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 /**
  * Created by toidiu on 4/15/15.
@@ -16,7 +16,6 @@ import org.dosomething.letsdothis.ui.fragments.RegisterLoginFragment;
 public class RegisterLoginActivity extends BaseActivity {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     private static final String TAG = RegisterLoginActivity.class.getSimpleName();
-    private final String TRACKER_SCREEN_TAG = "user-connect";
 
     // Google Analytics tracker
     private Tracker mTracker;
@@ -47,7 +46,6 @@ public class RegisterLoginActivity extends BaseActivity {
     public void onResume() {
         super.onResume();
 
-        mTracker.setScreenName(TRACKER_SCREEN_TAG);
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        AnalyticsUtils.sendScreen(mTracker, AnalyticsUtils.SCREEN_USER_CONNECT);
     }
 }
