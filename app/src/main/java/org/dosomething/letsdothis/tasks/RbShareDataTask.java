@@ -111,6 +111,10 @@ public class RbShareDataTask extends BaseNetworkErrorHandlerTask
         return inputStream;
     }
 
+    public Campaign getCampaign() {
+        return campaign;
+    }
+
     @Override
     protected void onComplete(Context context)
     {
