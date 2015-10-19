@@ -27,41 +27,46 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
 /**
  * Created by toidiu on 4/16/15.
  */
-public class RbShareDataTask extends BaseNetworkErrorHandlerTask
-{
-    private final Campaign campaign;
-    public        File     file;
+public class RbShareDataTask extends BaseNetworkErrorHandlerTask {
+    // Campaign to get user's activity for
+    private final Campaign mCampaign;
+
+    // Reportback photo file path
+    public File mFile;
+
+    // User-reported quantity in the reportback
+    public String mQuantity;
 
     public RbShareDataTask(Campaign campaign)
     {
-        this.campaign = campaign;
+        mCampaign = campaign;
     }
 
     @Override
-    protected void run(Context context) throws Throwable
-    {
+    protected void run(Context context) throws Throwable {
+
         String sessionToken = AppPrefs.getInstance(context).getSessionToken();
         ResponseRbData response = NetworkHelper.getNorthstarAPIService()
-                .getRbData(sessionToken, campaign.id);
+                .getRbData(sessionToken, mCampaign.id);
 
+        // Get reported quantity
+        mQuantity = response.getQuantity();
+
+        // Get photo file path. Download it if we don't have it yet.
         ReportBack[] list = ResponseRbData.getRbList(response);
-        if(list.length > 0)
-        {
+        if (list.length > 0) {
             ReportBack reportBack = list[list.length - 1];
 
             String name = "rb_" + response.data
                     .getReportback_data().id + "item_" + reportBack.id + ".jpg";
-            if((getFile(name)).exists())
-            {
-                this.file = getFile(name);
+            if((getFile(name)).exists()) {
+                mFile = getFile(name);
             }
-            else
-            {
-                this.file = downloadAndSaveTile(name, getInputStream(reportBack.getImagePath()));
+            else {
+                mFile = downloadAndSaveTile(name, getInputStream(reportBack.getImagePath()));
             }
         }
-        else
-        {
+        else {
             Toast.makeText(context, "Sorry, something got misplaced.", Toast.LENGTH_SHORT).show();
         }
     }
@@ -109,6 +114,10 @@ public class RbShareDataTask extends BaseNetworkErrorHandlerTask
         }
 
         return inputStream;
+    }
+
+    public Campaign getCampaign() {
+        return mCampaign;
     }
 
     @Override
