@@ -119,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_small"
                 android:layout_marginRight="@dimen/padding_small"
-                android:hint="@string/password"
+                android:hint="@string/password_hint"
                 android:imeOptions="actionNext"
                 android:inputType="textPassword"/>
 

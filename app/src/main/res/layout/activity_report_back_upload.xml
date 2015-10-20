@@ -51,10 +51,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-
             android:layout_marginTop="16dp"
             android:background="@drawable/bg_silver_border"
             android:focusable="true"
@@ -62,7 +60,8 @@
             android:gravity="top|left"
             android:hint="@string/report_back_caption"
             android:inputType="textCapSentences|textMultiLine"
-            android:lines="2"/>
+            android:lines="2"
+            android:maxLength="60"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
             android:id="@+id/number"
