@@ -324,24 +324,27 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(RbShareDataTask task) {
-        if (task.mFile != null && task.mFile.exists()) {
-            Intent share = new Intent(Intent.ACTION_SEND);
-            share.setType("text/plain");
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("text/plain");
 
-            // Set default subject and text body
-            share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+        share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+
+        // Add a default message if we have the data we need
+        if (task.getCampaign() != null) {
             String defaultMessage = String.format(getString(R.string.share_reportback_message),
                     task.getCampaign().verb,
                     task.mQuantity,
                     task.getCampaign().noun);
             share.putExtra(Intent.EXTRA_TEXT, defaultMessage);
+        }
 
-            // Add file
+        // Attach the file if we have it
+        if (task.mFile != null && task.mFile.exists()) {
             Uri uri = Uri.fromFile(task.mFile);
             share.putExtra(Intent.EXTRA_STREAM, uri);
-
-            startActivity(share);
         }
+
+        startActivity(share);
     }
 
     @SuppressWarnings("UnusedDeclaration")
