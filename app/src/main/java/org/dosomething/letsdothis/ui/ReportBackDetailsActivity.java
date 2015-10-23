@@ -164,9 +164,14 @@ public class ReportBackDetailsActivity extends BaseActivity
         }
 
         // User profile photo
-        if (reportBack.user.avatarPath != null && !reportBack.user.avatarPath.isEmpty()) {
-            Picasso.with(this).load(reportBack.user.avatarPath)
+        if (reportBack.user.photo != null && !reportBack.user.photo.isEmpty()) {
+            Picasso.with(this).load(reportBack.user.photo)
                     .placeholder(R.drawable.default_profile_photo)
+                    .resizeDimen(R.dimen.friend_avatar, R.dimen.friend_avatar)
+                    .into(avatar);
+        }
+        else {
+            Picasso.with(this).load(R.drawable.default_profile_photo)
                     .resizeDimen(R.dimen.friend_avatar, R.dimen.friend_avatar)
                     .into(avatar);
         }
