@@ -54,10 +54,8 @@ public class UpdateInterestGroupCampaignTask extends BaseNetworkErrorHandlerTask
     }
 
     @Override
-    protected boolean handleError(Context context, Throwable throwable)
-    {
-        super.handleError(context, throwable);
-        return false;
+    protected boolean handleError(Context context, Throwable throwable) {
+        return super.handleError(context, throwable);
     }
 
     @Override
