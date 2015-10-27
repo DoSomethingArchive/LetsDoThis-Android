@@ -38,6 +38,7 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
         initRate();
         initLogout();
         initChangePhoto();
+        initFeedback();
         initSuggestionLink();
 
         mTracker = ((LDTApplication)getActivity().getApplication()).getDefaultTracker();
@@ -112,6 +113,24 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                 });
     }
 
+    private void initFeedback() {
+        findPreference(getString(R.string.pref_feedback))
+                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        final String url = "https://docs.google.com/a/dosomething.org/forms/d/1KUWQgfuoKpUXg7uuurXSgYQ3RCuxwNVSrGeb_kDRqf8/viewform";
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(url));
+                        startActivity(intent);
+
+                        AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR,
+                                AnalyticsUtils.ACTION_TAP_FEEDBACK_FORM);
+
+                        return true;
+                    }
+                });
+    }
+
     private void initSuggestionLink() {
         findPreference(getString(R.string.pref_suggestion_link))
                 .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -122,7 +141,7 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                         startActivity(intent);
 
                         AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR,
-                                AnalyticsUtils.ACTION_TAP_FEEDBACK_FORM);
+                                AnalyticsUtils.ACTION_TAP_IDEAS_FORM);
 
                         return true;
                     }

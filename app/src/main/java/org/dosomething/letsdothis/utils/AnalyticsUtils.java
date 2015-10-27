@@ -34,6 +34,7 @@ public class AnalyticsUtils {
     public static final String ACTION_SHARE_PHOTO = "share photo";
     public static final String ACTION_LOG_OUT = "log out";
     public static final String ACTION_TAP_FEEDBACK_FORM = "tap on feedback form";
+    public static final String ACTION_TAP_IDEAS_FORM = "tap on ideas form";
     public static final String ACTION_TAP_PRIVACY_POLICY = "tap on privacy policy";
     public static final String ACTION_TAP_REVIEW_APP_BUTTON = "tap on review app button";
 
