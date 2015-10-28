@@ -78,9 +78,17 @@ public class IntroActivity extends BaseActivity
                 switch(position)
                 {
                     case 0:
-                        return IntroFragment.newInstance(R.string.intro_title_1,  R.string.intro_desc_1);
+                        return IntroFragment.newInstance(
+                                R.string.intro_title_1,
+                                R.string.intro_desc_1,
+                                R.drawable.onboarding_phone1
+                        );
                     case 1:
-                        return IntroFragment.newInstance(R.string.intro_title_2,  R.string.intro_desc_2);
+                        return IntroFragment.newInstance(
+                                R.string.intro_title_2,
+                                R.string.intro_desc_2,
+                                R.drawable.onboarding_phone2
+                        );
 
                 }
                 return RegisterLoginFragment.newInstance();
