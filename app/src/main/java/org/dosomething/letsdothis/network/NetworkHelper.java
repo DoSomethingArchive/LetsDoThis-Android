@@ -85,7 +85,7 @@ public class NetworkHelper
             baseUrl = DoSomethingAPI.PRODUCTION_URL;
         }
         else if (BuildConfig.BUILD_TYPE.equals("internal")) {
-            baseUrl = DoSomethingAPI.THOR_URL;
+            baseUrl = DoSomethingAPI.PRODUCTION_URL;
         }
         else {
             baseUrl = DoSomethingAPI.QA_URL;
@@ -105,7 +105,7 @@ public class NetworkHelper
             baseUrl = NorthstarAPI.PRODUCTION_URL;
         }
         else if (BuildConfig.BUILD_TYPE.equals("internal")) {
-            baseUrl = NorthstarAPI.THOR_URL;
+            baseUrl = NorthstarAPI.PRODUCTION_URL;
         }
         else {
             baseUrl = NorthstarAPI.QA_URL;
