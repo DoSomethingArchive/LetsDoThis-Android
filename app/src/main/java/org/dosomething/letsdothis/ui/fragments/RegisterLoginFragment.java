@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
@@ -55,6 +56,8 @@ public class RegisterLoginFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
         AppPrefs.getInstance(getActivity()).setFirstIntro(false);
+
+        FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
     }
 
     @Override
@@ -101,28 +104,23 @@ public class RegisterLoginFragment extends Fragment
         }
 
         callbackManager = CallbackManager.Factory.create();
-        LoginManager.getInstance()
-                .registerCallback(callbackManager, new FacebookCallback<LoginResult>()
-                {
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
                     @Override
-                    public void onSuccess(LoginResult loginResult)
-                    {
+                    public void onSuccess(LoginResult loginResult) {
                         final GraphRequest request = GraphRequest
                                 .newMeRequest(loginResult.getAccessToken(),
-                                              new GraphRequest.GraphJSONObjectCallback()
-                                              {
-                                                  @Override
-                                                  public void onCompleted(JSONObject object, GraphResponse response)
-                                                  {
-                                                      if(response.getError() == null)
-                                                      {
-                                                          FbUser user = new Gson().fromJson(
-                                                                  response.getRawResponse(),
-                                                                  FbUser.class);
-                                                          startRegisterActivity(user);
-                                                      }
-                                                  }
-                                              });
+                                        new GraphRequest.GraphJSONObjectCallback() {
+                                            @Override
+                                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                                if (response.getError() == null) {
+                                                    FbUser user = new Gson().fromJson(
+                                                            response.getRawResponse(),
+                                                            FbUser.class);
+                                                    startRegisterActivity(user);
+                                                }
+                                            }
+                                        });
                         Bundle parameters = new Bundle();
                         parameters.putString("fields", "id,email, birthday, first_name, last_name");
                         request.setParameters(parameters);
@@ -130,21 +128,16 @@ public class RegisterLoginFragment extends Fragment
                     }
 
                     @Override
-                    public void onCancel()
-                    {
-                        if(BuildConfig.DEBUG)
-                        {
-                            Toast.makeText(getActivity(), "Cancel", Toast.LENGTH_SHORT).show();
+                    public void onCancel() {
+                        if (BuildConfig.DEBUG) {
+                            Toast.makeText(getActivity(), "Facebook Login Canceled", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
-                    public void onError(FacebookException e)
-                    {
-                        if(BuildConfig.DEBUG)
-                        {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT)
-                                    .show();
+                    public void onError(FacebookException e) {
+                        if (BuildConfig.DEBUG) {
+                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
