@@ -254,11 +254,11 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupAda
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(RbShareDataTask task)
     {
-        if(task.file != null && task.file.exists())
+        if(task.mFile != null && task.mFile.exists())
         {
             Intent share = new Intent(Intent.ACTION_SEND);
             share.setType("image/*");
-            Uri uri = Uri.fromFile(task.file);
+            Uri uri = Uri.fromFile(task.mFile);
             share.putExtra(Intent.EXTRA_STREAM, uri);
             startActivity(share);
         }

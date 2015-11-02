@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.dosomething.letsdothis.R;
@@ -18,12 +19,14 @@ public class IntroFragment extends Fragment
     public static final String TAG              = IntroFragment.class.getSimpleName();
     public static final String ARG_TITLE_RES    = "title";
     public static final String ARG_DESC_RES     = "description";
+    public static final String ARG_IMAGE_RES    = "image";
 
-    public static Fragment newInstance(int titleTextRes, int descTextRes)
+    public static Fragment newInstance(int titleTextRes, int descTextRes, int imageRes)
     {
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_TITLE_RES, titleTextRes);
         bundle.putInt(ARG_DESC_RES, descTextRes);
+        bundle.putInt(ARG_IMAGE_RES, imageRes);
 
         IntroFragment introFragment = new IntroFragment();
         introFragment.setArguments(bundle);
@@ -50,11 +53,16 @@ public class IntroFragment extends Fragment
 
         int titleRes = getArguments().getInt(ARG_TITLE_RES);
         int descriptionRes = getArguments().getInt(ARG_DESC_RES);
+        int imageRes = getArguments().getInt(ARG_IMAGE_RES);
 
         TextView title = (TextView) view.findViewById(R.id.title);
         title.setText(titleRes);
+
         TextView description = (TextView) view.findViewById(R.id.description);
         description.setText(descriptionRes);
+
+        ImageView image = (ImageView) view.findViewById(R.id.image);
+        image.setImageResource(imageRes);
     }
 
 }

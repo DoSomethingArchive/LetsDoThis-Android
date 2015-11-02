@@ -8,14 +8,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Picasso;
 
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.tasks.DbGetCampaignTask;
 import org.dosomething.letsdothis.tasks.ReportBackDetailsTask;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
 import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 import java.util.Locale;
 
@@ -45,6 +48,9 @@ public class ReportBackDetailsActivity extends BaseActivity
     private String actionVerb;
     private String actionQuantity;
 
+    // Google Analytics tracker
+    private Tracker mTracker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -65,11 +71,23 @@ public class ReportBackDetailsActivity extends BaseActivity
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mTracker = ((LDTApplication)getApplication()).getDefaultTracker();
+
         TaskQueue.loadQueueDefault(this).execute(
                 new ReportBackDetailsTask(getIntent().getIntExtra(EXTRA_REPORT_BACK_ID, -1)));
 
         TaskQueue.loadQueueDefault(this).execute(
                 new DbGetCampaignTask(getIntent().getStringExtra(EXTRA_CAMPAIGN_ID)));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Submit screen view to Google Analytics
+        int id = getIntent().getIntExtra(EXTRA_REPORT_BACK_ID, -1);
+        String screenName = String.format(AnalyticsUtils.SCREEN_REPORTBACK_ITEM, id);
+        AnalyticsUtils.sendScreen(mTracker, screenName);
     }
 
     public static Intent getLaunchIntent(Context context, int reportBackId, int campaignId)
@@ -146,9 +164,14 @@ public class ReportBackDetailsActivity extends BaseActivity
         }
 
         // User profile photo
-        if (reportBack.user.avatarPath != null && !reportBack.user.avatarPath.isEmpty()) {
-            Picasso.with(this).load(reportBack.user.avatarPath)
+        if (reportBack.user.photo != null && !reportBack.user.photo.isEmpty()) {
+            Picasso.with(this).load(reportBack.user.photo)
                     .placeholder(R.drawable.default_profile_photo)
+                    .resizeDimen(R.dimen.friend_avatar, R.dimen.friend_avatar)
+                    .into(avatar);
+        }
+        else {
+            Picasso.with(this).load(R.drawable.default_profile_photo)
                     .resizeDimen(R.dimen.friend_avatar, R.dimen.friend_avatar)
                     .into(avatar);
         }

@@ -100,11 +100,19 @@
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:id="@+id/solutionSupport"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_33"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/padding_medium"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_33"
             tool:text="solution support"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/campaign_reportback_prompt"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_33"/>
     </LinearLayout>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomButton

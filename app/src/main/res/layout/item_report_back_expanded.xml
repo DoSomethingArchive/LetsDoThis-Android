@@ -23,7 +23,6 @@
         <org.dosomething.letsdothis.ui.views.CircleImageView
             android:layout_marginLeft="@dimen/padding_small"
             android:id="@+id/avatar"
-            android:src="@drawable/default_profile_photo"
             android:layout_width="@dimen/friend_avatar"
             android:layout_height="@dimen/friend_avatar"
             app:background_color="@color/gray"

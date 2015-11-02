@@ -112,6 +112,7 @@
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
 
         <!-- Parse-->
+        <meta-data android:name="com.parse.push.notification_icon" android:resource="@drawable/push_icon"/>
         <service android:name="com.parse.PushService" />
         <receiver android:name="com.parse.ParseBroadcastReceiver">
             <intent-filter>

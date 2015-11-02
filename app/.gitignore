@@ -1,1 +1,8 @@
 /build
+
+# Secrets
+fabric.properties
+secrets.properties
+
+# Keystores
+letsdothis-android-release.keystore

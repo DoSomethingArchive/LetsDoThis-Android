@@ -74,7 +74,7 @@ public interface NorthstarAPI {
     ResponseUser userProfileWithDrupalId(@Path("id") String id) throws NetworkException;
 
     @Headers("Content-Type: application/json")
-    @PUT("/users/{id}")
+    @PUT("/users/_id/{id}")
     ResponseUserUpdate updateUser(@Path("id") String id, @Body TypedInput user) throws NetworkException;
 
     @POST("/logout")
@@ -107,7 +107,7 @@ public interface NorthstarAPI {
     ResponseReportBack submitKudos(@Body RequestKudo requestKudo, @Header("Session") String sessionToken) throws NetworkException;
 
     @Headers("Content-Type: application/json")
-    @PUT("/users/{id}")
+    @PUT("/users/_id/{id}")
     ResponseUserUpdate setParseInstallationId(@Path("id") String id, @Body ParseInstallationRequest ParseInstallationRequest) throws NetworkException;
 
     @Multipart

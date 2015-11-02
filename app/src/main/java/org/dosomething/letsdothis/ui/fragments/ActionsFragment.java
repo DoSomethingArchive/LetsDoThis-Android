@@ -10,13 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.gms.analytics.Tracker;
 import com.viewpagerindicator.TabPageIndicator;
 
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.InterestGroup;
 import org.dosomething.letsdothis.tasks.GetInterestGroupTitleTask;
 import org.dosomething.letsdothis.ui.views.typeface.CustomTypefaceSpan;
 import org.dosomething.letsdothis.ui.views.typeface.TypefaceManager;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 import org.dosomething.letsdothis.utils.ViewUtils;
 
 import java.util.HashMap;
@@ -52,6 +55,9 @@ public class ActionsFragment extends Fragment
     // Retry button
     private Button mRetryButton;
 
+    // Google Analytics tracker
+    private Tracker mTracker;
+
     public static ActionsFragment newInstance()
     {
         return new ActionsFragment();
@@ -71,6 +77,14 @@ public class ActionsFragment extends Fragment
         titleListener.setTitle("Actions");
 
         EventBusExt.getDefault().register(this);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        LDTApplication application = (LDTApplication)getActivity().getApplication();
+        mTracker = application.getDefaultTracker();
     }
 
     @Override
@@ -122,8 +136,26 @@ public class ActionsFragment extends Fragment
             }
         };
 
+        ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+            @Override
+            public void onPageSelected(int position) {
+                // Submit screen view to Google Analytics
+                sendScreenViewToAnalytics(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        };
+
+        // Log initial screen into analytics
+        sendScreenViewToAnalytics(0);
+
         mPager.setAdapter(pagerAdapter);
         mIndicator.setViewPager(mPager);
+        mIndicator.setOnPageChangeListener(pageChangeListener);
 
         if (NetworkUtils.isOnline(getActivity())) {
             fetchGroupNames();
@@ -148,6 +180,20 @@ public class ActionsFragment extends Fragment
     public void onDestroy() {
         super.onDestroy();
         EventBusExt.getDefault().unregister(this);
+    }
+
+    /**
+     * Send screen view to analytics.
+     *
+     * @param position int Pager position
+     */
+    protected void sendScreenViewToAnalytics(int position) {
+        if (mTracker == null) {
+            return;
+        }
+
+        String screenName = String.format(AnalyticsUtils.SCREEN_INTEREST_GROUP, InterestGroup.values()[position].id);
+        AnalyticsUtils.sendScreen(mTracker, screenName);
     }
 
     /**

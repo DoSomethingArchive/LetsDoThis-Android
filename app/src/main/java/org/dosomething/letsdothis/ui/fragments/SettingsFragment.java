@@ -7,8 +7,12 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
+import com.google.android.gms.analytics.Tracker;
+
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.BaseActivity;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 /**
  * Created by izzyoji :) on 4/29/15.
@@ -16,6 +20,9 @@ import org.dosomething.letsdothis.ui.BaseActivity;
 public class SettingsFragment extends PreferenceFragment implements ConfirmDialog.ConfirmListener
 {
     private SetTitleListener setTitleListener;
+
+    // Google Analytics tracker
+    private Tracker mTracker;
 
     public static SettingsFragment newInstance()
     {
@@ -31,7 +38,10 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
         initRate();
         initLogout();
         initChangePhoto();
+        initFeedback();
         initSuggestionLink();
+
+        mTracker = ((LDTApplication)getActivity().getApplication()).getDefaultTracker();
     }
 
     @Override
@@ -95,6 +105,27 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                             startActivity(intent);
                         }
 
+                        AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR,
+                                AnalyticsUtils.ACTION_TAP_REVIEW_APP_BUTTON);
+
+                        return true;
+                    }
+                });
+    }
+
+    private void initFeedback() {
+        findPreference(getString(R.string.pref_feedback))
+                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        final String url = "https://docs.google.com/a/dosomething.org/forms/d/1KUWQgfuoKpUXg7uuurXSgYQ3RCuxwNVSrGeb_kDRqf8/viewform";
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(url));
+                        startActivity(intent);
+
+                        AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR,
+                                AnalyticsUtils.ACTION_TAP_FEEDBACK_FORM);
+
                         return true;
                     }
                 });
@@ -108,6 +139,9 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setData(Uri.parse("https://www.dosomething.org/campaigns/submit-your-idea"));
                         startActivity(intent);
+
+                        AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR,
+                                AnalyticsUtils.ACTION_TAP_IDEAS_FORM);
 
                         return true;
                     }
