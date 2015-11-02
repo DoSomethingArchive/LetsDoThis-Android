@@ -24,7 +24,7 @@ public interface DoSomethingAPI {
     ResponseCampaignWrapper campaign(@Path("id") int id) throws NetworkException;
 
     @Headers("Content-Type: application/json")
-    @GET("/reportback-items.json")
+    @GET("/reportback-items.json?load_user=true")
     ResponseReportBackList reportBackList(
             @Query("status") String status,
             @Query("campaigns") String campaignIds,
@@ -33,7 +33,7 @@ public interface DoSomethingAPI {
             @Query("page") int page) throws NetworkException;
 
     @Headers("Content-Type: application/json")
-    @GET("/reportback-items/{id}.json")
+    @GET("/reportback-items/{id}.json?load_user=true")
     ResponseReportBack reportBack(@Path("id") int id) throws NetworkException;
 
     @Headers("Content-Type: application/json")
