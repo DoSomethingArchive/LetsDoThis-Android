@@ -69,6 +69,7 @@
     <string name="error_interest_group_titles">There was an error getting campaign info</string>
     <string name="error_login_phone_email">Must not be empty</string>
     <string name="error_login_password">Must not be empty</string>
+    <string name="error_photo_select">Error loading the photo</string>
     <string name="error_registration_email">We need a valid email</string>
     <string name="error_registration_first_name">We need your first name</string>
     <string name="error_registration_password">Your password must be 6+ characters</string>
