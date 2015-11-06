@@ -18,8 +18,16 @@ public class ReportBackImageView extends ImageView
         super(context, attrs);
     }
 
-    public ReportBackImageView(Context context, AttributeSet attrs, int defStyleAttr)
-    {
+    public ReportBackImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        // Set height to be same as the measured width.
+        int width = getMeasuredWidth();
+        setMeasuredDimension(width, width);
     }
 }
