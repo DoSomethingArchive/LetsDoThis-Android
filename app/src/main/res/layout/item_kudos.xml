@@ -17,7 +17,7 @@
         android:layout_height="28dp"
         tools:text="4"
         android:gravity="center"
-        app:typeface="proxima_nova_bold"
+        app:typeface="brandon_bold"
         android:layout_margin="@dimen/padding_small"
         android:textSize="@dimen/text_small"
         android:id="@+id/count"/>

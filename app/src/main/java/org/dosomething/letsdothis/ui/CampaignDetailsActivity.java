@@ -219,53 +219,49 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if(resultCode == RESULT_OK)
-        {
-            if(requestCode == SELECT_PICTURE)
-            {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECT_PICTURE) {
                 final boolean isCamera;
-                if(data == null || data.getData() == null)
-                {
+                if (data == null || data.getData() == null) {
                     isCamera = true;
                 }
-                else
-                {
+                else {
                     final String action = data.getAction();
-                    if(action == null)
-                    {
+                    if (action == null) {
                         isCamera = false;
                     }
-                    else
-                    {
+                    else {
                         isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                     }
                 }
 
-                Uri selectedImageUri;
-                if(isCamera)
-                {
+                Uri selectedImageUri = null;
+                if (isCamera) {
                     selectedImageUri = imageUri;
                 }
-                else
-                {
+                else if (data != null) {
                     selectedImageUri = data.getData();
                 }
 
                 Campaign clickedCampaign = adapter.getCampaign();
-                startActivityForResult(PhotoCropActivity
-                                               .getResultIntent(this, selectedImageUri.toString(),
-                                                                clickedCampaign.title,
-                                                                clickedCampaign.id),
-                                       PhotoCropActivity.RESULT_CODE);
+                if (selectedImageUri != null) {
+Toast.makeText(CampaignDetailsActivity.this, R.string.error_photo_select, Toast.LENGTH_SHORT).show();
+                    Intent cropIntent = PhotoCropActivity.getResultIntent(
+                            this,
+                            selectedImageUri.toString(),
+                            clickedCampaign.title,
+                            clickedCampaign.id);
+                    startActivityForResult(cropIntent, PhotoCropActivity.RESULT_CODE);
+                }
+                else {
+                    Toast.makeText(CampaignDetailsActivity.this, R.string.error_photo_select, Toast.LENGTH_SHORT).show();
+                }
             }
-            else if(requestCode == PhotoCropActivity.RESULT_CODE)
-            {
+            else if (requestCode == PhotoCropActivity.RESULT_CODE) {
                 String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
                 Campaign clickedCampaign = adapter.getCampaign();
-                String format = String
-                        .format(getString(R.string.reportback_upload_hint), clickedCampaign.noun,
+                String format = String.format(getString(R.string.reportback_upload_hint), clickedCampaign.noun,
                                 clickedCampaign.verb);
                 startActivity(ReportBackUploadActivity
                                       .getLaunchIntent(this, filePath, clickedCampaign.title,

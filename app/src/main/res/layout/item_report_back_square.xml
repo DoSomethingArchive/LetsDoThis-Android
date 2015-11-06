@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--FIXME this should be a dynamically sized square-->
 <org.dosomething.letsdothis.ui.views.ReportBackImageView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
