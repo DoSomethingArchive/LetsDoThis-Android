@@ -12,9 +12,6 @@ public class TypefaceManager
 
     public final static int BRANDON_BOLD         = 0;
     public final static int BRANDON_REGULAR      = 1;
-    public final static int PROXIMA_NOVA_BOLD    = 3;
-    public final static int PROXIMA_NOVA_REGULAR = 4;
-
 
     public final static int DEFAULT = BRANDON_REGULAR;
 
@@ -42,14 +39,6 @@ public class TypefaceManager
             case BRANDON_REGULAR:
             default:
                 typeface = Typeface.createFromAsset(context.getAssets(), "fonts/brandon_reg.otf");
-                break;
-            case PROXIMA_NOVA_BOLD:
-                typeface = Typeface
-                        .createFromAsset(context.getAssets(), "fonts/proxima_nova_bold.otf");
-                break;
-            case PROXIMA_NOVA_REGULAR:
-                typeface = Typeface
-                        .createFromAsset(context.getAssets(), "fonts/proxima_nova_reg.otf");
                 break;
         }
         return typeface;
