@@ -101,7 +101,7 @@
         #picsoritdidnthappen
     </string>
     <string name="campaign_reportback_confirmation">Stunning! You submitted your action for approval. </string>
-    <string name="campaign_signup_confirmation">Niiiiice. You signed up for %1$s.</string>
+    <string name="campaign_signup_confirmation">Niiiiice. You\'re signed up for this campaign.</string>
     <string name="campaign_signup_failed">Oops! Our bad. Looks like there was an issue with that
         request. We\'re looking into it now!
     </string>

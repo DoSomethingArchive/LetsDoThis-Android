@@ -3,8 +3,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.widget.Toast;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.RequestReportback;
 import org.dosomething.letsdothis.network.models.ResponseSubmitReportBack;
@@ -60,10 +62,11 @@ public class ReportbackUploadTask extends BaseNetworkErrorHandlerTask
     }
 
     @Override
-    protected void onComplete(Context context)
-    {
+    protected void onComplete(Context context) {
         super.onComplete(context);
         EventBusExt.getDefault().post(this);
+
+        Toast.makeText(context, R.string.campaign_reportback_confirmation, Toast.LENGTH_SHORT).show();
     }
 
 }

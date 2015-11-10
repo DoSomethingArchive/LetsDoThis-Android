@@ -246,7 +246,6 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
 
                 Campaign clickedCampaign = adapter.getCampaign();
                 if (selectedImageUri != null) {
-Toast.makeText(CampaignDetailsActivity.this, R.string.error_photo_select, Toast.LENGTH_SHORT).show();
                     Intent cropIntent = PhotoCropActivity.getResultIntent(
                             this,
                             selectedImageUri.toString(),

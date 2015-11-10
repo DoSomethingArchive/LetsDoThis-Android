@@ -51,15 +51,15 @@ public class UploadAvatarTask extends Task
     }
 
     @Override
-    protected boolean handleError(Context context, Throwable e)
-    {
-        Toast.makeText(context, context.getString(R.string.error_avatar_upload), Toast.LENGTH_SHORT).show();
+    protected boolean handleError(Context context, Throwable e) {
+        Toast.makeText(context, R.string.error_avatar_upload, Toast.LENGTH_SHORT).show();
         return true;
     }
 
     @Override
-    protected void onComplete(Context context)
-    {
+    protected void onComplete(Context context) {
         super.onComplete(context);
+
+        Toast.makeText(context, R.string.change_photo_confirmation, Toast.LENGTH_SHORT).show();
     }
 }
