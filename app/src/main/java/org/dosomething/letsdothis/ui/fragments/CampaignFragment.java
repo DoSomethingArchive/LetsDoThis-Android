@@ -128,7 +128,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         recyclerView.setLayoutManager(layoutManager);
 
         EventBusExt.getDefault().register(this);
-        dbCampaignRefresh();
+        campaignRefresh();
     }
 
     @Override
@@ -220,14 +220,13 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     }
 
 
-    public void dbCampaignRefresh()
+    public void campaignRefresh()
     {
         adapter.clear();
         currentRbQueryStatus = BaseReportBackListTask.STATUS_PROMOTED;
         currentPage = 0;
         totalPages = 0;
-        DatabaseHelper.defaultDatabaseQueue(getActivity())
-                .execute(new DbInterestGroupCampaignListTask(findGroupId()));
+        getCampaignQueue().execute(new UpdateInterestGroupCampaignTask(findGroupId()));
         refreshProgressBar();
     }
 
