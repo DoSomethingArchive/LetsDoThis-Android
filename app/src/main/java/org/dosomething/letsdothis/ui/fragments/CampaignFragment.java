@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.google.android.gms.analytics.Tracker;
@@ -16,7 +17,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
-import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.InterestGroup;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.tasks.BaseReportBackListTask;
@@ -62,6 +62,8 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     private String          currentRbQueryStatus;
     private ArrayList<Integer> campaignIds = new ArrayList<>();
     private ProgressBar mProgress;
+    private View mErrorView;
+    private Button mErrorRetry;
 
     // Google Analytics tracker
     private Tracker mTracker;
@@ -99,11 +101,27 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     {
         super.onActivityCreated(savedInstanceState);
         mPagerPosition = getArguments().getInt(KEY_POSITION);
+
+        // Error view if no campaigns or network connection problem
+        mErrorView = getView().findViewById(R.id.error);
+        mErrorRetry = (Button) getView().findViewById(R.id.retry_button);
+        mErrorRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerView.setVisibility(View.VISIBLE);
+                mErrorView.setVisibility(View.GONE);
+
+                campaignRefresh();
+            }
+        });
+
+        // Progress bar
         mProgress = (ProgressBar) getView().findViewById(R.id.progress);
         mProgress.getIndeterminateDrawable()
                 .setColorFilter(getResources().getColor(R.color.cerulean_1),
                                 PorterDuff.Mode.SRC_IN);
 
+        // Recycler and adapter
         recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
         adapter = new CampaignAdapter(this, getResources());
         recyclerView.setAdapter(adapter);
@@ -127,7 +145,10 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
 
         recyclerView.setLayoutManager(layoutManager);
 
+        // Register this fragment for receiving events
         EventBusExt.getDefault().register(this);
+
+        // Execute tasks to get campaigns to populate the view
         campaignRefresh();
     }
 
@@ -324,7 +345,15 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(UpdateInterestGroupCampaignTask task)
     {
-        getCampaignQueue().execute(new DbInterestGroupCampaignListTask(task.interestGroupId));
+        if (task.campaigns == null || task.campaigns.isEmpty() || task.hasError()) {
+            recyclerView.setVisibility(View.GONE);
+            mErrorView.setVisibility(View.VISIBLE);
+        }
+        else {
+            getCampaignQueue().execute(new DbInterestGroupCampaignListTask(task.interestGroupId));
+        }
+
+        refreshProgressBar();
     }
 
     /**

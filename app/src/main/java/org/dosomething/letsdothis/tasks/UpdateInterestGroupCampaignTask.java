@@ -28,9 +28,12 @@ public class UpdateInterestGroupCampaignTask extends BaseNetworkErrorHandlerTask
     // Resulting campaigns
     public List<Campaign> campaigns;
 
-    public UpdateInterestGroupCampaignTask(int interestGroupId)
-    {
+    // True if an error was encountered during the task
+    private boolean mHasError;
+
+    public UpdateInterestGroupCampaignTask(int interestGroupId) {
         this.interestGroupId = interestGroupId;
+        this.mHasError = false;
     }
 
     @Override
@@ -55,7 +58,10 @@ public class UpdateInterestGroupCampaignTask extends BaseNetworkErrorHandlerTask
 
     @Override
     protected boolean handleError(Context context, Throwable throwable) {
-        return super.handleError(context, throwable);
+        super.handleError(context, throwable);
+        mHasError = true;
+
+        return true;
     }
 
     @Override
@@ -63,6 +69,10 @@ public class UpdateInterestGroupCampaignTask extends BaseNetworkErrorHandlerTask
     {
         EventBusExt.getDefault().post(this);
         super.onComplete(context);
+    }
+
+    public boolean hasError() {
+        return mHasError;
     }
 
     public static class IdQuery implements BaseTaskQueue.QueueQuery
