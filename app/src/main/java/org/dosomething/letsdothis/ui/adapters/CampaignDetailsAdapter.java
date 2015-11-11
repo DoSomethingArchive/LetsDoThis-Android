@@ -275,11 +275,15 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             }
 
             // Report back campaign name and details
-            reportBackViewHolder.title.setText(currentCampaign.title);
+
+            final String title = currentCampaign != null ? currentCampaign.title : "";
+            final String noun = currentCampaign != null ? currentCampaign.noun: "";
+            final String verb = currentCampaign != null ? currentCampaign.verb : "";
+            reportBackViewHolder.title.setText(title);
             reportBackViewHolder.caption.setText(reportBack.caption);
 
             String impactText = String.format("%s %s %s", String.valueOf(reportBack.reportback.quantity),
-                    currentCampaign.noun, currentCampaign.verb);
+                    noun, verb);
             reportBackViewHolder.impact.setText(impactText);
 
             // Click listeners on the user name and user photo

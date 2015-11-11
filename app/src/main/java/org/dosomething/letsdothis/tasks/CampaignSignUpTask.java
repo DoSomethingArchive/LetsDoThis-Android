@@ -27,14 +27,19 @@ public class CampaignSignUpTask extends Task {
     // Set to true if an error occurs
     private boolean mHasError;
 
+    // Set to true if this is a new signup
+    private boolean mIsNewSignup;
+
     public CampaignSignUpTask(int campaignId) {
         this.mCampaignId = campaignId;
+        this.mIsNewSignup = false;
     }
 
     public CampaignSignUpTask(int campaignId, int pagerPosition) {
         this.mCampaignId = campaignId;
         this.mPagerPosition = pagerPosition;
         this.mHasError = false;
+        this.mIsNewSignup = false;
     }
 
     //
@@ -54,8 +59,12 @@ public class CampaignSignUpTask extends Task {
 
     @Override
     protected void onComplete(Context context) {
-        EventBusExt.getDefault().post(this);
         super.onComplete(context);
+        EventBusExt.getDefault().post(this);
+
+        if (mIsNewSignup) {
+            Toast.makeText(context, R.string.campaign_signup_confirmation, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -75,12 +84,14 @@ public class CampaignSignUpTask extends Task {
             campaignActions.campaignId = mCampaignId;
             campaignActions.signUpId = ResponseCampaignSignUp.getSignUpId(response);
             CampaignActions.save(context, campaignActions);
+
+            this.mIsNewSignup = true;
         }
     }
 
     @Override
     protected boolean handleError(Context context, Throwable throwable) {
-        Toast.makeText(context, context.getString(R.string.error_signup), Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, R.string.error_signup, Toast.LENGTH_SHORT).show();
         mHasError = true;
         return true;
     }

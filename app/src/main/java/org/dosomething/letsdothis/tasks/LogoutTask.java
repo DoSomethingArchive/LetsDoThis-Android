@@ -3,7 +3,6 @@ import android.content.Context;
 
 import com.facebook.login.LoginManager;
 
-import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
@@ -12,25 +11,31 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
 /**
  * Created by izzyoji :) on 4/30/15.
  */
-public class LogoutTask extends BaseNetworkErrorHandlerTask
-{
-    private String sessionToken;
+public class LogoutTask extends BaseNetworkErrorHandlerTask {
 
     @Override
-    protected void run(Context context) throws Throwable
-    {
-        //FIXME switch to using persisted task
-        LoginManager.getInstance().logOut();
-        EventBusExt.getDefault().post(this);
+    protected void onComplete(Context context) {
+        super.onComplete(context);
 
-        sessionToken = AppPrefs.getInstance(context).getSessionToken();
-        NetworkHelper.getNorthstarAPIService().logout(sessionToken);
-        AppPrefs.getInstance(context).logout();
+        EventBusExt.getDefault().post(this);
     }
 
     @Override
-    protected boolean handleError(Context context, Throwable throwable)
-    {
+    protected void run(Context context) throws Throwable {
+        LoginManager.getInstance().logOut();
+
+        // Get current token to logout with
+        String sessionToken = AppPrefs.getInstance(context).getSessionToken();
+
+        // Clear local cache of the token
+        AppPrefs.getInstance(context).logout();
+
+        // Logout from API
+        NetworkHelper.getNorthstarAPIService().logout(sessionToken);
+    }
+
+    @Override
+    protected boolean handleError(Context context, Throwable throwable) {
         return true;
     }
 }

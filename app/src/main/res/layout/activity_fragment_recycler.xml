@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <ProgressBar
         android:id="@+id/progress"
@@ -20,5 +23,62 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/progress"
         android:background="@color/white"/>
+
+    <LinearLayout
+        android:id="@+id/error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:paddingLeft="@dimen/padding_xxlarge"
+        android:paddingRight="@dimen/padding_xxlarge"
+        android:paddingTop="@dimen/padding_xxlarge"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <org.dosomething.letsdothis.ui.views.CircleImageView
+            android:layout_width="@dimen/hub_avatar_height"
+            android:layout_height="@dimen/hub_avatar_height"
+            android:src="@drawable/default_profile_photo"
+            app:border_color="@color/white"
+            app:border_width="@dimen/padding_tiny"
+            app:draw_border="true"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/padding_small"
+            android:paddingRight="@dimen/padding_small"
+            android:paddingTop="@dimen/padding_medium"
+            android:text="@string/error_network_main_title"
+            android:textColor="@color/silverChalice"
+            android:textSize="@dimen/text_33"
+            android:textStyle="bold"
+            app:typeface="brandon_bold"
+            tool:text="@string/error_network_main_title" />
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/padding_small"
+            android:text="@string/error_network_main_body"
+            android:textColor="@color/black_70"
+            android:textSize="@dimen/text_33"
+            app:typeface="brandon_regular"
+            tool:text="@string/error_network_main_body"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+            android:id="@+id/retry_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_small"
+            android:text="@string/error_network_main_button"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            app:typeface="brandon_bold"
+            tool:text="@string/error_network_main_button"/>
+
+    </LinearLayout>
 
 </RelativeLayout>
