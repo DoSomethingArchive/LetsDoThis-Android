@@ -280,25 +280,21 @@ public class RegisterActivity extends BaseActivity
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(RegisterTask task)
-    {
+    public void onEventMainThread(RegisterTask task) {
         AppPrefs prefs = AppPrefs.getInstance(this);
-        if (prefs.getCurrentUserId() != null && prefs.getAvatarPath() != null)
-        {
+        if (prefs.getCurrentUserId() != null && prefs.getAvatarPath() != null) {
             TaskQueue.loadQueueDefault(RegisterActivity.this).execute(
                     new UploadAvatarTask(prefs.getCurrentUserId(), prefs.getAvatarPath())
             );
         }
 
-        if (prefs.isLoggedIn())
-        {
+        if (prefs.isLoggedIn()) {
             broadcastLogInSuccess(this);
             startActivity(MainActivity.getLaunchIntent(this));
         }
-        else
-        {
-            Snackbar snackbar = Snackbar
-                    .make(findViewById(R.id.snack), R.string.fail_register, Snackbar.LENGTH_SHORT);
+        else {
+            String message = task.getErrorMessage() != null ? task.getErrorMessage() : getString(R.string.fail_register);
+            Snackbar snackbar = Snackbar.make(findViewById(R.id.snack), message, Snackbar.LENGTH_SHORT);
             View snackBarView = snackbar.getView();
             snackBarView.setBackgroundColor(getResources().getColor(R.color.snack_error));
             snackbar.show();

@@ -150,7 +150,7 @@
     <string name="intro_title_2">Prove It</string>
     <string name="intro_desc_2">Submit and share photos of yourself in action -- and see other
         people\'s photos too. #picsoritdidnthappen</string>
-    <string name="fail_register">Register failed</string>
+    <string name="fail_register">Registration failed</string>
     <string name="fail_login">Your username or password was incorrect.</string>
     <string name="success_login">Login successful</string>
     <string name="success_register">Register successful</string>

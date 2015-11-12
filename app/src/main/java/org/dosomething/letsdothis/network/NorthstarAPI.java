@@ -55,11 +55,17 @@ public interface NorthstarAPI {
     ResponseLogin loginWithEmail(@Field("email") String email, @Field(
             "password") String password) throws NetworkException;
 
-    @Headers("Content-Type: application/json")
+    @Headers({
+            "Content-Type: application/json",
+            "Accept: application/json"
+    })
     @POST("/users?create_drupal_user=1")
     ResponseRegister registerWithEmail(@Body User user) throws NetworkException;
 
-    @Headers("Content-Type: application/json")
+    @Headers({
+            "Content-Type: application/json",
+            "Accept: application/json"
+    })
     @POST("/users?create_drupal_user=1")
     ResponseRegister registerWithMobile(@Body User user) throws NetworkException;
 

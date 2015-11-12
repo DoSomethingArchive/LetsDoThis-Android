@@ -10,6 +10,8 @@ import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.ParseInstallationRequest;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
+import retrofit.RetrofitError;
+
 /**
  * Created by toidiu on 4/16/15.
  */
@@ -17,6 +19,7 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
 {
     private final String mPhoneEmail;
     protected final String mPassword;
+    private String mErrorMessage;
 
     protected BaseRegistrationTask(String email, String password)
     {
@@ -24,6 +27,7 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
                 ? null
                 : email;
         mPassword = password;
+        mErrorMessage = null;
     }
 
     protected void loginUser(Context context, User user) throws Throwable
@@ -70,6 +74,41 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
     protected boolean matchesEmail(String email)
     {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    @Override
+    protected boolean handleError(Context context, Throwable throwable) {
+        if (throwable instanceof RetrofitError) {
+            RetrofitError retrofitError = (RetrofitError) throwable;
+            RegistrationError regError = (RegistrationError) retrofitError.getBodyAs(RegistrationError.class);
+            mErrorMessage = regError.error.message;
+
+            return true;
+        }
+        else {
+            return super.handleError(context, throwable);
+        }
+    }
+
+    /**
+     * Returns an error message received from an error response. Returns null if none.
+     *
+     * @return String
+     */
+    public String getErrorMessage() {
+        return mErrorMessage;
+    }
+
+    /**
+     * Data structure of error returned from a registration attempt.
+     */
+    class RegistrationError {
+        class RegistrationErrorBody {
+            public int code;
+            public String message;
+        }
+
+        public RegistrationErrorBody error;
     }
 
 }
