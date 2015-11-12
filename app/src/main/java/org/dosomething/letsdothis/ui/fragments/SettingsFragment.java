@@ -137,7 +137,7 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
                         Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse("https://www.dosomething.org/campaigns/submit-your-idea"));
+                        intent.setData(Uri.parse("https://www.dosomething.org/us/about/submit-your-campaign-idea"));
                         startActivity(intent);
 
                         AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR,
