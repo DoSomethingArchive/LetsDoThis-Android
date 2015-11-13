@@ -2,6 +2,8 @@ package org.dosomething.letsdothis.ui.fragments;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -40,6 +42,7 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
         initChangePhoto();
         initFeedback();
         initSuggestionLink();
+        displayVersionName();
 
         mTracker = ((LDTApplication)getActivity().getApplication()).getDefaultTracker();
     }
@@ -137,7 +140,7 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
                         Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse("https://www.dosomething.org/campaigns/submit-your-idea"));
+                        intent.setData(Uri.parse("https://www.dosomething.org/us/about/submit-your-campaign-idea"));
                         startActivity(intent);
 
                         AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR,
@@ -146,6 +149,19 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                         return true;
                     }
                 });
+    }
+
+    private void displayVersionName() {
+        String packageName = getActivity().getPackageName();
+        try {
+            PackageInfo packageInfo = getActivity().getPackageManager().getPackageInfo(packageName, 0);
+            String version = getString(R.string.pref_version_text, packageInfo.versionName);
+
+            findPreference(getString(R.string.pref_version_key)).setTitle(version);
+        }
+        catch (PackageManager.NameNotFoundException e) {
+            ; // Just don't display anything I guess? Or find some way to log it so we can see it.
+        }
     }
 
     @Override

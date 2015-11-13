@@ -56,15 +56,14 @@ public class RegisterTask extends BaseRegistrationTask
 
                 AppPrefs.getInstance(context).setSessionToken(response.data.session_token);
                 loginUser(context, user);
-                //FIXME: need to get the session token here
             }
         }
     }
 
     @Override
-    protected void onComplete(Context context)
-    {
+    protected void onComplete(Context context) {
         super.onComplete(context);
+
         EventBusExt.getDefault().post(this);
     }
 

@@ -166,7 +166,7 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     public void onCampaignClicked(int campaignId, boolean alreadySignedUp)
     {
         if (!alreadySignedUp) {
-            TaskQueue.loadQueueDefault(getActivity()).execute(new CampaignSignUpTask(campaignId));
+            TaskQueue.loadQueueDefault(getActivity()).execute(new CampaignSignUpTask(campaignId, mPagerPosition));
         }
         else {
             startActivity(CampaignDetailsActivity.getLaunchIntent(getActivity(), campaignId));
@@ -313,7 +313,6 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     {
         if(findGroupId() == task.interestGroupId)
         {
-            // @TODO seems like campaigns won't get updated on app if they're changed on the server?
             if(task.campList.isEmpty())
             {
                 getCampaignQueue()

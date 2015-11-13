@@ -133,6 +133,8 @@
     <string name="notification_pref">Notification Preferences</string>
     <string name="pref_feedback">Give Us Your Feedback</string>
     <string name="pref_suggestion_link">Have your own ideas? Fill out this form and let us know.</string>
+    <string name="pref_version_key">pref_version_key</string>
+    <string name="pref_version_text">v%1$s</string>
     <string name="expired_already">Oof. This action has expired. Let’s freshen things up.</string>
     <string name="max_kudos">99+</string>
     <string name="log_in_with_facebook">Log in with Facebook</string>
@@ -150,7 +152,7 @@
     <string name="intro_title_2">Prove It</string>
     <string name="intro_desc_2">Submit and share photos of yourself in action -- and see other
         people\'s photos too. #picsoritdidnthappen</string>
-    <string name="fail_register">Register failed</string>
+    <string name="fail_register">Registration failed</string>
     <string name="fail_login">Your username or password was incorrect.</string>
     <string name="success_login">Login successful</string>
     <string name="success_register">Register successful</string>
