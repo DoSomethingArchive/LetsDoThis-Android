@@ -133,6 +133,8 @@
     <string name="notification_pref">Notification Preferences</string>
     <string name="pref_feedback">Give Us Your Feedback</string>
     <string name="pref_suggestion_link">Have your own ideas? Fill out this form and let us know.</string>
+    <string name="pref_version_key">pref_version_key</string>
+    <string name="pref_version_text">v%1$s</string>
     <string name="expired_already">Oof. This action has expired. Let’s freshen things up.</string>
     <string name="max_kudos">99+</string>
     <string name="log_in_with_facebook">Log in with Facebook</string>
