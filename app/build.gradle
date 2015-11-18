@@ -65,8 +65,7 @@ android {
         release {
             // TODO: disabling minifyEnabled for now. It's removing some things it shouldn't.
             // minifyEnabled true
-            shrinkResources true
-            signingConfig signingConfigs.letsdothis
+            // shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         packagingOptions {
