@@ -92,7 +92,7 @@ public class LoginActivity extends BaseActivity
                 password.setBackgroundResource(R.drawable.bg_white_rounded_rect_filled);
 
                 boolean isValid = true;
-                String usertext = phoneEmail.getText().toString();
+                String usertext = phoneEmail.getText().toString().trim();
                 String passtext = password.getText().toString();
                 if (TextUtils.isEmpty(usertext)) {
                     String error = getResources().getString(R.string.error_login_phone_email);

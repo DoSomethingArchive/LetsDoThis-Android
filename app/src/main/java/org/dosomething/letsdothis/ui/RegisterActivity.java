@@ -242,10 +242,10 @@ public class RegisterActivity extends BaseActivity
             public void onClick(View view)
             {
                 if (validateForRegistration()) {
-                    String emailText = email.getText().toString();
-                    String phoneText = phone.getText().toString();
+                    String emailText = email.getText().toString().trim();
+                    String phoneText = phone.getText().toString().trim();
                     String passText = password.getText().toString();
-                    String firstText = firstName.getText().toString();
+                    String firstText = firstName.getText().toString().trim();
 
                     TaskQueue.loadQueueDefault(RegisterActivity.this).execute(
                             new RegisterTask(emailText, phoneText, passText, firstText));
