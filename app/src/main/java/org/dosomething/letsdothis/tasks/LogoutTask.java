@@ -3,8 +3,13 @@ import android.content.Context;
 
 import com.facebook.login.LoginManager;
 
+import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.utils.AppPrefs;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
@@ -22,13 +27,30 @@ public class LogoutTask extends BaseNetworkErrorHandlerTask {
 
     @Override
     protected void run(Context context) throws Throwable {
+        // Facebook logout
         LoginManager.getInstance().logOut();
 
+        AppPrefs prefs = AppPrefs.getInstance(context);
+        DatabaseHelper dbHelper = DatabaseHelper.getInstance(context);
+
+        // Clear user data from SharedPreferences and the database
+        prefs.clearUserData();
+        dbHelper.getUserDao().deleteById(prefs.getCurrentUserId());
+
+        // Clear campaign data from the DB
+        List<Campaign> listCampaigns = dbHelper.getCampDao().queryForAll();
+        ArrayList<Campaign> arrCampaigns = new ArrayList<>();
+        arrCampaigns.addAll(listCampaigns);
+        for (int i = 0; i < arrCampaigns.size(); i++) {
+            Campaign campaign = arrCampaigns.get(i);
+            dbHelper.getCampDao().deleteById(Integer.toString(campaign.id));
+        }
+
         // Get current token to logout with
-        String sessionToken = AppPrefs.getInstance(context).getSessionToken();
+        String sessionToken = prefs.getSessionToken();
 
         // Clear local cache of the token
-        AppPrefs.getInstance(context).logout();
+        prefs.logout();
 
         // Logout from API
         NetworkHelper.getNorthstarAPIService().logout(sessionToken);

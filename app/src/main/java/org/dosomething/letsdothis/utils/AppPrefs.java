@@ -154,4 +154,14 @@ public class AppPrefs
     {
         return getString(AVATAR_PATH, null);
     }
+
+    /**
+     * Clear preferences related to user data.
+     */
+    public void clearUserData() {
+        prefs.edit().remove(AVATAR_PATH).apply();
+        prefs.edit().remove(CURRENT_USER_ID).apply();
+        prefs.edit().remove(CURRENT_DRUPAL_ID).apply();
+        prefs.edit().remove(USER_SESSION_TOKEN).apply();
+    }
 }
