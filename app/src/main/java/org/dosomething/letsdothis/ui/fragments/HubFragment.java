@@ -288,7 +288,8 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
             userId = AppPrefs.getInstance(getActivity()).getCurrentUserId();
         }
 
-        TaskQueue.loadQueueDefault(getActivity()).execute(new GetUserCampaignsTask(userId));
+        GetUserCampaignsTask task = new GetUserCampaignsTask(userId, HubFragment.class.toString());
+        TaskQueue.loadQueueDefault(getActivity()).execute(task);
         refreshProgressBar();
     }
 
@@ -314,6 +315,10 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(GetUserCampaignsTask task) {
+        if (task.getOrigin() == null || !task.getOrigin().equals(HubFragment.class.toString())) {
+            return;
+        }
+
         refreshProgressBar();
         adapter.setCurrentCampaign(task.currentCampaignList);
 

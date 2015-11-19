@@ -27,6 +27,9 @@ public class GetUserCampaignsTask extends BaseNetworkErrorHandlerTask {
     // User id we're getting campaigns info for
     private String mUserId;
 
+    // Originating class this task came from
+    private String mOrigin;
+
     // Campaigns a user is participating in
     public List<Campaign> currentCampaignList;
 
@@ -35,6 +38,16 @@ public class GetUserCampaignsTask extends BaseNetworkErrorHandlerTask {
 
     public GetUserCampaignsTask(String id) {
         mUserId = id;
+        mOrigin = null;
+    }
+
+    public GetUserCampaignsTask(String id, String origin) {
+        mUserId = id;
+        mOrigin = origin;
+    }
+
+    public String getOrigin() {
+        return mOrigin;
     }
 
     @Override
