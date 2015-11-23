@@ -174,7 +174,10 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
         else {
             startActivity(CampaignDetailsActivity.getLaunchIntent(getActivity(), campaignId));
         }*/
-        TaskQueue.loadQueueDefault(getActivity()).execute(new CampaignSignUpTask(campaignId, mPagerPosition));
+        TaskQueue defaultQueue = TaskQueue.loadQueueDefault(getActivity());
+        if (!TaskQueueHelper.hasTasksOfType(defaultQueue, CampaignSignUpTask.class)) {
+            defaultQueue.execute(new CampaignSignUpTask(campaignId, mPagerPosition));
+        }
 
         refreshProgressBar();
     }
