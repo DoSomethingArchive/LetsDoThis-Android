@@ -345,10 +345,14 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             // Remove empty stub if it's there
             hubList.remove(CURRENT_CAMPAIGNS_EMPTY_STUB);
 
-            // Remove anything between the past campaigns label and current campaigns label
-            int indexPastLabel = hubList.indexOf(BEEN_THERE_DONE_GOOD);
-            if (indexPastLabel > indexCurrentLabel + 1) {
-                for (int i = indexPastLabel; i > indexCurrentLabel; i--) {
+            // Remove anything between the past campaigns label (or the end of the list if there are
+            // no past campaigns) and the current campaigns label
+            int indexRemoveTo = hubList.indexOf(BEEN_THERE_DONE_GOOD);
+            if (indexRemoveTo < 0) {
+                indexRemoveTo = hubList.size() - 1;
+            }
+            if (indexRemoveTo > indexCurrentLabel + 1) {
+                for (int i = indexRemoveTo; i > indexCurrentLabel; i--) {
                     hubList.remove(i);
                 }
             }

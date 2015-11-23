@@ -140,6 +140,8 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
             adapter.processingUpload();
         }
 
+        refreshProgressBar();
+
         // Submit screen view to Google Analytics
         String screenName = String.format(AnalyticsUtils.SCREEN_USER_PROFILE, trackerIdentifier);
         AnalyticsUtils.sendScreen(mTracker, screenName);
@@ -295,19 +297,18 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
     private void refreshProgressBar()
     {
-        boolean b = TaskQueueHelper.hasTasksOfType(TaskQueue.loadQueueDefault(getActivity()),
-                                                   GetUserCampaignsTask.class);
-        if(b)
-        {
-            if(progress != null)
-            {
+        TaskQueue defaultQueue = TaskQueue.loadQueueDefault(getActivity());
+        boolean userTaskInProgress = TaskQueueHelper.hasTasksOfType(defaultQueue, GetUserCampaignsTask.class);
+        TaskQueue rbQueue = ReportbackUploadTask.getQueue(LDTApplication.getContext());
+        boolean rbTaskInProgress = TaskQueueHelper.hasTasksOfType(rbQueue, ReportbackUploadTask.class);
+
+        if (userTaskInProgress || rbTaskInProgress) {
+            if (progress != null) {
                 progress.setVisibility(View.VISIBLE);
             }
         }
-        else
-        {
-            if(progress != null)
-            {
+        else {
+            if (progress != null) {
                 progress.setVisibility(View.GONE);
             }
         }
