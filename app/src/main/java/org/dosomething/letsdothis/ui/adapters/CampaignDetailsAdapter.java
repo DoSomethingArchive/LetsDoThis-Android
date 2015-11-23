@@ -267,9 +267,14 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             }
 
             // User profile photo
-            if (reportBack.user.avatarPath != null && !reportBack.user.avatarPath.isEmpty()) {
-                Picasso.with(context).load(reportBack.user.avatarPath)
+            if (reportBack.user.photo != null && !reportBack.user.photo.isEmpty()) {
+                Picasso.with(context).load(reportBack.user.photo)
                         .placeholder(R.drawable.default_profile_photo)
+                        .resizeDimen(R.dimen.friend_avatar, R.dimen.friend_avatar)
+                        .into(reportBackViewHolder.avatar);
+            }
+            else {
+                Picasso.with(context).load(R.drawable.default_profile_photo)
                         .resizeDimen(R.dimen.friend_avatar, R.dimen.friend_avatar)
                         .into(reportBackViewHolder.avatar);
             }
