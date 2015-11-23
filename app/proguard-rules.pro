@@ -24,41 +24,41 @@
 #   got time to revisit it.
 #
 
-#-dontwarn com.google.android.gms.**
-#-dontwarn okio.**
-#-dontwarn retrofit.**
+-dontwarn com.google.android.gms.**
+-dontwarn okio.**
+-dontwarn retrofit.**
 
-## Retrofit
-#-keepattributes InnerClasses
-#-keepattributes Signature
-#-keepattributes Exceptions
-#-keepattributes *Annotation*
-#
-## Crashlytics
-#-keepattributes SourceFile,LineNumberTable
-#
-## More Retrofit
-#-keep class com.google.gson.** { *; }
-#-keep class com.google.inject.** { *; }
-#-keep class org.apache.http.** { *; }
-#-keep class org.apache.james.mime4j.** { *; }
-#-keep class javax.inject.** { *; }
-#-keep class retrofit.** { *; }
-#-keep class com.google.android.gms.** { *; }
-#
-## okhttp
-#-keep class com.squareup.** { *; }
-#
-## Parse
-#-keep class com.parse.** { *; }
-#
-## Touch lab
-#-keep class co.touchlab.android.** { *; }
-#
-## All the letsdothis stuff
-#-keep class org.dosomething.letsdothis.** { *; }
-#
-## And a few more things
-#-keep class com.j256.ormlite.** { *; }
-#-keep class com.crashlytics.** { *; }
-#-keep class com.viewpagerindicator.** { *; }
+# Retrofit
+-keepattributes InnerClasses
+-keepattributes Signature
+-keepattributes Exceptions
+-keepattributes *Annotation*
+
+# Crashlytics
+-keepattributes SourceFile,LineNumberTable
+
+# More Retrofit
+-keep class com.google.gson.** { *; }
+-keep class com.google.inject.** { *; }
+-keep class org.apache.http.** { *; }
+-keep class org.apache.james.mime4j.** { *; }
+-keep class javax.inject.** { *; }
+-keep class retrofit.** { *; }
+-keep class com.google.android.gms.** { *; }
+
+# okhttp
+-keep class com.squareup.** { *; }
+
+# Parse
+-keep class com.parse.** { *; }
+
+# Touch lab
+-keep class co.touchlab.android.** { *; }
+
+# All the letsdothis stuff
+-keep class org.dosomething.letsdothis.** { *; }
+
+# And a few more things
+-keep class com.j256.ormlite.** { *; }
+-keep class com.crashlytics.** { *; }
+-keep class com.viewpagerindicator.** { *; }

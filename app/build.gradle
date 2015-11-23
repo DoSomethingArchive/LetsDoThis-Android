@@ -63,11 +63,9 @@ android {
             resValue "string", "northstar_api_key", NORTHSTAR_API_KEY_THOR
         }
         release {
-            // TODO: disabling minifyEnabled, shrinkResources, and proguard for now. It's potentially
-            //       removing some things it shouldn't.
-            // minifyEnabled true
-            // shrinkResources true
-            // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+             minifyEnabled true
+             shrinkResources true
+             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         packagingOptions {
             exclude 'META-INF/ASL2.0'
