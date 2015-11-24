@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public class AppPrefs
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
+    public static final String CURRENT_EMAIL      = "CURRENT_EMAIL";
     public static final String CURRENT_USER_ID    = "CURRENT_USER_ID";
     public static final String CURRENT_DRUPAL_ID  = "CURRENT_DRUPAL_ID";
     public static final String USER_SESSION_TOKEN = "CURRENT_SESSION_TOKEN";
@@ -89,10 +90,20 @@ public class AppPrefs
         return ! TextUtils.isEmpty(getString(CURRENT_USER_ID, null));
     }
 
-    public void logout()
-    {
+    public void logout() {
+        setAvatarPath(null);
+        setCurrentEmail(null);
+        setCurrentDrupalId(-1);
         setCurrentUserId(null);
         setSessionToken(null);
+    }
+
+    public void setCurrentEmail(String email) {
+        setString(CURRENT_EMAIL, email);
+    }
+
+    public String getCurrentEmail() {
+        return getString(CURRENT_EMAIL, null);
     }
 
     public void setCurrentUserId(String id)
