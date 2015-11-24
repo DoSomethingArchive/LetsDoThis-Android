@@ -22,7 +22,7 @@ public class DbGetCampaignTask extends Task {
 
     @Override
     protected void run(Context context) throws Throwable {
-        campaign = DatabaseHelper.getInstance(context).getCampDao().queryForId(campaignId);
+        campaign = DatabaseHelper.getInstance(context).getCampDao().queryForId(Integer.valueOf(campaignId));
     }
 
     @Override

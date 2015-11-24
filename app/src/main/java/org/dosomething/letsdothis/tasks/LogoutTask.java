@@ -4,6 +4,7 @@ import android.content.Context;
 import com.facebook.login.LoginManager;
 
 import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.data.CampaignActions;
 import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.utils.AppPrefs;
@@ -33,8 +34,7 @@ public class LogoutTask extends BaseNetworkErrorHandlerTask {
         AppPrefs prefs = AppPrefs.getInstance(context);
         DatabaseHelper dbHelper = DatabaseHelper.getInstance(context);
 
-        // Clear user data from SharedPreferences and the database
-        prefs.clearUserData();
+        // Clear user data from the database
         dbHelper.getUserDao().deleteById(prefs.getCurrentUserId());
 
         // Clear campaign data from the DB
@@ -43,13 +43,16 @@ public class LogoutTask extends BaseNetworkErrorHandlerTask {
         arrCampaigns.addAll(listCampaigns);
         for (int i = 0; i < arrCampaigns.size(); i++) {
             Campaign campaign = arrCampaigns.get(i);
-            dbHelper.getCampDao().deleteById(Integer.toString(campaign.id));
+            dbHelper.getCampDao().deleteById(Integer.valueOf(campaign.id));
         }
+
+        // Clear campaign actions from the database
+        CampaignActions.clear(context);
 
         // Get current token to logout with
         String sessionToken = prefs.getSessionToken();
 
-        // Clear local cache of the token
+        // Clear SharedPreferences cache of the token and user data
         prefs.logout();
 
         // Logout from API
