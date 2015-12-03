@@ -44,7 +44,7 @@ public class UpdateInterestGroupCampaignTask extends BaseNetworkErrorHandlerTask
                 .campaignList(interestGroupId, currentDate);
         campaigns = ResponseCampaignList.getCampaigns(response);
 
-        Dao<Campaign, String> campDao = DatabaseHelper.getInstance(context).getCampDao();
+        Dao<Campaign, Integer> campDao = DatabaseHelper.getInstance(context).getCampDao();
 
         DeleteBuilder db = campDao.deleteBuilder();
         db.where().eq(Campaign.INTEREST_GROUP, interestGroupId);

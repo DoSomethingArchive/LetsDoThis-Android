@@ -15,6 +15,7 @@ import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.BaseActivity;
 import org.dosomething.letsdothis.utils.AnalyticsUtils;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 /**
  * Created by izzyoji :) on 4/29/15.
@@ -39,7 +40,7 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
 
         initRate();
         initLogout();
-        initChangePhoto();
+        initAccount();
         initFeedback();
         initSuggestionLink();
         displayVersionName();
@@ -76,8 +77,12 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                 });
     }
 
-    private void initChangePhoto()
-    {
+    private void initAccount() {
+        String email = AppPrefs.getInstance(getActivity()).getCurrentEmail();
+        if (email != null) {
+            findPreference(getString(R.string.pref_email_key)).setTitle(email);
+        }
+
         findPreference(getString(R.string.change_photo))
                 .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
                 {

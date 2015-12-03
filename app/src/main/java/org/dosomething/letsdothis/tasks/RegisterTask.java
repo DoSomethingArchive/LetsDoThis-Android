@@ -54,7 +54,9 @@ public class RegisterTask extends BaseRegistrationTask
                 user.first_name = response.data.first_name;
                 user.last_name = response.data.last_name;
 
-                AppPrefs.getInstance(context).setSessionToken(response.data.session_token);
+                AppPrefs appPrefs = AppPrefs.getInstance(context);
+                appPrefs.setSessionToken(response.data.session_token);
+                appPrefs.setCurrentEmail(response.data.email);
                 loginUser(context, user);
             }
         }

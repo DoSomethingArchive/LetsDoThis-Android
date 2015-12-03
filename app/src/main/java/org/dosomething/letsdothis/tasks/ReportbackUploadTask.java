@@ -20,10 +20,17 @@ import co.touchlab.android.threading.tasks.TaskQueue;
  */
 public class ReportbackUploadTask extends BaseNetworkErrorHandlerTask
 {
+    // Reportback request data
+    private final RequestReportback mRequest;
 
-    private final RequestReportback req;
-    private final String            filePath;
-    public        int               campaignId;
+    // Path to the reportback photo
+    private final String mFilePath;
+
+    // Campaign ID the reportback is for
+    private int mCampaignId;
+
+    // Set to true if an error occurs
+    private boolean mHasError;
 
 
     public static TaskQueue getQueue(Context context)
@@ -36,20 +43,23 @@ public class ReportbackUploadTask extends BaseNetworkErrorHandlerTask
         getQueue(context).execute(new ReportbackUploadTask(req, campaignId, filePath));
     }
 
-    private ReportbackUploadTask(RequestReportback req, int campaignId, String filePath)
-    {
-        this.req = req;
-        this.campaignId = campaignId;
-        this.filePath = filePath;
+    private ReportbackUploadTask(RequestReportback req, int campaignId, String filePath) {
+        this.mRequest = req;
+        this.mCampaignId = campaignId;
+        this.mFilePath = filePath;
+    }
+
+    public int getCampaignId() {
+        return mCampaignId;
     }
 
     @Override
     protected void run(Context context) throws Throwable
     {
-        req.file = base64Encode(filePath);
+        mRequest.file = base64Encode(mFilePath);
         String sessionToken = AppPrefs.getInstance(context).getSessionToken();
         ResponseSubmitReportBack response = NetworkHelper.getNorthstarAPIService()
-                .submitReportback(sessionToken, req, campaignId);
+                .submitReportback(sessionToken, mRequest, mCampaignId);
     }
 
     private String base64Encode(String filePath)
@@ -66,7 +76,16 @@ public class ReportbackUploadTask extends BaseNetworkErrorHandlerTask
         super.onComplete(context);
         EventBusExt.getDefault().post(this);
 
-        Toast.makeText(context, R.string.campaign_reportback_confirmation, Toast.LENGTH_SHORT).show();
+        if (!mHasError) {
+            Toast.makeText(context, R.string.campaign_reportback_confirmation, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected boolean handleError(Context context, Throwable throwable) {
+        boolean result = super.handleError(context, throwable);
+        mHasError = true;
+        return result;
     }
 
 }

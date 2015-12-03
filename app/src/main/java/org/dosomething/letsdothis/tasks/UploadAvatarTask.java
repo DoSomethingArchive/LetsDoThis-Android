@@ -25,11 +25,13 @@ public class UploadAvatarTask extends Task
     private String filePath;
     private String userId;
     public  User   user;
+    private boolean mHasError;
 
     public UploadAvatarTask(String id, String filePath)
     {
         this.userId = id;
         this.filePath = filePath;
+        this.mHasError = false;
     }
 
     @Override
@@ -53,6 +55,7 @@ public class UploadAvatarTask extends Task
     @Override
     protected boolean handleError(Context context, Throwable e) {
         Toast.makeText(context, R.string.error_avatar_upload, Toast.LENGTH_SHORT).show();
+        mHasError = true;
         return true;
     }
 
@@ -60,6 +63,8 @@ public class UploadAvatarTask extends Task
     protected void onComplete(Context context) {
         super.onComplete(context);
 
-        Toast.makeText(context, R.string.change_photo_confirmation, Toast.LENGTH_SHORT).show();
+        if (!mHasError) {
+            Toast.makeText(context, R.string.change_photo_confirmation, Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -165,11 +165,18 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
     @Override
     public void onCampaignClicked(int campaignId, boolean alreadySignedUp)
     {
-        if (!alreadySignedUp) {
+        // @TODO The use of alreadySignedUp seems buggy. On release builds, it seems to be set to true
+        // when it shouldn't be. Maybe something to do with previously signed in users who've signed
+        // up for that campaign? But also maybe not.
+        /*if (!alreadySignedUp) {
             TaskQueue.loadQueueDefault(getActivity()).execute(new CampaignSignUpTask(campaignId, mPagerPosition));
         }
         else {
             startActivity(CampaignDetailsActivity.getLaunchIntent(getActivity(), campaignId));
+        }*/
+        TaskQueue defaultQueue = TaskQueue.loadQueueDefault(getActivity());
+        if (!TaskQueueHelper.hasTasksOfType(defaultQueue, CampaignSignUpTask.class)) {
+            defaultQueue.execute(new CampaignSignUpTask(campaignId, mPagerPosition));
         }
 
         refreshProgressBar();
