@@ -70,7 +70,9 @@ public class LoginTask extends BaseRegistrationTask
             user.birthdate = response.data.birthday;
             user.avatarPath = response.data.photo;
 
-            AppPrefs.getInstance(context).setSessionToken(response.data.session_token);
+            AppPrefs appPrefs = AppPrefs.getInstance(context);
+            appPrefs.setSessionToken(response.data.session_token);
+            appPrefs.setCurrentEmail(response.data.email);
             loginUser(context, user);
 
             DatabaseHelper.getInstance(context).getUserDao().createOrUpdate(user);

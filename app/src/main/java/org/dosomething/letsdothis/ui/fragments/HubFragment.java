@@ -140,6 +140,8 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
             adapter.processingUpload();
         }
 
+        refreshProgressBar();
+
         // Submit screen view to Google Analytics
         String screenName = String.format(AnalyticsUtils.SCREEN_USER_PROFILE, trackerIdentifier);
         AnalyticsUtils.sendScreen(mTracker, screenName);
@@ -232,7 +234,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
             if(requestCode == SELECT_PICTURE)
             {
                 final boolean isCamera;
-                if(data == null && data.getData() == null)
+                if(data == null || data.getData() == null)
                 {
                     isCamera = true;
                 }
@@ -288,25 +290,25 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
             userId = AppPrefs.getInstance(getActivity()).getCurrentUserId();
         }
 
-        TaskQueue.loadQueueDefault(getActivity()).execute(new GetUserCampaignsTask(userId));
+        GetUserCampaignsTask task = new GetUserCampaignsTask(userId, HubFragment.class.toString());
+        TaskQueue.loadQueueDefault(getActivity()).execute(task);
         refreshProgressBar();
     }
 
     private void refreshProgressBar()
     {
-        boolean b = TaskQueueHelper.hasTasksOfType(TaskQueue.loadQueueDefault(getActivity()),
-                                                   GetUserCampaignsTask.class);
-        if(b)
-        {
-            if(progress != null)
-            {
+        TaskQueue defaultQueue = TaskQueue.loadQueueDefault(getActivity());
+        boolean userTaskInProgress = TaskQueueHelper.hasTasksOfType(defaultQueue, GetUserCampaignsTask.class);
+        TaskQueue rbQueue = ReportbackUploadTask.getQueue(LDTApplication.getContext());
+        boolean rbTaskInProgress = TaskQueueHelper.hasTasksOfType(rbQueue, ReportbackUploadTask.class);
+
+        if (userTaskInProgress || rbTaskInProgress) {
+            if (progress != null) {
                 progress.setVisibility(View.VISIBLE);
             }
         }
-        else
-        {
-            if(progress != null)
-            {
+        else {
+            if (progress != null) {
                 progress.setVisibility(View.GONE);
             }
         }
@@ -314,6 +316,10 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(GetUserCampaignsTask task) {
+        if (task.getOrigin() == null || !task.getOrigin().equals(HubFragment.class.toString())) {
+            return;
+        }
+
         refreshProgressBar();
         adapter.setCurrentCampaign(task.currentCampaignList);
 

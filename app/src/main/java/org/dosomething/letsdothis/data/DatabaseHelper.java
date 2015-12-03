@@ -103,7 +103,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
         return getDao(User.class);
     }
 
-    public Dao<Campaign, String> getCampDao() throws SQLException
+    public Dao<Campaign, Integer> getCampDao() throws SQLException
     {
         return getDao(Campaign.class);
     }

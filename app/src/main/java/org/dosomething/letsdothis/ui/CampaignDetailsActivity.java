@@ -330,7 +330,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(ReportbackUploadTask task)
     {
-        refreshCampaign(task.campaignId);
+        refreshCampaign(task.getCampaignId());
     }
 
     @SuppressWarnings("UnusedDeclaration")

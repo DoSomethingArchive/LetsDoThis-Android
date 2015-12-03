@@ -62,7 +62,7 @@ public class CampaignSignUpTask extends Task {
         super.onComplete(context);
         EventBusExt.getDefault().post(this);
 
-        if (mIsNewSignup) {
+        if (mIsNewSignup && !mHasError) {
             Toast.makeText(context, R.string.campaign_signup_confirmation, Toast.LENGTH_SHORT).show();
         }
     }
@@ -76,7 +76,7 @@ public class CampaignSignUpTask extends Task {
         CampaignActions actions = CampaignActions.queryForId(context, mCampaignId);
         if (actions == null || actions.signUpId <= 0) {
             String sessionToken = AppPrefs.getInstance(context).getSessionToken();
-            RequestCampaignSignup requestCampaignSignup = new RequestCampaignSignup(null);
+            RequestCampaignSignup requestCampaignSignup = new RequestCampaignSignup();
             ResponseCampaignSignUp response = NetworkHelper.getNorthstarAPIService()
                                                            .campaignSignUp(requestCampaignSignup,
                                                                            mCampaignId, sessionToken);

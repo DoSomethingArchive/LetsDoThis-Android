@@ -27,7 +27,7 @@ public class DbInterestGroupCampaignListTask extends Task
     @Override
     protected void run(Context context) throws Throwable
     {
-        Dao<Campaign, String> dao = DatabaseHelper.getInstance(context).getCampDao();
+        Dao<Campaign, Integer> dao = DatabaseHelper.getInstance(context).getCampDao();
         campList = dao.queryBuilder().where().eq(Campaign.INTEREST_GROUP, interestGroupId).query();
     }
 
