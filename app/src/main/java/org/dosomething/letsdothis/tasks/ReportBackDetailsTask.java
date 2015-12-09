@@ -23,7 +23,7 @@ public class ReportBackDetailsTask extends BaseNetworkErrorHandlerTask
     @Override
     protected void run(Context context) throws Throwable
     {
-        ResponseReportBack response = NetworkHelper.getDoSomethingAPIService()
+        ResponseReportBack response = NetworkHelper.getPhoenixAPIService()
                                                    .reportBack(reportBackId);
         reportBack = ResponseReportBack.getReportBack(response);
     }

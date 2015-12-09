@@ -43,7 +43,7 @@ public class InvitesTask extends Task
         }
 
         String campaignIds = StringUtils.join(inviteHashMap.keySet(), ",");
-        ResponseCampaignList responseCampaignList = NetworkHelper.getDoSomethingAPIService()
+        ResponseCampaignList responseCampaignList = NetworkHelper.getPhoenixAPIService()
                                                                  .campaignListByIds(campaignIds);
         List<Campaign> campaigns = ResponseCampaignList.getCampaigns(responseCampaignList);
 

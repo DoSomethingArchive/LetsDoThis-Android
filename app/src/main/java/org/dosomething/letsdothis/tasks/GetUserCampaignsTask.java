@@ -90,7 +90,7 @@ public class GetUserCampaignsTask extends BaseNetworkErrorHandlerTask {
 
         // Populate the currentCampaigns list
         if (!campaignIds.isEmpty()) {
-            ResponseCampaignList responseCampaignList = NetworkHelper.getDoSomethingAPIService()
+            ResponseCampaignList responseCampaignList = NetworkHelper.getPhoenixAPIService()
                     .campaignListByIds(campaignIds);
             List<Campaign> campaigns = ResponseCampaignList.getCampaigns(responseCampaignList);
 
@@ -129,7 +129,7 @@ public class GetUserCampaignsTask extends BaseNetworkErrorHandlerTask {
         if (!pastIds.isEmpty())
         {
             pastIds = pastIds.substring(0, pastIds.length() - 1);
-            ResponseCampaignList responseCampaignList = NetworkHelper.getDoSomethingAPIService()
+            ResponseCampaignList responseCampaignList = NetworkHelper.getPhoenixAPIService()
                     .campaignListByIds(pastIds);
             pastCampaignList = ResponseCampaignList.getCampaigns(responseCampaignList);
         }

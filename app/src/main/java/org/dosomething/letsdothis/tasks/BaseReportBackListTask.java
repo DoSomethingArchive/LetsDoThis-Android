@@ -44,7 +44,7 @@ public abstract class BaseReportBackListTask extends BaseNetworkErrorHandlerTask
 
     @Override
     protected void run(Context context) throws Throwable {
-        ResponseReportBackList response = NetworkHelper.getDoSomethingAPIService().reportBackList(
+        ResponseReportBackList response = NetworkHelper.getPhoenixAPIService().reportBackList(
             status, campaignIds, REQUEST_COUNT, false, page);
 
         if (response.error != null) {

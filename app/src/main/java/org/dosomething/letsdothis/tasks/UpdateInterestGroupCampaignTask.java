@@ -40,7 +40,7 @@ public class UpdateInterestGroupCampaignTask extends BaseNetworkErrorHandlerTask
     protected void run(Context context) throws Throwable {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String currentDate = df.format(new Date());
-        ResponseCampaignList response = NetworkHelper.getDoSomethingAPIService()
+        ResponseCampaignList response = NetworkHelper.getPhoenixAPIService()
                 .campaignList(interestGroupId, currentDate);
         campaigns = ResponseCampaignList.getCampaigns(response);
 
