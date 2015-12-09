@@ -14,7 +14,7 @@ import retrofit.http.Query;
 /**
  * Created by izzyoji :) on 4/20/15.
  */
-public interface DoSomethingAPI {
+public interface PhoenixAPI {
     String PRODUCTION_URL = "https://www.dosomething.org/api/v1/";
     String THOR_URL = "https://thor.dosomething.org/api/v1";
     String QA_URL = "https://staging.dosomething.org/api/v1";

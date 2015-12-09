@@ -176,7 +176,7 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
                     responses[0] = gson.toJson(responseGroup);
 
                     ResponseCampaignWrapper responseCampaignWrapper = NetworkHelper
-                            .getDoSomethingAPIService().campaign(responseGroup.data.campaign_id);
+                            .getPhoenixAPIService().campaign(responseGroup.data.campaign_id);
                     responses[1] = gson.toJson(responseCampaignWrapper);
 
                 }

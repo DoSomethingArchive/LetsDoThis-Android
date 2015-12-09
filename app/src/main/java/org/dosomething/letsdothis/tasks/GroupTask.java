@@ -51,7 +51,7 @@ public class GroupTask extends Task
         ResponseGroup responseGroup = NetworkHelper.getNorthstarAPIService().group(groupId);
 
         int campaignId = responseGroup.data.campaign_id;
-        ResponseCampaignWrapper responseCampaignWrapper = NetworkHelper.getDoSomethingAPIService()
+        ResponseCampaignWrapper responseCampaignWrapper = NetworkHelper.getPhoenixAPIService()
                                                                        .campaign(campaignId);
 
         campaign = ResponseCampaign.getCampaign(responseCampaignWrapper.data);

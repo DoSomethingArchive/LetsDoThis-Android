@@ -29,7 +29,7 @@ import retrofit.converter.GsonConverter;
 public class NetworkHelper
 {
     public static final String JSON_DATE_FORMAT_NORTHSTAR    = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-    public static final String JSON_DATE_FORMAT_DO_SOMETHING = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+    public static final String JSON_DATE_FORMAT_PHOENIX      = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
     public static final int    CONNECT_TIMEOUT               = 45;
     public static final int    READ_TIMEOUT                  = 30;
 
@@ -79,24 +79,24 @@ public class NetworkHelper
         return okHttpClient;
     }
 
-    public static DoSomethingAPI getDoSomethingAPIService() {
+    public static PhoenixAPI getPhoenixAPIService() {
         String baseUrl;
         if (BuildConfig.BUILD_TYPE.equals("release")) {
-            baseUrl = DoSomethingAPI.PRODUCTION_URL;
+            baseUrl = PhoenixAPI.PRODUCTION_URL;
         }
         else if (BuildConfig.BUILD_TYPE.equals("internal")) {
-            baseUrl = DoSomethingAPI.PRODUCTION_URL;
+            baseUrl = PhoenixAPI.PRODUCTION_URL;
         }
         else {
-            baseUrl = DoSomethingAPI.QA_URL;
+            baseUrl = PhoenixAPI.QA_URL;
         }
 
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(ResponseCampaign.class, new ResponseCampaignDeserializer<ResponseCampaign>())
-                .setDateFormat(JSON_DATE_FORMAT_DO_SOMETHING).create();
+                .setDateFormat(JSON_DATE_FORMAT_PHOENIX).create();
         GsonConverter gsonConverter = new GsonConverter(gson);
         return getRequestAdapterBuilder().setConverter(gsonConverter)
-                .setEndpoint(baseUrl).build().create(DoSomethingAPI.class);
+                .setEndpoint(baseUrl).build().create(PhoenixAPI.class);
     }
 
     public static NorthstarAPI getNorthstarAPIService() {
