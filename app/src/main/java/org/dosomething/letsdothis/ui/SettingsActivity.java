@@ -3,13 +3,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.gms.analytics.Tracker;
 
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.LogoutTask;
+import org.dosomething.letsdothis.tasks.UploadAvatarTask;
 import org.dosomething.letsdothis.ui.fragments.SetTitleListener;
 import org.dosomething.letsdothis.ui.fragments.SettingsFragment;
 import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
@@ -72,6 +75,22 @@ public class SettingsActivity extends BaseActivity implements SetTitleListener
         startActivity(RegisterLoginActivity.getLaunchIntent(this));
 
         AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR, AnalyticsUtils.ACTION_LOG_OUT);
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(UploadAvatarTask task) {
+        int stringResId = R.string.change_photo_confirmation;
+        int colorResId = R.color.cerulean_1;
+
+        if (task.hasError()) {
+            stringResId = R.string.error_avatar_upload;
+            colorResId = R.color.snack_error;
+        }
+
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.snack), stringResId, Snackbar.LENGTH_LONG);
+        View snackBarView = snackbar.getView();
+        snackBarView.setBackgroundColor(getResources().getColor(colorResId));
+        snackbar.show();
     }
 
     @Override

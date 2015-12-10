@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_alignParentTop="true"
+        android:indeterminate="true"
+        android:visibility="gone"/>
 
     <org.dosomething.letsdothis.ui.views.CircleImageView
         android:id="@+id/avatar"
         android:layout_width="@dimen/avatar"
         android:layout_height="@dimen/avatar"
-        android:layout_gravity="center_horizontal"
+        android:layout_below="@id/progress"
+        android:layout_centerHorizontal="true"
         android:layout_margin="@dimen/padding_medium"
         android:src="@drawable/ic_action_add"
         app:background_color="@color/porcelain"
@@ -22,9 +31,10 @@
         android:id="@+id/save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/avatar"
         android:layout_marginLeft="@dimen/padding_small"
         android:layout_marginRight="@dimen/padding_small"
         android:text="@string/save_photo"
         app:typeface="brandon_bold"/>
 
-</LinearLayout>
+</RelativeLayout>
