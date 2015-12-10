@@ -92,7 +92,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         int campaignId = getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, -1);
         boolean isNewSignup = getIntent().getBooleanExtra(EXTRA_IS_NEW_SIGNUP, false);
         if (isNewSignup) {
-            showSignupSuccessSnackbar();
+            showSnackbarSuccessMessage(R.string.campaign_signup_confirmation);
         }
 
         // Determine if user is signed up for this campaign
@@ -299,11 +299,10 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     }
 
     /**
-     * Show the snackbar with the signup success message.
+     * Show the snackbar with a success message.
      */
-    private void showSignupSuccessSnackbar() {
-        Snackbar snackbar = Snackbar.make(findViewById(R.id.snack),
-                R.string.campaign_signup_confirmation, Snackbar.LENGTH_LONG);
+    private void showSnackbarSuccessMessage(int stringResId) {
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.snack), stringResId, Snackbar.LENGTH_LONG);
         View snackBarView = snackbar.getView();
         snackBarView.setBackgroundColor(getResources().getColor(R.color.cerulean_1));
         snackbar.show();
@@ -341,6 +340,10 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(ReportbackUploadTask task) {
         refreshCampaign(task.getCampaignId());
+
+        if (!task.hasError()) {
+            showSnackbarSuccessMessage(R.string.campaign_reportback_confirmation);
+        }
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -420,7 +423,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         if (!task.hasError()) {
             adapter.refreshOnSignup();
 
-            showSignupSuccessSnackbar();
+            showSnackbarSuccessMessage(R.string.campaign_signup_confirmation);
         }
 
         AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_CAMPAIGN,

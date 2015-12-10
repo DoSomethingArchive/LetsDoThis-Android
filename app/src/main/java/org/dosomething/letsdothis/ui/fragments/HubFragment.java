@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -354,9 +355,16 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(ReportbackUploadTask task)
-    {
+    public void onEventMainThread(ReportbackUploadTask task) {
         refreshUserCampaign();
+
+        if (!task.hasError()) {
+            Snackbar snackbar = Snackbar.make(getView().findViewById(R.id.snack),
+                    R.string.campaign_reportback_confirmation, Snackbar.LENGTH_LONG);
+            View snackBarView = snackbar.getView();
+            snackBarView.setBackgroundColor(getResources().getColor(R.color.cerulean_1));
+            snackbar.show();
+        }
     }
 
     @SuppressWarnings("UnusedDeclaration")
