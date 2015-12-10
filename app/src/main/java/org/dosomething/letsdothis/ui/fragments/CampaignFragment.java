@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.ui.fragments;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -401,7 +402,9 @@ public class CampaignFragment extends Fragment implements CampaignAdapter.Campai
 
             if (task != null && !task.hasError()) {
                 adapter.userSignedUpForCampaign(task.getCampaignId());
-                startActivity(CampaignDetailsActivity.getLaunchIntent(getActivity(), task.getCampaignId()));
+                Intent i = CampaignDetailsActivity.getLaunchIntent(getActivity(),
+                        task.getCampaignId(), task.isNewSignup());
+                startActivity(i);
 
                 // Log the successful signup to analytics
                 Tracker tracker = ((LDTApplication)getActivity().getApplication()).getDefaultTracker();
