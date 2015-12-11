@@ -5,12 +5,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.Tracker;
@@ -47,6 +49,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final String EXTRA_CAMPAIGN_ID = "campaign_id";
+    public static final String EXTRA_IS_NEW_SIGNUP = "new_signup";
     public static final int    SELECT_PICTURE    = 23123;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
@@ -60,16 +63,21 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     // Google Analytics tracker
     private Tracker mTracker;
 
-    public static Intent getLaunchIntent(Context context, int campaignId)
-    {
+    public static Intent getLaunchIntent(Context context, int campaignId) {
         return new Intent(context, CampaignDetailsActivity.class)
                 .putExtra(EXTRA_CAMPAIGN_ID, campaignId);
     }
 
+    public static Intent getLaunchIntent(Context context, int campaignId, boolean isNewSignup) {
+        return new Intent(context, CampaignDetailsActivity.class)
+                .putExtra(EXTRA_CAMPAIGN_ID, campaignId)
+                .putExtra(EXTRA_IS_NEW_SIGNUP, isNewSignup);
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_fragment_quickreturn_recycler);
         EventBusExt.getDefault().register(this);
 
@@ -81,11 +89,14 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        int campaignId = getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, - 1);
-        boolean userIsSignedUp = false;
+        int campaignId = getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, -1);
+        boolean isNewSignup = getIntent().getBooleanExtra(EXTRA_IS_NEW_SIGNUP, false);
+        if (isNewSignup) {
+            showSnackbarSuccessMessage(R.string.campaign_signup_confirmation);
+        }
 
         // Determine if user is signed up for this campaign
+        boolean userIsSignedUp = false;
         try {
             if (CampaignActions.queryForId(this, campaignId) != null) {
                 userIsSignedUp = true;
@@ -112,21 +123,18 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
+
         if(TaskQueueHelper
-                .hasTasksOfType(ReportbackUploadTask.getQueue(this), ReportbackUploadTask.class))
-        {
+                .hasTasksOfType(ReportbackUploadTask.getQueue(this), ReportbackUploadTask.class)) {
             adapter.processingUpload();
         }
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch(item.getItemId())
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 return true;
@@ -167,8 +175,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     }
 
     @Override
-    public void proveClicked()
-    {
+    public void proveClicked() {
         choosePicture();
     }
 
@@ -180,22 +187,19 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     }
 
     @Override
-    public void inviteClicked()
-    {
+    public void inviteClicked() {
         Campaign campaign = adapter.getCampaign();
         startActivity(
                 CampaignInviteActivity.getLaunchIntent(this, campaign.title, campaign.signupGroup));
     }
 
     @Override
-    public void onUserClicked(String id)
-    {
+    public void onUserClicked(String id) {
         startActivity(PublicProfileActivity.getLaunchIntent(this, id));
     }
 
     @Override
-    public void onKudosClicked(ReportBack reportBack, Kudos kudos)
-    {
+    public void onKudosClicked(ReportBack reportBack, Kudos kudos) {
         TaskQueue.loadQueueDefault(this).execute(new SubmitKudosTask(kudos.id, reportBack.id));
     }
 
@@ -212,8 +216,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     }
 
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         EventBusExt.getDefault().unregister(this);
         super.onDestroy();
     }
@@ -269,8 +272,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         }
     }
 
-    public void choosePicture()
-    {
+    public void choosePicture() {
         Intent pickIntent = new Intent(Intent.ACTION_PICK,
                                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         pickIntent.setType("image/*");
@@ -281,8 +283,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         File file = new File(externalFile, "reportBack" + System.currentTimeMillis() + ".jpg");
         takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
         imageUri = Uri.parse(file.getAbsolutePath());
-        if(BuildConfig.DEBUG)
-        {
+        if (BuildConfig.DEBUG) {
             Log.d("photo location", imageUri.toString());
         }
 
@@ -293,9 +294,18 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         startActivityForResult(chooserIntent, SELECT_PICTURE);
     }
 
-    private void refreshCampaign(int campaignId)
-    {
+    private void refreshCampaign(int campaignId) {
         TaskQueue.loadQueueDefault(this).execute(new CampaignDetailsTask(campaignId));
+    }
+
+    /**
+     * Show the snackbar with a success message.
+     */
+    private void showSnackbarSuccessMessage(int stringResId) {
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.snack), stringResId, Snackbar.LENGTH_LONG);
+        View snackBarView = snackbar.getView();
+        snackBarView.setBackgroundColor(getResources().getColor(R.color.cerulean_1));
+        snackbar.show();
     }
 
     /**
@@ -328,9 +338,12 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(ReportbackUploadTask task)
-    {
+    public void onEventMainThread(ReportbackUploadTask task) {
         refreshCampaign(task.getCampaignId());
+
+        if (!task.hasError()) {
+            showSnackbarSuccessMessage(R.string.campaign_reportback_confirmation);
+        }
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -339,7 +352,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         boolean isComplete = false;
         boolean isSignedUp = false;
 
-        if(task.campaign != null) {
+        if (task.campaign != null) {
             // Update the view in the adapter
             adapter.updateCampaign(task.campaign);
 
@@ -390,8 +403,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(IndividualCampaignReportBackList task)
-    {
+    public void onEventMainThread(IndividualCampaignReportBackList task) {
         totalPages = task.totalPages;
         currentPage = task.page;
         List<ReportBack> reportBacks = task.reportBacks;
@@ -408,7 +420,11 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(CampaignSignUpTask task) {
-        adapter.refreshOnSignup();
+        if (!task.hasError()) {
+            adapter.refreshOnSignup();
+
+            showSnackbarSuccessMessage(R.string.campaign_signup_confirmation);
+        }
 
         AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_CAMPAIGN,
                 AnalyticsUtils.ACTION_SUBMIT_SIGNUP, Integer.toString(task.getCampaignId()));

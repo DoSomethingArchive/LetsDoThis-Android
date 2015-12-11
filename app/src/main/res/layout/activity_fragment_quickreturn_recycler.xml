@@ -13,4 +13,11 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar"/>
 
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/snack"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom">
+    </android.support.design.widget.CoordinatorLayout>
+
 </FrameLayout>

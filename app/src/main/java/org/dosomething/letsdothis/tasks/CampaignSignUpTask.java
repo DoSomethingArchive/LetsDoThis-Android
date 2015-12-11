@@ -57,14 +57,14 @@ public class CampaignSignUpTask extends Task {
         return mHasError;
     }
 
+    public boolean isNewSignup() {
+        return mIsNewSignup;
+    }
+
     @Override
     protected void onComplete(Context context) {
         super.onComplete(context);
         EventBusExt.getDefault().post(this);
-
-        if (mIsNewSignup && !mHasError) {
-            Toast.makeText(context, R.string.campaign_signup_confirmation, Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override

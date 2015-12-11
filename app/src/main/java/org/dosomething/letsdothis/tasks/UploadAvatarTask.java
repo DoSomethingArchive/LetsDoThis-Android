@@ -1,11 +1,8 @@
 package org.dosomething.letsdothis.tasks;
 import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.j256.ormlite.dao.Dao;
 
-import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.NetworkHelper;
@@ -20,30 +17,31 @@ import retrofit.mime.TypedFile;
 /**
  * Created by toidiu on 4/16/15.
  */
-public class UploadAvatarTask extends Task
-{
+public class UploadAvatarTask extends Task {
+
     private String filePath;
     private String userId;
     public  User   user;
     private boolean mHasError;
 
-    public UploadAvatarTask(String id, String filePath)
-    {
+    public UploadAvatarTask(String id, String filePath) {
         this.userId = id;
         this.filePath = filePath;
         this.mHasError = false;
     }
 
+    public boolean hasError() {
+        return mHasError;
+    }
+
     @Override
-    protected void run(Context context) throws Throwable
-    {
+    protected void run(Context context) throws Throwable {
         File file = new File(filePath);
         Dao<User, String> userDao = DatabaseHelper.getInstance(context).getUserDao();
         user = userDao.queryForId(userId);
         user.avatarPath = "file:" + filePath;
 
         userDao.createOrUpdate(user);
-        EventBusExt.getDefault().post(this);
 
         TypedFile typedFile = new TypedFile("multipart/form-data", file);
         ResponseAvatar response = NetworkHelper.getNorthstarAPIService()
@@ -54,7 +52,6 @@ public class UploadAvatarTask extends Task
 
     @Override
     protected boolean handleError(Context context, Throwable e) {
-        Toast.makeText(context, R.string.error_avatar_upload, Toast.LENGTH_SHORT).show();
         mHasError = true;
         return true;
     }
@@ -63,8 +60,6 @@ public class UploadAvatarTask extends Task
     protected void onComplete(Context context) {
         super.onComplete(context);
 
-        if (!mHasError) {
-            Toast.makeText(context, R.string.change_photo_confirmation, Toast.LENGTH_SHORT).show();
-        }
+        EventBusExt.getDefault().post(this);
     }
 }
