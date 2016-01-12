@@ -122,18 +122,19 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                if(drawerListAdapter.selected != position)
+                if (drawerListAdapter.selected != position)
                 {
                     drawerListAdapter.selected = position;
                     String positionString = list[position];
-                    if(TextUtils.equals(positionString, getString(R.string.actions)))
-                    {
+                    if (TextUtils.equals(positionString, getString(R.string.actions))) {
                         replaceCurrentFragment(ActionsFragment.newInstance(), ActionsFragment.TAG);
                     }
-                    else if(TextUtils.equals(positionString, getString(R.string.hub)))
-                    {
+                    else if (TextUtils.equals(positionString, getString(R.string.hub))) {
                         replaceCurrentFragment(HubFragment.newInstance(null), HubFragment.TAG);
 
+                    }
+                    else if (TextUtils.equals(positionString, "React Prototype")) {
+                        startActivity(ReactPrototypeActivity.getLaunchIntent(MainActivity.this));
                     }
                 }
                 drawerLayout.closeDrawer(drawer);

@@ -1,0 +1,23 @@
+{
+  "name": "ldt-react-prototype",
+  "version": "1.0.0",
+  "description": "## Development",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node_modules/react-native/packager/packager.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DoSomething/LetsDoThis-Android.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DoSomething/LetsDoThis-Android/issues"
+  },
+  "homepage": "https://github.com/DoSomething/LetsDoThis-Android",
+  "dependencies": {
+    "react-native": "^0.18.0-rc"
+  }
+}

@@ -3,6 +3,7 @@
     <string-array name="drawer_list">
         <item>@string/actions</item>
         <item>@string/hub</item>
+        <item>React Prototype</item>
     </string-array>
 
     <string-array name="word_1">
