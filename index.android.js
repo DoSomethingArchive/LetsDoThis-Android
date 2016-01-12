@@ -8,12 +8,12 @@ var {
   View
 } = React;
 
-var MOCKED_MOVIES_DATA = [
-  {title: 'Title', year: '2016', posters: {thumbnail: 'http://i.imgur.com/RvDSh4Z.jpg'}}
-];
-var REQUEST_URL = 'https://raw.githubusercontent.com/facebook/react-native/master/docs/MoviesExample.json';
+var REQUEST_URL = 'http://dev-ltd-news.pantheon.io/?json=1';
 
 var ReactPrototype = React.createClass({
+  /**
+   * Render the view.
+   */
   render: function() {
     if (!this.state.loaded) {
       return this.renderLoadingView();
@@ -22,54 +22,38 @@ var ReactPrototype = React.createClass({
     return (
       <ListView
         dataSource={this.state.dataSource}
-        renderRow={this.renderMovie}
+        renderRow={this.renderPost}
         style={styles.listView}
         />
     );
-//    var movie = this.state.movies[0];
-//    return this.renderMovie(movie);
   },
 
   renderLoadingView: function() {
     return (
-      <View style={styles.container}>
-        <Text>
-          Loading movies...
-        </Text>
+      <Text>Loading...</Text>
+    );
+  },
+
+  renderPost: function(post) {
+    return(
+      <View style={styles.postContainer}>
+        <Text style={styles.h1}>Title</Text>
+        <Text>{post.title}</Text>
+
+        <Text style={styles.h1}>Subtitle</Text>
+        <Text>{post.custom_fields.subtitle}</Text>
+
+        <Text style={styles.h1}>Summary</Text>
+        <Text>{post.custom_fields.summary_1}</Text>
+        <Text>{post.custom_fields.summary_2}</Text>
+        <Text>{post.custom_fields.summary_3}</Text>
       </View>
     );
   },
 
-  renderMovie: function(movie) {
-    return (
-      <View style={styles.container}>
-        <Image
-          source={{uri: movie.posters.thumbnail}}
-          style={styles.thumbnail} />
-        <View style={styles.rightContainer}>
-          <Text style={styles.title}>{movie.title}</Text>
-          <Text style={styles.year}>{movie.year}</Text>
-        </View>
-      </View>
-    );
-  },
-
-  componentDidMount: function() {
-    this.fetchData();
-  },
-
-  fetchData: function() {
-    fetch(REQUEST_URL)
-      .then((response) => response.json())
-      .then((responseData) => {
-        this.setState({
-          dataSource: this.state.dataSource.cloneWithRows(responseData.movies),
-          loaded: true,
-        });
-      })
-      .done();
-  },
-
+  /**
+   * Set initial state of the component.
+   */
   getInitialState: function() {
     return {
       dataSource: new ListView.DataSource({
@@ -78,34 +62,43 @@ var ReactPrototype = React.createClass({
       loaded: false,
     };
   },
+
+  /**
+   * Called just once after the component is loaded.
+   */
+  componentDidMount: function() {
+    this.fetchData();
+  },
+
+  /**
+   * Fetch data from the server.
+   */
+  fetchData: function() {
+    fetch(REQUEST_URL)
+      .then((response) => response.json())
+      .then((responseData) => {
+        this.setState({
+          dataSource: this.state.dataSource.cloneWithRows(responseData.posts),
+          loaded: true,
+        });
+      })
+      .done();
+  },
 });
 
 var styles = React.StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+  postContainer: {
+    borderColor: '#000000',
+    borderWidth: 1,
+    marginTop: 10,
+    padding: 10,
   },
-  rightContainer: {
-    flex: 1
+  h1: {
+    fontSize: 20,
   },
   listView: {
-    paddingTop: 20,
-    backgroundColor: '#F5FCFF',
-  },
-  thumbnail: {
-    width: 53,
-    height: 81,
-  },
-  title: {
-    fontSize: 20,
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  year: {
-    textAlign: 'center'
+    paddingLeft: 20,
+    paddingRight: 20,
   },
 });
 
