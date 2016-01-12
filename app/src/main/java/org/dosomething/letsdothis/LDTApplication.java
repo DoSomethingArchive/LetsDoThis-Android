@@ -1,6 +1,7 @@
 package org.dosomething.letsdothis;
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
@@ -38,6 +39,13 @@ public class LDTApplication extends Application
             throw new RuntimeException("context is null");
         }
         return context;
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+
+        MultiDex.install(this);
     }
 
     /**
