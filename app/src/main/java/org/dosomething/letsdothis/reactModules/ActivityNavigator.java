@@ -1,7 +1,6 @@
 package org.dosomething.letsdothis.reactModules;
 
 import android.content.Intent;
-import android.widget.Toast;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -27,9 +26,8 @@ public class ActivityNavigator extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void start(String activityName) {
-        Toast.makeText(getReactApplicationContext(), "heyo", Toast.LENGTH_SHORT).show();
-        Intent i = CampaignDetailsActivity.getNewActivityLaunchIntent(mContext, 1377);
+    public void start(int campaignId) {
+        Intent i = CampaignDetailsActivity.getNewActivityLaunchIntent(mContext, campaignId);
         mContext.startActivity(i);
     }
 

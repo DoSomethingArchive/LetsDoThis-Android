@@ -89,7 +89,7 @@ var ReactPrototype = React.createClass({
         </View>
 
         <TouchableHighlight
-          onPress={this.onPressAction}
+          onPress={this.onPressAction.bind(this, post.custom_fields.campaign_id)}
           style={styles.btn}>
 
           <Text style={styles.btnText}>TAKE ACTION</Text>
@@ -136,15 +136,20 @@ var ReactPrototype = React.createClass({
   /**
    * Button event listener.
    */
-  onPressAction: function() {
-    NativeModules.ActivityNavigator.start("hey hey");
+  onPressAction: function(campaignIds) {
+    console.log(campaignIds);
+    if (campaignIds.length > 0) {
+      NativeModules.ActivityNavigator.start(parseInt(campaignIds[0]));
+    }
   },
 
   /**
    * Link event listener.
    */
-  onPressLink: function(url) {
-    IntentAndroid.openURL(url[0]);
+  onPressLink: function(urls) {
+    if (urls.length > 0) {
+      IntentAndroid.openURL(urls[0]);
+    }
   },
 });
 
