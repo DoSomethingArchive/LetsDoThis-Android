@@ -3,6 +3,7 @@
 var React = require('react-native');
 var {
   Image,
+  IntentAndroid,
   ListView,
   NativeModules,
   Text,
@@ -80,6 +81,11 @@ var ReactPrototype = React.createClass({
             <Text style={styles.summaryText}>{post.custom_fields.summary_3}</Text>
           </View>
 
+          <Text
+            onPress={this.onPressLink.bind(this, post.custom_fields.full_article_url)}
+            style={styles.articleLink}>
+            Read the full article
+          </Text>
         </View>
 
         <TouchableHighlight
@@ -128,11 +134,17 @@ var ReactPrototype = React.createClass({
   },
 
   /**
-   * Button even listener.
+   * Button event listener.
    */
   onPressAction: function() {
-    console.log('did it');
     NativeModules.ActivityNavigator.start("hey hey");
+  },
+
+  /**
+   * Link event listener.
+   */
+  onPressLink: function(url) {
+    IntentAndroid.openURL(url[0]);
   },
 });
 
@@ -152,6 +164,10 @@ var styles = React.StyleSheet.create({
   },
   postHeaderText: {
     color: '#ffffff',
+  },
+  articleLink: {
+    color: '#3932A9',
+    fontFamily: 'brandon_bold',
   },
   btn: {
     backgroundColor: '#3932A9',
