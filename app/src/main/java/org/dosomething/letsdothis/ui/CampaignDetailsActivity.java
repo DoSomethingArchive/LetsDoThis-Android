@@ -74,6 +74,12 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
                 .putExtra(EXTRA_IS_NEW_SIGNUP, isNewSignup);
     }
 
+    public static Intent getNewActivityLaunchIntent(Context context, int campaignId) {
+        Intent i = CampaignDetailsActivity.getLaunchIntent(context, campaignId);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return i;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
