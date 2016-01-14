@@ -226,6 +226,7 @@ var styles = React.StyleSheet.create({
     textAlign: 'center',
   },
   titleContainer: {
+    backgroundColor: 'rgba(0,0,0,0.3)',
     alignItems: 'center',
     flex: 1,
     flexDirection: 'row',
