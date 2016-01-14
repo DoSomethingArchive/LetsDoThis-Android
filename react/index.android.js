@@ -37,6 +37,23 @@ var ReactPrototype = React.createClass({
   },
 
   renderPost: function(post) {
+    var imgBackground;
+
+    if (typeof post !== 'undefined'
+        && typeof post.attachments[0] !== 'undefined'
+        && typeof post.attachments[0].images !== 'undefined'
+        && typeof post.attachments[0].images.full !== 'undefined') {
+        imgBackground = <Image
+          style={{flex: 1, height: 128, alignItems: 'stretch'}}
+          source={{uri: post.attachments[0].images.full.url}}>
+            <View style={styles.titleContainer}>
+              <Text style={styles.title}>{post.title.toUpperCase()}</Text>
+            </View>
+          </Image>;
+    }
+    else {
+      imgBackground = <Text style={styles.title}>{post.title.toUpperCase()}</Text>;
+    }
 
     return(
       <View style={styles.postContainer}>
@@ -44,9 +61,7 @@ var ReactPrototype = React.createClass({
           <Text style={styles.date}>{post.date}</Text>
         </View>
 
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>{post.title.toUpperCase()}</Text>
-        </View>
+        {imgBackground}
 
         <View style={styles.postBody}>
 
@@ -170,22 +185,30 @@ var styles = React.StyleSheet.create({
     fontSize: 16,
   },
   summaryItem: {
-    flexDirection: 'column',
+    flex: 1,
+    flexDirection: 'row',
     marginBottom: 8,
     marginTop: 8,
   },
   summaryText: {
+    flex: 1,
+    flexDirection: 'column',
     fontFamily: 'brandon_reg',
+    marginLeft: 4,
   },
   title: {
     color: '#ffffff',
+    flex: 1,
+    flexDirection: 'column',
     fontFamily: 'brandon_bold',
     fontSize: 20,
     textAlign: 'center',
   },
   titleContainer: {
-    backgroundColor: '#333333',
-    padding: 20
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    padding: 20,
   },
 });
 
