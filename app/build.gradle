@@ -54,6 +54,14 @@ android {
         // Enabling multidex support.
         multiDexEnabled true
     }
+    signingConfigs {
+        release {
+            storeFile file(LDT_RELEASE_STORE_FILE)
+            storePassword LDT_RELEASE_STORE_PASSWORD
+            keyAlias LDT_RELEASE_KEY_ALIAS
+            keyPassword LDT_RELEASE_KEY_PASSWORD
+        }
+    }
     buildTypes {
         debug {
             debuggable true
@@ -69,9 +77,10 @@ android {
             resValue "string", "northstar_api_key", NORTHSTAR_API_KEY_THOR
         }
         release {
-             minifyEnabled true
-             shrinkResources true
-             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+             //minifyEnabled true
+             //shrinkResources true
+             //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+             signingConfig signingConfigs.release
         }
         packagingOptions {
             exclude 'META-INF/ASL2.0'
