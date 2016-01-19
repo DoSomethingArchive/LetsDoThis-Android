@@ -118,15 +118,11 @@ var NewsFeedView = React.createClass({
     );
   },
   ctaButtonPressed: function(post) {
-    var campaignID = post.custom_fields.campaign_id[0];
-    // @TODO need Android NativeModules to handle this
-    var NewsFeedViewController = require('react-native').NativeModules.LDTNewsFeedViewController;
-    NewsFeedViewController.presentCampaignWithCampaignID(campaignID);
+    var campaignID = parseInt(post.custom_fields.campaign_id[0]);
+    React.NativeModules.CampaignNavigationModule.presentCampaignWithCampaignID(campaignID);
   },
   fullArticlePressed: function(url) {
-  // @TODO need Android NativeModules to handle this... or just use IntentAndroid
-    var NewsFeedViewController = require('react-native').NativeModules.LDTNewsFeedViewController;
-    NewsFeedViewController.presentFullArticleWithUrlString(url);
+    IntentAndroid.openURL(url);
   },
 });
 

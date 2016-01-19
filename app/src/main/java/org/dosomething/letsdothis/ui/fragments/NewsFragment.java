@@ -11,10 +11,16 @@ import android.view.ViewGroup;
 import com.facebook.react.LifecycleState;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactRootView;
+import com.facebook.react.bridge.NativeModule;
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.shell.MainReactPackage;
 
 import org.dosomething.letsdothis.BuildConfig;
+import org.dosomething.letsdothis.react.CampaignNavigationModule;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This fragment displays a feed of news items sourced from the DoSomething.org prototype News API.
@@ -92,7 +98,18 @@ public class NewsFragment extends Fragment implements DefaultHardwareBackBtnHand
         }
     }
 
+    /**
+     * Custom ReactPackage to add custom DS Native Modules.
+     */
     private class LDTReactPackage extends MainReactPackage {
+        @Override
+        public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
+            List<NativeModule> modules = new ArrayList<>();
 
+            modules.addAll(super.createNativeModules(reactContext));
+            modules.add(new CampaignNavigationModule(reactContext));
+
+            return modules;
+        }
     }
 }
