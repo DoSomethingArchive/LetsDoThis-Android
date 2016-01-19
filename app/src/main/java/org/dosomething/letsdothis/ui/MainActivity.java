@@ -24,6 +24,7 @@ import org.dosomething.letsdothis.ui.fragments.ActionsFragment;
 import org.dosomething.letsdothis.ui.fragments.HubFragment;
 import org.dosomething.letsdothis.ui.fragments.InvitesFragment;
 import org.dosomething.letsdothis.ui.fragments.JoinGroupDialogFragment;
+import org.dosomething.letsdothis.ui.fragments.NewsFragment;
 import org.dosomething.letsdothis.ui.fragments.ReplaceFragmentListener;
 import org.dosomething.letsdothis.ui.fragments.SetTitleListener;
 import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
@@ -44,25 +45,22 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
     private DrawerListAdapter drawerListAdapter;
 
 
-    public static Intent getLaunchIntent(Context context)
-    {
+    public static Intent getLaunchIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         return intent;
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initToolbar();
         initDrawer();
 
 
-        if(savedInstanceState == null)
-        {
+        if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, ActionsFragment.newInstance(), ActionsFragment.TAG)
+                    .add(R.id.container, NewsFragment.newInstance(), NewsFragment.TAG)
                     .commit();
             drawerListAdapter.notifyDataSetChanged();
         }
@@ -72,25 +70,20 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
         initDrawer();
     }
 
-    private void initGroupInvite()
-    {
+    private void initGroupInvite() {
         boolean attemptInvite = getIntent().getBooleanExtra(ATTEMPT_INVITE, false);
-        if(attemptInvite)
-        {
+        if (attemptInvite) {
             int groupId = getIntent().getIntExtra(GROUP_ID, 0);
-            if(groupId == - 1)
-            {
+            if (groupId == - 1) {
                 InvitesFragment.showErrorToast(this);
             }
-            else
-            {
+            else {
                 joinInvite(groupId);
             }
         }
     }
 
-    private void initToolbar()
-    {
+    private void initToolbar() {
         toolbar = (CustomToolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Actions");
         setSupportActionBar(toolbar);
@@ -105,8 +98,7 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
         mDrawerToggle.syncState();
     }
 
-    private void initDrawer()
-    {
+    private void initDrawer() {
         final String[] list = getResources().getStringArray(R.array.drawer_list);
         final View drawer = findViewById(R.id.drawer);
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -117,23 +109,20 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
         drawerListAdapter.notifyDataSetChanged();
 
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                if(drawerListAdapter.selected != position)
-                {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (drawerListAdapter.selected != position) {
                     drawerListAdapter.selected = position;
                     String positionString = list[position];
-                    if(TextUtils.equals(positionString, getString(R.string.actions)))
-                    {
+                    if (TextUtils.equals(positionString, getString(R.string.nav_news))) {
+                        replaceCurrentFragment(NewsFragment.newInstance(), NewsFragment.TAG);
+                    }
+                    else if (TextUtils.equals(positionString, getString(R.string.actions))) {
                         replaceCurrentFragment(ActionsFragment.newInstance(), ActionsFragment.TAG);
                     }
-                    else if(TextUtils.equals(positionString, getString(R.string.hub)))
-                    {
+                    else if (TextUtils.equals(positionString, getString(R.string.hub))) {
                         replaceCurrentFragment(HubFragment.newInstance(null), HubFragment.TAG);
-
                     }
                 }
                 drawerLayout.closeDrawer(drawer);
@@ -156,17 +145,13 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
         }
     }
 
-    private void joinInvite(final int groupId)
-    {
+    private void joinInvite(final int groupId) {
         //fixme one day, we should extract this class so we don't have copy pasta code
-        new AsyncTask<Integer, Integer, String[]>()
-        {
+        new AsyncTask<Integer, Integer, String[]>() {
             @Override
-            protected String[] doInBackground(Integer... params)
-            {
+            protected String[] doInBackground(Integer... params) {
                 String[] responses = new String[2];
-                try
-                {
+                try {
                     SystemClock.sleep(1000);
 
                     Gson gson = new Gson();
@@ -180,8 +165,7 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
                     responses[1] = gson.toJson(responseCampaignWrapper);
 
                 }
-                catch(RetrofitError | NetworkException e)
-                {
+                catch (RetrofitError | NetworkException e) {
                     return null;
                 }
 
@@ -189,17 +173,13 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
             }
 
             @Override
-            protected void onPostExecute(String[] responses)
-            {
+            protected void onPostExecute(String[] responses) {
                 super.onPostExecute(responses);
-                if(! isCancelled())
-                {
-                    if(responses == null)
-                    {
+                if (! isCancelled()) {
+                    if (responses == null) {
                         InvitesFragment.showErrorToast(MainActivity.this);
                     }
-                    else
-                    {
+                    else {
                         JoinGroupDialogFragment joinGroupDialogFragment = JoinGroupDialogFragment
                                 .newInstance(groupId, responses[0], responses[1]);
                         joinGroupDialogFragment.show(MainActivity.this.getSupportFragmentManager(),
@@ -208,11 +188,9 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
                 }
             }
         }.execute(groupId);
-
     }
 
-    private void replaceCurrentFragment(Fragment fragment, String tag)
-    {
+    private void replaceCurrentFragment(Fragment fragment, String tag) {
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, tag)
                 .commit();
         getSupportFragmentManager().executePendingTransactions();
