@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -44,6 +45,9 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
     private CustomToolbar toolbar;
     private DrawerListAdapter drawerListAdapter;
 
+    // Current Fragment being shown
+    private Fragment mCurrentFragment;
+
 
     public static Intent getLaunchIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -59,10 +63,7 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
 
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, NewsFragment.newInstance(), NewsFragment.TAG)
-                    .commit();
-            drawerListAdapter.notifyDataSetChanged();
+            replaceCurrentFragment(NewsFragment.newInstance(), NewsFragment.TAG);
         }
 
         initGroupInvite();
@@ -117,11 +118,9 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
                     String positionString = list[position];
                     if (TextUtils.equals(positionString, getString(R.string.nav_news))) {
                         replaceCurrentFragment(NewsFragment.newInstance(), NewsFragment.TAG);
-                    }
-                    else if (TextUtils.equals(positionString, getString(R.string.actions))) {
+                    } else if (TextUtils.equals(positionString, getString(R.string.actions))) {
                         replaceCurrentFragment(ActionsFragment.newInstance(), ActionsFragment.TAG);
-                    }
-                    else if (TextUtils.equals(positionString, getString(R.string.hub))) {
+                    } else if (TextUtils.equals(positionString, getString(R.string.hub))) {
                         replaceCurrentFragment(HubFragment.newInstance(null), HubFragment.TAG);
                     }
                 }
@@ -191,6 +190,8 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
     }
 
     private void replaceCurrentFragment(Fragment fragment, String tag) {
+        mCurrentFragment = fragment;
+
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, tag)
                 .commit();
         getSupportFragmentManager().executePendingTransactions();
@@ -223,6 +224,23 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
         }
 
         replaceCurrentFragment(ActionsFragment.newInstance(), ActionsFragment.TAG);
+    }
+
+    /**
+     * Capture the onKeyUp event specifically for use by the React Native NewsFragment.
+     *
+     * @param keyCode
+     * @param event
+     * @return boolean
+     */
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        boolean handled = false;
+        if (mCurrentFragment != null && mCurrentFragment.getTag() == NewsFragment.TAG) {
+            handled = ((NewsFragment)mCurrentFragment).onKeyUp(keyCode);
+        }
+
+        return handled || super.onKeyUp(keyCode, event);
     }
 
 

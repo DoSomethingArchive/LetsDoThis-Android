@@ -3,6 +3,7 @@ package org.dosomething.letsdothis.ui.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import com.facebook.react.LifecycleState;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactRootView;
+import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.shell.MainReactPackage;
 
 import org.dosomething.letsdothis.BuildConfig;
@@ -19,7 +21,7 @@ import org.dosomething.letsdothis.BuildConfig;
  *
  * Created by juy on 1/15/16.
  */
-public class NewsFragment extends Fragment {
+public class NewsFragment extends Fragment implements DefaultHardwareBackBtnHandler {
 
     public static final String TAG = NewsFragment.class.getSimpleName();
 
@@ -41,9 +43,53 @@ public class NewsFragment extends Fragment {
                 .setUseDeveloperSupport(BuildConfig.DEBUG)
                 .setInitialLifecycleState(LifecycleState.RESUMED)
                 .build();
-        mReactRootView.startReactApplication(mReactInstanceManager, "LDTReactNewsApp", null);
+        mReactRootView.startReactApplication(mReactInstanceManager, "NewsFeedView", null);
 
         return mReactRootView;
+    }
+
+    @Override
+    public void invokeDefaultOnBackPressed() {
+        getActivity().onBackPressed();
+
+        if (mReactInstanceManager != null) {
+            mReactInstanceManager.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if (mReactInstanceManager != null) {
+            mReactInstanceManager.onPause();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mReactInstanceManager != null) {
+            mReactInstanceManager.onResume(getActivity(), this);
+        }
+    }
+
+
+    /**
+     * Capture the menu button key-up event to show the React Native dev options dialog.
+     *
+     * @param keyCode
+     * @return boolean
+     */
+    public boolean onKeyUp(int keyCode) {
+        if (keyCode == KeyEvent.KEYCODE_MENU && mReactInstanceManager != null) {
+            mReactInstanceManager.showDevOptionsDialog();
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     private class LDTReactPackage extends MainReactPackage {
