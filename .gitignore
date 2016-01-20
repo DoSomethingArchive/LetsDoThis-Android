@@ -49,3 +49,7 @@ brandon_reg.otf
 
 # Google Services
 app/google-services.json
+
+# NPM stuff for React Native
+node_modules/
+npm-debug.log
