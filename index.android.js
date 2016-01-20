@@ -20,14 +20,20 @@ var NewsFeedView = React.createClass({
         rowHasChanged: (row1, row2) => row1 !== row2,
       }),
       loaded: false,
+      requestUrl: undefined,
     };
   },
   componentDidMount: function() {
-    this.fetchData();
+    // Only fetch data after we've received the URL to use from native
+    var onNewsUrlReceived = function(url) {
+      this.setState({requestUrl: url});
+      this.fetchData();
+    };
+
+    React.NativeModules.ConfigModule.getNewsUrl(onNewsUrlReceived.bind(this));
   },
   fetchData: function() {
-    // @TODO pass URL through a NativeModule
-    fetch("https://dev-ltd-news.pantheon.io/?json=1")
+    fetch(this.state.requestUrl)
       .then((response) => response.json())
       .then((responseData) => {
         this.setState({
@@ -210,4 +216,5 @@ var styles = React.StyleSheet.create({
     padding: 20,
   },
 });
+
 AppRegistry.registerComponent('NewsFeedView', () => NewsFeedView);
