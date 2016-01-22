@@ -8,7 +8,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "node_modules/react-native/packager/packager.sh --root `pwd`/app/react",
+    "start": "node_modules/react-native/packager/packager.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
