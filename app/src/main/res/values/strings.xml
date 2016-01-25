@@ -15,6 +15,7 @@
         tab for what\'s fresh.</string>
     <string name="hub_expire_current">Current:</string>
     <string name="hub_expire_days_left">Days Left</string>
+    <string name="nav_news">News</string>
     <string name="notifications">Notifications</string>
     <string name="invites">Invites</string>
     <string name="staff_pick">Staff pick</string>

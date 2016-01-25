@@ -26,7 +26,7 @@ public class CampaignDetailsTask extends BaseNetworkErrorHandlerTask
     @Override
     protected void run(Context context) throws Throwable
     {
-        ResponseCampaignWrapper response = NetworkHelper.getDoSomethingAPIService()
+        ResponseCampaignWrapper response = NetworkHelper.getPhoenixAPIService()
                 .campaign(campaignId);
         campaign = ResponseCampaign.getCampaign(response.data);
 

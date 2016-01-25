@@ -1,0 +1,24 @@
+{
+  "name": "ldt_android_react",
+  "version": "1.0.0",
+  "description": "## Development",
+  "main": "index.js",
+  "dependencies": {
+    "react-native": "^0.17.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node_modules/react-native/packager/packager.sh --root `pwd`/app/react",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DoSomething/LetsDoThis-Android.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DoSomething/LetsDoThis-Android/issues"
+  },
+  "homepage": "https://github.com/DoSomething/LetsDoThis-Android"
+}

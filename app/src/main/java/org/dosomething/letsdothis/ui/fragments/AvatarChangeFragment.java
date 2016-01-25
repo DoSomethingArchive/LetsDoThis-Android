@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.squareup.picasso.Picasso;
 
@@ -24,6 +25,7 @@ import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.io.File;
 
+import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
 
 /**
@@ -41,6 +43,7 @@ public class AvatarChangeFragment extends Fragment implements View.OnClickListen
 
     // UI references
     private ImageView photoView;
+    private ProgressBar progressBar;
     private Button saveButton;
 
     // Uri for the photo if taken from the camera
@@ -59,6 +62,7 @@ public class AvatarChangeFragment extends Fragment implements View.OnClickListen
         super.onViewCreated(view, savedInstanceState);
 
         photoView = (ImageView)view.findViewById(R.id.avatar);
+        progressBar = (ProgressBar)view.findViewById(R.id.progress);
         saveButton = (Button)view.findViewById(R.id.save);
 
         photoView.setOnClickListener(this);
@@ -91,7 +95,18 @@ public class AvatarChangeFragment extends Fragment implements View.OnClickListen
     public void onResume() {
         super.onResume();
 
+        if (!EventBusExt.getDefault().isRegistered(this)) {
+            EventBusExt.getDefault().register(this);
+        }
+
         setTitleListener.setTitle(getResources().getString(R.string.change_photo));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        EventBusExt.getDefault().unregister(this);
     }
 
     @Override
@@ -177,8 +192,7 @@ public class AvatarChangeFragment extends Fragment implements View.OnClickListen
         TaskQueue.loadQueueDefault(getActivity())
                 .execute(new UploadAvatarTask(id, croppedPhotoPath));
 
-        // Return to the previous fragment
-        getActivity().onBackPressed();
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -189,5 +203,15 @@ public class AvatarChangeFragment extends Fragment implements View.OnClickListen
     private void displayPicture(String path) {
         Picasso.with(getActivity()).load("file://" + path)
                 .resize(photoView.getWidth(), photoView.getHeight()).into(photoView);
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(UploadAvatarTask task) {
+        progressBar.setVisibility(View.GONE);
+
+        if (!task.hasError()) {
+            // Return to the previous fragment on success
+            getActivity().onBackPressed();
+        }
     }
 }

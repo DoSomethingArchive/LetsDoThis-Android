@@ -4,7 +4,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 import org.dosomething.letsdothis.R;
-import org.dosomething.letsdothis.network.DoSomethingAPI;
+import org.dosomething.letsdothis.network.PhoenixAPI;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.ResponseTaxonomyTerm;
 
@@ -35,7 +35,7 @@ public class GetInterestGroupTitleTask extends BaseNetworkErrorHandlerTask {
 
     @Override
     protected void run(Context context) throws Throwable {
-        DoSomethingAPI api = NetworkHelper.getDoSomethingAPIService();
+        PhoenixAPI api = NetworkHelper.getPhoenixAPIService();
 
         for (int i = 0; i < 4; i++) {
             ResponseTaxonomyTerm response = api.taxonomyTerm(mGroupIds[i]);

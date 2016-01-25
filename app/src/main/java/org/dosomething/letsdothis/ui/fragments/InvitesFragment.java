@@ -132,7 +132,7 @@ public class InvitesFragment extends Fragment implements InvitesAdapter.InviteAd
                         responses[0] = gson.toJson(responseGroup);
 
                         ResponseCampaignWrapper responseCampaignWrapper = NetworkHelper
-                                .getDoSomethingAPIService()
+                                .getPhoenixAPIService()
                                 .campaign(responseGroup.data.campaign_id);
                         responses[1] = gson.toJson(responseCampaignWrapper);
 

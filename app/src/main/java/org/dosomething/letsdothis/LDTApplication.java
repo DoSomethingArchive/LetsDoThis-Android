@@ -1,6 +1,7 @@
 package org.dosomething.letsdothis;
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
@@ -12,16 +13,15 @@ import io.fabric.sdk.android.Fabric;
 /**
  * Created by izzyoji :) on 4/14/15.
  */
-public class LDTApplication extends Application
-{
-    public static Context      context;
+public class LDTApplication extends Application {
+    // Application context
+    public static Context context;
 
     // Google Analytics Tracker
     private Tracker mTracker;
 
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         super.onCreate();
         context = this;
 
@@ -30,14 +30,23 @@ public class LDTApplication extends Application
         Parse.initialize(this, getString(R.string.parse_app_id), getString(R.string.parse_client_key));
     }
 
-
-    public static Context getContext()
-    {
-        if(context == null)
-        {
+    public static Context getContext() {
+        if (context == null) {
             throw new RuntimeException("context is null");
         }
         return context;
+    }
+
+    /**
+     * Sets the base context for this ContextWrapper. Enabling multidex also happens here.
+     *
+     * @param base
+     */
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+
+        MultiDex.install(this);
     }
 
     /**

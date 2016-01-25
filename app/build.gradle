@@ -33,20 +33,34 @@ def NORTHSTAR_API_KEY_THOR = secrets.getProperty("NorthstarApiKeyThor") ?: "Need
 def NORTHSTAR_API_KEY_PROD = secrets.getProperty("NorthstarApiKeyProduction") ?: "Need to set NorthstarApiKeyProduction in app/secrets.properties";
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+    dexOptions {
+        javaMaxHeapSize "2048M"
+    }
     defaultConfig {
         applicationId "org.dosomething.letsdothis"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.0.1"
         resValue "string", "fabric_api_key", FABRIC_API_KEY
         resValue "string", "facebook_app_id", FACEBOOK_APP_ID_PROD
         resValue "string", "parse_app_id", PARSE_APP_ID
         resValue "string", "parse_client_key", PARSE_CLIENT_KEY
         resValue "string", "northstar_app_id", NORTHSTAR_APP_ID_PROD
         resValue "string", "northstar_api_key", NORTHSTAR_API_KEY_PROD
+
+        // Enabling multidex support.
+        multiDexEnabled true
+    }
+    signingConfigs {
+        release {
+            storeFile file(LDT_RELEASE_STORE_FILE)
+            storePassword LDT_RELEASE_STORE_PASSWORD
+            keyAlias LDT_RELEASE_KEY_ALIAS
+            keyPassword LDT_RELEASE_KEY_PASSWORD
+        }
     }
     buildTypes {
         debug {
@@ -63,9 +77,10 @@ android {
             resValue "string", "northstar_api_key", NORTHSTAR_API_KEY_THOR
         }
         release {
-             minifyEnabled true
-             shrinkResources true
-             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+             //minifyEnabled true
+             //shrinkResources true
+             //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+             signingConfig signingConfigs.release
         }
         packagingOptions {
             exclude 'META-INF/ASL2.0'
@@ -86,9 +101,10 @@ android {
 dependencies {
     compile 'com.parse.bolts:bolts-android:1.+'
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.android.support:support-v4:22.2.0'
-    compile 'com.android.support:design:22.2.0'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:design:23.1.1'
+    compile 'com.android.support:multidex:1.0.0'
+    compile 'com.android.support:support-v4:23.1.1'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.okhttp:okhttp:2.3.0'
     compile 'com.viewpagerindicator:library:2.4.1@aar'
@@ -100,9 +116,10 @@ dependencies {
     compile 'commons-io:commons-io:2.4'
     compile 'org.apache.commons:commons-lang3:3.3.2'
     provided 'com.intellij:annotations:9.0.4'
-    compile 'com.android.support:recyclerview-v7:22.0.0'
+    compile 'com.android.support:recyclerview-v7:23.1.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.facebook.android:facebook-android-sdk:4.7.0'
+    compile 'com.facebook.react:react-native:0.17.0'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {
         transitive = true;
     }
