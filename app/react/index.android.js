@@ -1,12 +1,12 @@
 'use strict';
 import React, {
-  ActivityIndicatorIOS,
+  ProgressBarAndroid,
   AppRegistry,
   Component,
   Image,
   IntentAndroid,
   ListView,
-  RefreshControl,
+  PullToRefreshViewAndroid,
   StyleSheet,
   Text,
   TouchableHighlight,
@@ -54,21 +54,19 @@ var NewsFeedView = React.createClass({
     }
 
     return (
-      <ListView
-        dataSource={this.state.dataSource}
-        renderRow={this.renderPost}
-        style={styles.listView}
-        refreshControl={
-          <RefreshControl
-            enabled={true}
-            refreshing={this.state.isRefreshing}
-            onRefresh={this._onRefresh}
-            tintColor="#3932A9"
-            colors={['#ff0000', '#00ff00', '#0000ff']}
-            progressBackgroundColor="#ffff00"
-          />
-        }
-      />
+      <PullToRefreshViewAndroid
+        style={{flex: 1}}
+        refreshing={this.state.isRefreshing}
+        onRefresh={this._onRefresh}
+        colors={['#3932a9', '#00e4c8', '#ff0000']}
+        progressBackgroundColor={'#ffffff'}
+        >
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={this.renderPost}
+          style={styles.listView}
+        />
+      </PullToRefreshViewAndroid>
     );
   },
   _onRefresh: function () {
@@ -83,7 +81,7 @@ var NewsFeedView = React.createClass({
   renderLoadingView: function() {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicatorIOS animating={this.state.animating} style={[{height: 80}]} size="small" />
+        <ProgressBarAndroid animating={this.state.animating} style={styles.loadingIndicator} size="small" />
         <Text style={styles.subtitle}>
           Loading news...
         </Text>
@@ -241,6 +239,9 @@ var styles = React.StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     paddingBottom: 10,
+  },
+  loadingIndicator: {
+    height: 40,
   },
   subtitle: {
     color: '#4A4A4A',
