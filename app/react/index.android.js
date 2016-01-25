@@ -89,6 +89,8 @@ var NewsFeedView = React.createClass({
     );
   },
   renderPost: function(post) {
+    var causeStyle;
+    var causeTitle;
     var formattedDate;
     var imgBackground;
     var imgOval;
@@ -129,15 +131,57 @@ var NewsFeedView = React.createClass({
     formattedDate = Helpers.formatDate(post.date);
     viewCategory = null;
     if (post.categories.length > 0) {
+      causeTitle = post.categories[0].title;
       viewCategory =
         <View style={styles.categoryContainer}>
-          <Text style={styles.category}>{post.categories[0].title}</Text>
+          <Text style={styles.category}>{causeTitle}</Text>
         </View>;
+    }
+
+    causeStyle = {backgroundColor: '#FF0033'};
+    causeStyle.backgroundColor = '#FF0033';
+    switch (causeTitle) {
+      case 'Animals':
+        causeStyle.backgroundColor = '#1BC2DD';
+        break;
+      case 'Bullying':
+        causeStyle.backgroundColor = '#E75526';
+        break;
+      case 'Disasters':
+        causeStyle.backgroundColor = '#1D78FB';
+        break;
+      case 'Discrimination':
+        causeStyle.backgroundColor = '#E1000D';
+        break;
+      case 'Education':
+        causeStyle.backgroundColor = '#1AE3C6';
+        break;
+      case 'Environment':
+        causeStyle.backgroundColor = '#12D168';
+        break;
+      case 'Homelessness':
+        causeStyle.backgroundColor = '#FBB71D';
+        break;
+      case 'Mental Health':
+        causeStyle.backgroundColor = '#BA2CC7';
+        break;
+      case 'Physical Health':
+        causeStyle.backgroundColor = '#BA2CC7';
+        break;
+      case 'Relationships':
+        causeStyle.backgroundColor = '#A01DFB';
+        break;
+      case 'Sex':
+        causeStyle.backgroundColor = '#FB1DA9';
+        break;
+      case 'Violence':
+        causeStyle.backgroundColor = '#F1921A';
+        break;
     }
 
     return(
       <View style={styles.postContainer}>
-        <View style={styles.postHeader}>
+        <View style={[styles.postHeader, causeStyle]}>
           <Text style={styles.date}>{formattedDate}</Text>
           {viewCategory}
         </View>
