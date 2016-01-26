@@ -19,6 +19,7 @@ import com.facebook.react.shell.MainReactPackage;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.react.CampaignNavigationModule;
 import org.dosomething.letsdothis.react.ConfigModule;
+import org.dosomething.letsdothis.react.WebViewModule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,6 +111,7 @@ public class NewsFragment extends Fragment implements DefaultHardwareBackBtnHand
             modules.addAll(super.createNativeModules(reactContext));
             modules.add(new CampaignNavigationModule(reactContext));
             modules.add(new ConfigModule(reactContext));
+            modules.add(new WebViewModule(reactContext));
 
             return modules;
         }
