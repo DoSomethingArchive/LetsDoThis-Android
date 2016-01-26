@@ -4,7 +4,6 @@ import React, {
   AppRegistry,
   Component,
   Image,
-  IntentAndroid,
   ListView,
   PullToRefreshViewAndroid,
   StyleSheet,
@@ -213,7 +212,7 @@ var NewsFeedView = React.createClass({
     React.NativeModules.CampaignNavigationModule.presentCampaignWithCampaignID(campaignID);
   },
   fullArticlePressed: function(url) {
-    IntentAndroid.openURL(url);
+    React.NativeModules.WebViewModule.open(url);
   },
 });
 

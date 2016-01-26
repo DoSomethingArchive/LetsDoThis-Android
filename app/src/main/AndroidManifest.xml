@@ -103,6 +103,10 @@
                   android:screenOrientation="portrait"
                   android:configChanges="orientation|keyboardHidden"/>
 
+        <activity android:name=".ui.WebViewActivity"
+                  android:configChanges="orientation|keyboardHidden"
+                  android:screenOrientation="portrait" />
+
         <activity android:name="com.facebook.FacebookActivity"
                   android:configChanges=
                       "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
