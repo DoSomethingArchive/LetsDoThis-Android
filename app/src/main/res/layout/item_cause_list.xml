@@ -3,13 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <View android:id="@+id/color"
+    <RelativeLayout android:id="@+id/color"
         android:layout_width="8dp"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/container"
+        android:layout_alignBottom="@+id/container"
         android:background="@color/cause_default" />
 
-    <RelativeLayout
+    <RelativeLayout android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_toRightOf="@id/color"
@@ -17,7 +19,8 @@
         android:paddingRight="16dp"
         android:paddingTop="36dp"
         android:paddingBottom="36dp"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:background="@drawable/bg_topbot_border" >
 
         <TextView android:id="@+id/name"
             android:layout_width="wrap_content"
