@@ -7,8 +7,8 @@
         <item name="android:textSize">@dimen/text_30</item>
         <item name="android:buttonStyle">@style/PrimaryButton</item>
         <item name="android:editTextStyle">@style/EditText</item>
-        <item name="colorPrimary">@color/web_orange</item>
-        <item name="colorPrimaryDark">@color/dark_orange</item>
+        <item name="colorPrimary">@color/theme_primary</item>
+        <item name="colorPrimaryDark">@color/theme_primary_dark</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="android:scrollbarSize">4dp</item>
     </style>
@@ -44,8 +44,8 @@
     </style>
 
     <style name="CustomCirclePageIndicator">
-        <item name="fillColor">@color/cerulean_1</item>
-        <item name="strokeColor">@color/cerulean_1</item>
+        <item name="fillColor">@color/circle_indicator</item>
+        <item name="strokeColor">@color/circle_indicator</item>
         <item name="strokeWidth">1dp</item>
         <item name="radius">3dp</item>
         <item name="centered">true</item>

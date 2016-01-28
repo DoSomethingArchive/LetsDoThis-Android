@@ -73,8 +73,11 @@
     <color name="cause_relationships">#FFA01DFB</color>
     <color name="cause_sex">#FFFB1DA9</color>
     <color name="cause_violence">#FFF1921A</color>
+    <color name="circle_indicator">#F72959</color>
     <color name="fb_bg">#3b579d</color>
     <color name="hint">#D6D6D6</color>
     <color name="snack_error">#d0021b</color>
     <color name="snack_success">#0fad22</color>
+    <color name="theme_primary">#352FB0</color>
+    <color name="theme_primary_dark">#211E63</color>
 </resources>
