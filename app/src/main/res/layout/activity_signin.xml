@@ -6,13 +6,12 @@
                 android:background="@color/web_orange">
 
     <ImageView
-        android:id="@+id/lightning"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/padding_medium"
-        android:paddingRight="@dimen/padding_medium"
-        android:scaleType="centerCrop"
-        android:src="@drawable/orange_lightning"/>
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_onboarding_bitmap"
+        android:tint="@color/theme_primary_dark"
+        android:tintMode="multiply"/>
 
     <ScrollView
         android:layout_width="match_parent"

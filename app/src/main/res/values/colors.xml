@@ -59,6 +59,8 @@
     <color name="black_15">#26000000</color>
     <color name="black_10">#1A000000</color>
     <color name="black_5">#0D000000</color>
+    <color name="button_bg_primary">#F72959</color>
+    <color name="button_text_secondary">#F72959</color>
     <color name="cause_default">#FFFF0033</color>
     <color name="cause_animals">#FF1BC2DD</color>
     <color name="cause_bullying">#FFE75526</color>

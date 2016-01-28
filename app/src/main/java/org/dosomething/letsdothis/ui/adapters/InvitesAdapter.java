@@ -155,7 +155,7 @@ public class InvitesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         break;
                     case BUTTON_STATE_SEARCH:
                         inputCodeViewHolder.join.setText(R.string.search_for_group);
-                        inputCodeViewHolder.join.setBackgroundResource(R.drawable.bg_cerulean_rounded_rect_filled);
+                        inputCodeViewHolder.join.setBackgroundResource(R.drawable.bg_button_rounded_rect_filled);
                         inputCodeViewHolder.join.setVisibility(View.VISIBLE);
                         inputCodeViewHolder.join.setOnClickListener(new View.OnClickListener()
                         {

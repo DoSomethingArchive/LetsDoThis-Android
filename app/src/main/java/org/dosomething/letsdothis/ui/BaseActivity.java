@@ -75,22 +75,6 @@ public abstract class BaseActivity extends AppCompatActivity
         context.sendBroadcast(new Intent(LOGIN_SUCCESS));
     }
 
-    protected void initLightning()
-    {
-        final ImageView lightning = (ImageView) findViewById(R.id.lightning);
-        lightning.getViewTreeObserver()
-                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener()
-                {
-                    @Override
-                    public void onGlobalLayout()
-                    {
-                        int measuredWidth = getWindow().getDecorView().getMeasuredWidth();
-                        int translateX = (- measuredWidth * 3 / LIGHTNING_OFFSET);
-                        lightning.setTranslationX(translateX);
-                    }
-                });
-    }
-
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(AppPrefs fakeTask)
     {

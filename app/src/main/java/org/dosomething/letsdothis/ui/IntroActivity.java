@@ -105,7 +105,8 @@ public class IntroActivity extends BaseActivity
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 int measuredWidth = getWindow().getDecorView().getMeasuredWidth();
                 int translateX = (-position * measuredWidth - positionOffsetPixels) / LIGHTNING_OFFSET;
-                background.setTranslationX(translateX);
+                // @todo Temporarily disabling parallax until we get finalized assets
+                // background.setTranslationX(translateX);
 
                 if (position == (INTRO_FRAGMENT_COUNT - 2)) {
                     indicator.setTranslationY(indicatorTop + positionOffsetPixels / 2);
