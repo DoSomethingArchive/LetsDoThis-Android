@@ -1,5 +1,6 @@
 package org.dosomething.letsdothis.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,12 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.Tracker;
 
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Causes;
+import org.dosomething.letsdothis.ui.CauseActivity;
 import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 /**
@@ -66,7 +69,7 @@ public class CauseListFragment extends Fragment {
     }
 
     /**
-     * @todo COMMENT ME
+     * Adapter for RecyclerView.
      */
     private class CauseListAdapter extends RecyclerView.Adapter<CauseListItemViewHolder> {
 
@@ -84,6 +87,7 @@ public class CauseListFragment extends Fragment {
 
             holder.name.setText(name);
             holder.color.setBackgroundResource(resColor);
+            holder.setCauseName(name);
         }
 
         @Override
@@ -92,15 +96,33 @@ public class CauseListFragment extends Fragment {
         }
     }
 
-    private class CauseListItemViewHolder extends RecyclerView.ViewHolder {
+    /**
+     * ViewHolder for each row in the cause list.
+     */
+    private class CauseListItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView name;
         View color;
+        View rootView;
+
+        private String causeName;
 
         CauseListItemViewHolder(View itemView) {
             super(itemView);
 
             name = (TextView) itemView.findViewById(R.id.name);
             color = itemView.findViewById(R.id.color);
+            rootView = itemView;
+            rootView.setOnClickListener(this);
+        }
+
+        public void setCauseName(String name) {
+            causeName = name;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent i = CauseActivity.getLaunchIntent(getActivity(), causeName);
+            startActivity(i);
         }
     }
 }

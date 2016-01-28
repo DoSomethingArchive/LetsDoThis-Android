@@ -42,4 +42,8 @@ public class GetCampaignsByCauseTask extends BaseNetworkErrorHandlerTask {
     protected boolean handleError(Context context, Throwable throwable) {
         return super.handleError(context, throwable);
     }
+
+    public ResponseCampaignList getResults() {
+        return mResults;
+    }
 }
