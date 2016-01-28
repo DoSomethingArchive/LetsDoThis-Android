@@ -48,6 +48,7 @@
             android:lineSpacingExtra="5dp"
             android:textColor="@android:color/black"
             android:textSize="@dimen/text_medium"
+            app:typeface="brandon_regular"
             tools:text="This is some intro text. and then here is some more text"/>
 
     </LinearLayout>

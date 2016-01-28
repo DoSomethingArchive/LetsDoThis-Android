@@ -31,8 +31,6 @@ public class RegisterLoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_lightning_container);
 
-        initLightning();
-
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, RegisterLoginFragment.newInstance(),

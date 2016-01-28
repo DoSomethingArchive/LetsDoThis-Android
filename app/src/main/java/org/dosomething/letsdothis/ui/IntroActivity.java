@@ -39,7 +39,7 @@ public class IntroActivity extends BaseActivity
     private ViewPager           pager;
     private CirclePageIndicator indicator;
     private int                 indicatorTop;
-    private ImageView           lightning;
+    private ImageView           background;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
 
@@ -96,7 +96,7 @@ public class IntroActivity extends BaseActivity
 
         });
 
-        lightning = (ImageView) findViewById(R.id.lightning);
+        background = (ImageView) findViewById(R.id.background);
         indicator = (CirclePageIndicator) findViewById(R.id.indicator);
         indicator.setViewPager(pager);
         indicatorTop = indicator.getTop();
@@ -105,7 +105,8 @@ public class IntroActivity extends BaseActivity
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 int measuredWidth = getWindow().getDecorView().getMeasuredWidth();
                 int translateX = (-position * measuredWidth - positionOffsetPixels) / LIGHTNING_OFFSET;
-                lightning.setTranslationX(translateX);
+                // @todo Temporarily disabling parallax until we get finalized assets
+                // background.setTranslationX(translateX);
 
                 if (position == (INTRO_FRAGMENT_COUNT - 2)) {
                     indicator.setTranslationY(indicatorTop + positionOffsetPixels / 2);
