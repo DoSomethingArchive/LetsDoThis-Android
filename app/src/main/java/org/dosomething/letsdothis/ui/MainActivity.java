@@ -22,6 +22,7 @@ import org.dosomething.letsdothis.network.models.ResponseCampaignWrapper;
 import org.dosomething.letsdothis.network.models.ResponseGroup;
 import org.dosomething.letsdothis.ui.adapters.DrawerListAdapter;
 import org.dosomething.letsdothis.ui.fragments.ActionsFragment;
+import org.dosomething.letsdothis.ui.fragments.CauseListFragment;
 import org.dosomething.letsdothis.ui.fragments.HubFragment;
 import org.dosomething.letsdothis.ui.fragments.InvitesFragment;
 import org.dosomething.letsdothis.ui.fragments.JoinGroupDialogFragment;
@@ -119,7 +120,7 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
                     if (TextUtils.equals(positionString, getString(R.string.nav_news))) {
                         replaceCurrentFragment(NewsFragment.newInstance(), NewsFragment.TAG);
                     } else if (TextUtils.equals(positionString, getString(R.string.actions))) {
-                        replaceCurrentFragment(ActionsFragment.newInstance(), ActionsFragment.TAG);
+                        replaceCurrentFragment(CauseListFragment.newInstance(), CauseListFragment.TAG);
                     } else if (TextUtils.equals(positionString, getString(R.string.hub))) {
                         replaceCurrentFragment(HubFragment.newInstance(null), HubFragment.TAG);
                     }

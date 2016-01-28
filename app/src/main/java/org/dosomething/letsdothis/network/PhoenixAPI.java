@@ -43,6 +43,10 @@ public interface PhoenixAPI {
             @Query("mobile_app_date") String currentDate) throws NetworkException;
 
     @Headers("Content-Type: application/json")
+    @GET("/campaigns.json")
+    ResponseCampaignList campaignListByCause(@Query("term_ids") int causeId) throws NetworkException;
+
+    @Headers("Content-Type: application/json")
     @GET("/campaigns.json?mobile_app=1")
     ResponseCampaignList campaignListByIds(@Query("ids") String ids) throws NetworkException;
 

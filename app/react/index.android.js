@@ -167,6 +167,9 @@ var NewsFeedView = React.createClass({
       case 'Physical Health':
         causeStyle.backgroundColor = '#BA2CC7';
         break;
+      case 'Poverty':
+        causeStyle.backgroundColor = '#69D24B'
+        break;
       case 'Relationships':
         causeStyle.backgroundColor = '#A01DFB';
         break;
