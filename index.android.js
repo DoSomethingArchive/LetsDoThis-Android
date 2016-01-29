@@ -12,7 +12,7 @@ import React, {
   View
 } from 'react-native';
 
-var Helpers = require('./newsfeed-helpers');
+var Helpers = require('./app/react/newsfeed-helpers');
 
 var TAKE_ACTION_TEXT = 'Take action';
 
