@@ -65,7 +65,6 @@ public class RegisterActivity extends BaseActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        initLightning();
 
         FbUser fbUser = (FbUser) getIntent().getSerializableExtra(FB_USER);
 

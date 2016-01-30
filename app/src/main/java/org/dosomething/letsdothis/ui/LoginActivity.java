@@ -45,7 +45,6 @@ public class LoginActivity extends BaseActivity
         setContentView(R.layout.activity_signin);
 
         initLoginListener();
-        initLightning();
 
         findViewById(R.id.register).setOnClickListener(new View.OnClickListener() {
             @Override
