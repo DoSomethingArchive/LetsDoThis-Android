@@ -61,6 +61,9 @@
     <string name="share_invite">I want you to join the %1$s campaign with me, here\'s the code:
         %2$s.
     </string>
+    <string name="share_news">%1$s - %2$s Read this on the Let\'s Do This app.
+        https://play.google.com/store/apps/details?id=org.dosomething.letsdothis
+    </string>
     <string name="share_reportback_message">Bam! I %1$s %2$s %3$s on the Let\'s Do This app. Want to do more
         un-boring stuff with me? https://play.google.com/store/apps/details?id=org.dosomething.letsdothis
     </string>

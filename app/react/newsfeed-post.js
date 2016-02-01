@@ -48,7 +48,10 @@ var NewsFeedPost = React.createClass({
    * Share button onPress listener.
    */
   _onPressShareButton: function() {
-    // @todo open up a Share intent
+    var post = this.props.post;
+    var postTitle = Helpers.convertUnicode(post.title);
+
+    React.NativeModules.ShareIntentModule.share(postTitle, post.custom_fields.full_article_url[0]);
   },
 
   /**
