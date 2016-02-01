@@ -45,6 +45,13 @@ var NewsFeedPost = React.createClass({
   },
 
   /**
+   * Share button onPress listener.
+   */
+  _onPressShareButton: function() {
+    // @todo open up a Share intent
+  },
+
+  /**
    * Renders the button to link to the full article, if any.
    */
   renderFullArticleButton: function () {
@@ -53,11 +60,20 @@ var NewsFeedPost = React.createClass({
         && typeof post.custom_fields.full_article_url[0] !== 'undefined'
         && post.custom_fields.full_article_url[0]) {
       return (
-        <Text
-          onPress={this._onPressFullArticleButton}
-          style={styles.fullArticleButton}>
-            Read the full article
-        </Text>
+        <View style={styles.articleShareContainer}>
+          <Text
+            onPress={this._onPressFullArticleButton}
+            style={styles.fullArticleButton}>
+              Read the full article
+          </Text>
+          <TouchableHighlight
+            activeOpacity={0.75}
+            underlayColor={'#00000000'}
+            style={styles.imageShareButton}
+            onPress={this._onPressShareButton}>
+            <Image style={styles.imageShareIcon} source={require('image!ic_share_white')} />
+          </TouchableHighlight>
+        </View>
       );
     }
     return null;
@@ -191,7 +207,6 @@ var styles = StyleSheet.create({
   fullArticleButton: {
     color: '#3932A9',
     fontFamily: 'brandon_bold',
-    marginTop: 14,
   },
   actionButton: {
     backgroundColor: '#3932A9',
@@ -205,6 +220,11 @@ var styles = StyleSheet.create({
     fontFamily: 'brandon_bold',
     fontSize: 16,
     textAlign: 'center',
+  },
+  articleShareContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    marginTop: 14,
   },
   image: {
     flex: 1, 
@@ -241,6 +261,15 @@ var styles = StyleSheet.create({
     color: '#FFFFFF',
     fontFamily: 'brandon_reg',
     fontSize: 15,
+  },
+  imageShareButton: {
+    flex: 1,
+    alignItems: 'flex-end',
+  },
+  imageShareIcon: {
+    tintColor: '#3932A9',
+    width: 22,
+    height: 22,
   },
   listItemOvalImage: {
     // The height and width are based off the draw height of a single summaryText line
