@@ -12,8 +12,17 @@
         android:id="@+id/title_container"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_below="@id/toolbar"
-        android:background="@color/cause_default">
+        android:layout_below="@id/toolbar">
+
+        <!-- @todo The current src pattern is a temporary placeholder -->
+        <ImageView
+            android:id="@+id/title_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/bg_onboarding_bitmap"
+            android:tint="@color/cause_default"
+            android:tintMode="multiply"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:id="@+id/title"

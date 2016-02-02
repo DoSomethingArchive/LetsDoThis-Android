@@ -2,11 +2,13 @@ package org.dosomething.letsdothis.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -57,11 +59,18 @@ public class CauseActivity extends BaseActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.progress);
         mProgressBar.setVisibility(View.VISIBLE);
 
-        View titleContainer = findViewById(R.id.title_container);
+        ImageView titleBg = (ImageView) findViewById(R.id.title_bg);
         TextView titleView = (TextView) findViewById(R.id.title);
         TextView descView = (TextView) findViewById(R.id.description);
 
-        titleContainer.setBackgroundResource(Causes.getColorRes(mCauseName));
+        // Extracting rgb values from the color resource so we can also add an alpha to the tint
+        int color = getResources().getColor(Causes.getColorRes(mCauseName));
+        int red = (color >> 16) & 0xff;
+        int green = (color >> 8) & 0xff;
+        int blue = color & 0xff;
+        int alpha = 0x77;
+
+        titleBg.setColorFilter(Color.argb(alpha, red, green, blue));
         titleView.setText(mCauseName.toUpperCase());
         descView.setText("TODO: this cause needs a description.");
 
