@@ -169,8 +169,18 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
             Resources res = campaignViewHolder.imageView.getContext().getResources();
             int height = res.getDimensionPixelSize(R.dimen.campaign_height_expanded);
-            Picasso.with(campaignViewHolder.imageView.getContext()).load(campaign.imagePath)
-                    .resize(0, height).into(campaignViewHolder.imageView);
+            if (campaign.imagePath == null || campaign.imagePath.isEmpty()) {
+                Picasso.with(campaignViewHolder.imageView.getContext())
+                        .load(R.drawable.image_error)
+                        .resize(0, height)
+                        .into(campaignViewHolder.imageView);
+            } else {
+                Picasso.with(campaignViewHolder.imageView.getContext())
+                        .load(campaign.imagePath)
+                        .placeholder(R.drawable.image_loading)
+                        .resize(0, height).into(campaignViewHolder.imageView);
+            }
+
             campaignViewHolder.title.setText(campaign.title);
             campaignViewHolder.callToAction.setText(campaign.callToAction);
 
