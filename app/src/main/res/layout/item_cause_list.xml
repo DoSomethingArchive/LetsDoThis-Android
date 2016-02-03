@@ -38,15 +38,18 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/name"
+            android:layout_toLeftOf="@+id/arrow"
             android:text="Cause description placeholder."
             android:textSize="12sp"
             app:typeface="brandon_regular" />
 
         <ImageView
+            android:id="@id/arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:src="@drawable/ic_cause_list_arrow" />
 

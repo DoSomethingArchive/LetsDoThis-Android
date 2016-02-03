@@ -83,9 +83,11 @@ public class CauseListFragment extends Fragment {
         @Override
         public void onBindViewHolder(CauseListItemViewHolder holder, int position) {
             final String name = Causes.LIST_ORDER[position];
+            final int resDesc = Causes.getDescriptionRes(name);
             final int resColor = Causes.getColorRes(name);
 
             holder.name.setText(name);
+            holder.description.setText(resDesc);
             holder.color.setBackgroundResource(resColor);
             holder.setCauseName(name);
         }
@@ -101,6 +103,7 @@ public class CauseListFragment extends Fragment {
      */
     private class CauseListItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView name;
+        TextView description;
         View color;
         View rootView;
 
@@ -110,6 +113,7 @@ public class CauseListFragment extends Fragment {
             super(itemView);
 
             name = (TextView) itemView.findViewById(R.id.name);
+            description = (TextView) itemView.findViewById(R.id.description);
             color = itemView.findViewById(R.id.color);
             rootView = itemView;
             rootView.setOnClickListener(this);

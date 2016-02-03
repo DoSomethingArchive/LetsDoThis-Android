@@ -7,6 +7,20 @@
     <string name="actions_no_network_text1">No network connection!</string>
     <string name="actions_no_network_text2">We can\'t connect to the internet, please check your
         connection and try again.</string>
+    <string name="cause_default_desc">Find volunteer opportunities.</string>
+    <string name="cause_animals_desc">Find volunteer opportunities to help find a home for shelter pets and protect endangered species.</string>
+    <string name="cause_bullying_desc">Find volunteer opportunities that stop bullying in schools, at work and online.</string>
+    <string name="cause_disasters_desc">Find volunteer opportunities to help disaster relief and emergency readiness.</string>
+    <string name="cause_discrimination_desc">Find volunteer opportunities to fight discrimination in your community.</string>
+    <string name="cause_education_desc">Find volunteer opportunities to improve the education system.</string>
+    <string name="cause_environment_desc">Find volunteer opportunities that protect the environment and save the earth.</string>
+    <string name="cause_homelessness_desc">Find volunteer opportunities to help those in need.</string>
+    <string name="cause_mental_health_desc">Find volunteer opportunities to help those suffering from mental health issues.</string>
+    <string name="cause_physical_health_desc">Find volunteer opportunities to bring healthy living to your community.</string>
+    <string name="cause_poverty_desc">Find volunteer opportunities to help those less fortunate in your community.</string>
+    <string name="cause_relationships_desc">Find volunteer opportunities to promote healthy relationships.</string>
+    <string name="cause_sex_desc">Find volunteer opportunities that promote safe consensual sex and combat sexism.</string>
+    <string name="cause_violence_desc">Find volunteer opportunities to make your community safer.</string>
     <string name="hub">Me</string>
     <string name="hub_empty_action_button">Take Me There</string>
     <string name="hub_empty_public">Hm, we aren\'t able to find any activity for this user.</string>
