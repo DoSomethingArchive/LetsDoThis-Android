@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +36,10 @@ import co.touchlab.android.threading.tasks.TaskQueue;
  * Created by juy on 1/27/16.
  */
 public class CauseActivity extends BaseActivity {
+
+    // View types
+    private static final int VIEW_TYPE_HEADER = 0;
+    private static final int VIEW_TYPE_CAMPAIGN = 1;
 
     // Intent Bundle extra keys
     private static final String EXTRA_CAUSE_NAME = "cause_name";
@@ -75,21 +78,6 @@ public class CauseActivity extends BaseActivity {
 
         mProgressBar = (ProgressBar) findViewById(R.id.progress);
         mProgressBar.setVisibility(View.VISIBLE);
-
-        ImageView titleBg = (ImageView) findViewById(R.id.title_bg);
-        TextView titleView = (TextView) findViewById(R.id.title);
-        TextView descView = (TextView) findViewById(R.id.description);
-
-        // Extracting rgb values from the color resource so we can also add an alpha to the tint
-        int color = getResources().getColor(Causes.getColorRes(mCauseName));
-        int red = (color >> 16) & 0xff;
-        int green = (color >> 8) & 0xff;
-        int blue = color & 0xff;
-        int alpha = 0x77;
-
-        titleBg.setColorFilter(Color.argb(alpha, red, green, blue));
-        titleView.setText(mCauseName.toUpperCase());
-        descView.setText(Causes.getDescriptionRes(mCauseName));
 
         mAdapter = new CauseCampaignsAdapter();
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
@@ -132,55 +120,94 @@ public class CauseActivity extends BaseActivity {
     /**
      *  Adapter for campaign data.
      */
-    private class CauseCampaignsAdapter extends RecyclerView.Adapter<CauseCampaignViewHolder> {
+    private class CauseCampaignsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private ArrayList<Campaign> mCampaigns;
 
         @Override
-        public CauseCampaignViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_campaign, parent, false);
-            return new CauseCampaignViewHolder(v);
+        public int getItemViewType(int position) {
+            if (position == 0) {
+                return VIEW_TYPE_HEADER;
+            } else {
+                return VIEW_TYPE_CAMPAIGN;
+            }
         }
 
         @Override
-        public void onBindViewHolder(CauseCampaignViewHolder holder, int position) {
-            final Campaign campaign = mCampaigns.get(position);
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            if (viewType == VIEW_TYPE_HEADER) {
+                View v = LayoutInflater.from(parent.getContext())
+                            .inflate(R.layout.item_cause_header, parent, false);
+                return new HeaderViewHolder(v);
 
-            // Title
-            holder.mTitle.setText(campaign.title);
-
-            // Background campaign image
-            int height = getResources().getDimensionPixelSize(R.dimen.campaign_height);
-            if (campaign.imagePath == null || campaign.imagePath.isEmpty()) {
-                Picasso.with(CauseActivity.this).load(R.drawable.image_error).resize(0, height)
-                        .into(holder.mImageView);
+            } else if (viewType == VIEW_TYPE_CAMPAIGN) {
+                View v = LayoutInflater.from(parent.getContext())
+                            .inflate(R.layout.item_campaign, parent, false);
+                return new CauseCampaignViewHolder(v);
             } else {
-                CharSequence tag = (CharSequence) holder.mImageView.getTag();
-                if (! TextUtils.equals(campaign.imagePath, tag)) {
-                    Picasso.with(CauseActivity.this)
-                            .load(campaign.imagePath)
-                            .placeholder(R.drawable.image_loading)
-                            .resize(0, height)
+                return null;
+            }
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+            if (viewHolder.getItemViewType() == VIEW_TYPE_HEADER) {
+                HeaderViewHolder holder = (HeaderViewHolder) viewHolder;
+
+                int color = getResources().getColor(Causes.getColorRes(mCauseName));
+                int red = (color >> 16) & 0xff;
+                int green = (color >> 8) & 0xff;
+                int blue = color & 0xff;
+                int alpha = 0x77;
+
+                holder.mBackground.setColorFilter(Color.argb(alpha, red, green, blue));
+                holder.mTitle.setText(mCauseName.toUpperCase());
+                holder.mDescription.setText(Causes.getDescriptionRes(mCauseName));
+
+            } else if (viewHolder.getItemViewType() == VIEW_TYPE_CAMPAIGN) {
+                CauseCampaignViewHolder holder = (CauseCampaignViewHolder) viewHolder;
+
+                // -1 to account for the header being in the 1st position
+                final Campaign campaign = mCampaigns.get(position - 1);
+
+                // Title
+                holder.mTitle.setText(campaign.title);
+
+                // Background campaign image
+                int height = getResources().getDimensionPixelSize(R.dimen.campaign_height);
+                if (campaign.imagePath == null || campaign.imagePath.isEmpty()) {
+                    Picasso.with(CauseActivity.this).load(R.drawable.image_error).resize(0, height)
                             .into(holder.mImageView);
-                    holder.mImageView.setTag(campaign.imagePath);
+                } else {
+                    CharSequence tag = (CharSequence) holder.mImageView.getTag();
+                    if (!TextUtils.equals(campaign.imagePath, tag)) {
+                        Picasso.with(CauseActivity.this)
+                                .load(campaign.imagePath)
+                                .placeholder(R.drawable.image_loading)
+                                .resize(0, height)
+                                .into(holder.mImageView);
+                        holder.mImageView.setTag(campaign.imagePath);
+                    }
                 }
-            }
 
-            // Signed-up indicator
-            if (campaign.userIsSignedUp) {
-                holder.mSignedupIndicator.setVisibility(View.VISIBLE);
-            } else {
-                holder.mSignedupIndicator.setVisibility(View.GONE);
-            }
+                // Signed-up indicator
+                if (campaign.userIsSignedUp) {
+                    holder.mSignedupIndicator.setVisibility(View.VISIBLE);
+                } else {
+                    holder.mSignedupIndicator.setVisibility(View.GONE);
+                }
 
-            // Setting campaign ID to use in click listener
-            holder.setCampaignId(campaign.id);
+                // Setting campaign ID to use in click listener
+                holder.setCampaignId(campaign.id);
+            }
         }
 
         @Override
         public int getItemCount() {
-            return mCampaigns != null ? mCampaigns.size() : 0;
+            int numCampaigns = mCampaigns != null ? mCampaigns.size() : 0;
+
+            // Adding the +1 to account for the header row
+            return numCampaigns + 1;
         }
 
         public void setCampaigns(List<Campaign> campaigns) {
@@ -202,6 +229,7 @@ public class CauseActivity extends BaseActivity {
 
         public CauseCampaignViewHolder(View view) {
             super(view);
+
             this.mRoot = view;
             this.mImageView = (ImageView) view.findViewById(R.id.image);
             this.mTitle = (TextView) view.findViewById(R.id.title);
@@ -217,6 +245,24 @@ public class CauseActivity extends BaseActivity {
         @Override
         public void onClick(View view) {
             startActivity(CampaignDetailsActivity.getLaunchIntent(CauseActivity.this, mCampaignId));
+        }
+    }
+
+    /**
+     * Header row ViewHolder.
+     */
+    private class HeaderViewHolder extends RecyclerView.ViewHolder {
+
+        protected ImageView mBackground;
+        protected TextView mTitle;
+        protected TextView mDescription;
+
+        public HeaderViewHolder(View view) {
+            super(view);
+
+            this.mBackground = (ImageView) view.findViewById(R.id.title_bg);
+            this.mTitle = (TextView) view.findViewById(R.id.title);
+            this.mDescription = (TextView) view.findViewById(R.id.description);
         }
     }
 }
