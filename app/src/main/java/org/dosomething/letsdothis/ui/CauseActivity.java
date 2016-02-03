@@ -89,7 +89,7 @@ public class CauseActivity extends BaseActivity {
 
         titleBg.setColorFilter(Color.argb(alpha, red, green, blue));
         titleView.setText(mCauseName.toUpperCase());
-        descView.setText("TODO: this cause needs a description.");
+        descView.setText(Causes.getDescriptionRes(mCauseName));
 
         mAdapter = new CauseCampaignsAdapter();
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
