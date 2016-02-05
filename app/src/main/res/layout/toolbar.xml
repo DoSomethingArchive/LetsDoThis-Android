@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/abc_action_bar_default_height_material"
     android:layout_alignParentTop="true"
-    android:background="@drawable/toolbar_bg"
+    android:background="@color/active_blue"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView

@@ -1,5 +1,6 @@
 package org.dosomething.letsdothis.ui.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.shell.MainReactPackage;
 
 import org.dosomething.letsdothis.BuildConfig;
+import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.react.CampaignNavigationModule;
 import org.dosomething.letsdothis.react.ConfigModule;
 import org.dosomething.letsdothis.react.ShareIntentModule;
@@ -24,6 +26,8 @@ import org.dosomething.letsdothis.react.WebViewModule;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import co.touchlab.android.threading.eventbus.EventBusExt;
 
 /**
  * This fragment displays a feed of news items sourced from the DoSomething.org prototype News API.
@@ -34,11 +38,20 @@ public class NewsFragment extends Fragment implements DefaultHardwareBackBtnHand
 
     public static final String TAG = NewsFragment.class.getSimpleName();
 
+    // Listener to set title in the toolbar
+    private SetTitleListener mTitleListener;
+
     private ReactRootView mReactRootView;
     private ReactInstanceManager mReactInstanceManager;
 
     public static NewsFragment newInstance() {
         return new NewsFragment();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mTitleListener = (SetTitleListener) getActivity();
     }
 
     @Override
@@ -82,6 +95,8 @@ public class NewsFragment extends Fragment implements DefaultHardwareBackBtnHand
         if (mReactInstanceManager != null) {
             mReactInstanceManager.onResume(getActivity(), this);
         }
+
+        mTitleListener.setTitle(getResources().getString(R.string.nav_news));
     }
 
 
