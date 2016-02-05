@@ -38,7 +38,7 @@ public class ActionsFragment extends Fragment
     public static final int INDICATOR_SPACING = 8;
 
     // Listener to update title on the toolbar
-    private SetTitleListener titleListener;
+    private SetTitleListener mTitleListener;
 
     // Paging indicator
     private TabPageIndicator mIndicator;
@@ -64,19 +64,26 @@ public class ActionsFragment extends Fragment
     }
 
     @Override
-    public void onAttach(Activity activity)
-    {
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
-        titleListener = (SetTitleListener) getActivity();
+        mTitleListener = (SetTitleListener) getActivity();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
-        super.onActivityCreated(savedInstanceState);
-        titleListener.setTitle("Actions");
+    public void onPause() {
+        super.onPause();
+        EventBusExt.getDefault().unregister(this);
+    }
 
-        EventBusExt.getDefault().register(this);
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!EventBusExt.getDefault().isRegistered(this)) {
+            EventBusExt.getDefault().register(this);
+        }
+
+        mTitleListener.setTitle(getResources().getString(R.string.actions));
     }
 
     @Override
@@ -174,12 +181,6 @@ public class ActionsFragment extends Fragment
                 fetchGroupNames();
             }
         });
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBusExt.getDefault().unregister(this);
     }
 
     /**
