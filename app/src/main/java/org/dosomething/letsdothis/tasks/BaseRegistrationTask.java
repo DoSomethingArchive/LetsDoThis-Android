@@ -42,7 +42,7 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
         String parseInstallation = currentInstallation.getInstallationId();
 
         NetworkHelper.getNorthstarAPIService()
-                     .setParseInstallationId(AppPrefs.getInstance(context).getCurrentUserId(),
+                     .setParseInstallationId(AppPrefs.getInstance(context).getSessionToken(),
                                              new ParseInstallationRequest(parseInstallation));
     }
 

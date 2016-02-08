@@ -60,24 +60,26 @@ public class LoginTask extends BaseRegistrationTask
     }
 
     private User validateResponse(Context context, ResponseLogin response, User user) throws Throwable {
-        if (response != null && response.data != null && response.data._id != null) {
-            user.id = response.data._id;
-            user.drupalId = response.data.drupal_id;
-            user.email = response.data.email;
-            user.mobile = response.data.mobile;
-            user.first_name = response.data.first_name;
-            user.last_name = response.data.last_name;
-            user.birthdate = response.data.birthday;
-            user.avatarPath = response.data.photo;
+        if (response != null && response.data != null && response.data.key != null
+            && response.data.user != null && response.data.user.data != null
+            && response.data.user.data.id != null) {
+            user.id = response.data.user.data.id;
+            user.drupalId = response.data.user.data.drupal_id;
+            user.email = response.data.user.data.email;
+            user.mobile = response.data.user.data.mobile;
+            user.first_name = response.data.user.data.first_name;
+            user.last_name = response.data.user.data.last_name;
+            user.birthdate = response.data.user.data.birthday;
+            user.avatarPath = response.data.user.data.photo;
 
             AppPrefs appPrefs = AppPrefs.getInstance(context);
-            appPrefs.setSessionToken(response.data.session_token);
-            appPrefs.setCurrentEmail(response.data.email);
+            appPrefs.setSessionToken(response.data.key);
+            appPrefs.setCurrentEmail(response.data.user.data.email);
             loginUser(context, user);
 
             DatabaseHelper.getInstance(context).getUserDao().createOrUpdate(user);
 
-            if (!user.country.equalsIgnoreCase(response.data.country)) {
+            if (!user.country.equalsIgnoreCase(response.data.user.data.country)) {
                 mUserNeedsUpdate = true;
             }
         }

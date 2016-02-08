@@ -125,7 +125,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         String trackerIdentifier;
         String publicId = getArguments().getString(EXTRA_ID, null);
         if (publicId != null) {
-            TaskQueue.loadQueueDefault(getActivity()).execute(new GetUserTask(publicId));
+            TaskQueue.loadQueueDefault(getActivity()).execute(new GetUserTask());
 
             trackerIdentifier = publicId;
         }
