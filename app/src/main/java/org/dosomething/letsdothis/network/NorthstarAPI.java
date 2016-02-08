@@ -56,7 +56,7 @@ public interface NorthstarAPI {
             "Content-Type: application/json",
             "Accept: application/json"
     })
-    @POST("/users?create_drupal_user=1")
+    @POST("/auth/register?create_drupal_user=1")
     ResponseRegister registerWithEmail(@Body User user) throws NetworkException;
 
     @GET("/users/_id/{id}")
