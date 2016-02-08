@@ -9,6 +9,7 @@ import React, {
 } from 'react-native';
 
 var Helpers = require('./newsfeed-helpers');
+var Theme = require('./ldt-theme.js');
 
 var TAKE_ACTION_TEXT = 'Take action';
 
@@ -23,7 +24,7 @@ var NewsFeedPost = React.createClass({
    * Action button onPress listener.
    */
   _onPressActionButton: function() {
-    var campaignID = parseInt(this.props.post.custom_fields.campaign_id[0]);
+    var campaignID = parseInt(this.props.post.campaign_id);
     React.NativeModules.CampaignNavigationModule.presentCampaignWithCampaignID(campaignID);
   },
 
@@ -31,7 +32,7 @@ var NewsFeedPost = React.createClass({
    * Full article link onPress listener.
    */
   _onPressFullArticleButton: function() {
-    var urlString = this.props.post.custom_fields.full_article_url[0];
+    var urlString = this.props.post.full_article_url;
     React.NativeModules.WebViewModule.open(urlString);
   },
 
@@ -51,7 +52,7 @@ var NewsFeedPost = React.createClass({
     var post = this.props.post;
     var postTitle = Helpers.convertUnicode(post.title);
 
-    React.NativeModules.ShareIntentModule.share(postTitle, post.custom_fields.full_article_url[0]);
+    React.NativeModules.ShareIntentModule.share(postTitle, post.full_article_url);
   },
 
   /**
@@ -59,14 +60,12 @@ var NewsFeedPost = React.createClass({
    */
   renderFullArticleButton: function () {
     var post = this.props.post;
-    if (typeof post.custom_fields.full_article_url !== 'undefined'
-        && typeof post.custom_fields.full_article_url[0] !== 'undefined'
-        && post.custom_fields.full_article_url[0]) {
+    if (post.full_article_url.length > 0) {
       return (
         <View style={styles.articleShareContainer}>
           <Text
             onPress={this._onPressFullArticleButton}
-            style={styles.fullArticleButton}>
+            style={[Theme.styles.textBodyBold, Theme.styles.textColorCtaBlue]}>
               Read the full article
           </Text>
           <TouchableHighlight
@@ -88,13 +87,9 @@ var NewsFeedPost = React.createClass({
   renderImage: function() {
     var post = this.props.post;
     
-    if (typeof post.attachments[0] !== 'undefined'
-        && typeof post.attachments[0].images !== 'undefined'
-        && typeof post.attachments[0].images.full !== 'undefined') {
-
+    if (post.image_url.length > 0) {
       var viewImageCredit = null;
-      var imageCreditText = post.custom_fields.photo_credit[0];
-      if (imageCreditText.length > 0) {
+      if (post.photo_credit.length > 0) {
         var imageCreditOpacity = 1;
         if (this.state.imageCreditHidden) {
           imageCreditOpacity = 0;
@@ -102,7 +97,7 @@ var NewsFeedPost = React.createClass({
         viewImageCredit = (
           <View style={styles.imageCreditContainer}>
             <View style={[styles.imageCreditTextContainer, {opacity: imageCreditOpacity}]} >
-              <Text style={styles.imageCreditText}>{imageCreditText}</Text>
+              <Text style={[Theme.styles.textBody, {color: 'white'}]}>{post.photo_credit}</Text>
             </View>
             <TouchableHighlight
               activeOpacity={0.75}
@@ -120,7 +115,7 @@ var NewsFeedPost = React.createClass({
       return (
         <Image
           style={styles.image}
-          source={{uri: post.attachments[0].images.full.url}}>
+          source={{uri: post.image_url}}>
           {viewImageCredit}
         </Image>
       );
@@ -138,7 +133,7 @@ var NewsFeedPost = React.createClass({
         <Image 
           style={styles.listItemOvalImage}
           source={require('image!newsfeed_listitem_oval')} />
-          <Text style={styles.summaryText}>{summaryItemText}</Text>
+          <Text style={[Theme.styles.textBody, styles.summaryText]}>{summaryItemText}</Text>
         </View>
       );
     }
@@ -154,34 +149,36 @@ var NewsFeedPost = React.createClass({
     var causeTitle, causeStyle = null;
     if (post.categories.length > 0) {
       causeTitle = post.categories[0].title;
-      causeStyle = {backgroundColor: Helpers.causeBackgroundColor(causeTitle)};
+      causeStyle = {backgroundColor: '#' + post.categories[0].hex};
     }
 
     return(
       <View style={[styles.wrapper]}>
         <View style={[styles.header, causeStyle]}>
-          <Text style={styles.headerText}>{Helpers.formatDate(post.date)}</Text>
+          <Text style={[Theme.styles.textCaptionBold, {color: 'white'}]}>{Helpers.formatDate(post.date)}</Text>
           <View style={styles.causeContainer}>
-            <Text style={styles.headerText}>{causeTitle}</Text>
+            <Text style={[Theme.styles.textCaptionBold, {color: 'white'}]}>{causeTitle}</Text>
           </View>
         </View>
         {this.renderImage()}
         <View style={styles.content}>
-          <Text style={styles.title}>{postTitle.toUpperCase()}</Text>
-          {this.renderSummaryItem(post.custom_fields.summary_1[0])}
-          {this.renderSummaryItem(post.custom_fields.summary_2[0])}
-          {this.renderSummaryItem(post.custom_fields.summary_3[0])}
+          <Text style={Theme.styles.textHeading}>{postTitle.toUpperCase()}</Text>
+          {this.renderSummaryItem(post.summary_1)}
+          {this.renderSummaryItem(post.summary_2)}
+          {this.renderSummaryItem(post.summary_3)}
           {this.renderFullArticleButton()}
         </View>
         <TouchableHighlight onPress={this._onPressActionButton} style={styles.actionButton}>
-          <Text style={styles.actionButtonText}>{'Take action'.toUpperCase()}</Text>
+          <Text style={[Theme.styles.textBodyBold, styles.actionButtonText]}>
+            {'Take action'.toUpperCase()}
+          </Text>
         </TouchableHighlight>
       </View>
     );
   }
 });
 
-var styles = StyleSheet.create({
+var styles = React.StyleSheet.create({
   wrapper: {
     backgroundColor: '#FFFFFF',
     marginTop: 14,
@@ -196,10 +193,6 @@ var styles = StyleSheet.create({
     borderTopRightRadius: 6,
     padding: 4,
   },
-  headerText: {
-    color: '#ffffff',
-    fontFamily: 'brandon_reg',
-  },
   causeContainer: {
     flex: 1,
     alignItems: 'flex-end',
@@ -207,12 +200,8 @@ var styles = StyleSheet.create({
   content: {
     padding: 20,
   },
-  fullArticleButton: {
-    color: '#3932A9',
-    fontFamily: 'brandon_bold',
-  },
   actionButton: {
-    backgroundColor: '#3932A9',
+    backgroundColor: Theme.colorCtaBlue,
     borderBottomLeftRadius: 6,
     borderBottomRightRadius: 6,
     paddingBottom: 10,
@@ -220,8 +209,6 @@ var styles = StyleSheet.create({
   },
   actionButtonText: {
     color: '#ffffff',
-    fontFamily: 'brandon_bold',
-    fontSize: 16,
     textAlign: 'center',
   },
   articleShareContainer: {
@@ -230,8 +217,8 @@ var styles = StyleSheet.create({
     marginTop: 14,
   },
   image: {
-    flex: 1, 
-    height: 180, 
+    flex: 1,
+    height: 180,
     justifyContent: 'flex-end',
   },
   imageCreditContainer: {
@@ -260,17 +247,12 @@ var styles = StyleSheet.create({
     borderBottomLeftRadius: 6,
     borderBottomRightRadius: 6,
   },
-  imageCreditText: {
-    color: '#FFFFFF',
-    fontFamily: 'brandon_reg',
-    fontSize: 15,
-  },
   imageShareButton: {
     flex: 1,
     alignItems: 'flex-end',
   },
   imageShareIcon: {
-    tintColor: '#3932A9',
+    tintColor: Theme.colorCtaBlue,
     width: 22,
     height: 22,
   },
@@ -280,11 +262,6 @@ var styles = StyleSheet.create({
     height: 21.5,
     resizeMode: 'contain',
   },
-  title: {
-    color: '#4A4A4A',
-    fontFamily: 'brandon_bold',
-    fontSize: 20,
-  },
   summaryItem: {
     flex: 1,
     flexDirection: 'row',
@@ -292,11 +269,8 @@ var styles = StyleSheet.create({
     marginTop: 8,
   },
   summaryText: {
-    color: '#4A4A4A',
     flex: 1,
     flexDirection: 'column',
-    fontFamily: 'brandon_reg',
-    fontSize: 15,
     marginLeft: 4,
   },
 });

@@ -15,6 +15,7 @@ import React, {
 
 var Helpers = require('./newsfeed-helpers');
 var NewsFeedPost = require('./newsfeed-post');
+var Theme = require('./ldt-theme.js');
 
 var TAKE_ACTION_TEXT = 'Take action';
 
@@ -59,7 +60,7 @@ var NewsFeedView = React.createClass({
         style={{flex: 1}}
         refreshing={this.state.isRefreshing}
         onRefresh={this._onRefresh}
-        colors={['#3932a9', '#00e4c8', '#ff0000']}
+        colors={[Theme.colorCtaBlue, '#00e4c8', '#ff0000']}
         progressBackgroundColor={'#ffffff'}
         >
         <ListView
@@ -82,7 +83,7 @@ var NewsFeedView = React.createClass({
     return (
       <View style={styles.loadingContainer}>
         <ProgressBarAndroid animating={this.state.animating} style={styles.loadingIndicator} size="small" />
-        <Text style={styles.subtitle}>
+        <Text style={Theme.styles.textBody}>
           Loading news...
         </Text>
       </View>
@@ -114,13 +115,6 @@ var styles = React.StyleSheet.create({
   loadingIndicator: {
     height: 40,
   },
-  loadingText: {
-    color: '#4a4a4a',
-    fontFamily: 'Brandon Grotesque',
-    fontSize: 15,
-  },
 });
-/*
 
-*/
 module.exports = NewsFeedView;
