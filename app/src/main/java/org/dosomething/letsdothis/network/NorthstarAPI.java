@@ -154,9 +154,6 @@ public interface NorthstarAPI {
     @GET("/users/_id/{id}/campaigns")
     ResponseUserCampaign getUserCampaigns(@Path("id") String id) throws NetworkException;
 
-    @GET("/signup-group/{groupId}")
-    ResponseGroup group(@Path("groupId") int groupId);
-
     @Headers("Content-Type: application/json")
     @POST("/kudos")
     ResponseReportBack submitKudos(@Body RequestKudo requestKudo,
