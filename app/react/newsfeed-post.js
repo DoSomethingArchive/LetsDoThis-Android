@@ -9,7 +9,7 @@ import React, {
 } from 'react-native';
 
 var Helpers = require('./newsfeed-helpers');
-var styles = require('./styles.js');
+var Theme = require('./ldt-theme.js');
 
 var TAKE_ACTION_TEXT = 'Take action';
 
@@ -65,7 +65,7 @@ var NewsFeedPost = React.createClass({
         <View style={styles.articleShareContainer}>
           <Text
             onPress={this._onPressFullArticleButton}
-            style={styles.fullArticleButton}>
+            style={[Theme.styles.textBodyBold, Theme.styles.textColorCtaBlue]}>
               Read the full article
           </Text>
           <TouchableHighlight
@@ -87,13 +87,9 @@ var NewsFeedPost = React.createClass({
   renderImage: function() {
     var post = this.props.post;
     
-    if (typeof post.attachments[0] !== 'undefined'
-        && typeof post.attachments[0].images !== 'undefined'
-        && typeof post.attachments[0].images.full !== 'undefined') {
-
+    if (post.image_url.length > 0) {
       var viewImageCredit = null;
-      var imageCreditText = post.photo_credit;
-      if (imageCreditText.length > 0) {
+      if (post.photo_credit.length > 0) {
         var imageCreditOpacity = 1;
         if (this.state.imageCreditHidden) {
           imageCreditOpacity = 0;
@@ -101,7 +97,7 @@ var NewsFeedPost = React.createClass({
         viewImageCredit = (
           <View style={styles.imageCreditContainer}>
             <View style={[styles.imageCreditTextContainer, {opacity: imageCreditOpacity}]} >
-              <Text style={styles.imageCreditText}>{imageCreditText}</Text>
+              <Text style={[Theme.styles.textBody, {color: 'white'}]}>{post.photo_credit}</Text>
             </View>
             <TouchableHighlight
               activeOpacity={0.75}
@@ -119,7 +115,7 @@ var NewsFeedPost = React.createClass({
       return (
         <Image
           style={styles.image}
-          source={{uri: post.attachments[0].images.full.url}}>
+          source={{uri: post.image_url}}>
           {viewImageCredit}
         </Image>
       );
@@ -137,7 +133,7 @@ var NewsFeedPost = React.createClass({
         <Image 
           style={styles.listItemOvalImage}
           source={require('image!newsfeed_listitem_oval')} />
-          <Text style={styles.summaryText}>{summaryItemText}</Text>
+          <Text style={[Theme.styles.textBody, styles.summaryText]}>{summaryItemText}</Text>
         </View>
       );
     }
@@ -153,31 +149,130 @@ var NewsFeedPost = React.createClass({
     var causeTitle, causeStyle = null;
     if (post.categories.length > 0) {
       causeTitle = post.categories[0].title;
-      causeStyle = {backgroundColor: Helpers.causeBackgroundColor(causeTitle)};
+      causeStyle = {backgroundColor: '#' + post.categories[0].hex};
     }
 
     return(
       <View style={[styles.wrapper]}>
         <View style={[styles.header, causeStyle]}>
-          <Text style={styles.headerText}>{Helpers.formatDate(post.date)}</Text>
+          <Text style={[Theme.styles.textCaptionBold, {color: 'white'}]}>{Helpers.formatDate(post.date)}</Text>
           <View style={styles.causeContainer}>
-            <Text style={styles.headerText}>{causeTitle}</Text>
+            <Text style={[Theme.styles.textCaptionBold, {color: 'white'}]}>{causeTitle}</Text>
           </View>
         </View>
         {this.renderImage()}
         <View style={styles.content}>
-          <Text style={styles.title}>{postTitle.toUpperCase()}</Text>
+          <Text style={Theme.styles.textHeading}>{postTitle.toUpperCase()}</Text>
           {this.renderSummaryItem(post.summary_1)}
           {this.renderSummaryItem(post.summary_2)}
           {this.renderSummaryItem(post.summary_3)}
           {this.renderFullArticleButton()}
         </View>
         <TouchableHighlight onPress={this._onPressActionButton} style={styles.actionButton}>
-          <Text style={styles.actionButtonText}>{'Take action'.toUpperCase()}</Text>
+          <Text style={[Theme.styles.textBodyBold, styles.actionButtonText]}>
+            {'Take action'.toUpperCase()}
+          </Text>
         </TouchableHighlight>
       </View>
     );
   }
+});
+
+var styles = React.StyleSheet.create({
+  wrapper: {
+    backgroundColor: '#FFFFFF',
+    marginTop: 14,
+    marginLeft: 7,
+    marginRight: 7,
+  },
+  header: {
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: '#00e4c8',
+    borderTopLeftRadius: 6,
+    borderTopRightRadius: 6,
+    padding: 4,
+  },
+  causeContainer: {
+    flex: 1,
+    alignItems: 'flex-end',
+  },
+  content: {
+    padding: 20,
+  },
+  actionButton: {
+    backgroundColor: Theme.colorCtaBlue,
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 6,
+    paddingBottom: 10,
+    paddingTop: 10,
+  },
+  actionButtonText: {
+    color: '#ffffff',
+    textAlign: 'center',
+  },
+  articleShareContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    marginTop: 14,
+  },
+  image: {
+    flex: 1,
+    height: 180,
+    justifyContent: 'flex-end',
+  },
+  imageCreditContainer: {
+    backgroundColor: 'transparent',
+    margin: 8,
+  },
+  imageCreditIcon: {
+    tintColor: '#ffffff',
+    width: 20,
+    height: 20,
+  },
+  imageCreditButton: {
+    flex: 1,
+    alignItems: 'flex-end',
+  },
+  imageCreditTextContainer: {
+    backgroundColor: 'rgba(0,0,0,0.66)',
+    paddingTop: 6,
+    paddingBottom: 6,
+    paddingLeft: 15,
+    paddingRight: 15,
+    marginRight: 37,
+    flex: 1,
+    borderTopLeftRadius: 6,
+    borderTopRightRadius: 6,
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 6,
+  },
+  imageShareButton: {
+    flex: 1,
+    alignItems: 'flex-end',
+  },
+  imageShareIcon: {
+    tintColor: Theme.colorCtaBlue,
+    width: 22,
+    height: 22,
+  },
+  listItemOvalImage: {
+    // The height and width are based off the draw height of a single summaryText line
+    width: 21.5,
+    height: 21.5,
+    resizeMode: 'contain',
+  },
+  summaryItem: {
+    flex: 1,
+    flexDirection: 'row',
+    marginBottom: 8,
+    marginTop: 8,
+  },
+  summaryText: {
+    flex: 1,
+    flexDirection: 'column',
+    marginLeft: 4,
+  },
 });
 
 module.exports = NewsFeedPost;
