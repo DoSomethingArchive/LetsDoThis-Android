@@ -26,7 +26,6 @@ import retrofit.http.Header;
 import retrofit.http.Headers;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
-import retrofit.http.PUT;
 import retrofit.http.Part;
 import retrofit.http.Path;
 import retrofit.mime.TypedFile;
@@ -40,18 +39,42 @@ public interface NorthstarAPI {
     String THOR_URL = "https://northstar-thor.dosomething.org/v1";
     String QA_URL = "https://northstar-qa.dosomething.org/v1";
 
+    /**
+     * Login using the user's mobile number.
+     *
+     * @param mobile Mobile number
+     * @param password Password
+     * @return ResponseLogin
+     * @throws NetworkException
+     */
     @FormUrlEncoded
     @Headers("Accept: application/json")
     @POST("/auth/token")
-    ResponseLogin loginWithMobile(@Field("mobile") String mobile, @Field(
-            "password") String password) throws NetworkException;
+    ResponseLogin loginWithMobile(@Field("mobile") String mobile,
+                                  @Field("password") String password) throws NetworkException;
 
+    /**
+     * Login using the user's email address.
+     *
+     * @param email Email address
+     * @param password Password
+     * @return ResponseLogin
+     * @throws NetworkException
+     */
     @FormUrlEncoded
     @Headers("Accept: application/json")
     @POST("/auth/token")
-    ResponseLogin loginWithEmail(@Field("email") String email, @Field(
-            "password") String password) throws NetworkException;
+    ResponseLogin loginWithEmail(@Field("email") String email,
+                                 @Field("password") String password) throws NetworkException;
 
+    /**
+     * Register a new user on Northstar and Drupal. Need to create the Drupal user in order to
+     * submit campaign sign ups and report backs.
+     *
+     * @param user User
+     * @return ResponseRegister
+     * @throws NetworkException
+     */
     @Headers({
             "Content-Type: application/json",
             "Accept: application/json"
@@ -59,12 +82,41 @@ public interface NorthstarAPI {
     @POST("/auth/register?create_drupal_user=1")
     ResponseRegister registerWithEmail(@Body User user) throws NetworkException;
 
-    @GET("/users/_id/{id}")
-    ResponseUser userProfile(@Path("id") String id) throws NetworkException;
+    /**
+     * Get current user profile info.
+     *
+     * @param sessionToken Token for currently logged in user
+     * @return ResponseUser
+     * @throws NetworkException
+     */
+    @GET("/profile")
+    ResponseUser userProfile(@Header("Session") String sessionToken) throws NetworkException;
 
+    /**
+     * Update profile of the currently logged in user.
+     *
+     * @param sessionToken Token for currently logged in user
+     * @param user Profile updates to submit
+     * @return ResponseUserUpdate
+     * @throws NetworkException
+     */
     @Headers("Content-Type: application/json")
-    @PUT("/users/_id/{id}")
-    ResponseUserUpdate updateUser(@Path("id") String id, @Body TypedInput user) throws NetworkException;
+    @POST("/profile")
+    ResponseUserUpdate updateUser(@Header("Session") String sessionToken,
+                                  @Body TypedInput user) throws NetworkException;
+
+    /**
+     * Update profile of the currently logged in user with a Parse installation ID.
+     *
+     * @param sessionToken Token for currently logged in user
+     * @param parseInstallationRequest ParseInstallationRequest
+     * @return ResponseUserUpdate
+     * @throws NetworkException
+     */
+    @Headers("Content-Type: application/json")
+    @POST("/profile")
+    ResponseUserUpdate setParseInstallationId(@Header("Session") String sessionToken,
+                                              @Body ParseInstallationRequest parseInstallationRequest) throws NetworkException;
 
     /**
      * Logs the user out of Northstar by invalidating its session token.
@@ -78,19 +130,25 @@ public interface NorthstarAPI {
      * @throws NetworkException
      */
     @POST("/auth/invalidate")
-    Response logout(@Header("Session") String sessionToken, @Body String hackEmptyBody) throws NetworkException;
+    Response logout(@Header("Session") String sessionToken,
+                    @Body String hackEmptyBody) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @POST("/user/campaigns/{nid}/reportback")
-    ResponseSubmitReportBack submitReportback(@Header("Session") String sessionToken, @Body RequestReportback requestreportback, @Path("nid") int id) throws NetworkException;
+    ResponseSubmitReportBack submitReportback(@Header("Session") String sessionToken,
+                                              @Body RequestReportback requestreportback,
+                                              @Path("nid") int id) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @GET("/user/campaigns/{id}")
-    ResponseRbData getRbData(@Header("Session") String sessionToken, @Path("id") int campId) throws NetworkException;
+    ResponseRbData getRbData(@Header("Session") String sessionToken,
+                             @Path("id") int campId) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @POST("/user/campaigns/{id}/signup")
-    ResponseCampaignSignUp campaignSignUp(@Body RequestCampaignSignup requestCampaignSignup, @Path("id") int id, @Header("Session") String sessionToken) throws NetworkException;
+    ResponseCampaignSignUp campaignSignUp(@Body RequestCampaignSignup requestCampaignSignup,
+                                          @Path("id") int id,
+                                          @Header("Session") String sessionToken) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @GET("/users/_id/{id}/campaigns")
@@ -101,14 +159,12 @@ public interface NorthstarAPI {
 
     @Headers("Content-Type: application/json")
     @POST("/kudos")
-    ResponseReportBack submitKudos(@Body RequestKudo requestKudo, @Header("Session") String sessionToken) throws NetworkException;
-
-    @Headers("Content-Type: application/json")
-    @PUT("/users/_id/{id}")
-    ResponseUserUpdate setParseInstallationId(@Path("id") String id, @Body ParseInstallationRequest ParseInstallationRequest) throws NetworkException;
+    ResponseReportBack submitKudos(@Body RequestKudo requestKudo,
+                                   @Header("Session") String sessionToken) throws NetworkException;
 
     @Multipart
     @POST("/users/{id}/avatar")
-    ResponseAvatar uploadAvatar(@Path("id") String id, @Part("photo") TypedFile file) throws NetworkException;
+    ResponseAvatar uploadAvatar(@Path("id") String id,
+                                @Part("photo") TypedFile file) throws NetworkException;
 
 }
