@@ -7,7 +7,6 @@ import org.dosomething.letsdothis.network.models.RequestReportback;
 import org.dosomething.letsdothis.network.models.ResponseAvatar;
 import org.dosomething.letsdothis.network.models.ResponseCampaignSignUp;
 import org.dosomething.letsdothis.network.models.ResponseGroup;
-import org.dosomething.letsdothis.network.models.ResponseGroupList;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 import org.dosomething.letsdothis.network.models.ResponseRbData;
 import org.dosomething.letsdothis.network.models.ResponseRegister;
@@ -15,7 +14,6 @@ import org.dosomething.letsdothis.network.models.ResponseReportBack;
 import org.dosomething.letsdothis.network.models.ResponseSubmitReportBack;
 import org.dosomething.letsdothis.network.models.ResponseUser;
 import org.dosomething.letsdothis.network.models.ResponseUserCampaign;
-import org.dosomething.letsdothis.network.models.ResponseUserList;
 import org.dosomething.letsdothis.network.models.ResponseUserUpdate;
 
 import co.touchlab.android.threading.errorcontrol.NetworkException;
@@ -31,7 +29,6 @@ import retrofit.http.POST;
 import retrofit.http.PUT;
 import retrofit.http.Part;
 import retrofit.http.Path;
-import retrofit.http.Query;
 import retrofit.mime.TypedFile;
 import retrofit.mime.TypedInput;
 
@@ -45,13 +42,13 @@ public interface NorthstarAPI {
 
     @FormUrlEncoded
     @Headers("Accept: application/json")
-    @POST("/login")
+    @POST("/auth/token")
     ResponseLogin loginWithMobile(@Field("mobile") String mobile, @Field(
             "password") String password) throws NetworkException;
 
     @FormUrlEncoded
     @Headers("Accept: application/json")
-    @POST("/login")
+    @POST("/auth/token")
     ResponseLogin loginWithEmail(@Field("email") String email, @Field(
             "password") String password) throws NetworkException;
 
@@ -62,29 +59,26 @@ public interface NorthstarAPI {
     @POST("/users?create_drupal_user=1")
     ResponseRegister registerWithEmail(@Body User user) throws NetworkException;
 
-    @Headers({
-            "Content-Type: application/json",
-            "Accept: application/json"
-    })
-    @POST("/users?create_drupal_user=1")
-    ResponseRegister registerWithMobile(@Body User user) throws NetworkException;
-
-    @GET("/users")
-    ResponseUserList userList(@Query("page") int page, @Query(
-            "limit") int limit) throws NetworkException;
-
     @GET("/users/_id/{id}")
     ResponseUser userProfile(@Path("id") String id) throws NetworkException;
-
-    @GET("/users/drupal_id/{id}")
-    ResponseUser userProfileWithDrupalId(@Path("id") String id) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @PUT("/users/_id/{id}")
     ResponseUserUpdate updateUser(@Path("id") String id, @Body TypedInput user) throws NetworkException;
 
-    @POST("/logout")
-    Response logout(@Header("Session") String sessionToken) throws NetworkException;
+    /**
+     * Logs the user out of Northstar by invalidating its session token.
+     *
+     * HACK: see hackDoNotUse param
+     *
+     * @param sessionToken Token to invalidate
+     * @param hackEmptyBody Without body data, Retrofit errors out because it expects POST requests
+     *                      to have a non-empty body
+     * @return Response
+     * @throws NetworkException
+     */
+    @POST("/auth/invalidate")
+    Response logout(@Header("Session") String sessionToken, @Body String hackEmptyBody) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @POST("/user/campaigns/{nid}/reportback")
@@ -104,9 +98,6 @@ public interface NorthstarAPI {
 
     @GET("/signup-group/{groupId}")
     ResponseGroup group(@Path("groupId") int groupId);
-
-    @GET("/signup-group")
-    ResponseGroupList groupList(@Query("ids") String ids) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @POST("/kudos")
