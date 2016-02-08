@@ -5,27 +5,24 @@ import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.ResponseUser;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
 /**
  * Created by toidiu on 4/16/15.
  */
-public class GetUserTask extends BaseNetworkErrorHandlerTask
-{
-    private final String  id;
-    public        User    user;
+public class GetUserTask extends BaseNetworkErrorHandlerTask {
+    public User user;
 
-    public GetUserTask(String id)
-    {
-        this.id = id;
+    public GetUserTask() {
     }
 
     @Override
-    protected void run(Context context) throws Throwable
-    {
-
-        ResponseUser response = NetworkHelper.getNorthstarAPIService().userProfile(id);
+    protected void run(Context context) throws Throwable {
+        AppPrefs appPrefs = AppPrefs.getInstance(context);
+        String token = appPrefs.getSessionToken();
+        ResponseUser response = NetworkHelper.getNorthstarAPIService().userProfile(token);
 
         user = ResponseUser.getUser(response);
 
@@ -34,8 +31,7 @@ public class GetUserTask extends BaseNetworkErrorHandlerTask
     }
 
     @Override
-    protected void onComplete(Context context)
-    {
+    protected void onComplete(Context context) {
         EventBusExt.getDefault().post(this);
         super.onComplete(context);
     }

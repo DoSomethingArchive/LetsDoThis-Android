@@ -120,12 +120,12 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
             EventBusExt.getDefault().register(this);
         }
 
-        titleListener.setTitle("Hub");
+        titleListener.setTitle(getResources().getString(R.string.hub));
 
         String trackerIdentifier;
         String publicId = getArguments().getString(EXTRA_ID, null);
         if (publicId != null) {
-            TaskQueue.loadQueueDefault(getActivity()).execute(new GetUserTask(publicId));
+            TaskQueue.loadQueueDefault(getActivity()).execute(new GetUserTask());
 
             trackerIdentifier = publicId;
         }

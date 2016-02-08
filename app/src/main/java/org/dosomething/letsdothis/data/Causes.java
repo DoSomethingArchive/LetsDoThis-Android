@@ -132,4 +132,43 @@ public class Causes {
                 return -1;
         }
     }
+
+    /**
+     * Returns the cause description string resource ID.
+     *
+     * @param causeName
+     * @return int
+     */
+    public static int getDescriptionRes(final String causeName) {
+        switch (causeName) {
+            case ANIMALS:
+                return R.string.cause_animals_desc;
+            case BULLYING:
+                return R.string.cause_bullying_desc;
+            case DISASTERS:
+                return R.string.cause_disasters_desc;
+            case DISCRIMINATION:
+                return R.string.cause_discrimination_desc;
+            case EDUCATION:
+                return R.string.cause_education_desc;
+            case ENVIRONMENT:
+                return R.string.cause_environment_desc;
+            case HOMELESSNESS:
+                return R.string.cause_homelessness_desc;
+            case MENTAL_HEALTH:
+                return R.string.cause_mental_health_desc;
+            case PHYSICAL_HEALTH:
+                return R.string.cause_physical_health_desc;
+            case POVERTY:
+                return R.string.cause_poverty_desc;
+            case RELATIONSHIPS:
+                return R.string.cause_animals_desc;
+            case SEX:
+                return R.string.cause_sex_desc;
+            case VIOLENCE:
+                return R.string.cause_violence_desc;
+            default:
+                return R.string.cause_default_desc;
+        }
+    }
 }

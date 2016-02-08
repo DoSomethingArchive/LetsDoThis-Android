@@ -56,7 +56,7 @@ public class LogoutTask extends BaseNetworkErrorHandlerTask {
         prefs.logout();
 
         // Logout from API
-        NetworkHelper.getNorthstarAPIService().logout(sessionToken);
+        NetworkHelper.getNorthstarAPIService().logout(sessionToken, "");
     }
 
     @Override
