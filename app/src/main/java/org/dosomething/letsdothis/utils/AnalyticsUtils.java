@@ -17,6 +17,7 @@ public class AnalyticsUtils {
     public static final String CATEGORY_ACCOUNT = "account";
     public static final String CATEGORY_CAMPAIGN = "campaign";
     public static final String CATEGORY_BEHAVIOR = "behavior";
+    public static final String CATEGORY_NEWS = "news";
 
     // Account category actions
     public static final String ACTION_FORGOT_PASSWORD = "forgot password";
@@ -37,6 +38,11 @@ public class AnalyticsUtils {
     public static final String ACTION_TAP_IDEAS_FORM = "tap on ideas form";
     public static final String ACTION_TAP_PRIVACY_POLICY = "tap on privacy policy";
     public static final String ACTION_TAP_REVIEW_APP_BUTTON = "tap on review app button";
+
+    // News category actions
+    public static final String ACTION_READ_NEWS = "read";
+    public static final String ACTION_SHARE_NEWS = "share";
+    public static final String ACTION_TAKE_ACTION = "take action";
 
     // Screen names
     public static final String SCREEN_CAMPAIGN = "campaign/%1$d/%2$s";

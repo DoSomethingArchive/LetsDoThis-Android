@@ -142,10 +142,10 @@ public class NewsFragment extends Fragment implements DefaultHardwareBackBtnHand
             List<NativeModule> modules = new ArrayList<>();
 
             modules.addAll(super.createNativeModules(reactContext));
-            modules.add(new CampaignNavigationModule(reactContext));
+            modules.add(new CampaignNavigationModule(reactContext, mTracker));
             modules.add(new ConfigModule(reactContext));
-            modules.add(new ShareIntentModule(reactContext));
-            modules.add(new WebViewModule(reactContext));
+            modules.add(new ShareIntentModule(reactContext, mTracker));
+            modules.add(new WebViewModule(reactContext, mTracker));
 
             return modules;
         }
