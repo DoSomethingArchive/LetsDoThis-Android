@@ -6,7 +6,6 @@ import org.dosomething.letsdothis.network.models.RequestKudo;
 import org.dosomething.letsdothis.network.models.RequestReportback;
 import org.dosomething.letsdothis.network.models.ResponseAvatar;
 import org.dosomething.letsdothis.network.models.ResponseCampaignSignUp;
-import org.dosomething.letsdothis.network.models.ResponseGroup;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 import org.dosomething.letsdothis.network.models.ResponseRbData;
 import org.dosomething.letsdothis.network.models.ResponseRegister;
@@ -153,9 +152,6 @@ public interface NorthstarAPI {
     @Headers("Content-Type: application/json")
     @GET("/users/_id/{id}/campaigns")
     ResponseUserCampaign getUserCampaigns(@Path("id") String id) throws NetworkException;
-
-    @GET("/signup-group/{groupId}")
-    ResponseGroup group(@Path("groupId") int groupId);
 
     @Headers("Content-Type: application/json")
     @POST("/kudos")

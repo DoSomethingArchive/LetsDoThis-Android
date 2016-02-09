@@ -496,17 +496,10 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    public interface HubAdapterClickListener
-    {
-        void friendClicked(String friendId);
-
-        void groupClicked(int groupId);
-
+    public interface HubAdapterClickListener {
         void onShareClicked(Campaign campaign);
 
         void onProveClicked(Campaign campaign);
-
-        void onInviteClicked(String title, int signupGroup);
 
         void onActionsButtonClicked();
     }

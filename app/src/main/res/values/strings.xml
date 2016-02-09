@@ -31,7 +31,6 @@
     <string name="hub_expire_days_left">Days Left</string>
     <string name="nav_news">News</string>
     <string name="notifications">Notifications</string>
-    <string name="invites">Invites</string>
     <string name="staff_pick">Staff pick</string>
     <string name="stop_being_bored">Do This Now</string>
     <string name="youre_doing_this">You\'re Doing This</string>
@@ -47,7 +46,6 @@
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="expires_in">Expires in</string>
-    <string name="invite_friends">Invite Friends</string>
     <string name="share_photo">Share Your Photo</string>
     <string name="show_off">Prove It</string>
     <string name="friends">Friends</string>
@@ -69,12 +67,6 @@
     <string name="logout">Log Out</string>
     <string name="change_notifications_prefs">Change Notification Preferences</string>
     <string name="select_picture">Select or Take Picture</string>
-    <string name="join_group">Join a friend\'s group with a code</string>
-    <string name="my_codes">My Codes</string>
-    <string name="invite_using">Invite using</string>
-    <string name="share_invite">I want you to join the %1$s campaign with me, here\'s the code:
-        %2$s.
-    </string>
     <string name="share_news">%1$s - %2$s Read this on the Let\'s Do This app.
         https://play.google.com/store/apps/details?id=org.dosomething.letsdothis
     </string>
@@ -83,7 +75,6 @@
     </string>
     <string name="done">Done</string>
     <string name="error_avatar_upload">There was an error uploading your photo</string>
-    <string name="error_code_length">An invite code should be 15 characters long!</string>
     <string name="error_interest_group_titles">There was an error getting campaign info</string>
     <string name="error_login_phone_email">Must not be empty</string>
     <string name="error_login_password">Must not be empty</string>
@@ -102,9 +93,6 @@
     <string name="forgot_pw_link">https://www.dosomething.org/user/password</string>
     <string name="ctia">Creating an account means you agree to our Privacy Policy &amp; to receive
         our weekly update. Message &amp; data rates may apply. Text STOP to opt-out, HELP for help
-    </string>
-    <string name="desc_rewards">Invite your friends to get rewards copy. There are multiple
-        sentences in this paragraph body.
     </string>
     <string name="crop_photo">crop photo</string>
     <string name="report_back_caption">Caption your photo (60 chars or less)</string>
@@ -126,14 +114,6 @@
     <string name="campaign_signup_confirmation">Niiiiice. You\'re signed up for this campaign.</string>
     <string name="campaign_signup_failed">Oops! Our bad. Looks like there was an issue with that
         request. We\'re looking into it now!
-    </string>
-    <string name="desc_campaign_invite">When a friend uses your code, they join your action group.
-        You can rock %s together and unlock rewards as a group.
-    </string>
-    <string name="title_campaign_invite">Your friends can join your %s group with this code.
-    </string>
-    <string name="footer_campaign_invite">Inviting more friends means more fun!\nPlus you can get
-        awesome rewards.
     </string>
     <string name="change_phone_hint">Enter a new phone number</string>
     <string name="change_email_hint">Enter a new email</string>
@@ -163,8 +143,6 @@
     <string name="refresh_copy">Get New Actions</string>
     <string name="uploading">uploading…</string>
     <string name="cancel_search">Cancel Search</string>
-    <string name="search_for_group">Search For Group</string>
-    <string name="join_this_group">Join This Group</string>
     <string name="intro_title_1">Stop Being Bored</string>
     <string name="intro_desc_1">Are you into sports? Crafting? Whatever your interests, you can do
         fun stuff and social good at the same time.</string>

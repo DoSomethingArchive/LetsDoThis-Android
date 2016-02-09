@@ -30,10 +30,7 @@ import org.dosomething.letsdothis.tasks.GetUserTask;
 import org.dosomething.letsdothis.tasks.RbShareDataTask;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
 import org.dosomething.letsdothis.tasks.UploadAvatarTask;
-import org.dosomething.letsdothis.ui.CampaignInviteActivity;
-import org.dosomething.letsdothis.ui.GroupActivity;
 import org.dosomething.letsdothis.ui.PhotoCropActivity;
-import org.dosomething.letsdothis.ui.PublicProfileActivity;
 import org.dosomething.letsdothis.ui.ReportBackUploadActivity;
 import org.dosomething.letsdothis.ui.adapters.HubAdapter;
 import org.dosomething.letsdothis.utils.AnalyticsUtils;
@@ -167,18 +164,6 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @Override
-    public void friendClicked(String friendId)
-    {
-        startActivity(PublicProfileActivity.getLaunchIntent(getActivity(), friendId));
-    }
-
-    @Override
-    public void groupClicked(int groupId)
-    {
-        startActivity(GroupActivity.getLaunchIntent(getActivity(), groupId));
-    }
-
-    @Override
     public void onShareClicked(Campaign campaign) {
         TaskQueue.loadQueueDefault(getActivity()).execute(new RbShareDataTask(campaign));
 
@@ -208,13 +193,6 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
 
         startActivityForResult(chooserIntent, SELECT_PICTURE);
-    }
-
-    @Override
-    public void onInviteClicked(String title, int signupGroup)
-    {
-        startActivity(CampaignInviteActivity
-                              .getLaunchIntent(getActivity(), title, signupGroup));
     }
 
     /**
