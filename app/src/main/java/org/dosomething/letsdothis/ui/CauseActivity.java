@@ -16,13 +16,16 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Picasso;
 
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.Causes;
 import org.dosomething.letsdothis.network.models.ResponseCampaignList;
 import org.dosomething.letsdothis.tasks.GetCampaignsByCauseTask;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +46,9 @@ public class CauseActivity extends BaseActivity {
 
     // Intent Bundle extra keys
     private static final String EXTRA_CAUSE_NAME = "cause_name";
+
+    // Google Analytics tracker
+    private Tracker mTracker;
 
     // Name of the cause to display campaigns for
     private String mCauseName;
@@ -66,6 +72,9 @@ public class CauseActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cause);
 
+        LDTApplication application = (LDTApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+
         if (!EventBusExt.getDefault().isRegistered(this)) {
             EventBusExt.getDefault().register(this);
         }
@@ -88,6 +97,15 @@ public class CauseActivity extends BaseActivity {
 
         GetCampaignsByCauseTask task = new GetCampaignsByCauseTask(mCauseName);
         TaskQueue.loadQueueDefault(this).execute(task);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Submit screen view to Google Analytics
+        String screenName = String.format(AnalyticsUtils.SCREEN_CAUSE, mCauseName);
+        AnalyticsUtils.sendScreen(mTracker, screenName);
     }
 
     @Override

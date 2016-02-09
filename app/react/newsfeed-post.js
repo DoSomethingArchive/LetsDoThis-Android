@@ -25,7 +25,8 @@ var NewsFeedPost = React.createClass({
    */
   _onPressActionButton: function() {
     var campaignID = parseInt(this.props.post.campaign_id);
-    React.NativeModules.CampaignNavigationModule.presentCampaignWithCampaignID(campaignID);
+    var postID = parseInt(this.props.post.id);
+    React.NativeModules.CampaignNavigationModule.presentCampaignWithCampaignID(campaignID, postID);
   },
 
   /**
@@ -33,7 +34,8 @@ var NewsFeedPost = React.createClass({
    */
   _onPressFullArticleButton: function() {
     var urlString = this.props.post.full_article_url;
-    React.NativeModules.WebViewModule.open(urlString);
+    var postID = parseInt(this.props.post.id);
+    React.NativeModules.WebViewModule.open(urlString, postID);
   },
 
   /**
@@ -51,8 +53,9 @@ var NewsFeedPost = React.createClass({
   _onPressShareButton: function() {
     var post = this.props.post;
     var postTitle = Helpers.convertUnicode(post.title);
+    var postID = parseInt(post.id);
 
-    React.NativeModules.ShareIntentModule.share(postTitle, post.full_article_url);
+    React.NativeModules.ShareIntentModule.share(postTitle, post.full_article_url, postID);
   },
 
   /**

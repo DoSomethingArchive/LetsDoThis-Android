@@ -5,8 +5,10 @@ import android.content.Intent;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.google.android.gms.analytics.Tracker;
 
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 /**
  * A React Native module for launching a Share intent.
@@ -17,10 +19,14 @@ public class ShareIntentModule extends ReactContextBaseJavaModule {
 
     ReactApplicationContext mContext;
 
-    public ShareIntentModule(ReactApplicationContext reactContext) {
+    // Google Analytics tracker
+    private Tracker mTracker;
+
+    public ShareIntentModule(ReactApplicationContext reactContext, Tracker tracker) {
         super(reactContext);
 
         mContext = reactContext;
+        mTracker = tracker;
     }
 
     @Override
@@ -29,7 +35,10 @@ public class ShareIntentModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void share(String articleName, String url) {
+    public void share(String articleName, String url, int postId) {
+        AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_NEWS,
+                AnalyticsUtils.ACTION_SHARE_NEWS, String.valueOf(postId));
+
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
 
