@@ -22,13 +22,13 @@
     <string name="cause_sex_desc">Find volunteer opportunities that promote safe consensual sex and combat sexism.</string>
     <string name="cause_violence_desc">Find volunteer opportunities to make your community safer.</string>
     <string name="hub">Hub</string>
+    <string name="hub_current_label">Actions I\'m Doing</string>
     <string name="hub_empty_action_button">Take Me There</string>
     <string name="hub_empty_public">Hm, we aren\'t able to find any activity for this user.</string>
     <string name="hub_empty_text1">No actions? No problem!</string>
     <string name="hub_empty_text2">We release 12 new things to do every month, so check your Actions
         tab for what\'s fresh.</string>
-    <string name="hub_expire_current">Current:</string>
-    <string name="hub_expire_days_left">Days Left</string>
+    <string name="hub_past_label">Actions I\'ve Done</string>
     <string name="nav_news">News</string>
     <string name="notifications">Notifications</string>
     <string name="staff_pick">Staff pick</string>

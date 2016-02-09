@@ -20,7 +20,6 @@ import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.data.UserReportBack;
 import org.dosomething.letsdothis.ui.CampaignDetailsActivity;
 import org.dosomething.letsdothis.ui.ReportBackDetailsActivity;
-import org.dosomething.letsdothis.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,10 +115,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position)
-    {
-        if(getItemViewType(position) == VIEW_TYPE_SECTION_TITLE)
-        {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+        if (getItemViewType(position) == VIEW_TYPE_SECTION_TITLE) {
             String s = (String) hubList.get(position);
             SectionTitleViewHolder sectionTitleViewHolder = (SectionTitleViewHolder) holder;
             sectionTitleViewHolder.textView.setText(s);
@@ -262,27 +259,9 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             pastCampaignViewHolder.title.setText(campaign.title);
         }
-        else if(getItemViewType(position) == VIEW_TYPE_EXPIRE)
-        {
-            ExpireViewHolder viewHolder = (ExpireViewHolder) holder;
-
-            // @todo Pretty sure I'm breaking whatever expired logic is going on here with the change
-            // to using mobile_app.dates.end time for campaign end dates. Will want to fix this when
-            // working on Hub stuff.
-            Long expire = TimeUtils.getStartOfNextMonth();
-            List<String> campExpTime = TimeUtils.getTimeUntilExpiration(expire);
-            int dayInt = Integer.parseInt(campExpTime.get(0));
-
-            viewHolder.expire_label.setVisibility(View.VISIBLE);
-            viewHolder.expired.setVisibility(View.GONE);
-            viewHolder.daysWrapper.setVisibility(View.GONE);
-            if (dayInt > 0) {
-                viewHolder.daysWrapper.setVisibility(View.VISIBLE);
-                viewHolder.days.setText(String.valueOf(dayInt));
-            } else {
-                viewHolder.expire_label.setVisibility(View.GONE);
-                viewHolder.expired.setVisibility(View.VISIBLE);
-            }
+        // This is the static label above the list of current campaigns
+        else if(getItemViewType(position) == VIEW_TYPE_EXPIRE) {
+            // @todo Nothing needs to happen here. Should clean this up.
         }
         else if (getItemViewType(position) == VIEW_TYPE_CURRENT_EMPTY) {
             EmptyViewHolder viewHolder = (EmptyViewHolder) holder;
@@ -390,16 +369,12 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return hubList.size();
     }
 
-    public void processingUpload()
-    {
-        for(int i = 0; i < hubList.size(); i++)
-        {
+    public void processingUpload() {
+        for (int i = 0; i < hubList.size(); i++) {
             Object o = hubList.get(i);
-            if(o instanceof Campaign)
-            {
+            if (o instanceof Campaign) {
                 Campaign campaign = (Campaign) o;
-                if(campaign.id == clickedCampaign.id)
-                {
+                if (campaign.id == clickedCampaign.id) {
                     campaign.showShare = Campaign.UploadShare.UPLOADING;
                     notifyItemChanged(i);
                 }
@@ -412,14 +387,12 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return clickedCampaign;
     }
 
-    public static class ProfileViewHolder extends RecyclerView.ViewHolder
-    {
+    public static class ProfileViewHolder extends RecyclerView.ViewHolder {
         protected ImageView userImage;
         protected TextView  name;
         protected TextView  userCountry;
 
-        public ProfileViewHolder(View itemView)
-        {
+        public ProfileViewHolder(View itemView) {
             super(itemView);
             this.userImage = (ImageView) itemView.findViewById(R.id.user_image);
             this.name = (TextView) itemView.findViewById(R.id.name);
@@ -427,8 +400,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    public static class CurrentCampaignViewHolder extends RecyclerView.ViewHolder
-    {
+    public static class CurrentCampaignViewHolder extends RecyclerView.ViewHolder {
         protected final TextView     title;
         protected final TextView     taglineCaption;
         protected final TextView     count;
@@ -437,8 +409,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         protected final ImageView    reportbackImage;
         protected final Button       share;
 
-        public CurrentCampaignViewHolder(View itemView)
-        {
+        public CurrentCampaignViewHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
             taglineCaption = (TextView) itemView.findViewById(R.id.tagline_caption);
@@ -450,33 +421,20 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    public static class PastCampaignViewHolder extends RecyclerView.ViewHolder
-    {
+    public static class PastCampaignViewHolder extends RecyclerView.ViewHolder {
         protected final ImageView image;
         protected final TextView  title;
 
-        public PastCampaignViewHolder(View itemView)
-        {
+        public PastCampaignViewHolder(View itemView) {
             super(itemView);
             image = (ImageView) itemView.findViewById(R.id.image);
             title = (TextView) itemView.findViewById(R.id.title);
         }
     }
 
-    public static class ExpireViewHolder extends RecyclerView.ViewHolder
-    {
-        public          TextView expired;
-        public          TextView expire_label;
-        protected final TextView days;
-        protected final View     daysWrapper;
-
-        public ExpireViewHolder(View itemView)
-        {
+    public static class ExpireViewHolder extends RecyclerView.ViewHolder {
+        public ExpireViewHolder(View itemView) {
             super(itemView);
-            expire_label = (TextView) itemView.findViewById(R.id.expire_label);
-            expired = (TextView) itemView.findViewById(R.id.expired_already);
-            daysWrapper = itemView.findViewById(R.id.days_wrapper);
-            days = (TextView) itemView.findViewById(R.id.days);
         }
     }
 
