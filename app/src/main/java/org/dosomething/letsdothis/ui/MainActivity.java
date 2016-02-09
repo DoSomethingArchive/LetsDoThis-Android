@@ -14,7 +14,6 @@ import android.widget.ListView;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.adapters.DrawerListAdapter;
-import org.dosomething.letsdothis.ui.fragments.ActionsFragment;
 import org.dosomething.letsdothis.ui.fragments.CauseListFragment;
 import org.dosomething.letsdothis.ui.fragments.HubFragment;
 import org.dosomething.letsdothis.ui.fragments.NewsFragment;
@@ -147,7 +146,7 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
             }
         }
 
-        replaceCurrentFragment(ActionsFragment.newInstance(), ActionsFragment.TAG);
+        replaceCurrentFragment(CauseListFragment.newInstance(), CauseListFragment.TAG);
     }
 
     /**

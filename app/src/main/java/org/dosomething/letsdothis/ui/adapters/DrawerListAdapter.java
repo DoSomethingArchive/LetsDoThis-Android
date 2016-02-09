@@ -39,7 +39,7 @@ public class DrawerListAdapter extends ArrayAdapter<String> {
             icon.setImageDrawable(resources.getDrawable(R.drawable.ic_news));
         } else if (TextUtils.equals(positionString, resources.getString(R.string.actions))) {
             icon.setImageDrawable(resources.getDrawable(R.drawable.ic_actions));
-        } else if(TextUtils.equals(positionString, resources.getString(R.string.hub))) {
+        } else if (TextUtils.equals(positionString, resources.getString(R.string.hub))) {
             icon.setImageDrawable(resources.getDrawable(R.drawable.ic_hub));
         }
 

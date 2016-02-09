@@ -1,5 +1,6 @@
 package org.dosomething.letsdothis.ui.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -29,11 +30,20 @@ public class CauseListFragment extends Fragment {
 
     public static final String TAG = CauseListFragment.class.getSimpleName();
 
+    // Listener to set title in the toolbar
+    private SetTitleListener mTitleListener;
+
     // Google Analytics tracker
     private Tracker mTracker;
 
     public static CauseListFragment newInstance() {
         return new CauseListFragment();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mTitleListener = (SetTitleListener) getActivity();
     }
 
     @Override
@@ -63,6 +73,8 @@ public class CauseListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        mTitleListener.setTitle(getResources().getString(R.string.actions));
 
         // Submit screen view to Google Analytics
         AnalyticsUtils.sendScreen(mTracker, AnalyticsUtils.SCREEN_CAUSE_LIST);
