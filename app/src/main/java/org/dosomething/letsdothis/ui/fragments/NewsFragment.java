@@ -16,13 +16,16 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.shell.MainReactPackage;
+import com.google.android.gms.analytics.Tracker;
 
 import org.dosomething.letsdothis.BuildConfig;
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.react.CampaignNavigationModule;
 import org.dosomething.letsdothis.react.ConfigModule;
 import org.dosomething.letsdothis.react.ShareIntentModule;
 import org.dosomething.letsdothis.react.WebViewModule;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +44,9 @@ public class NewsFragment extends Fragment implements DefaultHardwareBackBtnHand
     // Listener to set title in the toolbar
     private SetTitleListener mTitleListener;
 
+    // Google Analytics tracker
+    private Tracker mTracker;
+
     private ReactRootView mReactRootView;
     private ReactInstanceManager mReactInstanceManager;
 
@@ -52,6 +58,14 @@ public class NewsFragment extends Fragment implements DefaultHardwareBackBtnHand
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mTitleListener = (SetTitleListener) getActivity();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        LDTApplication application = (LDTApplication)getActivity().getApplication();
+        mTracker = application.getDefaultTracker();
     }
 
     @Override
@@ -97,6 +111,9 @@ public class NewsFragment extends Fragment implements DefaultHardwareBackBtnHand
         }
 
         mTitleListener.setTitle(getResources().getString(R.string.nav_news));
+
+        // Submit screen view to Google Analytics
+        AnalyticsUtils.sendScreen(mTracker, AnalyticsUtils.SCREEN_NEWS);
     }
 
 

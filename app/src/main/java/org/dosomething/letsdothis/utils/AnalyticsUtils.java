@@ -43,6 +43,7 @@ public class AnalyticsUtils {
     public static final String SCREEN_CAUSE_LIST = "causes";
     public static final String SCREEN_CAUSE = "causes/%1$d";
     public static final String SCREEN_INTEREST_GROUP = "taxonomy_term/%1$d";
+    public static final String SCREEN_NEWS = "news";
     public static final String SCREEN_ONBOARDING_1 = "onboarding-first";
     public static final String SCREEN_ONBOARDING_2 = "onboarding-second";
     public static final String SCREEN_REPORTBACK_FORM = "campaign/%1$d/reportbackform";
@@ -52,6 +53,7 @@ public class AnalyticsUtils {
     public static final String SCREEN_USER_LOGIN = "user-login";
     public static final String SCREEN_USER_PROFILE = "user-profile/%1$s";
     public static final String SCREEN_USER_REGISTER = "user-register";
+    public static final String SCREEN_WEBVIEW = "webview";
 
     /**
      * Send event to Google Analytics.

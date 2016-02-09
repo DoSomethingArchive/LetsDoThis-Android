@@ -14,7 +14,11 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.Tracker;
+
+import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 /**
  * A basic Activity to display content via a WebView.
@@ -23,6 +27,10 @@ public class WebViewActivity extends AppCompatActivity {
 
     private static final String EXTRA_URL = "url";
 
+    // Google Analytics tracker
+    private Tracker mTracker;
+
+    // Progress bar indicating loading progress
     ProgressBar mProgress;
 
     public static Intent getLaunchIntent(Context context, String url) {
@@ -65,6 +73,17 @@ public class WebViewActivity extends AppCompatActivity {
         });
 
         webview.loadUrl(getIntent().getStringExtra(EXTRA_URL));
+
+        LDTApplication application = (LDTApplication)getApplication();
+        mTracker = application.getDefaultTracker();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Submit screen view to Google Analytics
+        AnalyticsUtils.sendScreen(mTracker, AnalyticsUtils.SCREEN_WEBVIEW);
     }
 
     @Override
