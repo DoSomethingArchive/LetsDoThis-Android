@@ -6,7 +6,6 @@ import org.dosomething.letsdothis.network.models.RequestKudo;
 import org.dosomething.letsdothis.network.models.RequestReportback;
 import org.dosomething.letsdothis.network.models.ResponseAvatar;
 import org.dosomething.letsdothis.network.models.ResponseCampaignSignUp;
-import org.dosomething.letsdothis.network.models.ResponseGroup;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 import org.dosomething.letsdothis.network.models.ResponseRbData;
 import org.dosomething.letsdothis.network.models.ResponseRegister;
