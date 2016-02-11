@@ -49,6 +49,13 @@ android {
 
         // Enabling multidex support.
         multiDexEnabled true
+
+        // React Native HACK: exclude 64-bit binaries
+        // @see https://github.com/facebook/react-native/issues/2814
+        // @see https://corbt.com/posts/2015/09/18/mixing-32-and-64bit-dependencies-in-android.html
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
     }
     signingConfigs {
         release {
@@ -88,6 +95,9 @@ android {
             exclude 'META-INF/license.txt'
             exclude 'META-INF/dependencies.txt'
             exclude 'META-INF/LGPL2.1'
+
+            // React Native HACK: excluding 64-bit binaries
+            exclude "lib/arm64-v8a/librealm-jni.so"
         }
     }
 }
