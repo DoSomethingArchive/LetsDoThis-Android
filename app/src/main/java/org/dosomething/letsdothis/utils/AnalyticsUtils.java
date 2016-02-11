@@ -47,7 +47,7 @@ public class AnalyticsUtils {
     // Screen names
     public static final String SCREEN_CAMPAIGN = "campaign/%1$d/%2$s";
     public static final String SCREEN_CAUSE_LIST = "causes";
-    public static final String SCREEN_CAUSE = "causes/%1$d";
+    public static final String SCREEN_CAUSE = "causes/%1$s";
     public static final String SCREEN_INTEREST_GROUP = "taxonomy_term/%1$d";
     public static final String SCREEN_NEWS = "news";
     public static final String SCREEN_ONBOARDING_1 = "onboarding-first";
