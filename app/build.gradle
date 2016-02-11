@@ -25,9 +25,6 @@ def FACEBOOK_APP_ID_PROD = secrets.getProperty("FacebookAppIdProduction") ?: "Ne
 def FACEBOOK_APP_ID_DEBUG = secrets.getProperty("FacebookAppIdDebug") ?: "Need to set FacebookAppIdDebug in app/secrets.properties";
 def PARSE_APP_ID = secrets.getProperty("ParseAppId") ?: "Need to set ParseAppId in app/secrets.properties";
 def PARSE_CLIENT_KEY = secrets.getProperty("ParseClientKey") ?: "Need to set ParseClientKey in app/secrets.properties";
-def NORTHSTAR_APP_ID_DEBUG = secrets.getProperty("NorthstarAppIdDebug") ?: "Need to set NorthstarAppIdDebug in app/secrets.properties";
-def NORTHSTAR_APP_ID_THOR = secrets.getProperty("NorthstarAppIdThor") ?: "Need to set NorthstarAppIdThor in app/secrets.properties";
-def NORTHSTAR_APP_ID_PROD = secrets.getProperty("NorthstarAppIdProduction") ?: "Need to set NorthstarAppIdProduction in app/secrets.properties";
 def NORTHSTAR_API_KEY_DEBUG = secrets.getProperty("NorthstarApiKeyDebug") ?: "Need to set NorthstarApiKeyDebug in app/secrets.properties";
 def NORTHSTAR_API_KEY_THOR = secrets.getProperty("NorthstarApiKeyThor") ?: "Need to set NorthstarApiKeyThor in app/secrets.properties";
 def NORTHSTAR_API_KEY_PROD = secrets.getProperty("NorthstarApiKeyProduction") ?: "Need to set NorthstarApiKeyProduction in app/secrets.properties";
@@ -48,7 +45,6 @@ android {
         resValue "string", "facebook_app_id", FACEBOOK_APP_ID_PROD
         resValue "string", "parse_app_id", PARSE_APP_ID
         resValue "string", "parse_client_key", PARSE_CLIENT_KEY
-        resValue "string", "northstar_app_id", NORTHSTAR_APP_ID_PROD
         resValue "string", "northstar_api_key", NORTHSTAR_API_KEY_PROD
 
         // Enabling multidex support.
@@ -66,14 +62,12 @@ android {
         debug {
             debuggable true
             resValue "string", "facebook_app_id", FACEBOOK_APP_ID_DEBUG
-            resValue "string", "northstar_app_id", NORTHSTAR_APP_ID_DEBUG
             resValue "string", "northstar_api_key", NORTHSTAR_API_KEY_DEBUG
         }
         internal {
             debuggable true
             signingConfig signingConfigs.debug
             resValue "string", "facebook_app_id", FACEBOOK_APP_ID_DEBUG
-            resValue "string", "northstar_app_id", NORTHSTAR_APP_ID_THOR
             resValue "string", "northstar_api_key", NORTHSTAR_API_KEY_THOR
         }
         release {

@@ -42,9 +42,7 @@ public class NetworkHelper
             public void intercept(RequestFacade request)
             {
                 Context context = LDTApplication.getContext();
-                String northstarAppId = context.getString(R.string.northstar_app_id);
                 String northstarApiKey = context.getString(R.string.northstar_api_key);
-                request.addHeader("X-DS-Application-Id", northstarAppId);
                 request.addHeader("X-DS-REST-API-Key", northstarApiKey);
             }
         };
@@ -85,7 +83,7 @@ public class NetworkHelper
             baseUrl = PhoenixAPI.PRODUCTION_URL;
         }
         else if (BuildConfig.BUILD_TYPE.equals("internal")) {
-            baseUrl = PhoenixAPI.PRODUCTION_URL;
+            baseUrl = PhoenixAPI.THOR_URL;
         }
         else {
             baseUrl = PhoenixAPI.QA_URL;
@@ -105,7 +103,7 @@ public class NetworkHelper
             baseUrl = NorthstarAPI.PRODUCTION_URL;
         }
         else if (BuildConfig.BUILD_TYPE.equals("internal")) {
-            baseUrl = NorthstarAPI.PRODUCTION_URL;
+            baseUrl = NorthstarAPI.THOR_URL;
         }
         else {
             baseUrl = NorthstarAPI.QA_URL;
