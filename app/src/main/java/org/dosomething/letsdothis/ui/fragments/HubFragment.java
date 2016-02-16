@@ -1,5 +1,6 @@
 package org.dosomething.letsdothis.ui.fragments;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.net.Uri;
@@ -23,9 +24,7 @@ import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
-import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.tasks.DbGetUserTask;
-import org.dosomething.letsdothis.tasks.GetUserCampaignsTask;
 import org.dosomething.letsdothis.tasks.GetUserTask;
 import org.dosomething.letsdothis.tasks.RbShareDataTask;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
@@ -34,7 +33,6 @@ import org.dosomething.letsdothis.ui.PhotoCropActivity;
 import org.dosomething.letsdothis.ui.ReportBackUploadActivity;
 import org.dosomething.letsdothis.ui.adapters.HubAdapter;
 import org.dosomething.letsdothis.utils.AnalyticsUtils;
-import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.io.File;
 
@@ -62,6 +60,9 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
     // Google Analytics tracker
     private Tracker mTracker;
+
+    // Progress dialog to display while API calls are in progress
+    private ProgressDialog mProgressDialog;
 
     public static HubFragment newInstance(String id)
     {
@@ -98,8 +99,6 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         if (activity instanceof ReplaceFragmentListener) {
             replaceFragmentListener = (ReplaceFragmentListener) activity;
         }
-
-        refreshUserCampaign();
     }
 
     @Override
@@ -121,15 +120,18 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
         String trackerIdentifier;
         String publicId = getArguments().getString(EXTRA_ID, null);
-        if (publicId != null) {
-            TaskQueue.loadQueueDefault(getActivity()).execute(new GetUserTask());
+        TaskQueue.loadQueueDefault(getActivity()).execute(new GetUserTask());
 
+        // @todo Evaluate if we actually want to use a blocking progress dialog
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setTitle("Loading Profile...");
+        mProgressDialog.setMessage("Please wait...");
+        mProgressDialog.show();
+
+        if (publicId != null) {
             trackerIdentifier = publicId;
         }
         else {
-            DatabaseHelper.defaultDatabaseQueue(getActivity()).execute(
-                    new DbGetUserTask(AppPrefs.getInstance(getActivity()).getCurrentUserId()));
-
             trackerIdentifier = "self";
         }
 
@@ -262,26 +264,12 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         }
     }
 
-
-    private void refreshUserCampaign() {
-        String userId = getArguments().getString(EXTRA_ID, null);
-        if (userId == null) {
-            userId = AppPrefs.getInstance(getActivity()).getCurrentUserId();
-        }
-
-        GetUserCampaignsTask task = new GetUserCampaignsTask(userId, HubFragment.class.toString());
-        TaskQueue.loadQueueDefault(getActivity()).execute(task);
-        refreshProgressBar();
-    }
-
     private void refreshProgressBar()
     {
-        TaskQueue defaultQueue = TaskQueue.loadQueueDefault(getActivity());
-        boolean userTaskInProgress = TaskQueueHelper.hasTasksOfType(defaultQueue, GetUserCampaignsTask.class);
         TaskQueue rbQueue = ReportbackUploadTask.getQueue(LDTApplication.getContext());
         boolean rbTaskInProgress = TaskQueueHelper.hasTasksOfType(rbQueue, ReportbackUploadTask.class);
 
-        if (userTaskInProgress || rbTaskInProgress) {
+        if (rbTaskInProgress) {
             if (progress != null) {
                 progress.setVisibility(View.VISIBLE);
             }
@@ -290,20 +278,6 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
             if (progress != null) {
                 progress.setVisibility(View.GONE);
             }
-        }
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(GetUserCampaignsTask task) {
-        if (task.getOrigin() == null || !task.getOrigin().equals(HubFragment.class.toString())) {
-            return;
-        }
-
-        refreshProgressBar();
-        adapter.setCurrentCampaign(task.currentCampaignList);
-
-        if (task.pastCampaignList != null && !task.pastCampaignList.isEmpty()) {
-            adapter.addPastCampaign(task.pastCampaignList);
         }
     }
 
@@ -334,8 +308,6 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(ReportbackUploadTask task) {
-        refreshUserCampaign();
-
         if (!task.hasError()) {
             Snackbar snackbar = Snackbar.make(getView().findViewById(R.id.snack),
                     R.string.campaign_reportback_confirmation, Snackbar.LENGTH_LONG);
@@ -346,9 +318,9 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(GetUserTask task)
-    {
+    public void onEventMainThread(GetUserTask task) {
         adapter.addUser(task.user);
+        mProgressDialog.dismiss();
     }
 
     @SuppressWarnings("UnusedDeclaration")

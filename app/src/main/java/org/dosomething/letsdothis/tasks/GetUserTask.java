@@ -4,6 +4,8 @@ import android.content.Context;
 import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.NetworkHelper;
+import org.dosomething.letsdothis.network.models.ResponseProfileReportbacks;
+import org.dosomething.letsdothis.network.models.ResponseProfileSignups;
 import org.dosomething.letsdothis.network.models.ResponseUser;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
@@ -23,6 +25,10 @@ public class GetUserTask extends BaseNetworkErrorHandlerTask {
         AppPrefs appPrefs = AppPrefs.getInstance(context);
         String token = appPrefs.getSessionToken();
         ResponseUser response = NetworkHelper.getNorthstarAPIService().userProfile(token);
+
+        // @todo These calls probably belong in their own tasks
+        ResponseProfileSignups signup = NetworkHelper.getNorthstarAPIService().userProfileSignups(token);
+        ResponseProfileReportbacks reportbacks = NetworkHelper.getNorthstarAPIService().userProfileReportbacks(token);
 
         user = ResponseUser.getUser(response);
 

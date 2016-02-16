@@ -122,6 +122,10 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             sectionTitleViewHolder.textView.setText(s);
         }
         else if (getItemViewType(position) == VIEW_TYPE_PROFILE) {
+            if (mUser == null) {
+                return;
+            }
+
             ProfileViewHolder profileViewHolder = (ProfileViewHolder) holder;
 
             if (mUser != null && mUser.avatarPath != null) {

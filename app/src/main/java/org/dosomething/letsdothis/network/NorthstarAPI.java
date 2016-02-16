@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.network;
+
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.models.ParseInstallationRequest;
 import org.dosomething.letsdothis.network.models.RequestCampaignSignup;
@@ -7,6 +8,8 @@ import org.dosomething.letsdothis.network.models.RequestReportback;
 import org.dosomething.letsdothis.network.models.ResponseAvatar;
 import org.dosomething.letsdothis.network.models.ResponseCampaignSignUp;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
+import org.dosomething.letsdothis.network.models.ResponseProfileReportbacks;
+import org.dosomething.letsdothis.network.models.ResponseProfileSignups;
 import org.dosomething.letsdothis.network.models.ResponseRbData;
 import org.dosomething.letsdothis.network.models.ResponseRegister;
 import org.dosomething.letsdothis.network.models.ResponseReportBack;
@@ -82,14 +85,34 @@ public interface NorthstarAPI {
     ResponseRegister registerWithEmail(@Body User user) throws NetworkException;
 
     /**
-     * Get current user profile info.
+     * Get the current user's profile info.
      *
-     * @param sessionToken Token for currently logged in user
+     * @param sessionToken Token for the currently logged in user
      * @return ResponseUser
      * @throws NetworkException
      */
     @GET("/profile")
     ResponseUser userProfile(@Header("Session") String sessionToken) throws NetworkException;
+
+    /**
+     * Get the current user's reportbacks.
+     *
+     * @param sessionToken Token for the currently logged in user
+     * @return ResponseProfileReportbacks
+     * @throws NetworkException
+     */
+    @GET("/profile/reportbacks")
+    ResponseProfileReportbacks userProfileReportbacks(@Header("Session") String sessionToken) throws NetworkException;
+
+    /**
+     * Get the current user's signups.
+     *
+     * @param sessionToken Token for the currently logged in user
+     * @return ResponseProfileSignups
+     * @throws NetworkException
+     */
+    @GET("/profile/signups")
+    ResponseProfileSignups userProfileSignups(@Header("Session") String sessionToken) throws NetworkException;
 
     /**
      * Update profile of the currently logged in user.
