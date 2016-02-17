@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.ui;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -52,6 +53,9 @@ public class RegisterActivity extends BaseActivity
 
     // Google Analytics tracker
     private Tracker mTracker;
+
+    // Progress dialog while login is in progress
+    private ProgressDialog mProgressDialog;
 
     public static Intent getLaunchIntent(Context context, FbUser user)
     {
@@ -248,6 +252,9 @@ public class RegisterActivity extends BaseActivity
 
                     TaskQueue.loadQueueDefault(RegisterActivity.this).execute(
                             new RegisterTask(emailText, phoneText, passText, firstText));
+                    mProgressDialog = new ProgressDialog(RegisterActivity.this);
+                    mProgressDialog.setMessage(getResources().getString(R.string.progress_dialog_register));
+                    mProgressDialog.show();
 
                     // Track if user provided mobile # in registration
                     if (!phoneText.isEmpty()) {
@@ -280,6 +287,8 @@ public class RegisterActivity extends BaseActivity
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(RegisterTask task) {
+        mProgressDialog.dismiss();
+
         AppPrefs prefs = AppPrefs.getInstance(this);
         if (prefs.getCurrentUserId() != null && prefs.getAvatarPath() != null) {
             TaskQueue.loadQueueDefault(RegisterActivity.this).execute(
