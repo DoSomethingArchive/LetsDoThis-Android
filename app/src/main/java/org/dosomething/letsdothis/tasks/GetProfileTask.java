@@ -13,7 +13,8 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
  * Created by toidiu on 4/16/15.
  */
 public class GetProfileTask extends BaseNetworkErrorHandlerTask {
-    public User user;
+
+    private User mResult;
 
     public GetProfileTask() {
     }
@@ -24,14 +25,18 @@ public class GetProfileTask extends BaseNetworkErrorHandlerTask {
         String token = appPrefs.getSessionToken();
         ResponseUser response = NetworkHelper.getNorthstarAPIService().userProfile(token);
 
-        user = ResponseUser.getUser(response);
+        mResult = ResponseUser.getUser(response);
 
-        DatabaseHelper.getInstance(context).getUserDao().createOrUpdate(user);
+        DatabaseHelper.getInstance(context).getUserDao().createOrUpdate(mResult);
     }
 
     @Override
     protected void onComplete(Context context) {
         EventBusExt.getDefault().post(this);
         super.onComplete(context);
+    }
+
+    public User getResult() {
+        return mResult;
     }
 }

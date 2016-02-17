@@ -22,6 +22,8 @@ import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.network.models.ResponseProfileCampaign;
+import org.dosomething.letsdothis.network.models.ResponseProfileSignups;
 import org.dosomething.letsdothis.tasks.GetProfileSignupsTask;
 import org.dosomething.letsdothis.tasks.GetProfileTask;
 import org.dosomething.letsdothis.tasks.RbShareDataTask;
@@ -33,6 +35,7 @@ import org.dosomething.letsdothis.ui.adapters.HubAdapter;
 import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
@@ -49,10 +52,10 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     public static final  String EXTRA_ID       = "id";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
-    private HubAdapter       adapter;
-    private Uri              imageUri;
-    private SetTitleListener titleListener;
-    private ReplaceFragmentListener replaceFragmentListener;
+    private HubAdapter mAdapter;
+    private Uri mImageUri;
+    private SetTitleListener mTitleListener;
+    private ReplaceFragmentListener mReplaceFragmentListener;
 
     // Google Analytics tracker
     private Tracker mTracker;
@@ -86,10 +89,10 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        titleListener = (SetTitleListener) getActivity();
+        mTitleListener = (SetTitleListener) getActivity();
 
         if (activity instanceof ReplaceFragmentListener) {
-            replaceFragmentListener = (ReplaceFragmentListener) activity;
+            mReplaceFragmentListener = (ReplaceFragmentListener) activity;
         }
     }
 
@@ -107,7 +110,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
             EventBusExt.getDefault().register(this);
         }
 
-        titleListener.setTitle(getResources().getString(R.string.hub));
+        mTitleListener.setTitle(getResources().getString(R.string.hub));
 
         String trackerIdentifier;
         String publicId = getArguments().getString(EXTRA_ID, null);
@@ -136,7 +139,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         TaskQueue rbQueue = ReportbackUploadTask.getQueue(getActivity());
         boolean rbUploadInProgress = TaskQueueHelper.hasTasksOfType(rbQueue, ReportbackUploadTask.class);
         if (rbUploadInProgress) {
-            adapter.processingUpload();
+            mAdapter.processingUpload();
         }
 
         // Submit screen view to Google Analytics
@@ -148,10 +151,12 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
         String publicId = getArguments().getString(EXTRA_ID, null);
-        adapter = new HubAdapter(getActivity(), this, publicId != null);
-        recyclerView.setAdapter(adapter);
+        mAdapter = new HubAdapter(getActivity(), this, publicId != null);
+
+        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
+        recyclerView.setAdapter(mAdapter);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
     }
@@ -174,9 +179,9 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         externalFile.mkdirs();
         File file = new File(externalFile, "reportBack" + System.currentTimeMillis() + ".jpg");
         takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-        imageUri = Uri.parse(file.getAbsolutePath());
+        mImageUri = Uri.parse(file.getAbsolutePath());
         if (BuildConfig.DEBUG) {
-            Log.d("photo location", imageUri.toString());
+            Log.d("photo location", mImageUri.toString());
         }
 
         String pickTitle = getString(R.string.select_picture);
@@ -193,7 +198,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
      */
     @Override
     public void onActionsButtonClicked() {
-        replaceFragmentListener.replaceWithActionsFragment();
+        mReplaceFragmentListener.replaceWithActionsFragment();
     }
 
     @Override
@@ -216,7 +221,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
                 Uri selectedImageUri;
                 if (isCamera) {
-                    selectedImageUri = imageUri;
+                    selectedImageUri = mImageUri;
                 }
                 else {
                     selectedImageUri = data.getData();
@@ -228,7 +233,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
             }
             else if (requestCode == PhotoCropActivity.RESULT_CODE) {
                 String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
-                Campaign clickedCampaign = adapter.getClickedCampaign();
+                Campaign clickedCampaign = mAdapter.getClickedCampaign();
                 String format = String.format(getString(R.string.reportback_upload_hint),
                         clickedCampaign.noun, clickedCampaign.verb);
 
@@ -290,19 +295,34 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(GetProfileTask task) {
-        adapter.addUser(task.user);
-
         dismissProgressDialogIfDone();
+
+        mAdapter.addUser(task.getResult());
     }
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(GetProfileSignupsTask task) {
         dismissProgressDialogIfDone();
+
+        ArrayList<ResponseProfileCampaign> currentSignups = new ArrayList<>();
+        if (task.getResult() != null) {
+            ResponseProfileSignups signups = task.getResult();
+            for (int i = 0; i < signups.data.length; i++) {
+                // @todo We'll probably want to lists in the end.
+                //   1. Campaigns that are current that only have a signup, no reportback
+                //   2. Campaigns that have a reportback, regardless of whether or not it's current
+                if (signups.data[i].campaign_run.current) {
+                    currentSignups.add(signups.data[i].campaign);
+                }
+            }
+        }
+
+        mAdapter.setCurrentSignups(currentSignups);
     }
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(UploadAvatarTask task) {
-        adapter.addUser(task.user);
+        mAdapter.addUser(task.user);
     }
 
 }
