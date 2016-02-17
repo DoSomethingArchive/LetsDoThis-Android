@@ -2,7 +2,6 @@ package org.dosomething.letsdothis.ui.fragments;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,7 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.google.android.gms.analytics.Tracker;
 
@@ -24,8 +22,8 @@ import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
-import org.dosomething.letsdothis.tasks.DbGetUserTask;
-import org.dosomething.letsdothis.tasks.GetUserTask;
+import org.dosomething.letsdothis.tasks.GetProfileSignupsTask;
+import org.dosomething.letsdothis.tasks.GetProfileTask;
 import org.dosomething.letsdothis.tasks.RbShareDataTask;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
 import org.dosomething.letsdothis.tasks.UploadAvatarTask;
@@ -43,8 +41,7 @@ import co.touchlab.android.threading.tasks.utils.TaskQueueHelper;
 /**
  * Created by izzyoji :) on 4/15/15.
  */
-public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickListener
-{
+public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickListener {
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final  String TAG            = HubFragment.class.getSimpleName();
@@ -56,7 +53,6 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     private Uri              imageUri;
     private SetTitleListener titleListener;
     private ReplaceFragmentListener replaceFragmentListener;
-    private ProgressBar      progress;
 
     // Google Analytics tracker
     private Tracker mTracker;
@@ -64,8 +60,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     // Progress dialog to display while API calls are in progress
     private ProgressDialog mProgressDialog;
 
-    public static HubFragment newInstance(String id)
-    {
+    public static HubFragment newInstance(String id) {
         Bundle bundle = new Bundle();
         bundle.putString(EXTRA_ID, id);
         HubFragment fragment = new HubFragment();
@@ -75,8 +70,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
@@ -85,14 +79,12 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_recycler, container, false);
     }
 
     @Override
-    public void onAttach(Activity activity)
-    {
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
         titleListener = (SetTitleListener) getActivity();
 
@@ -102,8 +94,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @Override
-    public void onPause()
-    {
+    public void onPause() {
         super.onPause();
         EventBusExt.getDefault().unregister(this);
     }
@@ -120,7 +111,13 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
         String trackerIdentifier;
         String publicId = getArguments().getString(EXTRA_ID, null);
-        TaskQueue.loadQueueDefault(getActivity()).execute(new GetUserTask());
+
+        // Get user's profile info
+        TaskQueue taskQueue = TaskQueue.loadQueueDefault(getActivity());
+        taskQueue.execute(new GetProfileTask());
+
+        // Get user's campaign activity
+        taskQueue.execute(new GetProfileSignupsTask());
 
         // @todo Evaluate if we actually want to use a blocking progress dialog
         mProgressDialog = new ProgressDialog(getActivity());
@@ -135,12 +132,12 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
             trackerIdentifier = "self";
         }
 
-        if (TaskQueueHelper.hasTasksOfType(ReportbackUploadTask.getQueue(getActivity()),
-                                          ReportbackUploadTask.class)) {
+        // If a reportback upload is in progress, notify adapter that the upload is processing
+        TaskQueue rbQueue = ReportbackUploadTask.getQueue(getActivity());
+        boolean rbUploadInProgress = TaskQueueHelper.hasTasksOfType(rbQueue, ReportbackUploadTask.class);
+        if (rbUploadInProgress) {
             adapter.processingUpload();
         }
-
-        refreshProgressBar();
 
         // Submit screen view to Google Analytics
         String screenName = String.format(AnalyticsUtils.SCREEN_USER_PROFILE, trackerIdentifier);
@@ -148,14 +145,8 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        progress = (ProgressBar) getView().findViewById(R.id.progress);
-        progress.getIndeterminateDrawable()
-                .setColorFilter(getResources().getColor(R.color.cerulean_1),
-                                PorterDuff.Mode.SRC_IN);
-        refreshProgressBar();
 
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
         String publicId = getArguments().getString(EXTRA_ID, null);
@@ -173,8 +164,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @Override
-    public void onProveClicked(Campaign campaign)
-    {
+    public void onProveClicked(Campaign campaign) {
         Intent pickIntent = new Intent(Intent.ACTION_PICK,
                                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         pickIntent.setType("image/*");
@@ -185,8 +175,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         File file = new File(externalFile, "reportBack" + System.currentTimeMillis() + ".jpg");
         takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
         imageUri = Uri.parse(file.getAbsolutePath());
-        if(BuildConfig.DEBUG)
-        {
+        if (BuildConfig.DEBUG) {
             Log.d("photo location", imageUri.toString());
         }
 
@@ -208,76 +197,58 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if(resultCode == Activity.RESULT_OK)
-        {
-            if(requestCode == SELECT_PICTURE)
-            {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == SELECT_PICTURE) {
                 final boolean isCamera;
-                if(data == null || data.getData() == null)
-                {
+                if (data == null || data.getData() == null) {
                     isCamera = true;
                 }
-                else
-                {
+                else {
                     final String action = data.getAction();
-                    if(action == null)
-                    {
+                    if (action == null) {
                         isCamera = false;
                     }
-                    else
-                    {
+                    else {
                         isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                     }
                 }
 
                 Uri selectedImageUri;
-                if(isCamera)
-                {
+                if (isCamera) {
                     selectedImageUri = imageUri;
                 }
-                else
-                {
+                else {
                     selectedImageUri = data.getData();
                 }
 
-                startActivityForResult(PhotoCropActivity.getResultIntent(getActivity(),
-                                                                         selectedImageUri
-                                                                                 .toString(),
-                                                                         getString(
-                                                                                 R.string.share_photo),
-                                                                         null),
-                                       PhotoCropActivity.RESULT_CODE);
+                Intent photoCropIntent = PhotoCropActivity.getResultIntent(getActivity(),
+                        selectedImageUri.toString(), getString(R.string.share_photo), null);
+                startActivityForResult(photoCropIntent, PhotoCropActivity.RESULT_CODE);
             }
-            else if(requestCode == PhotoCropActivity.RESULT_CODE)
-            {
+            else if (requestCode == PhotoCropActivity.RESULT_CODE) {
                 String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
                 Campaign clickedCampaign = adapter.getClickedCampaign();
-                String format = String
-                        .format(getString(R.string.reportback_upload_hint), clickedCampaign.noun,
-                                clickedCampaign.verb);
-                startActivity(ReportBackUploadActivity.getLaunchIntent(getActivity(), filePath,
-                                                                       clickedCampaign.title,
-                                                                       clickedCampaign.id, format));
+                String format = String.format(getString(R.string.reportback_upload_hint),
+                        clickedCampaign.noun, clickedCampaign.verb);
+
+                Intent rbUploadIntent = ReportBackUploadActivity.getLaunchIntent(getActivity(),
+                        filePath, clickedCampaign.title, clickedCampaign.id, format);
+                startActivity(rbUploadIntent);
             }
         }
     }
 
-    private void refreshProgressBar()
-    {
-        TaskQueue rbQueue = ReportbackUploadTask.getQueue(LDTApplication.getContext());
-        boolean rbTaskInProgress = TaskQueueHelper.hasTasksOfType(rbQueue, ReportbackUploadTask.class);
+    /**
+     * Check if tasks are in progress. If they're done, then dismiss the ProgressDialog.
+     */
+    private void dismissProgressDialogIfDone() {
+        TaskQueue defaultQueue = TaskQueue.loadQueueDefault(getActivity());
+        boolean hasProfileTask = TaskQueueHelper.hasTasksOfType(defaultQueue, GetProfileTask.class);
+        boolean hasSignupsTask = TaskQueueHelper.hasTasksOfType(defaultQueue, GetProfileSignupsTask.class);
 
-        if (rbTaskInProgress) {
-            if (progress != null) {
-                progress.setVisibility(View.VISIBLE);
-            }
-        }
-        else {
-            if (progress != null) {
-                progress.setVisibility(View.GONE);
-            }
+        if (!hasProfileTask && !hasSignupsTask) {
+            mProgressDialog.dismiss();
         }
     }
 
@@ -318,20 +289,19 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(GetUserTask task) {
+    public void onEventMainThread(GetProfileTask task) {
         adapter.addUser(task.user);
-        mProgressDialog.dismiss();
+
+        dismissProgressDialogIfDone();
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(DbGetUserTask task)
-    {
-        adapter.addUser(task.user);
+    public void onEventMainThread(GetProfileSignupsTask task) {
+        dismissProgressDialogIfDone();
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(UploadAvatarTask task)
-    {
+    public void onEventMainThread(UploadAvatarTask task) {
         adapter.addUser(task.user);
     }
 

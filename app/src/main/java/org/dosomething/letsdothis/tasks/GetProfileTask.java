@@ -4,8 +4,6 @@ import android.content.Context;
 import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.NetworkHelper;
-import org.dosomething.letsdothis.network.models.ResponseProfileReportbacks;
-import org.dosomething.letsdothis.network.models.ResponseProfileSignups;
 import org.dosomething.letsdothis.network.models.ResponseUser;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
@@ -14,10 +12,10 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
 /**
  * Created by toidiu on 4/16/15.
  */
-public class GetUserTask extends BaseNetworkErrorHandlerTask {
+public class GetProfileTask extends BaseNetworkErrorHandlerTask {
     public User user;
 
-    public GetUserTask() {
+    public GetProfileTask() {
     }
 
     @Override
@@ -26,13 +24,8 @@ public class GetUserTask extends BaseNetworkErrorHandlerTask {
         String token = appPrefs.getSessionToken();
         ResponseUser response = NetworkHelper.getNorthstarAPIService().userProfile(token);
 
-        // @todo These calls probably belong in their own tasks
-        ResponseProfileSignups signup = NetworkHelper.getNorthstarAPIService().userProfileSignups(token);
-        ResponseProfileReportbacks reportbacks = NetworkHelper.getNorthstarAPIService().userProfileReportbacks(token);
-
         user = ResponseUser.getUser(response);
 
-        // @TODO we should maybe not allow this to run if id != user current id
         DatabaseHelper.getInstance(context).getUserDao().createOrUpdate(user);
     }
 
