@@ -297,7 +297,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     public void onEventMainThread(GetProfileTask task) {
         dismissProgressDialogIfDone();
 
-        mAdapter.addUser(task.getResult());
+        mAdapter.setUser(task.getResult());
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -322,7 +322,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(UploadAvatarTask task) {
-        mAdapter.addUser(task.user);
+        mAdapter.setUser(task.user);
     }
 
 }
