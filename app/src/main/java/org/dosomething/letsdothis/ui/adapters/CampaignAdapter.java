@@ -407,7 +407,6 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     {
         private         View     campaignDetailsWrapper;
         public          TextView callToAction;
-        public          TextView expire_label;
         private final   View     slantedBg;
         private final   View     notSignedUp;
         private final   View     alreadySignedUp;
@@ -416,7 +415,6 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public ExpandedCampaignViewHolder(View itemView)
         {
             super(itemView);
-            expire_label = (TextView) itemView.findViewById(R.id.expire_label);
             callToAction = (TextView) itemView.findViewById(R.id.call_to_action);
             slantedBg = itemView.findViewById(R.id.slanted_bg);
             signedupIndicator = itemView.findViewById(R.id.signedup_indicator);

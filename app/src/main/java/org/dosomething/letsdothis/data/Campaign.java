@@ -1,9 +1,6 @@
 package org.dosomething.letsdothis.data;
 import com.j256.ormlite.field.DatabaseField;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by izzyoji :) on 4/17/15.
  */
@@ -41,16 +38,11 @@ public class Campaign
     @DatabaseField(columnName = INTEREST_GROUP)
     public int    interestGroup;
 
-
-    public List<User> group  = new ArrayList<>();
-    public int    signupGroup;
-
     public boolean userIsSignedUp = false;
 
     public UserReportBack userReportBack;
 
-    public enum UploadShare
-    {
+    public enum UploadShare {
         UPLOADING,
         SHOW_OFF,
         SHARE

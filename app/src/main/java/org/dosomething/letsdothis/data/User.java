@@ -22,6 +22,8 @@ public class User
     @DatabaseField
     public String first_name;
     @DatabaseField
+    public String last_initial;
+    @DatabaseField
     public String last_name;
     @DatabaseField
     public String birthdate;
@@ -62,6 +64,9 @@ public class User
         JSONObject jsonObject = new JSONObject();
         if (user.first_name != null && !user.first_name.isEmpty()) {
             jsonObject.put("first_name", user.first_name);
+        }
+        if (user.last_initial != null && !user.last_initial.isEmpty()) {
+            jsonObject.put("last_initial", user.last_initial);
         }
         if (user.last_name != null && !user.last_name.isEmpty()) {
             jsonObject.put("last_name", user.last_name);

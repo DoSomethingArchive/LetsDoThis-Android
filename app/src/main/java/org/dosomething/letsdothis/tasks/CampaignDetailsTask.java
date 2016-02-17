@@ -37,7 +37,6 @@ public class CampaignDetailsTask extends BaseNetworkErrorHandlerTask
         {
             if(campaignId == c.drupal_id)
             {
-                campaign.signupGroup = c.signup_group;
                 if(c.reportback_data != null)
                 {
                     campaign.showShare = Campaign.UploadShare.SHARE;
