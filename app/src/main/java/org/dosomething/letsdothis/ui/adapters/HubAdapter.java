@@ -139,6 +139,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (user.country != null) {
                 Locale locale = new Locale("", user.country);
                 profileViewHolder.userCountry.setText(locale.getDisplayCountry());
+                profileViewHolder.userCountry.setAlpha(0.26f);
             }
         }
         else if (getItemViewType(position) == VIEW_TYPE_CURRENT_CAMPAIGN) {
@@ -327,8 +328,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public int getItemCount()
-    {
+    public int getItemCount() {
         return mHubList.size();
     }
 
@@ -345,8 +345,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    public Campaign getClickedCampaign()
-    {
+    public Campaign getClickedCampaign() {
         return mClickedCampaign;
     }
 
