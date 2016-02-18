@@ -16,9 +16,11 @@ import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.data.UserReportBack;
 import org.dosomething.letsdothis.network.models.ResponseProfileCampaign;
+import org.dosomething.letsdothis.network.models.ResponseProfileSignups;
 import org.dosomething.letsdothis.ui.CampaignDetailsActivity;
 import org.dosomething.letsdothis.ui.ReportBackDetailsActivity;
 
@@ -37,9 +39,11 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int    VIEW_TYPE_CURRENT_EMPTY    = 4;
     private static final int    VIEW_TYPE_PUBLIC_EMPTY     = 5;
     private static final int    VIEW_TYPE_CURRENT_SIGNUPS  = 6;
+    private static final int    VIEW_TYPE_REPORTBACKS      = 7;
 
     private static final String CURRENT_SIGNUPS_LABEL_STUB = "PLACEHOLDER: CURRENT_SIGNUPS_LABEL_STUB";
     private static final String CURRENT_CAMPAIGNS_EMPTY_STUB = "PLACEHOLDER: CURRENT_CAMPAIGNS_EMPTY_STUB";
+    private static final String REPORTBACKS_LABEL_STUB = "PLACEHOLDER: REPORTBACKS_LABEL_STUB";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private ArrayList<Object> mHubList = new ArrayList<>();
@@ -47,6 +51,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private boolean mIsPublic = false;
     private Campaign mClickedCampaign;
     private Context mContext;
+    private User mUser;
 
     public HubAdapter(Context context, HubAdapterClickListener hubAdapterClickListener, boolean isPublic) {
         super();
@@ -79,7 +84,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_hub_current_campaign, parent, false);
                 return new CurrentCampaignViewHolder(v);
-            // @todo May not make sense anymore. Consider replacing it with something like a VIEW_TYPE_DONE_CAMPAIGN
+            // @todo May not make sense anymore. Consider replacing it with something like a VIEW_TYPE_REPORTBACKS
             case VIEW_TYPE_PAST_CAMPAIGN:
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_hub_past_campaign, parent, false);
@@ -96,6 +101,10 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_hub_current_campaign, parent, false);
                 return new CurrentCampaignViewHolder(v);
+            case VIEW_TYPE_REPORTBACKS:
+                v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_report_back_expanded, parent, false);
+                return new ReportBackViewHolder(v);
             default:
                 return null;
         }
@@ -108,6 +117,9 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             String s = (String) mHubList.get(position);
             if (s.equals(CURRENT_SIGNUPS_LABEL_STUB)) {
                 viewHolder.textView.setText(R.string.hub_current_label);
+            }
+            else if (s.equals(REPORTBACKS_LABEL_STUB)) {
+                viewHolder.textView.setText(R.string.hub_done_label);
             }
             else {
                 viewHolder.textView.setText(s);
@@ -128,19 +140,9 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         .into(profileViewHolder.userImage);
             }
 
-
-            String first = user.first_name;
-            String last = user.last_initial != null ? user.last_initial + "." : "";
-
-            String displayName = String.format("%s %s", first, last).trim();
-            profileViewHolder.name.setText(displayName);
-
-            // Convert from country code to display name
-            if (user.country != null) {
-                Locale locale = new Locale("", user.country);
-                profileViewHolder.userCountry.setText(locale.getDisplayCountry());
-                profileViewHolder.userCountry.setAlpha(0.26f);
-            }
+            profileViewHolder.name.setText(formatUserDisplayName(user.first_name, user.last_initial));
+            profileViewHolder.userCountry.setText(formatUserLocation(user.country));
+            profileViewHolder.userCountry.setAlpha(0.26f);
         }
         else if (getItemViewType(position) == VIEW_TYPE_CURRENT_CAMPAIGN) {
             final Campaign campaign = (Campaign) mHubList.get(position);
@@ -259,6 +261,40 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             viewHolder.title.setText(campaign.title);
         }
+        else if (getItemViewType(position) == VIEW_TYPE_REPORTBACKS) {
+            final ResponseProfileSignups.Signup action = (ResponseProfileSignups.Signup) mHubList.get(position);
+            final ReportBackViewHolder rbViewHolder = (ReportBackViewHolder) holder;
+            final Context context = rbViewHolder.itemView.getContext();
+
+            // Use previously received User info
+            if (mUser != null) {
+                rbViewHolder.name.setText(formatUserDisplayName(mUser.first_name, mUser.last_initial));
+                rbViewHolder.location.setText(formatUserLocation(mUser.country));
+
+                if (mUser.avatarPath != null) {
+                    Picasso.with(((ProfileViewHolder) holder).userImage.getContext())
+                            .load(mUser.avatarPath).placeholder(R.drawable.ic_action_user)
+                            .resizeDimen(R.dimen.hub_avatar_height, R.dimen.hub_avatar_height)
+                            .into(rbViewHolder.avatar);
+                }
+            }
+
+            // Report back photo
+            int lastImageIndex = action.reportback.reportback_items.total - 1;
+            ReportBack rbItem = action.reportback.reportback_items.data[lastImageIndex];
+            Picasso.with(context).load(rbItem.getImagePath()).into(rbViewHolder.image);
+
+
+            // Report back campaign name and details
+            final int quantity = action.reportback.quantity;
+            final String noun = action.campaign.reportback_info.noun;
+            final String verb = action.campaign.reportback_info.verb;
+            rbViewHolder.title.setText(action.campaign.title);
+            rbViewHolder.caption.setText(rbItem.caption);
+
+            String impactText = String.format("%d %s %s", quantity, noun, verb);
+            rbViewHolder.impact.setText(impactText);
+        }
         else if (getItemViewType(position) == VIEW_TYPE_CURRENT_EMPTY) {
             EmptyViewHolder viewHolder = (EmptyViewHolder) holder;
 
@@ -297,8 +333,42 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         else if (currentObject instanceof ResponseProfileCampaign) {
             return VIEW_TYPE_CURRENT_SIGNUPS;
         }
+        else if (currentObject instanceof ResponseProfileSignups.Signup) {
+            return VIEW_TYPE_REPORTBACKS;
+        }
 
         return 0;
+    }
+
+    /**
+     * Helper function to format the user's location.
+     *
+     * @param country User country location
+     * @return String
+     */
+    private String formatUserLocation(String country) {
+        if (country != null && ! country.isEmpty()) {
+            Locale locale = new Locale("", country);
+            return locale.getDisplayCountry();
+        }
+
+        return "";
+    }
+
+    /**
+     * Helper function to format the displayed username.
+     *
+     * @param first User first name
+     * @param lastInitial User last initial, if any
+     * @return String
+     */
+    private String formatUserDisplayName(String first, String lastInitial) {
+        String last = "";
+        if (lastInitial != null && ! lastInitial.isEmpty()) {
+            last = lastInitial + ".";
+        }
+
+        return String.format("%s %s", first, last).trim();
     }
 
     /**
@@ -307,6 +377,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      * @param user
      */
     public void setUser(User user) {
+        mUser = user;
+
         if (! mHubList.isEmpty() && mHubList.get(0) instanceof User) {
             mHubList.set(0, user);
         }
@@ -318,12 +390,33 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     /**
-     * Adds current campaigns a user is signed up for to the Hub.
+     * Sets the current campaigns a user is signed up for to the Hub.
      *
      * @param campaigns Array of campaigns
      */
     public void setCurrentSignups(ArrayList<ResponseProfileCampaign> campaigns) {
         mHubList.addAll(campaigns);
+        notifyDataSetChanged();
+    }
+
+    /**
+     * Sets the user's completed actions to display to the Hub.
+     *
+     * @param actions A signup with a corresponding reportback
+     */
+    public void setCompletedActions(ArrayList<ResponseProfileSignups.Signup> actions) {
+        // Remove items in the current "actions done" list and replace it with the new ones
+        if (mHubList.indexOf(REPORTBACKS_LABEL_STUB) >= 0) {
+            for (int i = mHubList.size() - 1; i > mHubList.indexOf(REPORTBACKS_LABEL_STUB); i--) {
+                mHubList.remove(i);
+            }
+        }
+        // Add the "actions done" label
+        else {
+            mHubList.add(REPORTBACKS_LABEL_STUB);
+        }
+
+        mHubList.addAll(actions);
         notifyDataSetChanged();
     }
 
@@ -380,6 +473,28 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             reportbackImage = (ImageView) itemView.findViewById(R.id.reportback_image);
             count = (TextView) itemView.findViewById(R.id.count);
             share = (Button) itemView.findViewById(R.id.prove_share);
+        }
+    }
+
+    public static class ReportBackViewHolder extends RecyclerView.ViewHolder {
+        protected ImageView avatar;
+        protected TextView caption;
+        protected ImageView image;
+        protected TextView impact;
+        protected TextView location;
+        protected TextView name;
+        protected TextView title;
+
+        public ReportBackViewHolder(View itemView) {
+            super(itemView);
+
+            avatar = (ImageView) itemView.findViewById(R.id.avatar);
+            caption = (TextView) itemView.findViewById(R.id.caption);
+            image = (ImageView) itemView.findViewById(R.id.image);
+            impact = (TextView) itemView.findViewById(R.id.impact);
+            location = (TextView) itemView.findViewById(R.id.location);
+            name = (TextView) itemView.findViewById(R.id.name);
+            title = (TextView) itemView.findViewById(R.id.title);
         }
     }
 

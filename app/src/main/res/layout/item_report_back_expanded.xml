@@ -30,6 +30,7 @@
             app:draw_border="true"
             app:border_color="@color/white"
             android:layout_marginTop="@dimen/padding_medium"
+            android:src="@drawable/default_profile_photo"
             tools:src="@drawable/placeholder"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView

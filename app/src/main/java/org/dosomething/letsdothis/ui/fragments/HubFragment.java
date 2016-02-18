@@ -304,19 +304,23 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         dismissProgressDialogIfDone();
 
         ArrayList<ResponseProfileCampaign> currentSignups = new ArrayList<>();
+        ArrayList<ResponseProfileSignups.Signup> completedActions = new ArrayList<>();
         if (task.getResult() != null) {
             ResponseProfileSignups signups = task.getResult();
             for (int i = 0; i < signups.data.length; i++) {
-                // @todo We'll probably want to lists in the end.
-                //   1. Campaigns that are current that only have a signup, no reportback
-                //   2. Campaigns that have a reportback, regardless of whether or not it's current
-                if (signups.data[i].campaign_run.current) {
+                // Campaigns that the user has signed up for and reported back on
+                if (signups.data[i].reportback != null) {
+                    completedActions.add(signups.data[i]);
+                }
+                // Campaigns that the user has signed up for but has no reportback yet
+                else if (signups.data[i].campaign_run.current) {
                     currentSignups.add(signups.data[i].campaign);
                 }
             }
         }
 
         mAdapter.setCurrentSignups(currentSignups);
+        mAdapter.setCompletedActions(completedActions);
     }
 
     @SuppressWarnings("UnusedDeclaration")
