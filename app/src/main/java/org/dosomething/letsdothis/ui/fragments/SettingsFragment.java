@@ -22,7 +22,11 @@ import org.dosomething.letsdothis.utils.AppPrefs;
  */
 public class SettingsFragment extends PreferenceFragment implements ConfirmDialog.ConfirmListener
 {
+    // Listener for setting the screen title
     private SetTitleListener setTitleListener;
+
+    // Listener for showing or dismissing a ProgressDialog
+    private ShowProgressDialogListener mShowProgressDialogListener;
 
     // Google Analytics tracker
     private Tracker mTracker;
@@ -53,6 +57,7 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
     {
         super.onAttach(activity);
         setTitleListener = (SetTitleListener) getActivity();
+        mShowProgressDialogListener = (ShowProgressDialogListener) getActivity();
     }
 
     @Override
@@ -170,8 +175,21 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
     }
 
     @Override
-    public void onConfirmClick()
-    {
+    public void onConfirmClick() {
+        mShowProgressDialogListener.showProgressDialog(getString(R.string.progress_dialog_logout));
+
         BaseActivity.logOutUser(getActivity());
+    }
+
+    /**
+     * Interface the fragment can communicate through to show and dismiss a ProgressDialog.
+     */
+    public interface ShowProgressDialogListener {
+        /**
+         * Create and display a ProgressDialog.
+         *
+         * @param message Message to display
+         */
+        void showProgressDialog(String message);
     }
 }

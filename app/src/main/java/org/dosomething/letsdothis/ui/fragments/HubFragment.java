@@ -124,8 +124,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
         // @todo Evaluate if we actually want to use a blocking progress dialog
         mProgressDialog = new ProgressDialog(getActivity());
-        mProgressDialog.setTitle("Loading Profile...");
-        mProgressDialog.setMessage("Please wait...");
+        mProgressDialog.setMessage(getString(R.string.progress_dialog_hub));
         mProgressDialog.show();
 
         if (publicId != null) {
