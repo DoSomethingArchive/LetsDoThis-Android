@@ -126,8 +126,6 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         void shareClicked(Campaign campaign);
 
-        void inviteClicked();
-
         void onUserClicked(String id);
 
         void onKudosClicked(ReportBack reportBack, Kudos kudos);

@@ -35,10 +35,9 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
     public static final int    VIEW_TYPE_CAMPAIGN           = 0;
     public static final int    VIEW_TYPE_CAMPAIGN_EXPANDED  = 1;
-    public static final int    V_TYPE_CAMP_EXPANDED_EXPIRED = 2;
-    public static final int    VIEW_TYPE_CAMPAIGN_SMALL     = 3;
-    public static final int    VIEW_TYPE_CAMPAIGN_FOOTER    = 4;
-    public static final int    VIEW_TYPE_REPORT_BACK        = 5;
+    public static final int    VIEW_TYPE_CAMPAIGN_SMALL     = 2;
+    public static final int    VIEW_TYPE_CAMPAIGN_FOOTER    = 3;
+    public static final int    VIEW_TYPE_REPORT_BACK        = 4;
     public static final String PLACEHOLDER                  = "placeholder";
 
     private final int shadowColor;
@@ -84,11 +83,6 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         {
             if(position == selectedPosition)
             {
-                Campaign camp = (Campaign) currentObject;
-                if(TimeUtils.isCampaignExpired(camp))
-                {
-                    return V_TYPE_CAMP_EXPANDED_EXPIRED;
-                }
                 return VIEW_TYPE_CAMPAIGN_EXPANDED;
             }
             else if(selectedPosition != - 1)
@@ -124,10 +118,6 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_report_back_square, parent, false);
                 return new ReportBackViewHolder((ReportBackImageView) v);
-            case V_TYPE_CAMP_EXPANDED_EXPIRED:
-                v = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_campaign_expired_large, parent, false);
-                return new ExpandedExpireCampaignViewHolder(v);
             case VIEW_TYPE_CAMPAIGN_EXPANDED:
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_campaign_large, parent, false);
@@ -245,53 +235,6 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 smallCampaignViewHolder.imageView.setColorFilter(new ColorMatrixColorFilter(cm));
             }
         }
-        else if(getItemViewType(position) == V_TYPE_CAMP_EXPANDED_EXPIRED)
-        {
-            final Campaign campaign = (Campaign) dataSet.get(position);
-            final ExpandedExpireCampaignViewHolder viewHolder = (ExpandedExpireCampaignViewHolder) holder;
-
-            viewHolder.title.setText(campaign.title);
-            viewHolder.callToAction.setText(campaign.callToAction);
-
-            int height = resources.getDimensionPixelSize(R.dimen.campaign_height_expanded);
-
-            CharSequence tag = (CharSequence) viewHolder.imageView.getTag();
-
-            if(! TextUtils.equals(campaign.imagePath, tag))
-            {
-                Picasso.with(context).load(campaign.imagePath).resize(0, height)
-                        .into(viewHolder.imageView);
-                viewHolder.imageView.setTag(campaign.imagePath);
-            }
-            viewHolder.imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    selectedPosition = -1;
-                    notifyItemChanged(position);
-
-                    campaignAdapterClickListener.onCampaignCollapsed();
-                }
-            });
-
-            final SlantedBackgroundDrawable background = new SlantedBackgroundDrawable(false,
-                                                                                       Color.WHITE,
-                                                                                       shadowColor,
-                                                                                       slantHeight,
-                                                                                       widthOvershoot,
-                                                                                       heightShadowOvershoot);
-            viewHolder.slantedBg.setBackground(background);
-            viewHolder.refreshCopy.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    campaignAdapterClickListener.onNetworkCampaignRefresh();
-                    //FIXME show progress bar
-                }
-            });
-
-            ColorMatrix cm = new ColorMatrix();
-            cm.setSaturation(0);
-            viewHolder.imageView.setColorFilter(new ColorMatrixColorFilter(cm));
-        }
         else if(getItemViewType(position) == VIEW_TYPE_CAMPAIGN_EXPANDED)
         {
             final Campaign campaign = (Campaign) dataSet.get(position);
@@ -345,21 +288,6 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     campaignAdapterClickListener.onCampaignClicked(campaign.id, campaign.userIsSignedUp);
                 }
             });
-
-            // If campaign.endTime isn't specified by the server, then don't show the expires label
-            if (campaign.endTime == 0) {
-                viewHolder.expire_label.setVisibility(View.GONE);
-                viewHolder.daysWrapper.setVisibility(View.GONE);
-            }
-            else {
-                viewHolder.expire_label.setVisibility(View.VISIBLE);
-                viewHolder.daysWrapper.setVisibility(View.VISIBLE);
-
-                List<String> campExpTime = TimeUtils.getTimeUntilExpiration(campaign.endTime);
-                int dayInt = Integer.parseInt(campExpTime.get(0));
-                viewHolder.daysLabel.setText(resources.getQuantityString(R.plurals.days, dayInt));
-                viewHolder.days.setText(String.valueOf(dayInt));
-            }
         }
         else if(getItemViewType(position) == VIEW_TYPE_REPORT_BACK)
         {
@@ -479,45 +407,20 @@ public class CampaignAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     {
         private         View     campaignDetailsWrapper;
         public          TextView callToAction;
-        public          TextView expire_label;
-        public          TextView days;
-        public          TextView daysLabel;
         private final   View     slantedBg;
         private final   View     notSignedUp;
         private final   View     alreadySignedUp;
         protected final View     signedupIndicator;
-        protected final View     daysWrapper;
 
         public ExpandedCampaignViewHolder(View itemView)
         {
             super(itemView);
-            expire_label = (TextView) itemView.findViewById(R.id.expire_label);
             callToAction = (TextView) itemView.findViewById(R.id.call_to_action);
-            daysWrapper = itemView.findViewById(R.id.days_wrapper);
             slantedBg = itemView.findViewById(R.id.slanted_bg);
             signedupIndicator = itemView.findViewById(R.id.signedup_indicator);
             campaignDetailsWrapper = itemView.findViewById(R.id.campaign_details_wrapper);
             notSignedUp = campaignDetailsWrapper.findViewById(R.id.not_signedup);
             alreadySignedUp = campaignDetailsWrapper.findViewById(R.id.signedup);
-            days = (TextView) itemView.findViewById(R.id.days);
-            daysLabel = (TextView) itemView.findViewById(R.id.days_label);
-        }
-    }
-
-    public static class ExpandedExpireCampaignViewHolder extends CampaignViewHolder
-    {
-        private       View     refreshCopy;
-        public        TextView callToAction;
-        public        TextView expired;
-        private final View     slantedBg;
-
-        public ExpandedExpireCampaignViewHolder(View itemView)
-        {
-            super(itemView);
-            expired = (TextView) itemView.findViewById(R.id.expired_already);
-            callToAction = (TextView) itemView.findViewById(R.id.call_to_action);
-            slantedBg = itemView.findViewById(R.id.slanted_bg);
-            refreshCopy = itemView.findViewById(R.id.refresh_copy);
         }
     }
 }

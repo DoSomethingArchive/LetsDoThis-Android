@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.ui;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -32,6 +33,9 @@ public class LoginActivity extends BaseActivity
 
     // Google Analytics tracker
     private Tracker mTracker;
+
+    // Progress dialog while login is in progress
+    private ProgressDialog mProgressDialog;
 
     public static Intent getLaunchIntent(Context context)
     {
@@ -110,6 +114,9 @@ public class LoginActivity extends BaseActivity
                 if (isValid) {
                     TaskQueue.loadQueueDefault(LoginActivity.this)
                              .execute(new LoginTask(usertext, passtext));
+                    mProgressDialog = new ProgressDialog(LoginActivity.this);
+                    mProgressDialog.setMessage(getResources().getString(R.string.progress_dialog_login));
+                    mProgressDialog.show();
                 }
             }
         });
@@ -118,6 +125,8 @@ public class LoginActivity extends BaseActivity
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(LoginTask task) {
+        mProgressDialog.dismiss();
+
         if (AppPrefs.getInstance(this).isLoggedIn()) {
             broadcastLogInSuccess(this);
             startActivity(MainActivity.getLaunchIntent(this));

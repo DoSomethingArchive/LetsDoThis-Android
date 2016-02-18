@@ -4,7 +4,7 @@
   "description": "## Development",
   "main": "index.js",
   "dependencies": {
-    "react-native": "^0.17.0"
+    "react-native": "^0.19.0"
   },
   "devDependencies": {},
   "scripts": {

@@ -17,6 +17,7 @@ public class AnalyticsUtils {
     public static final String CATEGORY_ACCOUNT = "account";
     public static final String CATEGORY_CAMPAIGN = "campaign";
     public static final String CATEGORY_BEHAVIOR = "behavior";
+    public static final String CATEGORY_NEWS = "news";
 
     // Account category actions
     public static final String ACTION_FORGOT_PASSWORD = "forgot password";
@@ -38,11 +39,17 @@ public class AnalyticsUtils {
     public static final String ACTION_TAP_PRIVACY_POLICY = "tap on privacy policy";
     public static final String ACTION_TAP_REVIEW_APP_BUTTON = "tap on review app button";
 
+    // News category actions
+    public static final String ACTION_READ_NEWS = "read";
+    public static final String ACTION_SHARE_NEWS = "share";
+    public static final String ACTION_TAKE_ACTION = "take action";
+
     // Screen names
     public static final String SCREEN_CAMPAIGN = "campaign/%1$d/%2$s";
     public static final String SCREEN_CAUSE_LIST = "causes";
-    public static final String SCREEN_CAUSE = "causes/%1$d";
+    public static final String SCREEN_CAUSE = "causes/%1$s";
     public static final String SCREEN_INTEREST_GROUP = "taxonomy_term/%1$d";
+    public static final String SCREEN_NEWS = "news";
     public static final String SCREEN_ONBOARDING_1 = "onboarding-first";
     public static final String SCREEN_ONBOARDING_2 = "onboarding-second";
     public static final String SCREEN_REPORTBACK_FORM = "campaign/%1$d/reportbackform";
@@ -52,6 +59,7 @@ public class AnalyticsUtils {
     public static final String SCREEN_USER_LOGIN = "user-login";
     public static final String SCREEN_USER_PROFILE = "user-profile/%1$s";
     public static final String SCREEN_USER_REGISTER = "user-register";
+    public static final String SCREEN_WEBVIEW = "webview";
 
     /**
      * Send event to Google Analytics.

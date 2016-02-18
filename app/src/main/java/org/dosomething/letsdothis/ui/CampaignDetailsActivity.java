@@ -193,13 +193,6 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     }
 
     @Override
-    public void inviteClicked() {
-        Campaign campaign = adapter.getCampaign();
-        startActivity(
-                CampaignInviteActivity.getLaunchIntent(this, campaign.title, campaign.signupGroup));
-    }
-
-    @Override
     public void onUserClicked(String id) {
         startActivity(PublicProfileActivity.getLaunchIntent(this, id));
     }

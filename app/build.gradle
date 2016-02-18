@@ -25,9 +25,6 @@ def FACEBOOK_APP_ID_PROD = secrets.getProperty("FacebookAppIdProduction") ?: "Ne
 def FACEBOOK_APP_ID_DEBUG = secrets.getProperty("FacebookAppIdDebug") ?: "Need to set FacebookAppIdDebug in app/secrets.properties";
 def PARSE_APP_ID = secrets.getProperty("ParseAppId") ?: "Need to set ParseAppId in app/secrets.properties";
 def PARSE_CLIENT_KEY = secrets.getProperty("ParseClientKey") ?: "Need to set ParseClientKey in app/secrets.properties";
-def NORTHSTAR_APP_ID_DEBUG = secrets.getProperty("NorthstarAppIdDebug") ?: "Need to set NorthstarAppIdDebug in app/secrets.properties";
-def NORTHSTAR_APP_ID_THOR = secrets.getProperty("NorthstarAppIdThor") ?: "Need to set NorthstarAppIdThor in app/secrets.properties";
-def NORTHSTAR_APP_ID_PROD = secrets.getProperty("NorthstarAppIdProduction") ?: "Need to set NorthstarAppIdProduction in app/secrets.properties";
 def NORTHSTAR_API_KEY_DEBUG = secrets.getProperty("NorthstarApiKeyDebug") ?: "Need to set NorthstarApiKeyDebug in app/secrets.properties";
 def NORTHSTAR_API_KEY_THOR = secrets.getProperty("NorthstarApiKeyThor") ?: "Need to set NorthstarApiKeyThor in app/secrets.properties";
 def NORTHSTAR_API_KEY_PROD = secrets.getProperty("NorthstarApiKeyProduction") ?: "Need to set NorthstarApiKeyProduction in app/secrets.properties";
@@ -42,17 +39,23 @@ android {
         applicationId "org.dosomething.letsdothis"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0.3"
+        versionCode 2
+        versionName "1.0.4"
         resValue "string", "fabric_api_key", FABRIC_API_KEY
         resValue "string", "facebook_app_id", FACEBOOK_APP_ID_PROD
         resValue "string", "parse_app_id", PARSE_APP_ID
         resValue "string", "parse_client_key", PARSE_CLIENT_KEY
-        resValue "string", "northstar_app_id", NORTHSTAR_APP_ID_PROD
         resValue "string", "northstar_api_key", NORTHSTAR_API_KEY_PROD
 
         // Enabling multidex support.
         multiDexEnabled true
+
+        // React Native HACK: exclude 64-bit binaries
+        // @see https://github.com/facebook/react-native/issues/2814
+        // @see https://corbt.com/posts/2015/09/18/mixing-32-and-64bit-dependencies-in-android.html
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
     }
     signingConfigs {
         release {
@@ -66,14 +69,12 @@ android {
         debug {
             debuggable true
             resValue "string", "facebook_app_id", FACEBOOK_APP_ID_DEBUG
-            resValue "string", "northstar_app_id", NORTHSTAR_APP_ID_DEBUG
             resValue "string", "northstar_api_key", NORTHSTAR_API_KEY_DEBUG
         }
         internal {
             debuggable true
             signingConfig signingConfigs.debug
             resValue "string", "facebook_app_id", FACEBOOK_APP_ID_DEBUG
-            resValue "string", "northstar_app_id", NORTHSTAR_APP_ID_THOR
             resValue "string", "northstar_api_key", NORTHSTAR_API_KEY_THOR
         }
         release {
@@ -94,6 +95,9 @@ android {
             exclude 'META-INF/license.txt'
             exclude 'META-INF/dependencies.txt'
             exclude 'META-INF/LGPL2.1'
+
+            // React Native HACK: excluding 64-bit binaries
+            exclude "lib/arm64-v8a/librealm-jni.so"
         }
     }
 }
@@ -119,7 +123,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.1.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.facebook.android:facebook-android-sdk:4.7.0'
-    compile 'com.facebook.react:react-native:0.17.0'
+    compile 'com.facebook.react:react-native:0.19.0'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {
         transitive = true;
     }

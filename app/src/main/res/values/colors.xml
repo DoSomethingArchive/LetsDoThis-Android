@@ -37,7 +37,6 @@
     <color name="dark_gray">#4A4A4A</color>
     <color name="silver">#CCCCCC</color>
     <color name="alto">#D8D8D8</color>
-    <color name="invite_code">#FFCF00</color>
     <color name="signedup_indicator">#96BF67</color>
     <color name="transparent">#00000000</color>
     <color name="black_95">#F2000000</color>
@@ -78,6 +77,8 @@
     <color name="circle_indicator">#F72959</color>
     <color name="fb_bg">#3b579d</color>
     <color name="hint">#D6D6D6</color>
+    <color name="profile_bg_end">#FF3634AD</color>
+    <color name="profile_bg_start">#FFEF2D3B</color>
     <color name="snack_error">#d0021b</color>
     <color name="snack_success">#0fad22</color>
     <color name="theme_primary">#352FB0</color>

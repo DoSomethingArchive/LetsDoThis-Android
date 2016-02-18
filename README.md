@@ -1,4 +1,4 @@
-# Let's Do This
+# DoSomething Android App
 
 ## Development
 

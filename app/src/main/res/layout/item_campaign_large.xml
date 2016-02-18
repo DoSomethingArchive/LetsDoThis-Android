@@ -87,14 +87,4 @@
 
     </RelativeLayout>
 
-
-    <include
-        layout="@layout/item_hub_expire"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/slanted_wrapper"
-        android:paddingBottom="@dimen/padding_small"
-        android:paddingLeft="@dimen/padding_small"
-        android:paddingRight="@dimen/padding_small"/>
-
 </RelativeLayout>

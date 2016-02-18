@@ -40,7 +40,6 @@ public class ResponseCampaign
         campaign.showShare = Campaign.UploadShare.SHOW_OFF;
         campaign.noun = response.reportback_info.noun;
         campaign.verb = response.reportback_info.verb;
-        campaign.group = new ArrayList<>();
         return campaign;
     }
 
