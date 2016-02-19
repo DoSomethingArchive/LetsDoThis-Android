@@ -82,7 +82,7 @@ var NewsFeedView = React.createClass({
   renderLoadingView: function() {
     return (
       <View style={styles.loadingContainer}>
-        <ProgressBarAndroid animating={this.state.animating} style={styles.loadingIndicator} styleAttr="Small" />
+        <ProgressBarAndroid animating={this.state.animating} style={styles.loadingIndicator} styleAttr="Normal" />
         <Text style={Theme.styles.textBody}>
           Loading news...
         </Text>
