@@ -40,12 +40,14 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<Object> mHubList = new ArrayList<>();
     private HubAdapterClickListener mHubAdapterClickListener;
     private boolean mIsPublic = false;
+    private Context mContext;
     private Campaign mClickedCampaign;
     private User mUser;
 
     public HubAdapter(Context context, HubAdapterClickListener hubAdapterClickListener, boolean isPublic) {
         super();
 
+        this.mContext = context;
         this.mHubAdapterClickListener = hubAdapterClickListener;
 
         // First row is user profile info
@@ -80,7 +82,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case VIEW_TYPE_CURRENT_SIGNUPS:
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_hub_signups, parent, false);
-                return new SignupViewHolder(v);
+                return new SignupViewHolder(v, mHubAdapterClickListener);
             case VIEW_TYPE_REPORTBACKS:
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_report_back_expanded, parent, false);
@@ -130,6 +132,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             viewHolder.title.setText(campaign.title);
             viewHolder.tagline.setText(campaign.tagline);
+
+            viewHolder.setCampaignId(Integer.parseInt(campaign.id));
         }
         else if (getItemViewType(position) == VIEW_TYPE_REPORTBACKS) {
             final ResponseProfileSignups.Signup action = (ResponseProfileSignups.Signup) mHubList.get(position);
@@ -325,33 +329,53 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
+    /**
+     * ViewHolder for current signups without a reportback.
+     */
     public static class SignupViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         protected final TextView title;
         protected final TextView tagline;
         protected final Button proveIt;
 
-        public SignupViewHolder(View itemView) {
+        // Reference to listener for the Share button
+        private HubAdapterClickListener clickHandler;
+
+        // ID for the campaign displayed in this item
+        private int campaignId;
+
+        public SignupViewHolder(View itemView, HubAdapterClickListener listener) {
             super(itemView);
 
             title = (TextView) itemView.findViewById(R.id.title);
             tagline = (TextView) itemView.findViewById(R.id.tagline);
             proveIt = (Button) itemView.findViewById(R.id.prove_it);
 
+            clickHandler = listener;
+
             title.setOnClickListener(this);
             proveIt.setOnClickListener(this);
+        }
+
+        public void setCampaignId(int id) {
+            campaignId = id;
         }
 
         @Override
         public void onClick(View v) {
             switch(v.getId()) {
                 case R.id.title:
+                    clickHandler.onCampaignClicked(campaignId);
                     break;
                 case R.id.prove_it:
+                    // @todo Handle the Prove It button click
                     break;
             }
         }
     }
 
+    /**
+     * ViewHolder for user reportbacks.
+     */
     public static class ReportBackViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         protected ImageView avatar;
         protected TextView caption;
@@ -385,6 +409,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             share.setVisibility(View.VISIBLE);
             share.setOnClickListener(this);
+            title.setOnClickListener(this);
         }
 
         public void setAction(ResponseProfileSignups.Signup action) {
@@ -397,21 +422,20 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @Override
         public void onClick(View v) {
-            clickHandler.onShareClicked(completedAction, rbItemIndex);
+            switch(v.getId()) {
+                case R.id.share:
+                    clickHandler.onShareClicked(completedAction, rbItemIndex);
+                    break;
+                case R.id.title:
+                    clickHandler.onCampaignClicked(Integer.parseInt(completedAction.campaign.id));
+                    break;
+            }
         }
     }
 
-    public static class PastCampaignViewHolder extends RecyclerView.ViewHolder {
-        protected final ImageView image;
-        protected final TextView  title;
-
-        public PastCampaignViewHolder(View itemView) {
-            super(itemView);
-            image = (ImageView) itemView.findViewById(R.id.image);
-            title = (TextView) itemView.findViewById(R.id.title);
-        }
-    }
-
+    /**
+     * ViewHolder for the empty view shown for the logged in user.
+     */
     public static class EmptyViewHolder extends RecyclerView.ViewHolder {
         public Button actions;
 
@@ -422,6 +446,9 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
+    /**
+     * ViewHolder for the empty view shown for other users.
+     */
     public static class PublicEmptyViewHolder extends RecyclerView.ViewHolder {
         public PublicEmptyViewHolder(View itemView) {
             super(itemView);
@@ -436,6 +463,13 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
          * @param rbItemIndex Index of reportback item being shared
          */
         void onShareClicked(ResponseProfileSignups.Signup completedAction, int rbItemIndex);
+
+        /**
+         * Handles click to open a campaign screen.
+         *
+         * @param campaignId The campaign id
+         */
+        void onCampaignClicked(int campaignId);
 
         void onProveClicked(Campaign campaign);
 

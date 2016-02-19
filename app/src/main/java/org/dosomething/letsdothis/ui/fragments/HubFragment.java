@@ -29,6 +29,7 @@ import org.dosomething.letsdothis.tasks.GetProfileTask;
 import org.dosomething.letsdothis.tasks.ProfileReportbackShareTask;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
 import org.dosomething.letsdothis.tasks.UploadAvatarTask;
+import org.dosomething.letsdothis.ui.CampaignDetailsActivity;
 import org.dosomething.letsdothis.ui.PhotoCropActivity;
 import org.dosomething.letsdothis.ui.ReportBackUploadActivity;
 import org.dosomething.letsdothis.ui.adapters.HubAdapter;
@@ -158,6 +159,12 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
+    }
+
+    @Override
+    public void onCampaignClicked(int campaignId) {
+        Intent intent = CampaignDetailsActivity.getLaunchIntent(getActivity(), campaignId);
+        startActivity(intent);
     }
 
     @Override
