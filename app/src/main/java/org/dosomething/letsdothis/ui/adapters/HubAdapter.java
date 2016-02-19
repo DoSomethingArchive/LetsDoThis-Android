@@ -84,7 +84,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case VIEW_TYPE_REPORTBACKS:
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_report_back_expanded, parent, false);
-                return new ReportBackViewHolder(v);
+                return new ReportBackViewHolder(v, mHubAdapterClickListener);
             default:
                 return null;
         }
@@ -153,7 +153,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ReportBack rbItem = action.reportback.reportback_items.data[lastImageIndex];
             Picasso.with(context).load(rbItem.getImagePath()).into(rbViewHolder.image);
 
-
             // Report back campaign name and details
             final int quantity = action.reportback.quantity;
             final String noun = action.campaign.reportback_info.noun;
@@ -163,6 +162,10 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             String impactText = String.format("%d %s %s", quantity, noun, verb);
             rbViewHolder.impact.setText(impactText);
+
+            // Setting data on view holder for use if the Share button is clicked
+            rbViewHolder.setAction(action);
+            rbViewHolder.setReportbackItemIndex(lastImageIndex);
         }
         else if (getItemViewType(position) == VIEW_TYPE_CURRENT_EMPTY) {
             EmptyViewHolder viewHolder = (EmptyViewHolder) holder;
@@ -342,16 +345,24 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    public static class ReportBackViewHolder extends RecyclerView.ViewHolder {
+    public static class ReportBackViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         protected ImageView avatar;
         protected TextView caption;
         protected ImageView image;
         protected TextView impact;
         protected TextView location;
         protected TextView name;
+        protected Button share;
         protected TextView title;
 
-        public ReportBackViewHolder(View itemView) {
+        // Reference to listener for the Share button
+        private HubAdapterClickListener clickHandler;
+
+        // Data to pass through the listener
+        private ResponseProfileSignups.Signup completedAction;
+        private int rbItemIndex;
+
+        public ReportBackViewHolder(View itemView, HubAdapterClickListener listener) {
             super(itemView);
 
             avatar = (ImageView) itemView.findViewById(R.id.avatar);
@@ -360,7 +371,26 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             impact = (TextView) itemView.findViewById(R.id.impact);
             location = (TextView) itemView.findViewById(R.id.location);
             name = (TextView) itemView.findViewById(R.id.name);
+            share = (Button) itemView.findViewById(R.id.share);
             title = (TextView) itemView.findViewById(R.id.title);
+
+            clickHandler = listener;
+
+            share.setVisibility(View.VISIBLE);
+            share.setOnClickListener(this);
+        }
+
+        public void setAction(ResponseProfileSignups.Signup action) {
+            completedAction = action;
+        }
+
+        public void setReportbackItemIndex(int index) {
+            rbItemIndex = index;
+        }
+
+        @Override
+        public void onClick(View v) {
+            clickHandler.onShareClicked(completedAction, rbItemIndex);
         }
     }
 
@@ -392,7 +422,13 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public interface HubAdapterClickListener {
-        void onShareClicked(Campaign campaign);
+        /**
+         * Handles what happens when a Share button is clicked.
+         *
+         * @param completedAction Reportback data being shared
+         * @param rbItemIndex Index of reportback item being shared
+         */
+        void onShareClicked(ResponseProfileSignups.Signup completedAction, int rbItemIndex);
 
         void onProveClicked(Campaign campaign);
 

@@ -18,6 +18,7 @@ public class ResponseProfileSignups {
         }
 
         public class ReportbackWrapper {
+            public String id;
             public int quantity;
             public ReportbackItemsWrapper reportback_items;
 
