@@ -26,9 +26,10 @@ import org.dosomething.letsdothis.network.models.ResponseProfileCampaign;
 import org.dosomething.letsdothis.network.models.ResponseProfileSignups;
 import org.dosomething.letsdothis.tasks.GetProfileSignupsTask;
 import org.dosomething.letsdothis.tasks.GetProfileTask;
-import org.dosomething.letsdothis.tasks.RbShareDataTask;
+import org.dosomething.letsdothis.tasks.ProfileReportbackShareTask;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
 import org.dosomething.letsdothis.tasks.UploadAvatarTask;
+import org.dosomething.letsdothis.ui.CampaignDetailsActivity;
 import org.dosomething.letsdothis.ui.PhotoCropActivity;
 import org.dosomething.letsdothis.ui.ReportBackUploadActivity;
 import org.dosomething.letsdothis.ui.adapters.HubAdapter;
@@ -161,8 +162,14 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @Override
-    public void onShareClicked(Campaign campaign) {
-        TaskQueue.loadQueueDefault(getActivity()).execute(new RbShareDataTask(campaign));
+    public void onCampaignClicked(int campaignId) {
+        Intent intent = CampaignDetailsActivity.getLaunchIntent(getActivity(), campaignId);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onShareClicked(ResponseProfileSignups.Signup completedAction, int rbItemIndex) {
+        TaskQueue.loadQueueDefault(getActivity()).execute(new ProfileReportbackShareTask(completedAction, rbItemIndex));
 
         AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR, AnalyticsUtils.ACTION_SHARE_PHOTO);
     }
@@ -185,7 +192,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
         String pickTitle = getString(R.string.select_picture);
         Intent chooserIntent = Intent.createChooser(takePhotoIntent, pickTitle);
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
 
         startActivityForResult(chooserIntent, SELECT_PICTURE);
     }
@@ -202,44 +209,46 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == SELECT_PICTURE) {
-                final boolean isCamera;
-                if (data == null || data.getData() == null) {
-                    isCamera = true;
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+
+        if (requestCode == SELECT_PICTURE) {
+            final boolean isCamera;
+            if (data == null || data.getData() == null) {
+                isCamera = true;
+            }
+            else {
+                final String action = data.getAction();
+                if (action == null) {
+                    isCamera = false;
                 }
                 else {
-                    final String action = data.getAction();
-                    if (action == null) {
-                        isCamera = false;
-                    }
-                    else {
-                        isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    }
+                    isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 }
-
-                Uri selectedImageUri;
-                if (isCamera) {
-                    selectedImageUri = mImageUri;
-                }
-                else {
-                    selectedImageUri = data.getData();
-                }
-
-                Intent photoCropIntent = PhotoCropActivity.getResultIntent(getActivity(),
-                        selectedImageUri.toString(), getString(R.string.share_photo), null);
-                startActivityForResult(photoCropIntent, PhotoCropActivity.RESULT_CODE);
             }
-            else if (requestCode == PhotoCropActivity.RESULT_CODE) {
-                String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
-                Campaign clickedCampaign = mAdapter.getClickedCampaign();
-                String format = String.format(getString(R.string.reportback_upload_hint),
-                        clickedCampaign.noun, clickedCampaign.verb);
 
-                Intent rbUploadIntent = ReportBackUploadActivity.getLaunchIntent(getActivity(),
-                        filePath, clickedCampaign.title, clickedCampaign.id, format);
-                startActivity(rbUploadIntent);
+            Uri selectedImageUri;
+            if (isCamera) {
+                selectedImageUri = mImageUri;
             }
+            else {
+                selectedImageUri = data.getData();
+            }
+
+            Intent photoCropIntent = PhotoCropActivity.getResultIntent(getActivity(),
+                    selectedImageUri.toString(), getString(R.string.share_photo), null);
+            startActivityForResult(photoCropIntent, PhotoCropActivity.RESULT_CODE);
+        }
+        else if (requestCode == PhotoCropActivity.RESULT_CODE) {
+            String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
+            Campaign clickedCampaign = mAdapter.getClickedCampaign();
+            String format = String.format(getString(R.string.reportback_upload_hint),
+                    clickedCampaign.noun, clickedCampaign.verb);
+
+            Intent rbUploadIntent = ReportBackUploadActivity.getLaunchIntent(getActivity(),
+                    filePath, clickedCampaign.title, clickedCampaign.id, format);
+            startActivity(rbUploadIntent);
         }
     }
 
@@ -257,28 +266,8 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(RbShareDataTask task) {
-        Intent share = new Intent(Intent.ACTION_SEND);
-        share.setType("text/plain");
-
-        share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-
-        // Add a default message if we have the data we need
-        if (task.getCampaign() != null) {
-            String defaultMessage = String.format(getString(R.string.share_reportback_message),
-                    task.getCampaign().verb,
-                    task.mQuantity,
-                    task.getCampaign().noun);
-            share.putExtra(Intent.EXTRA_TEXT, defaultMessage);
-        }
-
-        // Attach the file if we have it
-        if (task.mFile != null && task.mFile.exists()) {
-            Uri uri = Uri.fromFile(task.mFile);
-            share.putExtra(Intent.EXTRA_STREAM, uri);
-        }
-
-        startActivity(share);
+    public void onEventMainThread(ProfileReportbackShareTask task) {
+        startActivity(task.getShareIntent());
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -304,19 +293,23 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         dismissProgressDialogIfDone();
 
         ArrayList<ResponseProfileCampaign> currentSignups = new ArrayList<>();
+        ArrayList<ResponseProfileSignups.Signup> completedActions = new ArrayList<>();
         if (task.getResult() != null) {
             ResponseProfileSignups signups = task.getResult();
             for (int i = 0; i < signups.data.length; i++) {
-                // @todo We'll probably want to lists in the end.
-                //   1. Campaigns that are current that only have a signup, no reportback
-                //   2. Campaigns that have a reportback, regardless of whether or not it's current
-                if (signups.data[i].campaign_run.current) {
+                // Campaigns that the user has signed up for and reported back on
+                if (signups.data[i].reportback != null) {
+                    completedActions.add(signups.data[i]);
+                }
+                // Campaigns that the user has signed up for but has no reportback yet
+                else if (signups.data[i].campaign_run.current) {
                     currentSignups.add(signups.data[i].campaign);
                 }
             }
         }
 
         mAdapter.setCurrentSignups(currentSignups);
+        mAdapter.setCompletedActions(completedActions);
     }
 
     @SuppressWarnings("UnusedDeclaration")

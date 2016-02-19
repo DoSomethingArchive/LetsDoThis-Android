@@ -10,10 +10,22 @@ public class ResponseProfileSignups {
         public String id;
         public CampaignRunWrapper campaign_run;
         public ResponseProfileCampaign campaign;
+        public ReportbackWrapper reportback;
 
         public class CampaignRunWrapper {
             public String id;
             public boolean current;
+        }
+
+        public class ReportbackWrapper {
+            public String id;
+            public int quantity;
+            public ReportbackItemsWrapper reportback_items;
+
+            public class ReportbackItemsWrapper {
+                public int total;
+                public org.dosomething.letsdothis.data.ReportBack data[];
+            }
         }
     }
 }
