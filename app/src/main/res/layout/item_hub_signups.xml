@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_hub_signups_border"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2">
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:maxLines="1"
+            android:paddingLeft="@dimen/padding_small"
+            android:paddingRight="@dimen/padding_small"
+            android:paddingTop="@dimen/padding_medium"
+            android:textAllCaps="true"
+            android:textColor="@color/theme_primary"
+            android:textSize="@dimen/text_large"
+            app:typeface="brandon_bold"
+            tool:text="Campaign Title"/>
+
+        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+            android:id="@+id/tagline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:paddingBottom="@dimen/padding_medium"
+            android:paddingLeft="@dimen/padding_small"
+            android:paddingRight="@dimen/padding_small"
+            android:paddingTop="@dimen/padding_small"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/text_medium"
+            app:typeface="brandon_regular"
+            tool:text="Campaign tagline"/>
+
+    </RelativeLayout>
+
+    <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+        android:id="@+id/prove_it"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="@dimen/padding_medium"
+        android:layout_weight="3"
+        android:text="PROVE IT"
+        style="@style/SecondaryButton"/>
+
+</LinearLayout>

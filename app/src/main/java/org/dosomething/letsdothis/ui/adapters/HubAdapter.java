@@ -79,8 +79,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 return new PublicEmptyViewHolder(v);
             case VIEW_TYPE_CURRENT_SIGNUPS:
                 v = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_hub_current_campaign, parent, false);
-                return new CurrentCampaignViewHolder(v);
+                        .inflate(R.layout.item_hub_signups, parent, false);
+                return new SignupViewHolder(v);
             case VIEW_TYPE_REPORTBACKS:
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_report_back_expanded, parent, false);
@@ -126,9 +126,10 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
         else if (getItemViewType(position) == VIEW_TYPE_CURRENT_SIGNUPS) {
             ResponseProfileCampaign campaign = (ResponseProfileCampaign) mHubList.get(position);
-            CurrentCampaignViewHolder viewHolder = (CurrentCampaignViewHolder) holder;
+            SignupViewHolder viewHolder = (SignupViewHolder) holder;
 
             viewHolder.title.setText(campaign.title);
+            viewHolder.tagline.setText(campaign.tagline);
         }
         else if (getItemViewType(position) == VIEW_TYPE_REPORTBACKS) {
             final ResponseProfileSignups.Signup action = (ResponseProfileSignups.Signup) mHubList.get(position);
@@ -324,24 +325,30 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    public static class CurrentCampaignViewHolder extends RecyclerView.ViewHolder {
-        protected final TextView     title;
-        protected final TextView     taglineCaption;
-        protected final TextView     count;
-        protected final View         imageContainer;
-        protected final ImageView    addImage;
-        protected final ImageView    reportbackImage;
-        protected final Button       share;
+    public static class SignupViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        protected final TextView title;
+        protected final TextView tagline;
+        protected final Button proveIt;
 
-        public CurrentCampaignViewHolder(View itemView) {
+        public SignupViewHolder(View itemView) {
             super(itemView);
+
             title = (TextView) itemView.findViewById(R.id.title);
-            taglineCaption = (TextView) itemView.findViewById(R.id.tagline_caption);
-            imageContainer = itemView.findViewById(R.id.image_container);
-            addImage = (ImageView) itemView.findViewById(R.id.add_image);
-            reportbackImage = (ImageView) itemView.findViewById(R.id.reportback_image);
-            count = (TextView) itemView.findViewById(R.id.count);
-            share = (Button) itemView.findViewById(R.id.prove_share);
+            tagline = (TextView) itemView.findViewById(R.id.tagline);
+            proveIt = (Button) itemView.findViewById(R.id.prove_it);
+
+            title.setOnClickListener(this);
+            proveIt.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch(v.getId()) {
+                case R.id.title:
+                    break;
+                case R.id.prove_it:
+                    break;
+            }
         }
     }
 
