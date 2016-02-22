@@ -266,9 +266,27 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      * @param campaigns Array of campaigns
      */
     public void setCurrentSignups(ArrayList<ResponseProfileCampaign> campaigns) {
-        // Adds signups to the list displayed to the Hub.
-        // @todo There could be a bug here, for example if this is called after setCompletedActions
+        ArrayList<Object> reportbacks = new ArrayList<>();
+        if (mHubList.indexOf(REPORTBACKS_LABEL_STUB) > 0) {
+            int rbStart = mHubList.indexOf(REPORTBACKS_LABEL_STUB);
+            for (int i = rbStart; i < mHubList.size(); i++) {
+                reportbacks.add(mHubList.get(i));
+            }
+        }
+
+        // Remove any current signups
+        if (mHubList.indexOf(CURRENT_SIGNUPS_LABEL_STUB) >= 0) {
+            int signupsStart = mHubList.indexOf(CURRENT_SIGNUPS_LABEL_STUB);
+            for (int i = mHubList.size() - 1; i > signupsStart ; i--) {
+                mHubList.remove(i);
+            }
+        }
+
+        // Adds signups to the list displayed to the Hub
         mHubList.addAll(campaigns);
+
+        // And then add back any reportbacks, if any
+        mHubList.addAll(reportbacks);
         notifyDataSetChanged();
     }
 
@@ -296,25 +314,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemCount() {
         return mHubList.size();
-    }
-
-    /**
-     * @todo Remove or refactor me.
-     */
-    @Deprecated
-    public void processingUpload() {
-        /*
-        for (int i = 0; i < mHubList.size(); i++) {
-            Object o = mHubList.get(i);
-            if (o instanceof Campaign) {
-                Campaign campaign = (Campaign) o;
-                if (campaign.id == mClickedCampaign.id) {
-                    campaign.showShare = Campaign.UploadShare.UPLOADING;
-                    notifyItemChanged(i);
-                }
-            }
-        }
-        */
     }
 
     public static class ProfileViewHolder extends RecyclerView.ViewHolder {

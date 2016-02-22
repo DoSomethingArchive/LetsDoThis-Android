@@ -88,6 +88,16 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
         LDTApplication application = (LDTApplication)getActivity().getApplication();
         mTracker = application.getDefaultTracker();
+
+        // Get user's profile info
+        TaskQueue taskQueue = TaskQueue.loadQueueDefault(getActivity());
+        taskQueue.execute(new GetProfileTask());
+
+        // Get user's campaign activity
+        taskQueue.execute(new GetProfileSignupsTask());
+
+        // Display a progress dialog while the profile is getting synced
+        showProgressDialog();
     }
 
     @Override
@@ -124,18 +134,6 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         String trackerIdentifier;
         String publicId = getArguments().getString(EXTRA_ID, null);
 
-        // Get user's profile info
-        TaskQueue taskQueue = TaskQueue.loadQueueDefault(getActivity());
-        taskQueue.execute(new GetProfileTask());
-
-        // Get user's campaign activity
-        taskQueue.execute(new GetProfileSignupsTask());
-
-        // @todo Evaluate if we actually want to use a blocking progress dialog
-        mProgressDialog = new ProgressDialog(getActivity());
-        mProgressDialog.setMessage(getString(R.string.progress_dialog_hub));
-        mProgressDialog.show();
-
         if (publicId != null) {
             trackerIdentifier = publicId;
         }
@@ -147,7 +145,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         TaskQueue rbQueue = ReportbackUploadTask.getQueue(getActivity());
         boolean rbUploadInProgress = TaskQueueHelper.hasTasksOfType(rbQueue, ReportbackUploadTask.class);
         if (rbUploadInProgress) {
-            mAdapter.processingUpload();
+            showProgressDialog();
         }
 
         // Submit screen view to Google Analytics
@@ -267,6 +265,15 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     /**
+     * Create and show a ProgressDialog.
+     */
+    private void showProgressDialog() {
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setMessage(getString(R.string.progress_dialog_hub));
+        mProgressDialog.show();
+    }
+
+    /**
      * Check if tasks are in progress. If they're done, then dismiss the ProgressDialog.
      */
     private void dismissProgressDialogIfDone() {
@@ -274,7 +281,10 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         boolean hasProfileTask = TaskQueueHelper.hasTasksOfType(defaultQueue, GetProfileTask.class);
         boolean hasSignupsTask = TaskQueueHelper.hasTasksOfType(defaultQueue, GetProfileSignupsTask.class);
 
-        if (!hasProfileTask && !hasSignupsTask) {
+        TaskQueue rbQueue = ReportbackUploadTask.getQueue(getActivity());
+        boolean hasUploadTask = TaskQueueHelper.hasTasksOfType(rbQueue, ReportbackUploadTask.class);
+
+        if (!hasProfileTask && !hasSignupsTask && !hasUploadTask) {
             mProgressDialog.dismiss();
         }
     }
@@ -286,12 +296,17 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(ReportbackUploadTask task) {
+        dismissProgressDialogIfDone();
+
         if (!task.hasError()) {
             Snackbar snackbar = Snackbar.make(getView().findViewById(R.id.snack),
                     R.string.campaign_reportback_confirmation, Snackbar.LENGTH_LONG);
             View snackBarView = snackbar.getView();
             snackBarView.setBackgroundColor(getResources().getColor(R.color.cerulean_1));
             snackbar.show();
+
+            // Refresh the campaign list by doing a GetProfileSignupsTask
+            TaskQueue.loadQueueDefault(getActivity()).execute(new GetProfileSignupsTask());
         }
     }
 

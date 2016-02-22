@@ -59,8 +59,7 @@ public class ReportbackUploadTask extends BaseNetworkErrorHandlerTask {
         mRequest.campaign_id = mCampaignId;
 
         String sessionToken = AppPrefs.getInstance(context).getSessionToken();
-        ResponseSubmitReportBack response = NetworkHelper.getNorthstarAPIService()
-                .submitReportback(sessionToken, mRequest);
+        NetworkHelper.getNorthstarAPIService().submitReportback(sessionToken, mRequest);
     }
 
     private String base64Encode(String filePath) {
