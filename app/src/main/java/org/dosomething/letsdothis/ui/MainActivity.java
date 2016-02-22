@@ -11,8 +11,13 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.data.CampaignActions;
+import org.dosomething.letsdothis.network.models.ResponseProfileCampaign;
+import org.dosomething.letsdothis.network.models.ResponseProfileSignups;
+import org.dosomething.letsdothis.tasks.GetProfileSignupsTask;
 import org.dosomething.letsdothis.ui.adapters.DrawerListAdapter;
 import org.dosomething.letsdothis.ui.fragments.CauseListFragment;
 import org.dosomething.letsdothis.ui.fragments.HubFragment;
@@ -21,6 +26,11 @@ import org.dosomething.letsdothis.ui.fragments.ReplaceFragmentListener;
 import org.dosomething.letsdothis.ui.fragments.SetTitleListener;
 import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
 import org.dosomething.letsdothis.utils.AppPrefs;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import co.touchlab.android.threading.eventbus.EventBusExt;
 
 public class MainActivity extends BaseActivity implements SetTitleListener, ReplaceFragmentListener {
     //~=~=~=~=~=~=~=~=~=~=~=~=VIEWS
@@ -50,6 +60,21 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
 
         initToolbar();
         initDrawer();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!EventBusExt.getDefault().isRegistered(this)) {
+            EventBusExt.getDefault().register(this);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBusExt.getDefault().unregister(this);
     }
 
     private void initToolbar() {
@@ -166,5 +191,32 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
         return handled || super.onKeyUp(keyCode, event);
     }
 
+    /**
+     * Handle completed tasks that would've been started from LoginActivity and RegisterActivity.
+     *
+     * @param task GetProfileSignupsTask
+     */
+    @SuppressWarnings("UnusedDeclaration")
+    public void onEventMainThread(GetProfileSignupsTask task) {
+        if (task.getResult() == null) {
+            return;
+        }
 
+        ResponseProfileSignups signups = task.getResult();
+        for (int i = 0; i < signups.data.length; i++) {
+            // Update local cache of actions
+            try {
+                CampaignActions actions = new CampaignActions();
+                actions.campaignId = Integer.parseInt(signups.data[i].campaign.id);
+                actions.signUpId = Integer.parseInt(signups.data[i].id);
+                if (signups.data[i].reportback != null) {
+                    actions.reportBackId = Integer.parseInt(signups.data[i].reportback.id);
+                }
+                CampaignActions.save(MainActivity.this, actions);
+            }
+            catch (SQLException e) {
+                Toast.makeText(MainActivity.this, R.string.error_hub_sync, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 }

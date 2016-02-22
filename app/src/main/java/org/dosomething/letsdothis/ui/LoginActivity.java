@@ -13,6 +13,7 @@ import com.google.android.gms.analytics.Tracker;
 
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.tasks.GetProfileSignupsTask;
 import org.dosomething.letsdothis.tasks.LoginTask;
 import org.dosomething.letsdothis.tasks.UpdateUserTask;
 import org.dosomething.letsdothis.utils.AnalyticsUtils;
@@ -131,9 +132,13 @@ public class LoginActivity extends BaseActivity
             broadcastLogInSuccess(this);
             startActivity(MainActivity.getLaunchIntent(this));
 
+            TaskQueue taskQueue = TaskQueue.loadQueueDefault(getApplicationContext());
             if (task.mUserNeedsUpdate) {
-                TaskQueue.loadQueueDefault(LoginActivity.this).execute(new UpdateUserTask(task.mLoggedInUser));
+                taskQueue.execute(new UpdateUserTask(task.mLoggedInUser));
             }
+
+            // Get user's actions to upade the local cache
+            taskQueue.execute(new GetProfileSignupsTask());
         }
         else {
             Snackbar snackbar = Snackbar

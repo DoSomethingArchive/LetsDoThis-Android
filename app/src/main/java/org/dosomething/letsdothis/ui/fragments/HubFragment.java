@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.Tracker;
 
@@ -22,6 +23,7 @@ import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.data.CampaignActions;
 import org.dosomething.letsdothis.network.models.ResponseProfileCampaign;
 import org.dosomething.letsdothis.network.models.ResponseProfileSignups;
 import org.dosomething.letsdothis.tasks.GetProfileSignupsTask;
@@ -36,6 +38,7 @@ import org.dosomething.letsdothis.ui.adapters.HubAdapter;
 import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
@@ -304,6 +307,20 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
                 // Campaigns that the user has signed up for but has no reportback yet
                 else if (signups.data[i].campaign_run.current) {
                     currentSignups.add(signups.data[i].campaign);
+                }
+
+                // Update local cache of actions
+                try {
+                    CampaignActions actions = new CampaignActions();
+                    actions.campaignId = Integer.parseInt(signups.data[i].campaign.id);
+                    actions.signUpId = Integer.parseInt(signups.data[i].id);
+                    if (signups.data[i].reportback != null) {
+                        actions.reportBackId = Integer.parseInt(signups.data[i].reportback.id);
+                    }
+                    CampaignActions.save(getActivity(), actions);
+                }
+                catch (SQLException e) {
+                    Toast.makeText(getActivity(), R.string.error_hub_sync, Toast.LENGTH_SHORT).show();
                 }
             }
         }

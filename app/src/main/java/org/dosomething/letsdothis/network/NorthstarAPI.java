@@ -166,11 +166,18 @@ public interface NorthstarAPI {
     ResponseRbData getRbData(@Header("Session") String sessionToken,
                              @Path("id") int campId) throws NetworkException;
 
+    /**
+     * Sign up the logged in user for a campaign.
+     *
+     * @param sessionToken Token for the currently logged in user
+     * @param requestCampaignSignup
+     * @return ResponseCampaignSignUp
+     * @throws NetworkException
+     */
     @Headers("Content-Type: application/json")
-    @POST("/user/campaigns/{id}/signup")
-    ResponseCampaignSignUp campaignSignUp(@Body RequestCampaignSignup requestCampaignSignup,
-                                          @Path("id") int id,
-                                          @Header("Session") String sessionToken) throws NetworkException;
+    @POST("/signups")
+    ResponseCampaignSignUp submitSignUp(@Header("Session") String sessionToken,
+                                        @Body RequestCampaignSignup requestCampaignSignup) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @GET("/users/_id/{id}/campaigns")

@@ -1,8 +1,6 @@
 package org.dosomething.letsdothis.ui;
 import android.os.Bundle;
-import android.view.View;
 
-import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 /**
