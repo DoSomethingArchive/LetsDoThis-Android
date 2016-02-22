@@ -16,7 +16,6 @@ import co.touchlab.android.threading.tasks.utils.NetworkUtils;
 /**
  * Created by izzyoji :) on 6/26/15.
  */
-//todo should this be persisted
 public class CampaignSignUpTask extends Task {
     // Campaign ID the signup is for
     private int mCampaignId;
@@ -76,10 +75,12 @@ public class CampaignSignUpTask extends Task {
         CampaignActions actions = CampaignActions.queryForId(context, mCampaignId);
         if (actions == null || actions.signUpId <= 0) {
             String sessionToken = AppPrefs.getInstance(context).getSessionToken();
-            RequestCampaignSignup requestCampaignSignup = new RequestCampaignSignup();
+            RequestCampaignSignup signup= new RequestCampaignSignup();
+            signup.campaign_id = mCampaignId;
+
             ResponseCampaignSignUp response = NetworkHelper.getNorthstarAPIService()
-                                                           .campaignSignUp(requestCampaignSignup,
-                                                                           mCampaignId, sessionToken);
+                    .submitSignUp(sessionToken, signup);
+
             CampaignActions campaignActions = new CampaignActions();
             campaignActions.campaignId = mCampaignId;
             campaignActions.signUpId = ResponseCampaignSignUp.getSignUpId(response);

@@ -12,7 +12,7 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
  * Created by toidiu on 4/15/15.
  */
 public class RegisterTask extends BaseRegistrationTask {
-    private final String SOURCE = "letsdothis_android";
+    private final String SOURCE = "mobileapp_android";
 
     private final String mEmail;
     private final String mPhone;
