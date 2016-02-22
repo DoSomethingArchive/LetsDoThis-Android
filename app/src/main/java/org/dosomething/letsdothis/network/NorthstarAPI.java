@@ -143,7 +143,7 @@ public interface NorthstarAPI {
     /**
      * Logs the user out of Northstar by invalidating its session token.
      *
-     * HACK: see hackDoNotUse param
+     * HACK: see hackEmptyBody param
      *
      * @param sessionToken Token to invalidate
      * @param hackEmptyBody Without body data, Retrofit errors out because it expects POST requests
@@ -155,11 +155,18 @@ public interface NorthstarAPI {
     Response logout(@Header("Session") String sessionToken,
                     @Body String hackEmptyBody) throws NetworkException;
 
+    /**
+     * Submit a reportback for the logged in user.
+     *
+     * @param sessionToken Token for the currently logged in user
+     * @param requestreportback
+     * @return
+     * @throws NetworkException
+     */
     @Headers("Content-Type: application/json")
-    @POST("/user/campaigns/{nid}/reportback")
+    @POST("/reportbacks")
     ResponseSubmitReportBack submitReportback(@Header("Session") String sessionToken,
-                                              @Body RequestReportback requestreportback,
-                                              @Path("nid") int id) throws NetworkException;
+                                              @Body RequestReportback requestreportback) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @GET("/user/campaigns/{id}")

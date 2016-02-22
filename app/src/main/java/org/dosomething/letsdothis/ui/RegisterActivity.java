@@ -223,10 +223,8 @@ public class RegisterActivity extends BaseActivity
                     Log.d("drawer_text-----------", selectedImageUri.toString());
                 }
 
-                startActivityForResult(PhotoCropActivity
-                                               .getResultIntent(this, selectedImageUri.toString(),
-                                                                "User Photo", null),
-                                       PhotoCropActivity.RESULT_CODE);
+                startActivityForResult(PhotoCropActivity.getResultIntent(this,
+                        selectedImageUri.toString(), "User Photo"), PhotoCropActivity.RESULT_CODE);
             }
             else if(requestCode == PhotoCropActivity.RESULT_CODE)
             {

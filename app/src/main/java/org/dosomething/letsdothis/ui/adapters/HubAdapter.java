@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.R;
-import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.models.ResponseProfileCampaign;
@@ -40,14 +39,11 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<Object> mHubList = new ArrayList<>();
     private HubAdapterClickListener mHubAdapterClickListener;
     private boolean mIsPublic = false;
-    private Context mContext;
-    private Campaign mClickedCampaign;
     private User mUser;
 
     public HubAdapter(Context context, HubAdapterClickListener hubAdapterClickListener, boolean isPublic) {
         super();
 
-        this.mContext = context;
         this.mHubAdapterClickListener = hubAdapterClickListener;
 
         // First row is user profile info
@@ -133,7 +129,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             viewHolder.title.setText(campaign.title);
             viewHolder.tagline.setText(campaign.tagline);
 
-            viewHolder.setCampaignId(Integer.parseInt(campaign.id));
+            viewHolder.setCampaignDetails(Integer.parseInt(campaign.id), campaign.title,
+                    campaign.reportback_info.noun, campaign.reportback_info.verb);
         }
         else if (getItemViewType(position) == VIEW_TYPE_REPORTBACKS) {
             final ResponseProfileSignups.Signup action = (ResponseProfileSignups.Signup) mHubList.get(position);
@@ -269,7 +266,27 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      * @param campaigns Array of campaigns
      */
     public void setCurrentSignups(ArrayList<ResponseProfileCampaign> campaigns) {
+        ArrayList<Object> reportbacks = new ArrayList<>();
+        if (mHubList.indexOf(REPORTBACKS_LABEL_STUB) > 0) {
+            int rbStart = mHubList.indexOf(REPORTBACKS_LABEL_STUB);
+            for (int i = rbStart; i < mHubList.size(); i++) {
+                reportbacks.add(mHubList.get(i));
+            }
+        }
+
+        // Remove any current signups
+        if (mHubList.indexOf(CURRENT_SIGNUPS_LABEL_STUB) >= 0) {
+            int signupsStart = mHubList.indexOf(CURRENT_SIGNUPS_LABEL_STUB);
+            for (int i = mHubList.size() - 1; i > signupsStart ; i--) {
+                mHubList.remove(i);
+            }
+        }
+
+        // Adds signups to the list displayed to the Hub
         mHubList.addAll(campaigns);
+
+        // And then add back any reportbacks, if any
+        mHubList.addAll(reportbacks);
         notifyDataSetChanged();
     }
 
@@ -299,23 +316,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return mHubList.size();
     }
 
-    public void processingUpload() {
-        for (int i = 0; i < mHubList.size(); i++) {
-            Object o = mHubList.get(i);
-            if (o instanceof Campaign) {
-                Campaign campaign = (Campaign) o;
-                if (campaign.id == mClickedCampaign.id) {
-                    campaign.showShare = Campaign.UploadShare.UPLOADING;
-                    notifyItemChanged(i);
-                }
-            }
-        }
-    }
-
-    public Campaign getClickedCampaign() {
-        return mClickedCampaign;
-    }
-
     public static class ProfileViewHolder extends RecyclerView.ViewHolder {
         protected ImageView userImage;
         protected TextView  name;
@@ -343,6 +343,11 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         // ID for the campaign displayed in this item
         private int campaignId;
 
+        // And additional campaign info for the reportback flow
+        private String campaignTitle;
+        private String rbNoun;
+        private String rbVerb;
+
         public SignupViewHolder(View itemView, HubAdapterClickListener listener) {
             super(itemView);
 
@@ -356,8 +361,11 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             proveIt.setOnClickListener(this);
         }
 
-        public void setCampaignId(int id) {
-            campaignId = id;
+        public void setCampaignDetails(int cId, String cTitle, String noun, String verb) {
+            campaignId = cId;
+            campaignTitle = cTitle;
+            rbNoun = noun;
+            rbVerb = verb;
         }
 
         @Override
@@ -367,7 +375,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     clickHandler.onCampaignClicked(campaignId);
                     break;
                 case R.id.prove_it:
-                    // @todo Handle the Prove It button click
+                    clickHandler.onProveClicked(campaignId, campaignTitle, rbNoun, rbVerb);
                     break;
             }
         }
@@ -471,7 +479,15 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
          */
         void onCampaignClicked(int campaignId);
 
-        void onProveClicked(Campaign campaign);
+        /**
+         * Handles click to start a reportback submission.
+         *
+         * @param campaignId The campaign id
+         * @param campaignTitle The campaign title
+         * @param noun The campaign's reportback noun
+         * @param verb The campaign's reportback verb
+         */
+        void onProveClicked(int campaignId, String campaignTitle, String noun, String verb);
 
         void onActionsButtonClicked();
     }

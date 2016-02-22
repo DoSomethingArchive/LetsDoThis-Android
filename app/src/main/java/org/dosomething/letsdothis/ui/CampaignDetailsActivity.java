@@ -248,12 +248,16 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
 
                 Campaign clickedCampaign = adapter.getCampaign();
                 if (selectedImageUri != null) {
+                    // @todo Get back to fixing this
+                    Toast.makeText(CampaignDetailsActivity.this, "@TODO: WORK IN PROGRESS", Toast.LENGTH_SHORT).show();
+                    /*
                     Intent cropIntent = PhotoCropActivity.getResultIntent(
                             this,
                             selectedImageUri.toString(),
                             clickedCampaign.title,
                             clickedCampaign.id);
                     startActivityForResult(cropIntent, PhotoCropActivity.RESULT_CODE);
+                    */
                 }
                 else {
                     Toast.makeText(CampaignDetailsActivity.this, R.string.error_photo_select, Toast.LENGTH_SHORT).show();
