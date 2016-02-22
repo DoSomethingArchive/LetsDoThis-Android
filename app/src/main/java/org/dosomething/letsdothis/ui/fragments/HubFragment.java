@@ -22,7 +22,6 @@ import com.google.android.gms.analytics.Tracker;
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
-import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.CampaignActions;
 import org.dosomething.letsdothis.network.models.ResponseProfileCampaign;
 import org.dosomething.letsdothis.network.models.ResponseProfileSignups;
@@ -66,6 +65,12 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
     // Progress dialog to display while API calls are in progress
     private ProgressDialog mProgressDialog;
+
+    // Campaign details on a reportback in progress, if any
+    private int mRbCampaignId;
+    private String mRbCampaignTitle;
+    private String mRbCampaignNoun;
+    private String mRbCampaignVerb;
 
     public static HubFragment newInstance(String id) {
         Bundle bundle = new Bundle();
@@ -178,7 +183,13 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     }
 
     @Override
-    public void onProveClicked(Campaign campaign) {
+    public void onProveClicked(int campaignId, String campaignTitle, String noun, String verb) {
+        // Campaign details to be used through the reportback process
+        mRbCampaignId = campaignId;
+        mRbCampaignTitle = campaignTitle;
+        mRbCampaignNoun = noun;
+        mRbCampaignVerb = verb;
+
         Intent pickIntent = new Intent(Intent.ACTION_PICK,
                                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         pickIntent.setType("image/*");
@@ -195,6 +206,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
         String pickTitle = getString(R.string.select_picture);
         Intent chooserIntent = Intent.createChooser(takePhotoIntent, pickTitle);
+
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
 
         startActivityForResult(chooserIntent, SELECT_PICTURE);
@@ -240,17 +252,16 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
             }
 
             Intent photoCropIntent = PhotoCropActivity.getResultIntent(getActivity(),
-                    selectedImageUri.toString(), getString(R.string.share_photo), null);
+                    selectedImageUri.toString(), getString(R.string.share_photo));
             startActivityForResult(photoCropIntent, PhotoCropActivity.RESULT_CODE);
         }
         else if (requestCode == PhotoCropActivity.RESULT_CODE) {
             String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
-            Campaign clickedCampaign = mAdapter.getClickedCampaign();
             String format = String.format(getString(R.string.reportback_upload_hint),
-                    clickedCampaign.noun, clickedCampaign.verb);
+                    mRbCampaignNoun, mRbCampaignVerb);
 
             Intent rbUploadIntent = ReportBackUploadActivity.getLaunchIntent(getActivity(),
-                    filePath, clickedCampaign.title, clickedCampaign.id, format);
+                    filePath, mRbCampaignTitle, mRbCampaignId, format);
             startActivity(rbUploadIntent);
         }
     }

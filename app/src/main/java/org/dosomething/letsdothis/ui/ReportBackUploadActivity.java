@@ -20,7 +20,6 @@ import org.dosomething.letsdothis.network.models.RequestReportback;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
 import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
 import org.dosomething.letsdothis.utils.AnalyticsUtils;
-import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.io.File;
 
@@ -117,7 +116,6 @@ public class ReportBackUploadActivity extends AppCompatActivity
                 }
 
                 req.quantity = number.getText().toString();
-                req.uid = AppPrefs.getInstance(ReportBackUploadActivity.this).getCurrentUserId();
 
                 String filePath = getIntent().getStringExtra(FILE_PATH);
 

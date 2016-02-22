@@ -41,7 +41,6 @@ public class PhotoCropActivity extends AppCompatActivity
     public static final  String CONTENT_URI_PREFIX = "content://";
     public static final  String IMAGE_PATH         = "IMAGE_PATH";
     public static final  String EXTRA_TITLE        = "EXTRA_TITLE";
-    public static final  String EXTRA_CAMP_ID      = "EXTRA_CAMP_ID";
     public static final  int    RESULT_FAILED      = 100;
     private static final int    DEFAULT_MAX_SIZE   = 640;
     public static final  int    RESULT_CODE        = 324;
@@ -53,12 +52,18 @@ public class PhotoCropActivity extends AppCompatActivity
     private FrameLayout    transparency;
     private int            imageWidth;
 
-    public static Intent getResultIntent(Context context, String path, String title, Integer campaignId)
-    {
+    /**
+     * Creates the Intent for cropping a user's profile photo.
+     *
+     * @param context Context
+     * @param path Image file path
+     * @param title Title for the Intent
+     * @return Intent
+     */
+    public static Intent getResultIntent(Context context, String path, String title) {
         Intent intent = new Intent(context, PhotoCropActivity.class);
         intent.putExtra(IMAGE_PATH, path);
         intent.putExtra(EXTRA_TITLE, title);
-        intent.putExtra(EXTRA_CAMP_ID, campaignId);
         return intent;
     }
 
