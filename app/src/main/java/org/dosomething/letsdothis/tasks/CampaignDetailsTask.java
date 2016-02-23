@@ -29,21 +29,6 @@ public class CampaignDetailsTask extends BaseNetworkErrorHandlerTask
         ResponseCampaignWrapper response = NetworkHelper.getPhoenixAPIService()
                 .campaign(campaignId);
         campaign = ResponseCampaign.getCampaign(response.data);
-
-        String currentUserId = AppPrefs.getInstance(context).getCurrentUserId();
-        ResponseUserCampaign userCampaigns = NetworkHelper.getNorthstarAPIService()
-                .getUserCampaigns(currentUserId);
-        for(ResponseUserCampaign.Wrapper c : userCampaigns.data)
-        {
-            if(campaignId == c.drupal_id)
-            {
-                if(c.reportback_data != null)
-                {
-                    campaign.showShare = Campaign.UploadShare.SHARE;
-                    return;
-                }
-            }
-        }
     }
 
     @Override

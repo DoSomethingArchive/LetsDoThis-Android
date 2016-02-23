@@ -58,7 +58,6 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     private int                    totalPages;
     private int currentPage = 1;
     private String currentRbQueryStatus;
-    //    private ResponseCampaign.ReportBackInfo rBInfo;
 
     // Google Analytics tracker
     private Tracker mTracker;
@@ -353,26 +352,27 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         boolean isSignedUp = false;
 
         if (task.campaign != null) {
-            // Update the view in the adapter
-            adapter.updateCampaign(task.campaign);
-
             // Set vars for the tracker
             campaignId = task.campaign.id;
-
             try {
-                if (CampaignActions.queryForId(this, campaignId) != null) {
-                    isSignedUp = true;
+                CampaignActions actions = CampaignActions.queryForId(this, campaignId);
+                if (actions != null) {
+                    isSignedUp = actions.signUpId > 0;
+                    isComplete = actions.reportBackId > 0;
                 }
             }
             catch (Exception e) {
+                isComplete = false;
                 isSignedUp = false;
             }
-
-            isComplete = task.campaign.showShare == Campaign.UploadShare.SHARE;
         }
         else {
             Toast.makeText(this, "campaign data failed", Toast.LENGTH_SHORT).show();
         }
+
+        // Update the view in the adapter
+        task.campaign.showShare = isComplete ? Campaign.UploadShare.SHARE : Campaign.UploadShare.SHOW_OFF;
+        adapter.updateCampaign(task.campaign);
 
         sendScreenViewToAnalytics(campaignId, isSignedUp, isComplete);
     }

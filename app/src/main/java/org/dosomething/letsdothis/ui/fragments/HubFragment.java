@@ -93,9 +93,6 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         TaskQueue taskQueue = TaskQueue.loadQueueDefault(getActivity());
         taskQueue.execute(new GetProfileTask());
 
-        // Get user's campaign activity
-        taskQueue.execute(new GetProfileSignupsTask());
-
         // Display a progress dialog while the profile is getting synced
         showProgressDialog();
     }
@@ -130,6 +127,10 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         }
 
         mTitleListener.setTitle(getResources().getString(R.string.hub));
+
+        // Get user's campaign activity
+        TaskQueue taskQueue = TaskQueue.loadQueueDefault(getActivity());
+        taskQueue.execute(new GetProfileSignupsTask());
 
         String trackerIdentifier;
         String publicId = getArguments().getString(EXTRA_ID, null);
