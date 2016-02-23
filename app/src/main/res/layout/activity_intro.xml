@@ -12,9 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        android:src="@drawable/bg_onboarding_bitmap"
-        android:tint="@color/theme_primary_dark"
-        android:tintMode="multiply"/>
+        android:src="@drawable/bg_onboarding_bitmap"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
