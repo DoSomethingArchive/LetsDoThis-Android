@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.dosomething.letsdothis.data.CampaignActions;
 import org.dosomething.letsdothis.network.NetworkHelper;
 import org.dosomething.letsdothis.network.models.RequestReportback;
 import org.dosomething.letsdothis.network.models.ResponseSubmitReportBack;
@@ -59,7 +60,19 @@ public class ReportbackUploadTask extends BaseNetworkErrorHandlerTask {
         mRequest.campaign_id = mCampaignId;
 
         String sessionToken = AppPrefs.getInstance(context).getSessionToken();
-        NetworkHelper.getNorthstarAPIService().submitReportback(sessionToken, mRequest);
+        ResponseSubmitReportBack response = NetworkHelper.getNorthstarAPIService()
+                .submitReportback(sessionToken, mRequest);
+
+        if (response != null && response.data != null && response.data.id != null) {
+            CampaignActions actions = CampaignActions.queryForId(context, mCampaignId);
+            if (actions != null) {
+                CampaignActions update = new CampaignActions();
+                update.campaignId = mCampaignId;
+                update.signUpId = actions.signUpId;
+                update.reportBackId = Integer.parseInt(response.data.id);
+                CampaignActions.save(context, update);
+            }
+        }
     }
 
     private String base64Encode(String filePath) {

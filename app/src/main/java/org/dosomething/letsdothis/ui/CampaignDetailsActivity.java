@@ -58,7 +58,6 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     private int                    totalPages;
     private int currentPage = 1;
     private String currentRbQueryStatus;
-    //    private ResponseCampaign.ReportBackInfo rBInfo;
 
     // Google Analytics tracker
     private Tracker mTracker;
@@ -187,9 +186,11 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
 
     @Override
     public void shareClicked(Campaign campaign) {
-        TaskQueue.loadQueueDefault(this).execute(new RbShareDataTask(campaign));
-
-        AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR, AnalyticsUtils.ACTION_SHARE_PHOTO);
+        // @todo Original design was for the reportback to be shown and sharable from this view. But
+        // for now with v1 we'll just push people to view and share from the Hub
+        Intent intent = MainActivity.getLaunchIntentHubTop(CampaignDetailsActivity.this);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -222,56 +223,53 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            if (requestCode == SELECT_PICTURE) {
-                final boolean isCamera;
-                if (data == null || data.getData() == null) {
-                    isCamera = true;
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+
+        if (requestCode == SELECT_PICTURE) {
+            final boolean isCamera;
+            if (data == null || data.getData() == null) {
+                isCamera = true;
+            }
+            else {
+                final String action = data.getAction();
+                if (action == null) {
+                    isCamera = false;
                 }
                 else {
-                    final String action = data.getAction();
-                    if (action == null) {
-                        isCamera = false;
-                    }
-                    else {
-                        isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    }
-                }
-
-                Uri selectedImageUri = null;
-                if (isCamera) {
-                    selectedImageUri = imageUri;
-                }
-                else if (data != null) {
-                    selectedImageUri = data.getData();
-                }
-
-                Campaign clickedCampaign = adapter.getCampaign();
-                if (selectedImageUri != null) {
-                    // @todo Get back to fixing this
-                    Toast.makeText(CampaignDetailsActivity.this, "@TODO: WORK IN PROGRESS", Toast.LENGTH_SHORT).show();
-                    /*
-                    Intent cropIntent = PhotoCropActivity.getResultIntent(
-                            this,
-                            selectedImageUri.toString(),
-                            clickedCampaign.title,
-                            clickedCampaign.id);
-                    startActivityForResult(cropIntent, PhotoCropActivity.RESULT_CODE);
-                    */
-                }
-                else {
-                    Toast.makeText(CampaignDetailsActivity.this, R.string.error_photo_select, Toast.LENGTH_SHORT).show();
+                    isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 }
             }
-            else if (requestCode == PhotoCropActivity.RESULT_CODE) {
-                String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
-                Campaign clickedCampaign = adapter.getCampaign();
-                String format = String.format(getString(R.string.reportback_upload_hint), clickedCampaign.noun,
-                                clickedCampaign.verb);
-                startActivity(ReportBackUploadActivity
-                                      .getLaunchIntent(this, filePath, clickedCampaign.title,
-                                                       clickedCampaign.id, format));
+
+            Uri selectedImageUri = null;
+            if (isCamera) {
+                selectedImageUri = imageUri;
             }
+            else if (data != null) {
+                selectedImageUri = data.getData();
+            }
+
+            Campaign clickedCampaign = adapter.getCampaign();
+            if (selectedImageUri != null) {
+                Intent cropIntent = PhotoCropActivity.getResultIntent(
+                        this,
+                        selectedImageUri.toString(),
+                        clickedCampaign.title);
+                startActivityForResult(cropIntent, PhotoCropActivity.RESULT_CODE);
+            }
+            else {
+                Toast.makeText(CampaignDetailsActivity.this, R.string.error_photo_select, Toast.LENGTH_SHORT).show();
+            }
+        }
+        else if (requestCode == PhotoCropActivity.RESULT_CODE) {
+            String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
+            Campaign clickedCampaign = adapter.getCampaign();
+            String format = String.format(getString(R.string.reportback_upload_hint), clickedCampaign.noun,
+                            clickedCampaign.verb);
+            startActivity(ReportBackUploadActivity
+                                  .getLaunchIntent(this, filePath, clickedCampaign.title,
+                                                   clickedCampaign.id, format));
         }
     }
 
@@ -356,26 +354,27 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         boolean isSignedUp = false;
 
         if (task.campaign != null) {
-            // Update the view in the adapter
-            adapter.updateCampaign(task.campaign);
-
             // Set vars for the tracker
             campaignId = task.campaign.id;
-
             try {
-                if (CampaignActions.queryForId(this, campaignId) != null) {
-                    isSignedUp = true;
+                CampaignActions actions = CampaignActions.queryForId(this, campaignId);
+                if (actions != null) {
+                    isSignedUp = actions.signUpId > 0;
+                    isComplete = actions.reportBackId > 0;
                 }
             }
             catch (Exception e) {
+                isComplete = false;
                 isSignedUp = false;
             }
-
-            isComplete = task.campaign.showShare == Campaign.UploadShare.SHARE;
         }
         else {
             Toast.makeText(this, "campaign data failed", Toast.LENGTH_SHORT).show();
         }
+
+        // Update the view in the adapter
+        task.campaign.showShare = isComplete ? Campaign.UploadShare.SHARE : Campaign.UploadShare.SHOW_OFF;
+        adapter.updateCampaign(task.campaign);
 
         sendScreenViewToAnalytics(campaignId, isSignedUp, isComplete);
     }
