@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
 public class MainActivity extends BaseActivity implements SetTitleListener, ReplaceFragmentListener {
+    private static final String EXTRA_SHOW_FRAGMENT = "EXTRA_SHOW_FRAGMENT";
+
     //~=~=~=~=~=~=~=~=~=~=~=~=VIEWS
     private CustomToolbar toolbar;
     private DrawerListAdapter drawerListAdapter;
@@ -46,6 +48,13 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
         return intent;
     }
 
+    public static Intent getLaunchIntentHubTop(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(EXTRA_SHOW_FRAGMENT, HubFragment.class.getSimpleName());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,8 +62,11 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
         initToolbar();
         initDrawer();
 
-
-        if (savedInstanceState == null) {
+        String showFrag = getIntent().getStringExtra(EXTRA_SHOW_FRAGMENT);
+        if (showFrag != null && showFrag.contentEquals(HubFragment.class.getSimpleName())) {
+            replaceCurrentFragment(HubFragment.newInstance(null), HubFragment.TAG);
+        }
+        else if (savedInstanceState == null) {
             replaceCurrentFragment(NewsFragment.newInstance(), NewsFragment.TAG);
         }
 

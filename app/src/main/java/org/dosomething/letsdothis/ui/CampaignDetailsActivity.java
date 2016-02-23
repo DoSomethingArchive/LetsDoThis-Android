@@ -186,9 +186,11 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
 
     @Override
     public void shareClicked(Campaign campaign) {
-        TaskQueue.loadQueueDefault(this).execute(new RbShareDataTask(campaign));
-
-        AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR, AnalyticsUtils.ACTION_SHARE_PHOTO);
+        // @todo Original design was for the reportback to be shown and sharable from this view. But
+        // for now with v1 we'll just push people to view and share from the Hub
+        Intent intent = MainActivity.getLaunchIntentHubTop(CampaignDetailsActivity.this);
+        startActivity(intent);
+        finish();
     }
 
     @Override

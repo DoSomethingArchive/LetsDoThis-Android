@@ -21,6 +21,7 @@
     <string name="cause_relationships_desc">Find volunteer opportunities to promote healthy relationships.</string>
     <string name="cause_sex_desc">Find volunteer opportunities that promote safe consensual sex and combat sexism.</string>
     <string name="cause_violence_desc">Find volunteer opportunities to make your community safer.</string>
+    <string name="cta_photo_in_hub">See Your Photo in the Hub</string>
     <string name="hub">Hub</string>
     <string name="hub_current_label">Actions I\'m Doing Now</string>
     <string name="hub_empty_action_button">Take Me There</string>
