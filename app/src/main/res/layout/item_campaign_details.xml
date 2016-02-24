@@ -117,7 +117,7 @@
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomButton
         android:id="@+id/action_button"
-        style="@style/PrimaryButton"
+        style="@style/ActionButton"
         app:typeface="brandon_bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
