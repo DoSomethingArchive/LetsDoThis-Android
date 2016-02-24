@@ -114,6 +114,9 @@
 
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
 
+        <!-- Crashlytics -->
+        <meta-data android:name="io.fabric.ApiKey" android:value="7e81fd514f3c96fe814c7225e180f175ecff3d54" />
+
         <!-- Parse-->
         <meta-data android:name="com.parse.push.notification_icon" android:resource="@drawable/push_icon"/>
         <service android:name="com.parse.PushService" />
