@@ -89,10 +89,6 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         LDTApplication application = (LDTApplication)getActivity().getApplication();
         mTracker = application.getDefaultTracker();
 
-        // Get user's profile info
-        TaskQueue taskQueue = TaskQueue.loadQueueDefault(getActivity());
-        taskQueue.execute(new GetProfileTask());
-
         // Display a progress dialog while the profile is getting synced
         showProgressDialog();
     }
@@ -128,17 +124,21 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
         mTitleListener.setTitle(getResources().getString(R.string.hub));
 
-        // Get user's campaign activity
-        TaskQueue taskQueue = TaskQueue.loadQueueDefault(getActivity());
-        taskQueue.execute(new GetProfileSignupsTask());
-
         String trackerIdentifier;
         String publicId = getArguments().getString(EXTRA_ID, null);
+        TaskQueue taskQueue = TaskQueue.loadQueueDefault(getActivity());
 
         if (publicId != null) {
+            // Get other user's profile info and campaign activity
+            taskQueue.execute(new GetProfileTask(publicId));
+
             trackerIdentifier = publicId;
         }
         else {
+            // Get logged-in user's profile info and campaign activity
+            taskQueue.execute(new GetProfileTask());
+            taskQueue.execute(new GetProfileSignupsTask());
+
             trackerIdentifier = "self";
         }
 

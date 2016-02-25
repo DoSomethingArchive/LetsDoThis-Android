@@ -30,6 +30,7 @@ import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.Part;
 import retrofit.http.Path;
+import retrofit.http.Query;
 import retrofit.mime.TypedFile;
 import retrofit.mime.TypedInput;
 
@@ -200,4 +201,24 @@ public interface NorthstarAPI {
     ResponseAvatar uploadAvatar(@Path("id") String id,
                                 @Part("photo") TypedFile file) throws NetworkException;
 
+    /**
+     * Get profile info for a user by their id.
+     *
+     * @param id A user's Northstar ID
+     * @return ResponseUser
+     * @throws NetworkException
+     */
+    @GET("/users/_id/{id}")
+    ResponseUser getUserById(@Path("id") String id) throws NetworkException;
+
+    /**
+     * Get signup info for a user by their id.
+     *
+     * @param id A user's Northstar ID
+     * @return ResponseProfileSignups
+     * @throws NetworkException
+     */
+    @GET("/signups")
+    ResponseProfileSignups getSignupsById(@Query("user") String id) throws NetworkException;
 }
+
