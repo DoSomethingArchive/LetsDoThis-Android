@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.CampaignActions;
-import org.dosomething.letsdothis.network.models.ResponseProfileCampaign;
 import org.dosomething.letsdothis.network.models.ResponseProfileSignups;
 import org.dosomething.letsdothis.tasks.GetProfileSignupsTask;
 import org.dosomething.letsdothis.ui.adapters.DrawerListAdapter;
@@ -28,7 +27,6 @@ import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 

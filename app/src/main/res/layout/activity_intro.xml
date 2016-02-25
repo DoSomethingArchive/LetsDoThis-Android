@@ -5,8 +5,6 @@
                 android:background="@color/theme_primary_dark"
                 android:orientation="vertical">
 
-    <!-- TODO: we probably won't need to actually use the tint in the final version. We should just
-        get a single image with the actual color we'll want to use -->
     <ImageView
         android:id="@+id/background"
         android:layout_width="match_parent"

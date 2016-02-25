@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -25,6 +24,7 @@ import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.Causes;
 import org.dosomething.letsdothis.network.models.ResponseCampaignList;
 import org.dosomething.letsdothis.tasks.GetCampaignsByCauseTask;
+import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
 import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 import java.util.ArrayList;
@@ -81,7 +81,8 @@ public class CauseActivity extends BaseActivity {
 
         mCauseName = getIntent().getStringExtra(EXTRA_CAUSE_NAME);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        CustomToolbar toolbar = (CustomToolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(getString(R.string.app_name).toUpperCase());
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
