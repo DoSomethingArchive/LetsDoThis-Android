@@ -131,6 +131,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         if (publicId != null) {
             // Get other user's profile info and campaign activity
             taskQueue.execute(new GetProfileTask(publicId));
+            taskQueue.execute(new GetProfileSignupsTask(publicId));
 
             trackerIdentifier = publicId;
         }
