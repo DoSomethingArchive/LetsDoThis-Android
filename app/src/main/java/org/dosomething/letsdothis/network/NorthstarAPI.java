@@ -5,7 +5,6 @@ import org.dosomething.letsdothis.network.models.ParseInstallationRequest;
 import org.dosomething.letsdothis.network.models.RequestCampaignSignup;
 import org.dosomething.letsdothis.network.models.RequestKudo;
 import org.dosomething.letsdothis.network.models.RequestReportback;
-import org.dosomething.letsdothis.network.models.ResponseAvatar;
 import org.dosomething.letsdothis.network.models.ResponseCampaignSignUp;
 import org.dosomething.letsdothis.network.models.ResponseLogin;
 import org.dosomething.letsdothis.network.models.ResponseProfileReportbacks;
@@ -196,10 +195,20 @@ public interface NorthstarAPI {
     ResponseReportBack submitKudos(@Body RequestKudo requestKudo,
                                    @Header("Session") String sessionToken) throws NetworkException;
 
+    /**
+     * Uploads a new profile photo for the logged in user.
+     *
+     * @param sessionToken Token for the currently logged in user
+     * @param id Logged-in user's Northstar ID
+     * @param file Photo file
+     * @return ResponseUser
+     * @throws NetworkException
+     */
     @Multipart
     @POST("/users/{id}/avatar")
-    ResponseAvatar uploadAvatar(@Path("id") String id,
-                                @Part("photo") TypedFile file) throws NetworkException;
+    ResponseUser uploadAvatar(@Header("Session") String sessionToken,
+                              @Path("id") String id,
+                              @Part("photo") TypedFile file) throws NetworkException;
 
     /**
      * Get profile info for a user by their id.
