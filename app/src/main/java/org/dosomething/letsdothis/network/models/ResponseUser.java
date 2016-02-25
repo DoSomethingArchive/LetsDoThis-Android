@@ -17,7 +17,7 @@ public class ResponseUser {
         String last_name;
         String _id;
         String birthdate;
-        String avatar;
+        String photo;
         String country;
         int    drupal_id;
         public ResponseUserCampaign.Wrapper[] campaigns;
@@ -38,7 +38,7 @@ public class ResponseUser {
         user.id = wrapper._id;
         user.birthdate = wrapper.birthdate;
         user.drupalId = wrapper.drupal_id;
-        user.avatarPath = wrapper.avatar;
+        user.avatarPath = wrapper.photo;
         user.country = wrapper.country;
         return user;
     }

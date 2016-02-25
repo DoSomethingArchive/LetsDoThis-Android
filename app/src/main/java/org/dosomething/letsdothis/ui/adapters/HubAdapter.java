@@ -94,10 +94,20 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             SectionTitleViewHolder viewHolder = (SectionTitleViewHolder) holder;
             String s = (String) mHubList.get(position);
             if (s.equals(CURRENT_SIGNUPS_LABEL_STUB)) {
-                viewHolder.textView.setText(R.string.hub_current_label);
+                if (! mIsPublic) {
+                    viewHolder.textView.setText(R.string.hub_current_label);
+                }
+                else {
+                    viewHolder.textView.setText(R.string.hub_current_label_public);
+                }
             }
             else if (s.equals(REPORTBACKS_LABEL_STUB)) {
-                viewHolder.textView.setText(R.string.hub_done_label);
+                if (! mIsPublic) {
+                    viewHolder.textView.setText(R.string.hub_done_label);
+                }
+                else {
+                    viewHolder.textView.setText(R.string.hub_done_label_public);
+                }
             }
             else {
                 viewHolder.textView.setText(s);
@@ -131,6 +141,10 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             viewHolder.setCampaignDetails(Integer.parseInt(campaign.id), campaign.title,
                     campaign.reportback_info.noun, campaign.reportback_info.verb);
+
+            if (mIsPublic) {
+                viewHolder.proveIt.setVisibility(View.GONE);
+            }
         }
         else if (getItemViewType(position) == VIEW_TYPE_REPORTBACKS) {
             final ResponseProfileSignups.Signup action = (ResponseProfileSignups.Signup) mHubList.get(position);
@@ -143,7 +157,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 rbViewHolder.location.setText(formatUserLocation(mUser.country));
 
                 if (mUser.avatarPath != null) {
-                    Picasso.with(((ProfileViewHolder) holder).userImage.getContext())
+                    Picasso.with(context)
                             .load(mUser.avatarPath).placeholder(R.drawable.ic_action_user)
                             .resizeDimen(R.dimen.hub_avatar_height, R.dimen.hub_avatar_height)
                             .into(rbViewHolder.avatar);
@@ -154,20 +168,26 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             int lastImageIndex = action.reportback.reportback_items.total - 1;
             ReportBack rbItem = action.reportback.reportback_items.data[lastImageIndex];
             Picasso.with(context).load(rbItem.getImagePath()).into(rbViewHolder.image);
-
-            // Report back campaign name and details
-            final int quantity = action.reportback.quantity;
-            final String noun = action.campaign.reportback_info.noun;
-            final String verb = action.campaign.reportback_info.verb;
-            rbViewHolder.title.setText(action.campaign.title);
             rbViewHolder.caption.setText(rbItem.caption);
 
-            String impactText = String.format("%d %s %s", quantity, noun, verb);
-            rbViewHolder.impact.setText(impactText);
+            // Report back campaign name and details
+            if (action.reportback != null && action.campaign != null && action.campaign.reportback_info != null) {
+                final int quantity = action.reportback.quantity;
+                final String noun = action.campaign.reportback_info.noun;
+                final String verb = action.campaign.reportback_info.verb;
+                rbViewHolder.title.setText(action.campaign.title);
+
+                String impactText = String.format("%d %s %s", quantity, noun, verb);
+                rbViewHolder.impact.setText(impactText);
+            }
 
             // Setting data on view holder for use if the Share button is clicked
             rbViewHolder.setAction(action);
             rbViewHolder.setReportbackItemIndex(lastImageIndex);
+
+            if (mIsPublic) {
+                rbViewHolder.share.setVisibility(View.GONE);
+            }
         }
         else if (getItemViewType(position) == VIEW_TYPE_CURRENT_EMPTY) {
             EmptyViewHolder viewHolder = (EmptyViewHolder) holder;
