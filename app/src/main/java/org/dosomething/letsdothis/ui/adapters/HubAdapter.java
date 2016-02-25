@@ -157,7 +157,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 rbViewHolder.location.setText(formatUserLocation(mUser.country));
 
                 if (mUser.avatarPath != null) {
-                    Picasso.with(((ProfileViewHolder) holder).userImage.getContext())
+                    Picasso.with(context)
                             .load(mUser.avatarPath).placeholder(R.drawable.ic_action_user)
                             .resizeDimen(R.dimen.hub_avatar_height, R.dimen.hub_avatar_height)
                             .into(rbViewHolder.avatar);
