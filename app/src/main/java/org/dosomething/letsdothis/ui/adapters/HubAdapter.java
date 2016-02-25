@@ -324,7 +324,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void setCompletedActions(ArrayList<ResponseProfileSignups.Signup> actions) {
         // Remove items in the current "actions done" list and replace it with the new ones
         if (mHubList.indexOf(REPORTBACKS_LABEL_STUB) >= 0) {
-            for (int i = mHubList.size() - 1; i >= mHubList.indexOf(REPORTBACKS_LABEL_STUB); i--) {
+            for (int i = mHubList.size() - 1; i >= mHubList.indexOf(REPORTBACKS_LABEL_STUB) && i >= 0; i--) {
                 mHubList.remove(i);
             }
         }
