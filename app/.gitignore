@@ -2,6 +2,7 @@
 
 # Secrets
 fabric.properties
+newrelic.properties
 secrets.properties
 
 # Keystores

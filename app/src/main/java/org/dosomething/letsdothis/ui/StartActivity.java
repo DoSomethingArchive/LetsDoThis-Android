@@ -1,6 +1,9 @@
 package org.dosomething.letsdothis.ui;
 import android.os.Bundle;
 
+import com.newrelic.agent.android.NewRelic;
+
+import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 /**
@@ -14,6 +17,9 @@ public class StartActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Starts the New Relic agent
+        NewRelic.withApplicationToken(getString(R.string.new_relic_app_token)).start(this.getApplication());
 
         if (AppPrefs.getInstance(this).isLoggedIn()) {
             goToMain();

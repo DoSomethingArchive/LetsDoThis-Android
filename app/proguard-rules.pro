@@ -49,6 +49,11 @@
 # okhttp
 -keep class com.squareup.** { *; }
 
+# New Relic
+-keep class com.newrelic.** { *; }
+-dontwarn com.newrelic.**
+-keepattributes Exceptions, Signature, InnerClasses, LineNumberTable
+
 # Parse
 -keep class com.parse.** { *; }
 
