@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.ui;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,13 +22,17 @@ import org.dosomething.letsdothis.utils.AnalyticsUtils;
 /**
  * Created by izzyoji :) on 4/29/15.
  */
-public class SettingsActivity extends BaseActivity implements SetTitleListener
+public class SettingsActivity extends BaseActivity implements SetTitleListener,
+        SettingsFragment.ShowProgressDialogListener
 {
 
     private CustomToolbar toolbar;
 
     // Google Analytics tracker
     private Tracker mTracker;
+
+    // Progress Dialog
+    private ProgressDialog mProgressDialog;
 
     public static Intent getLaunchIntent(Context context)
     {
@@ -71,6 +76,8 @@ public class SettingsActivity extends BaseActivity implements SetTitleListener
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(LogoutTask task) {
+        dismissProgressDialog();
+
         sendBroadcast(new Intent(BaseActivity.LOGOUT_SUCCESS));
         startActivity(RegisterLoginActivity.getLaunchIntent(this));
 
@@ -109,5 +116,24 @@ public class SettingsActivity extends BaseActivity implements SetTitleListener
     public void setTitle(String title)
     {
         toolbar.setTitle(title);
+    }
+
+    @Override
+    public void showProgressDialog(String message) {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(SettingsActivity.this);
+        }
+
+        mProgressDialog.setMessage(message);
+        mProgressDialog.show();
+    }
+
+    /**
+     * Dismisses the ProgressDialog, if any.
+     */
+    private void dismissProgressDialog() {
+        if (mProgressDialog != null) {
+            mProgressDialog.dismiss();
+        }
     }
 }

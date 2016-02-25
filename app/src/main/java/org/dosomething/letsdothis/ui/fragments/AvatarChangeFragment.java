@@ -144,10 +144,10 @@ public class AvatarChangeFragment extends Fragment implements View.OnClickListen
                     selectedImageUri = data.getData();
                 }
 
-                startActivityForResult(PhotoCropActivity.getResultIntent(
-                                getActivity(), selectedImageUri.toString(),
-                                getResources().getString(R.string.change_photo), null),
-                                PhotoCropActivity.RESULT_CODE);
+                startActivityForResult(PhotoCropActivity.getResultIntent(getActivity(),
+                                selectedImageUri.toString(),
+                                getResources().getString(R.string.change_photo)),
+                        PhotoCropActivity.RESULT_CODE);
             }
             else if (requestCode == PhotoCropActivity.RESULT_CODE) {
                 croppedPhotoPath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);

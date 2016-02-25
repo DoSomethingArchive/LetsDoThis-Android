@@ -224,7 +224,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 campaignViewHolder.actionButton.setText(res.getString(R.string.stop_being_bored));
             }
             else if (campaign.showShare == Campaign.UploadShare.SHARE) {
-                campaignViewHolder.actionButton.setText(res.getString(R.string.share_photo));
+                campaignViewHolder.actionButton.setText(R.string.cta_photo_in_hub);
             }
             else if (campaign.showShare == Campaign.UploadShare.UPLOADING) {
                 campaignViewHolder.actionButton.setText(res.getString(R.string.uploading));

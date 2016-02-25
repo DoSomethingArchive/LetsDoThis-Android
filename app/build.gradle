@@ -1,18 +1,23 @@
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
+        mavenCentral()
     }
 
     dependencies {
         classpath 'io.fabric.tools:gradle:1.+'
+        classpath "com.newrelic.agent.android:agent-gradle-plugin:5.+"
     }
 }
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'android'
+apply plugin: 'newrelic'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    mavenCentral()
 }
 
 // Pulling app ids and API keys from the app/secrets.properties file
@@ -25,6 +30,7 @@ def FACEBOOK_APP_ID_PROD = secrets.getProperty("FacebookAppIdProduction") ?: "Ne
 def FACEBOOK_APP_ID_DEBUG = secrets.getProperty("FacebookAppIdDebug") ?: "Need to set FacebookAppIdDebug in app/secrets.properties";
 def PARSE_APP_ID = secrets.getProperty("ParseAppId") ?: "Need to set ParseAppId in app/secrets.properties";
 def PARSE_CLIENT_KEY = secrets.getProperty("ParseClientKey") ?: "Need to set ParseClientKey in app/secrets.properties";
+def NEW_RELIC_APP_TOKEN = secrets.getProperty("NewRelicAppToken") ?: "Need to set NewRelicAppToken in app/secrets.properties";
 def NORTHSTAR_API_KEY_DEBUG = secrets.getProperty("NorthstarApiKeyDebug") ?: "Need to set NorthstarApiKeyDebug in app/secrets.properties";
 def NORTHSTAR_API_KEY_THOR = secrets.getProperty("NorthstarApiKeyThor") ?: "Need to set NorthstarApiKeyThor in app/secrets.properties";
 def NORTHSTAR_API_KEY_PROD = secrets.getProperty("NorthstarApiKeyProduction") ?: "Need to set NorthstarApiKeyProduction in app/secrets.properties";
@@ -40,11 +46,12 @@ android {
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 2
-        versionName "1.0.4"
+        versionName "1.0.5"
         resValue "string", "fabric_api_key", FABRIC_API_KEY
         resValue "string", "facebook_app_id", FACEBOOK_APP_ID_PROD
         resValue "string", "parse_app_id", PARSE_APP_ID
         resValue "string", "parse_client_key", PARSE_CLIENT_KEY
+        resValue "string", "new_relic_app_token", NEW_RELIC_APP_TOKEN
         resValue "string", "northstar_api_key", NORTHSTAR_API_KEY_PROD
 
         // Enabling multidex support.
@@ -124,7 +131,8 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.facebook.android:facebook-android-sdk:4.7.0'
     compile 'com.facebook.react:react-native:0.19.0'
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {
+    compile 'com.newrelic.agent.android:android-agent:5.+'
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
 }

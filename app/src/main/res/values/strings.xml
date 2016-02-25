@@ -21,14 +21,17 @@
     <string name="cause_relationships_desc">Find volunteer opportunities to promote healthy relationships.</string>
     <string name="cause_sex_desc">Find volunteer opportunities that promote safe consensual sex and combat sexism.</string>
     <string name="cause_violence_desc">Find volunteer opportunities to make your community safer.</string>
+    <string name="cta_photo_in_hub">See Your Photo</string>
     <string name="hub">Hub</string>
     <string name="hub_current_label">Actions I\'m Doing Now</string>
+    <string name="hub_current_label_public">Actions They\'re Doing Now</string>
     <string name="hub_empty_action_button">Take Me There</string>
     <string name="hub_empty_public">Hm, we aren\'t able to find any activity for this user.</string>
     <string name="hub_empty_text1">No actions? No problem!</string>
     <string name="hub_empty_text2">We release 12 new things to do every month, so check your Actions
         tab for what\'s fresh.</string>
-    <string name="hub_past_label">Actions I\'ve Done</string>
+    <string name="hub_done_label">Actions I\'ve Done</string>
+    <string name="hub_done_label_public">Actions They\'ve Done</string>
     <string name="nav_news">News</string>
     <string name="notifications">Notifications</string>
     <string name="staff_pick">Staff pick</string>
@@ -75,6 +78,7 @@
     </string>
     <string name="done">Done</string>
     <string name="error_avatar_upload">There was an error uploading your photo</string>
+    <string name="error_hub_sync">There was an error syncing your profile</string>
     <string name="error_interest_group_titles">There was an error getting campaign info</string>
     <string name="error_login_phone_email">Must not be empty</string>
     <string name="error_login_password">Must not be empty</string>
@@ -134,7 +138,9 @@
     <string name="pref_suggestion_link">Have your own ideas? Fill out this form and let us know.</string>
     <string name="pref_version_key">pref_version_key</string>
     <string name="pref_version_text">v%1$s</string>
+    <string name="progress_dialog_hub">Loading profile...</string>
     <string name="progress_dialog_login">Signing in...</string>
+    <string name="progress_dialog_logout">Logging out...</string>
     <string name="progress_dialog_register">Creating account...</string>
     <string name="expired_already">Oof. This action has expired. Let’s freshen things up.</string>
     <string name="max_kudos">99+</string>

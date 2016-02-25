@@ -25,6 +25,9 @@ FacebookAppIdDebug=FACEBOOK TEST APP ID HERE
 ParseAppId=PARSE APP ID HERE
 ParseClientKey=PARSE CLIENT KEY HERE
 
+# New Relic
+NewRelicAppToken=NEW RELIC APP TOKEN HERE
+
 # Northstar - user API
 NorthstarAppIdDebug=NORTHSTAR STAGING APP ID HERE
 NorthstarApiKeyDebug=NORTHSTAR STAGING API KEY HERE
@@ -41,6 +44,14 @@ To support Fabric, you will also need to add a __fabric.properties__ file to the
 ```
 apiSecret=FABRIC SECRET HERE
 apiKey=FABRIC KEY HERE
+```
+
+#### newrelic.properties
+
+Similarly, you will need a __newrelic.properties__ in the __app/__ folder for New Relic.
+
+```
+com.newrelic.application_token=NEW RELIC APP TOKEN HERE
 ```
 
 #### Fonts

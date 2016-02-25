@@ -30,6 +30,7 @@
             app:draw_border="true"
             app:border_color="@color/white"
             android:layout_marginTop="@dimen/padding_medium"
+            android:src="@drawable/default_profile_photo"
             tools:src="@drawable/placeholder"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
@@ -94,5 +95,17 @@
             android:id="@+id/caption"/>
 
     </RelativeLayout>
+
+    <org.dosomething.letsdothis.ui.views.typeface.CustomButton
+        android:id="@+id/share"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/padding_small"
+        android:layout_marginRight="@dimen/padding_small"
+        android:layout_marginBottom="@dimen/padding_small"
+        android:text="@string/share_photo"
+        android:visibility="gone"
+        app:typeface="brandon_bold"
+        style="@style/ActionButton"/>
 
 </LinearLayout>

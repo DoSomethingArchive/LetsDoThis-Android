@@ -30,6 +30,7 @@ import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.Part;
 import retrofit.http.Path;
+import retrofit.http.Query;
 import retrofit.mime.TypedFile;
 import retrofit.mime.TypedInput;
 
@@ -143,7 +144,7 @@ public interface NorthstarAPI {
     /**
      * Logs the user out of Northstar by invalidating its session token.
      *
-     * HACK: see hackDoNotUse param
+     * HACK: see hackEmptyBody param
      *
      * @param sessionToken Token to invalidate
      * @param hackEmptyBody Without body data, Retrofit errors out because it expects POST requests
@@ -155,22 +156,36 @@ public interface NorthstarAPI {
     Response logout(@Header("Session") String sessionToken,
                     @Body String hackEmptyBody) throws NetworkException;
 
+    /**
+     * Submit a reportback for the logged in user.
+     *
+     * @param sessionToken Token for the currently logged in user
+     * @param requestreportback
+     * @return
+     * @throws NetworkException
+     */
     @Headers("Content-Type: application/json")
-    @POST("/user/campaigns/{nid}/reportback")
+    @POST("/reportbacks")
     ResponseSubmitReportBack submitReportback(@Header("Session") String sessionToken,
-                                              @Body RequestReportback requestreportback,
-                                              @Path("nid") int id) throws NetworkException;
+                                              @Body RequestReportback requestreportback) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @GET("/user/campaigns/{id}")
     ResponseRbData getRbData(@Header("Session") String sessionToken,
                              @Path("id") int campId) throws NetworkException;
 
+    /**
+     * Sign up the logged in user for a campaign.
+     *
+     * @param sessionToken Token for the currently logged in user
+     * @param requestCampaignSignup
+     * @return ResponseCampaignSignUp
+     * @throws NetworkException
+     */
     @Headers("Content-Type: application/json")
-    @POST("/user/campaigns/{id}/signup")
-    ResponseCampaignSignUp campaignSignUp(@Body RequestCampaignSignup requestCampaignSignup,
-                                          @Path("id") int id,
-                                          @Header("Session") String sessionToken) throws NetworkException;
+    @POST("/signups")
+    ResponseCampaignSignUp submitSignUp(@Header("Session") String sessionToken,
+                                        @Body RequestCampaignSignup requestCampaignSignup) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @GET("/users/_id/{id}/campaigns")
@@ -186,4 +201,24 @@ public interface NorthstarAPI {
     ResponseAvatar uploadAvatar(@Path("id") String id,
                                 @Part("photo") TypedFile file) throws NetworkException;
 
+    /**
+     * Get profile info for a user by their id.
+     *
+     * @param id A user's Northstar ID
+     * @return ResponseUser
+     * @throws NetworkException
+     */
+    @GET("/users/_id/{id}")
+    ResponseUser getUserById(@Path("id") String id) throws NetworkException;
+
+    /**
+     * Get signup info for a user by their id.
+     *
+     * @param id A user's Northstar ID
+     * @return ResponseProfileSignups
+     * @throws NetworkException
+     */
+    @GET("/signups")
+    ResponseProfileSignups getSignupsById(@Query("user") String id) throws NetworkException;
 }
+

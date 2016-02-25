@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName;
 public class ResponseProfileCampaign {
     public String id;
     public String title;
+    public String tagline;
     public CampaignRunsWrapper campaign_runs;
     public ReportbackInfoWrapper reportback_info;
 

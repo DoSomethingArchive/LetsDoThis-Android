@@ -20,6 +20,7 @@ import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.FbUser;
+import org.dosomething.letsdothis.tasks.GetProfileSignupsTask;
 import org.dosomething.letsdothis.tasks.RegisterTask;
 import org.dosomething.letsdothis.tasks.UploadAvatarTask;
 import org.dosomething.letsdothis.utils.AnalyticsUtils;
@@ -222,10 +223,8 @@ public class RegisterActivity extends BaseActivity
                     Log.d("drawer_text-----------", selectedImageUri.toString());
                 }
 
-                startActivityForResult(PhotoCropActivity
-                                               .getResultIntent(this, selectedImageUri.toString(),
-                                                                "User Photo", null),
-                                       PhotoCropActivity.RESULT_CODE);
+                startActivityForResult(PhotoCropActivity.getResultIntent(this,
+                        selectedImageUri.toString(), "User Photo"), PhotoCropActivity.RESULT_CODE);
             }
             else if(requestCode == PhotoCropActivity.RESULT_CODE)
             {
@@ -289,16 +288,18 @@ public class RegisterActivity extends BaseActivity
     public void onEventMainThread(RegisterTask task) {
         mProgressDialog.dismiss();
 
+        TaskQueue taskQueue = TaskQueue.loadQueueDefault(getApplicationContext());
         AppPrefs prefs = AppPrefs.getInstance(this);
         if (prefs.getCurrentUserId() != null && prefs.getAvatarPath() != null) {
-            TaskQueue.loadQueueDefault(RegisterActivity.this).execute(
-                    new UploadAvatarTask(prefs.getCurrentUserId(), prefs.getAvatarPath())
-            );
+           taskQueue.execute(new UploadAvatarTask(prefs.getCurrentUserId(), prefs.getAvatarPath()));
         }
 
         if (prefs.isLoggedIn()) {
             broadcastLogInSuccess(this);
             startActivity(MainActivity.getLaunchIntent(this));
+
+            // Get user's actions to upade the local cache
+            taskQueue.execute(new GetProfileSignupsTask());
         }
         else {
             String message = task.getErrorMessage() != null ? task.getErrorMessage() : getString(R.string.fail_register);
