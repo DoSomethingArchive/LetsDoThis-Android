@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/padding_medium"
         android:text="@string/hub_empty_text1"
-        android:textColor="@color/gray"
+        android:textColor="@color/dark_gray"
         android:textSize="@dimen/text_large"
         android:textStyle="bold"
         app:typeface="brandon_bold"/>
@@ -26,9 +26,9 @@
         android:layout_marginRight="@dimen/padding_medium"
         android:gravity="center_horizontal"
         android:text="@string/hub_empty_text2"
-        android:textColor="@color/black_70"
+        android:textColor="@android:color/black"
         android:textSize="@dimen/text_medium"
-        app:typeface="brandon_bold"/>
+        app:typeface="brandon_regular"/>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomButton
         android:id="@+id/actions"
@@ -37,6 +37,7 @@
         android:layout_marginBottom="@dimen/padding_large"
         android:text="@string/hub_empty_action_button"
         android:textAllCaps="true"
-        app:typeface="brandon_bold"/>
+        app:typeface="brandon_bold"
+        style="@style/SecondaryButton"/>
 
 </LinearLayout>
