@@ -27,9 +27,8 @@
     <string name="hub_current_label_public">Actions They\'re Doing Now</string>
     <string name="hub_empty_action_button">Take Me There</string>
     <string name="hub_empty_public">Hm, we aren\'t able to find any activity for this user.</string>
-    <string name="hub_empty_text1">No actions? No problem!</string>
-    <string name="hub_empty_text2">We release 12 new things to do every month, so check your Actions
-        tab for what\'s fresh.</string>
+    <string name="hub_empty_text1">You haven\'t started any actions yet.</string>
+    <string name="hub_empty_text2">And you totally should! Shit is happening in the world -- find out how to do something about it.</string>
     <string name="hub_done_label">Actions I\'ve Done</string>
     <string name="hub_done_label_public">Actions They\'ve Done</string>
     <string name="nav_news">News</string>
