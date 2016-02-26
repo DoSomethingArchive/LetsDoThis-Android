@@ -9,9 +9,11 @@
         android:id="@+id/image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:paddingLeft="@dimen/padding_medium"
         android:paddingRight="@dimen/padding_medium"
         android:paddingTop="@dimen/padding_xxlarge"
+        android:scaleType="centerInside"
         android:src="@drawable/phone"/>
 
     <LinearLayout
