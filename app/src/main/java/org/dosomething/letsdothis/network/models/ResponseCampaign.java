@@ -17,6 +17,8 @@ public class ResponseCampaign
     public int              id;
     public String           title;
     public String           tagline;
+    public String           status;
+    public String           type;
     public ResponseImage    cover_image;
     public ResponseSolution solutions;
     public ResponseFacts    facts;
@@ -29,6 +31,8 @@ public class ResponseCampaign
         campaign.id = response.id;
         campaign.title = response.title;
         campaign.callToAction = response.tagline;
+        campaign.status = response.status;
+        campaign.type = response.type;
         campaign.startTime = getMillisFromString(response.getMobileAppTiming().getDates().start);
         campaign.endTime = getMillisFromString(response.getMobileAppTiming().getDates().end);
         campaign.imagePath = response.getCoverImage().getWrapper().getSizes().getLandscape()
