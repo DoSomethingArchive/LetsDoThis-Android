@@ -333,7 +333,9 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
                     completedActions.add(signups.data[i]);
                 }
                 // Campaigns that the user has signed up for but has no reportback yet
-                else if (signups.data[i].campaign_run.current) {
+                // Campaign must be current. All should have a run, but if not, let's just default
+                // to showing it in the list.
+                else if (signups.data[i].campaign_run == null || signups.data[i].campaign_run.current) {
                     currentSignups.add(signups.data[i].campaign);
                 }
 
