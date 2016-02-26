@@ -195,14 +195,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 campaignViewHolder.solutionWrapper.setVisibility(View.GONE);
             }
             else {
-                SlantedBackgroundDrawable background = new SlantedBackgroundDrawable(true, webOrange,
-                        shadowColor,
-                        slantHeight,
-                        widthOvershoot,
-                        heightShadowOvershoot);
-
                 campaignViewHolder.solutionWrapper.setVisibility(View.VISIBLE);
-                campaignViewHolder.solutionWrapper.setBackground(background);
 
                 if (campaign.solutionCopy != null) {
                     campaignViewHolder.solutionCopy.setText(campaign.solutionCopy.trim());

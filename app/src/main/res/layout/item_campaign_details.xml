@@ -68,33 +68,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="@dimen/padding_xlarge"
-        android:paddingLeft="@dimen/padding_small"
-        android:paddingRight="@dimen/padding_small"
-        android:paddingBottom="@dimen/padding_small"
-        android:background="@color/web_orange"
+        android:padding="@dimen/padding_small"
         android:layout_below="@+id/call_to_action">
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/padding_medium"
-            android:paddingRight="@dimen/padding_medium"
-            android:paddingBottom="@dimen/padding_small"
-            app:typeface="brandon_bold"
-            android:textAllCaps="true"
-            android:layout_gravity="center"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_36"
             android:layout_below="@+id/image_container"
-            android:text="@string/do_something_about_it"/>
+            android:layout_gravity="center"
+            android:background="@color/desertStorm"
+            android:paddingBottom="@dimen/padding_small"
+            android:text="@string/do_something_about_it"
+            app:typeface="brandon_bold"
+            style="@style/SectionTitle"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:id="@+id/solutionCopy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/padding_medium"
-            android:textColor="@color/white"
+            android:textColor="@android:color/black"
             android:textSize="@dimen/text_33"
             tool:text="solution copy"/>
 
@@ -103,7 +96,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/padding_medium"
-            android:textColor="@color/white"
+            android:textColor="@android:color/black"
             android:textSize="@dimen/text_33"
             tool:text="solution support"/>
 
@@ -111,7 +104,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/campaign_reportback_prompt"
-            android:textColor="@color/white"
+            android:textColor="@android:color/black"
             android:textSize="@dimen/text_33"/>
     </LinearLayout>
 
