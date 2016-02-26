@@ -59,8 +59,9 @@
         android:layout_below="@+id/image_container"
         android:gravity="center"
         android:padding="@dimen/padding_medium"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/text_33"
+        android:textColor="@color/dark_gray"
+        android:textSize="@dimen/text_36"
+        app:typeface="brandon_regular"
         tool:text="call to action. make chocolate and give to all the people because it has antioxidants."/>
 
     <LinearLayout
@@ -68,7 +69,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/padding_small"
+        android:paddingLeft="@dimen/padding_small"
+        android:paddingRight="@dimen/padding_small"
         android:layout_below="@+id/call_to_action">
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
@@ -76,8 +78,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/image_container"
             android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/padding_small"
             android:background="@color/desertStorm"
-            android:paddingBottom="@dimen/padding_small"
             android:text="@string/do_something_about_it"
             app:typeface="brandon_bold"
             style="@style/SectionTitle"/>
