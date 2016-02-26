@@ -38,6 +38,10 @@ public class Campaign
     @DatabaseField(columnName = INTEREST_GROUP)
     public int    interestGroup;
 
+    public String status;
+
+    public String type;
+
     public boolean userIsSignedUp = false;
 
     public UserReportBack userReportBack;

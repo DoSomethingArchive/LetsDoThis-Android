@@ -42,7 +42,7 @@ public class UpdateInterestGroupCampaignTask extends BaseNetworkErrorHandlerTask
         String currentDate = df.format(new Date());
         ResponseCampaignList response = NetworkHelper.getPhoenixAPIService()
                 .campaignList(interestGroupId, currentDate);
-        campaigns = ResponseCampaignList.getCampaigns(response);
+        campaigns = response.getCampaigns(true);
 
         Dao<Campaign, Integer> campDao = DatabaseHelper.getInstance(context).getCampDao();
 

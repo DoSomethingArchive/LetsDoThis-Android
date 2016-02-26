@@ -92,7 +92,7 @@ public class GetUserCampaignsTask extends BaseNetworkErrorHandlerTask {
         if (!campaignIds.isEmpty()) {
             ResponseCampaignList responseCampaignList = NetworkHelper.getPhoenixAPIService()
                     .campaignListByIds(campaignIds);
-            List<Campaign> campaigns = ResponseCampaignList.getCampaigns(responseCampaignList);
+            List<Campaign> campaigns = responseCampaignList.getCampaigns(true);
 
             for (Campaign campaign : campaigns) {
                 // Add reportback data, if any
@@ -131,7 +131,7 @@ public class GetUserCampaignsTask extends BaseNetworkErrorHandlerTask {
             pastIds = pastIds.substring(0, pastIds.length() - 1);
             ResponseCampaignList responseCampaignList = NetworkHelper.getPhoenixAPIService()
                     .campaignListByIds(pastIds);
-            pastCampaignList = ResponseCampaignList.getCampaigns(responseCampaignList);
+            pastCampaignList = responseCampaignList.getCampaigns(false);
         }
     }
 
