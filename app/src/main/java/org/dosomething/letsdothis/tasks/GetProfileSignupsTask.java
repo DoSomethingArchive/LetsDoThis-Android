@@ -30,15 +30,15 @@ public class GetProfileSignupsTask extends BaseNetworkErrorHandlerTask {
     @Override
     protected void run(Context context) throws Throwable {
         NorthstarAPI northstar = NetworkHelper.getNorthstarAPIService();
+        String token = AppPrefs.getInstance(context).getSessionToken();
 
         // Get signups for the logged-in user
         if (mPublicId == null) {
-            String token = AppPrefs.getInstance(context).getSessionToken();
             mResult = northstar.userProfileSignups(token);
         }
         // Get signups of some other user
         else {
-            mResult = northstar.getSignupsById(mPublicId);
+            mResult = northstar.getSignupsById(token, mPublicId);
         }
     }
 
