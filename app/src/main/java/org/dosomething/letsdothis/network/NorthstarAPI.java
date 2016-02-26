@@ -223,11 +223,13 @@ public interface NorthstarAPI {
     /**
      * Get signup info for a user by their id.
      *
+     * @param sessionToken Token for the currently logged in user
      * @param id A user's Northstar ID
      * @return ResponseProfileSignups
      * @throws NetworkException
      */
     @GET("/signups")
-    ResponseProfileSignups getSignupsById(@Query("user") String id) throws NetworkException;
+    ResponseProfileSignups getSignupsById(@Header("Session") String sessionToken,
+                                          @Query("user") String id) throws NetworkException;
 }
 
