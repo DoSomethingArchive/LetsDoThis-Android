@@ -90,7 +90,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         mTracker = application.getDefaultTracker();
 
         // Display a progress dialog while the profile is getting synced
-        showProgressDialog();
+        showProgressDialog(R.string.progress_dialog_hub);
     }
 
     @Override
@@ -147,7 +147,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         TaskQueue rbQueue = ReportbackUploadTask.getQueue(getActivity());
         boolean rbUploadInProgress = TaskQueueHelper.hasTasksOfType(rbQueue, ReportbackUploadTask.class);
         if (rbUploadInProgress) {
-            showProgressDialog();
+            showProgressDialog(R.string.progress_dialog_hub);
         }
 
         // Submit screen view to Google Analytics
@@ -177,6 +177,8 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
     @Override
     public void onShareClicked(ResponseProfileSignups.Signup completedAction, int rbItemIndex) {
+        showProgressDialog(R.string.progress_dialog_wait);
+
         TaskQueue.loadQueueDefault(getActivity()).execute(new ProfileReportbackShareTask(completedAction, rbItemIndex));
 
         AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR, AnalyticsUtils.ACTION_SHARE_PHOTO);
@@ -268,10 +270,15 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
     /**
      * Create and show a ProgressDialog.
+     *
+     * @param resMessage Message's string resource id
      */
-    private void showProgressDialog() {
-        mProgressDialog = new ProgressDialog(getActivity());
-        mProgressDialog.setMessage(getString(R.string.progress_dialog_hub));
+    private void showProgressDialog(int resMessage) {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(getActivity());
+        }
+
+        mProgressDialog.setMessage(getString(resMessage));
         mProgressDialog.show();
     }
 
@@ -282,17 +289,20 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         TaskQueue defaultQueue = TaskQueue.loadQueueDefault(getActivity());
         boolean hasProfileTask = TaskQueueHelper.hasTasksOfType(defaultQueue, GetProfileTask.class);
         boolean hasSignupsTask = TaskQueueHelper.hasTasksOfType(defaultQueue, GetProfileSignupsTask.class);
+        boolean hasShareTask = TaskQueueHelper.hasTasksOfType(defaultQueue, ProfileReportbackShareTask.class);
 
         TaskQueue rbQueue = ReportbackUploadTask.getQueue(getActivity());
         boolean hasUploadTask = TaskQueueHelper.hasTasksOfType(rbQueue, ReportbackUploadTask.class);
 
-        if (!hasProfileTask && !hasSignupsTask && !hasUploadTask) {
+        if (!hasProfileTask && !hasSignupsTask && !hasUploadTask && !hasShareTask) {
             mProgressDialog.dismiss();
         }
     }
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(ProfileReportbackShareTask task) {
+        dismissProgressDialogIfDone();
+
         startActivity(task.getShareIntent());
     }
 

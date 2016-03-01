@@ -141,6 +141,7 @@
     <string name="progress_dialog_login">Signing in...</string>
     <string name="progress_dialog_logout">Logging out...</string>
     <string name="progress_dialog_register">Creating account...</string>
+    <string name="progress_dialog_wait">Please wait...</string>
     <string name="expired_already">Oof. This action has expired. Let’s freshen things up.</string>
     <string name="max_kudos">99+</string>
     <string name="log_in_with_facebook">Log in with Facebook</string>
