@@ -223,6 +223,21 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         TaskQueue.loadQueueDefault(this).execute(new CampaignSignUpTask(campaignId));
     }
 
+    /**
+     * Shows a Snackbar error.
+     *
+     * Implements CampaignDetailsAdapter.DetailsAdapterClickListener
+     *
+     * @param resourceId
+     */
+    @Override
+    public void showError(int resourceId) {
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.snack), resourceId, Snackbar.LENGTH_LONG);
+        View snackBarView = snackbar.getView();
+        snackBarView.setBackgroundColor(getResources().getColor(R.color.snack_error));
+        snackbar.show();
+    }
+
     @Override
     protected void onDestroy() {
         EventBusExt.getDefault().unregister(this);

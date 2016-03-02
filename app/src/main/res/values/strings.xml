@@ -76,6 +76,8 @@
         un-boring stuff with me? https://play.google.com/store/apps/details?id=org.dosomething.letsdothis
     </string>
     <string name="done">Done</string>
+    <string name="error_action_closed_campaign">Sorry! This campaign is now closed.</string>
+    <string name="error_action_sms_game">This action is only available on web or SMS</string>
     <string name="error_avatar_upload">There was an error uploading your photo</string>
     <string name="error_hub_sync">There was an error syncing your profile</string>
     <string name="error_interest_group_titles">There was an error getting campaign info</string>
