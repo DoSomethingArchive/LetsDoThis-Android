@@ -157,7 +157,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position)
     {
-        if (position == dataSet.size() - 3) {
+        if (position >= dataSet.size() - 3) {
             detailsAdapterClickListener.onScrolledToBottom();
         }
 
