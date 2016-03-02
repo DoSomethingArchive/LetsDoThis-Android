@@ -12,13 +12,17 @@ public class ResponseReportBackList
 {
 
     public ReportBack data[];
-    public Pagination pagination;
+    public PaginationWrapper meta;
 
     // If there's an error, the response will instead include this object
     public Error error;
 
     public static List<ReportBack> getReportBacks(ResponseReportBackList response) {
         return new ArrayList<>(Arrays.asList(response.data));
+    }
+
+    public static class PaginationWrapper {
+        public Pagination pagination;
     }
 
     public static class Pagination {

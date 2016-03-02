@@ -417,7 +417,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         totalPages = task.totalPages;
         currentPage = task.page;
         List<ReportBack> reportBacks = task.reportBacks;
-        if (reportBacks != null) {
+        if (reportBacks != null && ! reportBacks.isEmpty()) {
             adapter.addAll(reportBacks);
         }
         else if (currentRbQueryStatus == BaseReportBackListTask.STATUS_PROMOTED) {
