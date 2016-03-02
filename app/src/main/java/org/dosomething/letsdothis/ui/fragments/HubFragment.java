@@ -349,18 +349,20 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
                     currentSignups.add(signups.data[i].campaign);
                 }
 
-                // Update local cache of actions
-                try {
-                    CampaignActions actions = new CampaignActions();
-                    actions.campaignId = Integer.parseInt(signups.data[i].campaign.id);
-                    actions.signUpId = Integer.parseInt(signups.data[i].id);
-                    if (signups.data[i].reportback != null) {
-                        actions.reportBackId = Integer.parseInt(signups.data[i].reportback.id);
+                // Update local cache of actions. Skip if displaying a public user profile.
+                // If an EXTRA_ID string arg exists, then this is for a public profile.
+                if (getArguments().getString(EXTRA_ID, null) == null) {
+                    try {
+                        CampaignActions actions = new CampaignActions();
+                        actions.campaignId = Integer.parseInt(signups.data[i].campaign.id);
+                        actions.signUpId = Integer.parseInt(signups.data[i].id);
+                        if (signups.data[i].reportback != null) {
+                            actions.reportBackId = Integer.parseInt(signups.data[i].reportback.id);
+                        }
+                        CampaignActions.save(getActivity(), actions);
+                    } catch (SQLException e) {
+                        Toast.makeText(getActivity(), R.string.error_hub_sync, Toast.LENGTH_SHORT).show();
                     }
-                    CampaignActions.save(getActivity(), actions);
-                }
-                catch (SQLException e) {
-                    Toast.makeText(getActivity(), R.string.error_hub_sync, Toast.LENGTH_SHORT).show();
                 }
             }
         }
