@@ -131,6 +131,8 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         void onKudosClicked(ReportBack reportBack, Kudos kudos);
 
         void onSignupClicked(int campaignId);
+
+        void showError(int resourceId);
     }
 
     @Override
@@ -212,7 +214,6 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 }
             }
 
-
             // Action button
             campaignViewHolder.actionButton.setVisibility(View.VISIBLE);
             if (! mUserIsSignedUp) {
@@ -237,23 +238,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 }
             }
 
-            campaignViewHolder.actionButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!mUserIsSignedUp) {
-                        mSignupInProgress = true;
-                        notifyDataSetChanged();
-
-                        detailsAdapterClickListener.onSignupClicked(campaign.id);
-                    }
-                    else if (campaign.showShare == Campaign.UploadShare.SHARE) {
-                        detailsAdapterClickListener.shareClicked(campaign);
-                    }
-                    else if (campaign.showShare == Campaign.UploadShare.SHOW_OFF) {
-                        detailsAdapterClickListener.proveClicked();
-                    }
-                }
-            });
+            campaignViewHolder.actionButton.setOnClickListener(new OnActionClickListener(campaign));
         }
         else if(getItemViewType(position) == VIEW_TYPE_REPORT_BACK)
         {
@@ -404,6 +389,35 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         @Override
         public void onClick(View v) {
             detailsAdapterClickListener.onUserClicked(mUserId);
+        }
+    }
+
+    private class OnActionClickListener implements View.OnClickListener {
+
+        private Campaign campaign;
+
+        public OnActionClickListener(Campaign campaign) {
+            this.campaign = campaign;
+        }
+
+        @Override
+        public void onClick(View v) {
+            boolean isSmsGame = campaign.type != null ? campaign.type.equals("sms_game") : false;
+            if (isSmsGame) {
+                detailsAdapterClickListener.showError(R.string.error_action_sms_game);
+            }
+            else if (!mUserIsSignedUp) {
+                mSignupInProgress = true;
+                notifyDataSetChanged();
+
+                detailsAdapterClickListener.onSignupClicked(campaign.id);
+            }
+            else if (campaign.showShare == Campaign.UploadShare.SHARE) {
+                detailsAdapterClickListener.shareClicked(campaign);
+            }
+            else if (campaign.showShare == Campaign.UploadShare.SHOW_OFF) {
+                detailsAdapterClickListener.proveClicked();
+            }
         }
     }
 
