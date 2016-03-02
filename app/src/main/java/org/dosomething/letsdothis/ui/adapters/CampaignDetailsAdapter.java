@@ -218,11 +218,6 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             campaignViewHolder.actionButton.setVisibility(View.VISIBLE);
             if (! mUserIsSignedUp) {
                 campaignViewHolder.actionButton.setText(res.getString(R.string.stop_being_bored));
-
-                // Hide the action button if the campaign is closed
-                if (campaign.status != null && campaign.status.equals("closed")) {
-                    campaignViewHolder.actionButton.setVisibility(View.GONE);
-                }
             }
             else if (campaign.showShare == Campaign.UploadShare.SHARE) {
                 campaignViewHolder.actionButton.setText(R.string.cta_photo_in_hub);
@@ -232,10 +227,6 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             }
             else if (campaign.showShare == Campaign.UploadShare.SHOW_OFF) {
                 campaignViewHolder.actionButton.setText(res.getString(R.string.show_off));
-
-                if (campaign.status != null && campaign.status.equals("closed")) {
-                    campaignViewHolder.actionButton.setVisibility(View.GONE);
-                }
             }
 
             campaignViewHolder.actionButton.setOnClickListener(new OnActionClickListener(campaign));
@@ -403,8 +394,13 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         @Override
         public void onClick(View v) {
             boolean isSmsGame = campaign.type != null ? campaign.type.equals("sms_game") : false;
+            boolean isClosed = campaign.status != null ? campaign.status.equals("closed") : false;
+
             if (isSmsGame) {
                 detailsAdapterClickListener.showError(R.string.error_action_sms_game);
+            }
+            else if (isClosed && campaign.showShare != Campaign.UploadShare.SHARE) {
+                detailsAdapterClickListener.showError(R.string.error_action_closed_campaign);
             }
             else if (!mUserIsSignedUp) {
                 mSignupInProgress = true;
