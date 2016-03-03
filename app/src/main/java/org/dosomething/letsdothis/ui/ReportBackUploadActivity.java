@@ -102,16 +102,17 @@ public class ReportBackUploadActivity extends AppCompatActivity
                 RequestReportback req = new RequestReportback();
                 req.caption = caption.getText().toString();
                 if (req.caption.equals("")) {
-                    Toast.makeText(ReportBackUploadActivity.this, "Please enter a valid caption.",
-                                   Toast.LENGTH_SHORT).show();
+                    caption.setError(getString(R.string.error_reportback_invalid_caption));
+                    return;
+                } else if (hasEmoji(req.caption)) {
+                    caption.setError(getString(R.string.error_reportback_emoji_caption));
+                    return;
                 }
 
                 try {
                     Integer.parseInt(number.getText().toString());
-                }
-                catch (NumberFormatException e) {
-                    Toast.makeText(ReportBackUploadActivity.this, "Enter a valid number.",
-                                   Toast.LENGTH_SHORT).show();
+                } catch (NumberFormatException e) {
+                    number.setError(getString(R.string.error_reportback_invalid_quantity));
                     return;
                 }
 
@@ -142,5 +143,25 @@ public class ReportBackUploadActivity extends AppCompatActivity
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Checks if a string has any emoji characters.
+     *
+     * @param text String to check
+     * @return boolean. True if an emoji is found. Otherwise, false.
+     */
+    private boolean hasEmoji(String text) {
+        for (int i = 0; text != null && i < text.length(); i++) {
+            int charType = Character.getType(text.charAt(i));
+
+            // This will also reject some non-emoji characters. But I think they're still in a range
+            // that don't really make sense for us to allow in a reportback caption.
+            if (charType == Character.SURROGATE || charType == Character.OTHER_SYMBOL) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

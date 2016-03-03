@@ -91,6 +91,9 @@
     <string name="error_registration_email">We need a valid email</string>
     <string name="error_registration_first_name">We need your first name</string>
     <string name="error_registration_password">Your password must be 6+ characters</string>
+    <string name="error_reportback_emoji_caption">You cannot use emojis or symbols in your caption :(</string>
+    <string name="error_reportback_invalid_caption">Please enter a valid caption</string>
+    <string name="error_reportback_invalid_quantity">Please enter a valid number</string>
     <string name="error_signup">There was an error signing up for the campaign</string>
     <string name="tell_us">Let\'s get to know each other.</string>
     <string name="footer_register">Have a DoSomething.org account? Sign in</string>
