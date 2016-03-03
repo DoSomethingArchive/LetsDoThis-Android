@@ -29,7 +29,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:text="Cause Title Placeholder"
-            android:textSize="18sp"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/text_large"
             app:typeface="brandon_bold" />
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
@@ -40,7 +41,8 @@
             android:layout_below="@id/name"
             android:layout_toLeftOf="@+id/arrow"
             android:text="Cause description placeholder."
-            android:textSize="12sp"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/text_tiny"
             app:typeface="brandon_regular" />
 
         <ImageView

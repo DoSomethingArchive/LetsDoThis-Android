@@ -6,7 +6,8 @@ import com.j256.ormlite.dao.Dao;
 import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.NetworkHelper;
-import org.dosomething.letsdothis.network.models.ResponseAvatar;
+import org.dosomething.letsdothis.network.models.ResponseUser;
+import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.io.File;
 
@@ -36,6 +37,8 @@ public class UploadAvatarTask extends Task {
 
     @Override
     protected void run(Context context) throws Throwable {
+        String token = AppPrefs.getInstance(context).getSessionToken();
+
         File file = new File(filePath);
         Dao<User, String> userDao = DatabaseHelper.getInstance(context).getUserDao();
         user = userDao.queryForId(userId);
@@ -44,9 +47,9 @@ public class UploadAvatarTask extends Task {
         userDao.createOrUpdate(user);
 
         TypedFile typedFile = new TypedFile("multipart/form-data", file);
-        ResponseAvatar response = NetworkHelper.getNorthstarAPIService()
-                .uploadAvatar(userId, typedFile);
-        user.avatarPath = response.data.photo;
+        ResponseUser response = NetworkHelper.getNorthstarAPIService()
+                .uploadAvatar(token, userId, typedFile);
+        user.avatarPath = ResponseUser.getUser(response).avatarPath;
         userDao.createOrUpdate(user);
     }
 

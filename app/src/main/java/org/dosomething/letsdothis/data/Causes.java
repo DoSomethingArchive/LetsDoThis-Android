@@ -162,7 +162,7 @@ public class Causes {
             case POVERTY:
                 return R.string.cause_poverty_desc;
             case RELATIONSHIPS:
-                return R.string.cause_animals_desc;
+                return R.string.cause_relationships_desc;
             case SEX:
                 return R.string.cause_sex_desc;
             case VIOLENCE:

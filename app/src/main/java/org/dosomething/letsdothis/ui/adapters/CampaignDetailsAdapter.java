@@ -131,6 +131,8 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         void onKudosClicked(ReportBack reportBack, Kudos kudos);
 
         void onSignupClicked(int campaignId);
+
+        void showError(int resourceId);
     }
 
     @Override
@@ -157,7 +159,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position)
     {
-        if (position == dataSet.size() - 3) {
+        if (position >= dataSet.size() - 3) {
             detailsAdapterClickListener.onScrolledToBottom();
         }
 
@@ -195,14 +197,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 campaignViewHolder.solutionWrapper.setVisibility(View.GONE);
             }
             else {
-                SlantedBackgroundDrawable background = new SlantedBackgroundDrawable(true, webOrange,
-                        shadowColor,
-                        slantHeight,
-                        widthOvershoot,
-                        heightShadowOvershoot);
-
                 campaignViewHolder.solutionWrapper.setVisibility(View.VISIBLE);
-                campaignViewHolder.solutionWrapper.setBackground(background);
 
                 if (campaign.solutionCopy != null) {
                     campaignViewHolder.solutionCopy.setText(campaign.solutionCopy.trim());
@@ -220,7 +215,8 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             }
 
             // Action button
-            if (!mUserIsSignedUp) {
+            campaignViewHolder.actionButton.setVisibility(View.VISIBLE);
+            if (! mUserIsSignedUp) {
                 campaignViewHolder.actionButton.setText(res.getString(R.string.stop_being_bored));
             }
             else if (campaign.showShare == Campaign.UploadShare.SHARE) {
@@ -233,23 +229,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 campaignViewHolder.actionButton.setText(res.getString(R.string.show_off));
             }
 
-            campaignViewHolder.actionButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!mUserIsSignedUp) {
-                        mSignupInProgress = true;
-                        notifyDataSetChanged();
-
-                        detailsAdapterClickListener.onSignupClicked(campaign.id);
-                    }
-                    else if(campaign.showShare == Campaign.UploadShare.SHARE) {
-                        detailsAdapterClickListener.shareClicked(campaign);
-                    }
-                    else if(campaign.showShare == Campaign.UploadShare.SHOW_OFF) {
-                        detailsAdapterClickListener.proveClicked();
-                    }
-                }
-            });
+            campaignViewHolder.actionButton.setOnClickListener(new OnActionClickListener(campaign));
         }
         else if(getItemViewType(position) == VIEW_TYPE_REPORT_BACK)
         {
@@ -400,6 +380,40 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         @Override
         public void onClick(View v) {
             detailsAdapterClickListener.onUserClicked(mUserId);
+        }
+    }
+
+    private class OnActionClickListener implements View.OnClickListener {
+
+        private Campaign campaign;
+
+        public OnActionClickListener(Campaign campaign) {
+            this.campaign = campaign;
+        }
+
+        @Override
+        public void onClick(View v) {
+            boolean isSmsGame = campaign.type != null ? campaign.type.equals("sms_game") : false;
+            boolean isClosed = campaign.status != null ? campaign.status.equals("closed") : false;
+
+            if (isSmsGame) {
+                detailsAdapterClickListener.showError(R.string.error_action_sms_game);
+            }
+            else if (isClosed && campaign.showShare != Campaign.UploadShare.SHARE) {
+                detailsAdapterClickListener.showError(R.string.error_action_closed_campaign);
+            }
+            else if (!mUserIsSignedUp) {
+                mSignupInProgress = true;
+                notifyDataSetChanged();
+
+                detailsAdapterClickListener.onSignupClicked(campaign.id);
+            }
+            else if (campaign.showShare == Campaign.UploadShare.SHARE) {
+                detailsAdapterClickListener.shareClicked(campaign);
+            }
+            else if (campaign.showShare == Campaign.UploadShare.SHOW_OFF) {
+                detailsAdapterClickListener.proveClicked();
+            }
         }
     }
 

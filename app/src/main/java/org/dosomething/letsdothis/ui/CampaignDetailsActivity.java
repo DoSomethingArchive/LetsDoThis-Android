@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.ui;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -58,6 +59,9 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     private int                    totalPages;
     private int currentPage = 1;
     private String currentRbQueryStatus;
+
+    // Progress dialog to display while signup is in progress
+    private ProgressDialog mProgressDialog;
 
     // Google Analytics tracker
     private Tracker mTracker;
@@ -212,7 +216,26 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
      */
     @Override
     public void onSignupClicked(int campaignId) {
-         TaskQueue.loadQueueDefault(this).execute(new CampaignSignUpTask(campaignId));
+        mProgressDialog = new ProgressDialog(CampaignDetailsActivity.this);
+        mProgressDialog.setMessage(getString(R.string.progress_dialog_wait));
+        mProgressDialog.show();
+
+        TaskQueue.loadQueueDefault(this).execute(new CampaignSignUpTask(campaignId));
+    }
+
+    /**
+     * Shows a Snackbar error.
+     *
+     * Implements CampaignDetailsAdapter.DetailsAdapterClickListener
+     *
+     * @param resourceId
+     */
+    @Override
+    public void showError(int resourceId) {
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.snack), resourceId, Snackbar.LENGTH_LONG);
+        View snackBarView = snackbar.getView();
+        snackBarView.setBackgroundColor(getResources().getColor(R.color.snack_error));
+        snackbar.show();
     }
 
     @Override
@@ -409,7 +432,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         totalPages = task.totalPages;
         currentPage = task.page;
         List<ReportBack> reportBacks = task.reportBacks;
-        if (reportBacks != null) {
+        if (reportBacks != null && ! reportBacks.isEmpty()) {
             adapter.addAll(reportBacks);
         }
         else if (currentRbQueryStatus == BaseReportBackListTask.STATUS_PROMOTED) {
@@ -422,6 +445,10 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(CampaignSignUpTask task) {
+        if (mProgressDialog != null) {
+            mProgressDialog.dismiss();
+        }
+
         if (!task.hasError()) {
             adapter.refreshOnSignup();
 

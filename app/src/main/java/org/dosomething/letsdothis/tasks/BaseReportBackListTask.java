@@ -51,7 +51,9 @@ public abstract class BaseReportBackListTask extends BaseNetworkErrorHandlerTask
             error = response.error.message;
         }
         else {
-            totalPages = response.pagination.total_pages;
+            if (response.meta != null && response.meta.pagination != null) {
+                totalPages = response.meta.pagination.total_pages;
+            }
             reportBacks = ResponseReportBackList.getReportBacks(response);
         }
     }

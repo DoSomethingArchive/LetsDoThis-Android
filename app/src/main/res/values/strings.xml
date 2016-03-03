@@ -8,28 +8,27 @@
     <string name="actions_no_network_text2">We can\'t connect to the internet, please check your
         connection and try again.</string>
     <string name="cause_default_desc">Find volunteer opportunities.</string>
-    <string name="cause_animals_desc">Find volunteer opportunities to help find a home for shelter pets and protect endangered species.</string>
-    <string name="cause_bullying_desc">Find volunteer opportunities that stop bullying in schools, at work and online.</string>
-    <string name="cause_disasters_desc">Find volunteer opportunities to help disaster relief and emergency readiness.</string>
-    <string name="cause_discrimination_desc">Find volunteer opportunities to fight discrimination in your community.</string>
-    <string name="cause_education_desc">Find volunteer opportunities to improve the education system.</string>
-    <string name="cause_environment_desc">Find volunteer opportunities that protect the environment and save the earth.</string>
-    <string name="cause_homelessness_desc">Find volunteer opportunities to help those in need.</string>
-    <string name="cause_mental_health_desc">Find volunteer opportunities to help those suffering from mental health issues.</string>
-    <string name="cause_physical_health_desc">Find volunteer opportunities to bring healthy living to your community.</string>
-    <string name="cause_poverty_desc">Find volunteer opportunities to help those less fortunate in your community.</string>
-    <string name="cause_relationships_desc">Find volunteer opportunities to promote healthy relationships.</string>
-    <string name="cause_sex_desc">Find volunteer opportunities that promote safe consensual sex and combat sexism.</string>
-    <string name="cause_violence_desc">Find volunteer opportunities to make your community safer.</string>
+    <string name="cause_animals_desc">Sometimes Simba or Bambi or Dory need your help. You know, in real life.</string>
+    <string name="cause_bullying_desc">Save the drama for your mama.</string>
+    <string name="cause_disasters_desc">When bad things happen, a little good goes a long way. </string>
+    <string name="cause_discrimination_desc">Racism. Sexism. Ableism. Down with all the isms.</string>
+    <string name="cause_education_desc">Want to know how to fix our broken system? Listen up -- school is in session.</string>
+    <string name="cause_environment_desc">This planet is the only one we\'ve got. Trust us: Mars is totally overrated.</string>
+    <string name="cause_homelessness_desc">Over a million young Americans experience homelessness. Take a stand for them.</string>
+    <string name="cause_mental_health_desc">Time to make the mind top of mind.</string>
+    <string name="cause_physical_health_desc">Strong people for strong bodies.</string>
+    <string name="cause_poverty_desc">What you need to help those in need.</string>
+    <string name="cause_relationships_desc">BFs, baes, and boos. Let\'s take action when the personal goes public.</string>
+    <string name="cause_sex_desc">The hottest kind of sex? Consensual.</string>
+    <string name="cause_violence_desc">Learn how to fight back without fighting back.</string>
     <string name="cta_photo_in_hub">See Your Photo</string>
     <string name="hub">Hub</string>
     <string name="hub_current_label">Actions I\'m Doing Now</string>
     <string name="hub_current_label_public">Actions They\'re Doing Now</string>
     <string name="hub_empty_action_button">Take Me There</string>
     <string name="hub_empty_public">Hm, we aren\'t able to find any activity for this user.</string>
-    <string name="hub_empty_text1">No actions? No problem!</string>
-    <string name="hub_empty_text2">We release 12 new things to do every month, so check your Actions
-        tab for what\'s fresh.</string>
+    <string name="hub_empty_text1">You haven\'t started any actions yet.</string>
+    <string name="hub_empty_text2">And you totally should! Shit is happening in the world -- find out how to do something about it.</string>
     <string name="hub_done_label">Actions I\'ve Done</string>
     <string name="hub_done_label_public">Actions They\'ve Done</string>
     <string name="nav_news">News</string>
@@ -52,8 +51,8 @@
     <string name="share_photo">Share Your Photo</string>
     <string name="show_off">Prove It</string>
     <string name="friends">Friends</string>
-    <string name="desc_login_reg">Let\'s make this official. Register an account to find un-boring
-        stuff to do with your friends.
+    <string name="desc_login_reg">Let’s make this official. Create an account to find news around
+        your top causes and ways to take action.
     </string>
     <string name="settings">Settings</string>
     <string name="rate">Rate DoSomething</string>
@@ -77,6 +76,8 @@
         un-boring stuff with me? https://play.google.com/store/apps/details?id=org.dosomething.letsdothis
     </string>
     <string name="done">Done</string>
+    <string name="error_action_closed_campaign">Sorry! This campaign is now closed.</string>
+    <string name="error_action_sms_game">This action is only available on web or SMS</string>
     <string name="error_avatar_upload">There was an error uploading your photo</string>
     <string name="error_hub_sync">There was an error syncing your profile</string>
     <string name="error_interest_group_titles">There was an error getting campaign info</string>
@@ -90,6 +91,9 @@
     <string name="error_registration_email">We need a valid email</string>
     <string name="error_registration_first_name">We need your first name</string>
     <string name="error_registration_password">Your password must be 6+ characters</string>
+    <string name="error_reportback_emoji_caption">You cannot use emojis or symbols in your caption :(</string>
+    <string name="error_reportback_invalid_caption">Please enter a valid caption</string>
+    <string name="error_reportback_invalid_quantity">Please enter a valid number</string>
     <string name="error_signup">There was an error signing up for the campaign</string>
     <string name="tell_us">Let\'s get to know each other.</string>
     <string name="footer_register">Have a DoSomething.org account? Sign in</string>
@@ -142,6 +146,7 @@
     <string name="progress_dialog_login">Signing in...</string>
     <string name="progress_dialog_logout">Logging out...</string>
     <string name="progress_dialog_register">Creating account...</string>
+    <string name="progress_dialog_wait">Please wait...</string>
     <string name="expired_already">Oof. This action has expired. Let’s freshen things up.</string>
     <string name="max_kudos">99+</string>
     <string name="log_in_with_facebook">Log in with Facebook</string>
@@ -151,12 +156,10 @@
     <string name="refresh_copy">Get New Actions</string>
     <string name="uploading">uploading…</string>
     <string name="cancel_search">Cancel Search</string>
-    <string name="intro_title_1">Stop Being Bored</string>
-    <string name="intro_desc_1">Are you into sports? Crafting? Whatever your interests, you can do
-        fun stuff and social good at the same time.</string>
-    <string name="intro_title_2">Prove It</string>
-    <string name="intro_desc_2">Submit and share photos of yourself in action -- and see other
-        people\'s photos too. #picsoritdidnthappen</string>
+    <string name="intro_title_1">Information \u2192 Action</string>
+    <string name="intro_desc_1">Breaking news. You\'re on it. Learn what\'s happening in the world &amp; what you can do about it.</string>
+    <string name="intro_title_2">A Global Movement + You</string>
+    <string name="intro_desc_2">Send a photo of yourself in action to connect with a worldwide community of other Doers.</string>
     <string name="fail_register">Registration failed</string>
     <string name="fail_login">Your username or password was incorrect.</string>
     <string name="success_login">Login successful</string>

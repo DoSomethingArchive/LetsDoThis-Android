@@ -287,23 +287,29 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      */
     public void setCurrentSignups(ArrayList<ResponseProfileCampaign> campaigns) {
         ArrayList<Object> reportbacks = new ArrayList<>();
-        if (mHubList.indexOf(REPORTBACKS_LABEL_STUB) > 0) {
-            int rbStart = mHubList.indexOf(REPORTBACKS_LABEL_STUB);
-            for (int i = rbStart; i < mHubList.size(); i++) {
+        int rbLabelIndex = mHubList.indexOf(REPORTBACKS_LABEL_STUB);
+        if (rbLabelIndex > 0) {
+            for (int i = rbLabelIndex; i < mHubList.size(); i++) {
                 reportbacks.add(mHubList.get(i));
             }
         }
 
         // Remove any current signups
-        if (mHubList.indexOf(CURRENT_SIGNUPS_LABEL_STUB) >= 0) {
-            int signupsStart = mHubList.indexOf(CURRENT_SIGNUPS_LABEL_STUB);
-            for (int i = mHubList.size() - 1; i > signupsStart ; i--) {
+        int suLabelIndex = mHubList.indexOf(CURRENT_SIGNUPS_LABEL_STUB);
+        if (suLabelIndex >= 0) {
+            for (int i = mHubList.size() - 1; i > suLabelIndex; i--) {
                 mHubList.remove(i);
             }
         }
 
-        // Adds signups to the list displayed to the Hub
-        mHubList.addAll(campaigns);
+        if (! mIsPublic && (campaigns == null || campaigns.isEmpty())) {
+            // Adds the empty view
+            mHubList.add(CURRENT_CAMPAIGNS_EMPTY_STUB);
+        }
+        else {
+            // Adds signups to the list displayed to the Hub
+            mHubList.addAll(campaigns);
+        }
 
         // And then add back any reportbacks, if any
         mHubList.addAll(reportbacks);
@@ -317,17 +323,20 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      */
     public void setCompletedActions(ArrayList<ResponseProfileSignups.Signup> actions) {
         // Remove items in the current "actions done" list and replace it with the new ones
-        if (mHubList.indexOf(REPORTBACKS_LABEL_STUB) >= 0) {
-            for (int i = mHubList.size() - 1; i > mHubList.indexOf(REPORTBACKS_LABEL_STUB); i--) {
+        int rbLabelIndex = mHubList.indexOf(REPORTBACKS_LABEL_STUB);
+        if (rbLabelIndex >= 0) {
+            for (int i = mHubList.size() - 1; i >= rbLabelIndex; i--) {
                 mHubList.remove(i);
             }
         }
-        // Add the "actions done" label
-        else {
-            mHubList.add(REPORTBACKS_LABEL_STUB);
-        }
 
-        mHubList.addAll(actions);
+        if (actions != null && ! actions.isEmpty()) {
+            // Add the "actions done" label
+            mHubList.add(REPORTBACKS_LABEL_STUB);
+
+            // Add the reportbacks
+            mHubList.addAll(actions);
+        }
         notifyDataSetChanged();
     }
 

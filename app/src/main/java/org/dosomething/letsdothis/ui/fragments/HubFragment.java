@@ -90,7 +90,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         mTracker = application.getDefaultTracker();
 
         // Display a progress dialog while the profile is getting synced
-        showProgressDialog();
+        showProgressDialog(R.string.progress_dialog_hub);
     }
 
     @Override
@@ -147,7 +147,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         TaskQueue rbQueue = ReportbackUploadTask.getQueue(getActivity());
         boolean rbUploadInProgress = TaskQueueHelper.hasTasksOfType(rbQueue, ReportbackUploadTask.class);
         if (rbUploadInProgress) {
-            showProgressDialog();
+            showProgressDialog(R.string.progress_dialog_hub);
         }
 
         // Submit screen view to Google Analytics
@@ -177,6 +177,8 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
     @Override
     public void onShareClicked(ResponseProfileSignups.Signup completedAction, int rbItemIndex) {
+        showProgressDialog(R.string.progress_dialog_wait);
+
         TaskQueue.loadQueueDefault(getActivity()).execute(new ProfileReportbackShareTask(completedAction, rbItemIndex));
 
         AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR, AnalyticsUtils.ACTION_SHARE_PHOTO);
@@ -268,10 +270,15 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
     /**
      * Create and show a ProgressDialog.
+     *
+     * @param resMessage Message's string resource id
      */
-    private void showProgressDialog() {
-        mProgressDialog = new ProgressDialog(getActivity());
-        mProgressDialog.setMessage(getString(R.string.progress_dialog_hub));
+    private void showProgressDialog(int resMessage) {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(getActivity());
+        }
+
+        mProgressDialog.setMessage(getString(resMessage));
         mProgressDialog.show();
     }
 
@@ -282,17 +289,20 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         TaskQueue defaultQueue = TaskQueue.loadQueueDefault(getActivity());
         boolean hasProfileTask = TaskQueueHelper.hasTasksOfType(defaultQueue, GetProfileTask.class);
         boolean hasSignupsTask = TaskQueueHelper.hasTasksOfType(defaultQueue, GetProfileSignupsTask.class);
+        boolean hasShareTask = TaskQueueHelper.hasTasksOfType(defaultQueue, ProfileReportbackShareTask.class);
 
         TaskQueue rbQueue = ReportbackUploadTask.getQueue(getActivity());
         boolean hasUploadTask = TaskQueueHelper.hasTasksOfType(rbQueue, ReportbackUploadTask.class);
 
-        if (!hasProfileTask && !hasSignupsTask && !hasUploadTask) {
+        if (!hasProfileTask && !hasSignupsTask && !hasUploadTask && !hasShareTask) {
             mProgressDialog.dismiss();
         }
     }
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(ProfileReportbackShareTask task) {
+        dismissProgressDialogIfDone();
+
         startActivity(task.getShareIntent());
     }
 
@@ -333,22 +343,26 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
                     completedActions.add(signups.data[i]);
                 }
                 // Campaigns that the user has signed up for but has no reportback yet
-                else if (signups.data[i].campaign_run.current) {
+                // Campaign must be current. All should have a run, but if not, let's just default
+                // to showing it in the list.
+                else if (signups.data[i].campaign_run == null || signups.data[i].campaign_run.current) {
                     currentSignups.add(signups.data[i].campaign);
                 }
 
-                // Update local cache of actions
-                try {
-                    CampaignActions actions = new CampaignActions();
-                    actions.campaignId = Integer.parseInt(signups.data[i].campaign.id);
-                    actions.signUpId = Integer.parseInt(signups.data[i].id);
-                    if (signups.data[i].reportback != null) {
-                        actions.reportBackId = Integer.parseInt(signups.data[i].reportback.id);
+                // Update local cache of actions. Skip if displaying a public user profile.
+                // If an EXTRA_ID string arg exists, then this is for a public profile.
+                if (getArguments().getString(EXTRA_ID, null) == null) {
+                    try {
+                        CampaignActions actions = new CampaignActions();
+                        actions.campaignId = Integer.parseInt(signups.data[i].campaign.id);
+                        actions.signUpId = Integer.parseInt(signups.data[i].id);
+                        if (signups.data[i].reportback != null) {
+                            actions.reportBackId = Integer.parseInt(signups.data[i].reportback.id);
+                        }
+                        CampaignActions.save(getActivity(), actions);
+                    } catch (SQLException e) {
+                        Toast.makeText(getActivity(), R.string.error_hub_sync, Toast.LENGTH_SHORT).show();
                     }
-                    CampaignActions.save(getActivity(), actions);
-                }
-                catch (SQLException e) {
-                    Toast.makeText(getActivity(), R.string.error_hub_sync, Toast.LENGTH_SHORT).show();
                 }
             }
         }
