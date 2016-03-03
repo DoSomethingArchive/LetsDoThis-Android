@@ -157,7 +157,7 @@ public class RegisterActivity extends BaseActivity
         email.setBackgroundResource(R.drawable.bg_white_rounded_rect_filled);
         password.setBackgroundResource(R.drawable.bg_white_rounded_rect_filled);
 
-        String inputFName = firstName.getText().toString();
+        String inputFName = firstName.getText().toString().trim();
         if (inputFName.isEmpty()) {
             String fnameError = getResources().getString(R.string.error_registration_first_name);
             firstName.setError(fnameError);
@@ -165,7 +165,7 @@ public class RegisterActivity extends BaseActivity
             isValid = false;
         }
 
-        String inputEmail = email.getText().toString();
+        String inputEmail = email.getText().toString().trim();
         if (inputEmail.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(inputEmail).matches()) {
             String emailError = getResources().getString(R.string.error_registration_email);
             email.setError(emailError);
