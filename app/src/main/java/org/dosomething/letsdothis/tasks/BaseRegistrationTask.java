@@ -81,7 +81,15 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
         if (throwable instanceof RetrofitError) {
             RetrofitError retrofitError = (RetrofitError) throwable;
             RegistrationError regError = (RegistrationError) retrofitError.getBodyAs(RegistrationError.class);
-            mErrorMessage = regError.error.message;
+            mErrorMessage = regError.message;
+            if (regError.errors != null) {
+                if (regError.errors.email.length > 0) {
+                    mErrorMessage = regError.errors.email[0];
+                }
+                else if (regError.errors.password.length > 0) {
+                    mErrorMessage = regError.errors.password[0];
+                }
+            }
 
             return true;
         }
@@ -103,12 +111,14 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
      * Data structure of error returned from a registration attempt.
      */
     class RegistrationError {
-        class RegistrationErrorBody {
-            public int code;
-            public String message;
-        }
+        public int code;
+        public String message;
+        public RegistrationErrorBody errors;
 
-        public RegistrationErrorBody error;
+        class RegistrationErrorBody {
+            public String email[];
+            public String password[];
+        }
     }
 
 }
