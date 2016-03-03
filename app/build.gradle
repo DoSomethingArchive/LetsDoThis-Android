@@ -130,7 +130,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.1.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.facebook.android:facebook-android-sdk:4.7.0'
-    compile 'com.facebook.react:react-native:0.19.0'
+    compile 'com.facebook.react:react-native:+' // From node_modules
     compile 'com.newrelic.agent.android:android-agent:5.+'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
