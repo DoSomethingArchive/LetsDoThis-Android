@@ -14,6 +14,7 @@ import React, {
 } from 'react-native';
 
 var Helpers = require('./newsfeed-helpers');
+var NetworkErrorView = require('./network-error-view');
 var NewsFeedPost = require('./newsfeed-post');
 var Theme = require('./ldt-theme.js');
 
@@ -25,6 +26,7 @@ var NewsFeedView = React.createClass({
       dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
       }),
+      error: null,
       isRefreshing: false,
       loaded: false,
       requestUrl: undefined,
@@ -40,17 +42,42 @@ var NewsFeedView = React.createClass({
     React.NativeModules.ConfigModule.getNewsUrl(onNewsUrlReceived.bind(this));
   },
   fetchData: function() {
+    this.setState({
+      loaded: false,
+      error: null,
+    });
+
     fetch(this.state.requestUrl)
       .then((response) => response.json())
+      .catch((error) => this.catchError(error))
       .then((responseData) => {
+        if (!responseData) {
+          return;
+        }
+
         this.setState({
           dataSource: this.state.dataSource.cloneWithRows(responseData.posts),
           loaded: true,
+          error: null,
         });
       })
       .done();
   },
+  catchError: function(error) {
+    this.setState({
+      error: error,
+    });
+  },
   render: function() {
+    if (this.state.error) {
+      return (
+        <NetworkErrorView
+          title="News isn't loading right now"
+          retryHandler={this.fetchData}
+          errorMessage={this.state.error.message}
+        />);
+    }
+
     if (!this.state.loaded) {
       return this.renderLoadingView();
     }
