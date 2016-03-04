@@ -58,8 +58,8 @@ public class PublicProfileActivity extends BaseActivity implements SetTitleListe
 
 
     @Override
-    public void setTitle(String title)
-    {
-        //        toolbar.setTitle(title); PLACEHOLDER IN PUBLIC HUB
+    public void setTitle(String title) {
+        CustomToolbar toolbar = (CustomToolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(title);
     }
 }
