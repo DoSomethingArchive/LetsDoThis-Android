@@ -132,8 +132,10 @@ public class CauseActivity extends BaseActivity {
         mProgressBar.setVisibility(View.GONE);
 
         ResponseCampaignList response = task.getResults();
-        mAdapter.setCampaigns(response.getCampaigns(true));
-        mAdapter.notifyDataSetChanged();
+        if (response != null) {
+            mAdapter.setCampaigns(response.getCampaigns(true));
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     /**
