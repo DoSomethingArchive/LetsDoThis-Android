@@ -28,7 +28,7 @@ var NetworkErrorView = React.createClass({
               Unable to load the news
             </Text>
             <Text style={[Theme.styles.textBody, styles.text, {marginTop: 22}]}>
-              Please tap or swipe down to refresh and try again.
+              Please check your network connection, then tap or swipe down to refresh and try again.
             </Text>
           </View>
         </TouchableHighlight>   
