@@ -11,7 +11,31 @@ import java.util.List;
  */
 public class ResponseCampaignList {
 
+    private PaginationWrapper pagination;
     private ResponseCampaign[] data;
+
+    private class PaginationWrapper {
+        int current_page;
+        int total_pages;
+    }
+
+    /**
+     * Returns the current page number of the response.
+     *
+     * @return int
+     */
+    public int getCurrentPage() {
+        return pagination != null ? pagination.current_page : 0;
+    }
+
+    /**
+     * Returns the total number of pages available.
+     *
+     * @return int
+     */
+    public int getTotalPages() {
+        return pagination != null ? pagination.total_pages : 0;
+    }
 
     /**
      * Transform the data array into a usable list of Campaigns.
