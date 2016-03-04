@@ -330,7 +330,13 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
         User user = task.getResult();
         if (user != null) {
-            mTitleListener.setTitle(user.first_name);
+            String first = user.first_name != null ? user.first_name : "";
+            String last = "";
+            if (user.last_initial != null && ! user.last_initial.isEmpty()) {
+                last = user.last_initial + ".";
+            }
+
+            mTitleListener.setTitle(String.format("%s %s", first, last).trim());
         }
 
         mAdapter.setUser(user);
