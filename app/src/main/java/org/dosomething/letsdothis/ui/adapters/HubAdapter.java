@@ -41,6 +41,10 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private boolean mIsPublic = false;
     private User mUser;
 
+    // Displayed action counts
+    private int mActionsCount = 0;
+    private int mPhotosCount = 0;
+
     public HubAdapter(Context context, HubAdapterClickListener hubAdapterClickListener, boolean isPublic) {
         super();
 
@@ -128,9 +132,11 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         .into(profileViewHolder.userImage);
             }
 
-            profileViewHolder.name.setText(formatUserDisplayName(user.first_name, user.last_initial));
             profileViewHolder.userCountry.setText(formatUserLocation(user.country));
             profileViewHolder.userCountry.setAlpha(0.26f);
+
+            profileViewHolder.actionsCount.setText(String.valueOf(mActionsCount));
+            profileViewHolder.photosCount.setText(String.valueOf(mPhotosCount));
         }
         else if (getItemViewType(position) == VIEW_TYPE_CURRENT_SIGNUPS) {
             ResponseProfileCampaign campaign = (ResponseProfileCampaign) mHubList.get(position);
@@ -305,10 +311,12 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (! mIsPublic && (campaigns == null || campaigns.isEmpty())) {
             // Adds the empty view
             mHubList.add(CURRENT_CAMPAIGNS_EMPTY_STUB);
+            mActionsCount = 0;
         }
         else {
             // Adds signups to the list displayed to the Hub
             mHubList.addAll(campaigns);
+            mActionsCount = campaigns.size();
         }
 
         // And then add back any reportbacks, if any
@@ -336,7 +344,13 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             // Add the reportbacks
             mHubList.addAll(actions);
+
+            mPhotosCount = actions.size();
         }
+        else {
+            mPhotosCount = 0;
+        }
+
         notifyDataSetChanged();
     }
 
@@ -347,14 +361,16 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static class ProfileViewHolder extends RecyclerView.ViewHolder {
         protected ImageView userImage;
-        protected TextView  name;
         protected TextView  userCountry;
+        protected TextView  actionsCount;
+        protected TextView  photosCount;
 
         public ProfileViewHolder(View itemView) {
             super(itemView);
             this.userImage = (ImageView) itemView.findViewById(R.id.user_image);
-            this.name = (TextView) itemView.findViewById(R.id.name);
             this.userCountry = (TextView) itemView.findViewById(R.id.user_country);
+            this.actionsCount = (TextView) itemView.findViewById(R.id.actions_count);
+            this.photosCount = (TextView) itemView.findViewById(R.id.photos_count);
         }
     }
 
