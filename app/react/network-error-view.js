@@ -12,14 +12,9 @@ var Theme = require('./ldt-theme.js');
 
 var NetworkErrorView = React.createClass({
   render: function() {
-    var retryText, retryHandler = null;
+    var retryHandler = null;
     if (this.props.retryHandler) {
       retryHandler = this.props.retryHandler;
-      retryText = (
-        <Text style={[Theme.textCaption, styles.text, {marginTop: 44}]}>
-          Please tap to retry
-        </Text>
-      );
     } 
     return (
       <View style={styles.container}>
@@ -27,15 +22,14 @@ var NetworkErrorView = React.createClass({
           <View style={styles.button}>
             <Image
               style={styles.image}
-              source={{uri: 'Fail Icon'}}
+              source={require('image!newsfeed_network_error')}
             />  
-            <Text style={[Theme.textHeading, styles.text]}>
-              {this.props.title}
+            <Text style={[Theme.styles.textHeading, styles.text]}>
+              Unable to load the news
             </Text>
-            <Text style={[Theme.textBody, styles.text]}>
-              {this.props.errorMessage}
+            <Text style={[Theme.styles.textBody, styles.text, {marginTop: 22}]}>
+              Please tap or swipe down to refresh and try again.
             </Text>
-            {retryText}
           </View>
         </TouchableHighlight>   
       </View>
@@ -56,8 +50,8 @@ var styles = React.StyleSheet.create({
   },
   image: {
     flex: 1,
-    height: 65,
-    width: 65,
+    height: 100,
+    width: 100,
     resizeMode: 'contain',
     alignItems: 'center',
     margin: 16,

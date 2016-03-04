@@ -69,17 +69,25 @@ var NewsFeedView = React.createClass({
     });
   },
   render: function() {
+    if (!this.state.loaded) {
+      return this.renderLoadingView();
+    }
+
+    var bodyView;
     if (this.state.error) {
-      return (
+      bodyView = (
         <NetworkErrorView
-          title="News isn't loading right now"
           retryHandler={this.fetchData}
           errorMessage={this.state.error.message}
         />);
     }
-
-    if (!this.state.loaded) {
-      return this.renderLoadingView();
+    else {
+      bodyView = (
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={this.renderRow}
+          style={styles.listView}
+        />);
     }
 
     return (
@@ -90,10 +98,7 @@ var NewsFeedView = React.createClass({
         colors={[Theme.colorCtaBlue, '#00e4c8', '#ff0000']}
         progressBackgroundColor={'#ffffff'}
         >
-        <ListView
-          dataSource={this.state.dataSource}
-          renderRow={this.renderRow}
-          style={styles.listView} />
+        {bodyView}
       </PullToRefreshViewAndroid>
     );
   },
