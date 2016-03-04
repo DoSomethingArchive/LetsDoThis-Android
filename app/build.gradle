@@ -85,9 +85,9 @@ android {
             resValue "string", "northstar_api_key", NORTHSTAR_API_KEY_THOR
         }
         release {
-             //minifyEnabled true
-             //shrinkResources true
-             //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+             minifyEnabled true
+             shrinkResources true
+             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
              signingConfig signingConfigs.release
         }
         packagingOptions {

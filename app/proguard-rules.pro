@@ -17,11 +17,9 @@
 #}
 
 #
-# TODO: `minifyEnabled true` was disabled in the build.gradle. Things were getting removed that
-#   probably needed to stick around. Pretty sure the below ends up keeping what's needed, but would
-#   need a considerable amount of more testing before I'm comfortable letting it go out into the
-#   world. I also feel like there's GOT to be a better way. Anyway, just leaving it here until we've
-#   got time to revisit it.
+# TODO: This file currently feels like we're keeping almost every single thing. There's a lot that
+#   probably could get optimized out, but isn't. We'll want to revisit this file to see where we
+#   can slim down.
 #
 
 -dontwarn com.google.android.gms.**
@@ -56,6 +54,10 @@
 
 # Parse
 -keep class com.parse.** { *; }
+-dontwarn com.parse.**
+
+# React Native
+-dontwarn com.facebook.react.**
 
 # Touch lab
 -keep class co.touchlab.android.** { *; }
@@ -67,3 +69,4 @@
 -keep class com.j256.ormlite.** { *; }
 -keep class com.crashlytics.** { *; }
 -keep class com.viewpagerindicator.** { *; }
+-dontwarn com.viewpagerindicator.**
