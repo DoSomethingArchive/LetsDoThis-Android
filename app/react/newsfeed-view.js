@@ -65,6 +65,7 @@ var NewsFeedView = React.createClass({
   },
   catchError: function(error) {
     this.setState({
+      loaded: true,
       error: error,
     });
   },
