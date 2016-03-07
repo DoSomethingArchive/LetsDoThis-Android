@@ -85,10 +85,10 @@ android {
             resValue "string", "northstar_api_key", NORTHSTAR_API_KEY_THOR
         }
         release {
-             minifyEnabled true
-             shrinkResources true
-             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-             signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
         packagingOptions {
             exclude 'META-INF/ASL2.0'
