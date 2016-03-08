@@ -76,7 +76,7 @@ var NewsFeedPost = React.createClass({
             underlayColor={'#00000000'}
             style={styles.imageShareButton}
             onPress={this._onPressShareButton}>
-            <Image style={styles.imageShareIcon} source={require('image!ic_share_white')} />
+            <Image style={styles.imageShareIcon} source={require('image!newsfeed_share_white')} />
           </TouchableHighlight>
         </View>
       );
@@ -89,7 +89,7 @@ var NewsFeedPost = React.createClass({
    */
   renderImage: function() {
     var post = this.props.post;
-    
+
     if (post.image_url.length > 0) {
       var viewImageCredit = null;
       if (post.photo_credit.length > 0) {
@@ -258,6 +258,7 @@ var styles = React.StyleSheet.create({
     tintColor: Theme.colorCtaBlue,
     width: 22,
     height: 22,
+    resizeMode: 'contain',
   },
   listItemOvalImage: {
     // The height and width are based off the draw height of a single summaryText line

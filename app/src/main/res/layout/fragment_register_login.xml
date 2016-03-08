@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tool:background="#faaf00">
+    tool:background="@color/theme_primary">
 
     <ImageView
         android:layout_width="@dimen/login_intro_w"
@@ -29,6 +29,7 @@
             android:layout_marginBottom="@dimen/padding_xlarge"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
+            android:textSize="@dimen/text_medium"
             android:text="@string/desc_login_reg"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomButton

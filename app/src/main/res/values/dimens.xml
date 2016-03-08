@@ -51,8 +51,8 @@
     <dimen name="text_42">21sp</dimen>
     <dimen name="text_36">@dimen/text_large</dimen>
     <dimen name="text_48">@dimen/text_xlarge</dimen>
-    <dimen name="hub_profile_header">169dp</dimen>
-    <dimen name="hub_avatar_height">75dp</dimen>
+    <dimen name="hub_profile_header">144dp</dimen>
+    <dimen name="hub_avatar_height">78dp</dimen>
     <dimen name="report_back_expanded">375dp</dimen>
     <dimen name="notification_image">60dp</dimen>
     <dimen name="avatar">100dp</dimen>

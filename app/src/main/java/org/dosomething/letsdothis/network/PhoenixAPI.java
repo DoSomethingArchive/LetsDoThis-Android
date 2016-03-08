@@ -44,7 +44,9 @@ public interface PhoenixAPI {
 
     @Headers("Content-Type: application/json")
     @GET("/campaigns.json")
-    ResponseCampaignList campaignListByCause(@Query("term_ids") int causeId) throws NetworkException;
+    ResponseCampaignList campaignListByCause(
+            @Query("term_ids") int causeId,
+            @Query("page") int page) throws NetworkException;
 
     @Headers("Content-Type: application/json")
     @GET("/campaigns.json?mobile_app=1")

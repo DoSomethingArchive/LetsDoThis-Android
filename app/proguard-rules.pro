@@ -16,12 +16,14 @@
 #   public *;
 #}
 
+# Disabling obfuscation is useful if you collect stack traces from production crashes
+# (unless you are using a system that supports de-obfuscate the stack traces).
+-dontobfuscate
+
 #
-# TODO: `minifyEnabled true` was disabled in the build.gradle. Things were getting removed that
-#   probably needed to stick around. Pretty sure the below ends up keeping what's needed, but would
-#   need a considerable amount of more testing before I'm comfortable letting it go out into the
-#   world. I also feel like there's GOT to be a better way. Anyway, just leaving it here until we've
-#   got time to revisit it.
+# TODO: This file currently feels like we're keeping almost every single thing. There's a lot that
+#   probably could get optimized out, but isn't. We'll want to revisit this file to see where we
+#   can slim down.
 #
 
 -dontwarn com.google.android.gms.**
@@ -48,6 +50,8 @@
 
 # okhttp
 -keep class com.squareup.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
+-dontwarn com.squareup.okhttp.**
 
 # New Relic
 -keep class com.newrelic.** { *; }
@@ -56,6 +60,7 @@
 
 # Parse
 -keep class com.parse.** { *; }
+-dontwarn com.parse.**
 
 # Touch lab
 -keep class co.touchlab.android.** { *; }
@@ -67,3 +72,42 @@
 -keep class com.j256.ormlite.** { *; }
 -keep class com.crashlytics.** { *; }
 -keep class com.viewpagerindicator.** { *; }
+-dontwarn com.viewpagerindicator.**
+
+# React Native
+
+# Keep our interfaces so they can be used by other ProGuard rules.
+# See http://sourceforge.net/p/proguard/bugs/466/
+-keep,allowobfuscation @interface com.facebook.proguard.annotations.DoNotStrip
+-keep,allowobfuscation @interface com.facebook.proguard.annotations.KeepGettersAndSetters
+
+# Do not strip any method/class that is annotated with @DoNotStrip
+-keep @com.facebook.proguard.annotations.DoNotStrip class *
+-keepclassmembers class * {
+    @com.facebook.proguard.annotations.DoNotStrip *;
+}
+
+-keepclassmembers @com.facebook.proguard.annotations.KeepGettersAndSetters class * {
+  void set*(***);
+  *** get*();
+}
+
+-keep class * extends com.facebook.react.bridge.JavaScriptModule { *; }
+-keep class * extends com.facebook.react.bridge.NativeModule { *; }
+-keepclassmembers,includedescriptorclasses class * { native <methods>; }
+-keepclassmembers class *  { @com.facebook.react.uimanager.UIProp <fields>; }
+-keepclassmembers class *  { @com.facebook.react.uimanager.annotations.ReactProp <methods>; }
+-keepclassmembers class *  { @com.facebook.react.uimanager.annotations.ReactPropGroup <methods>; }
+
+-dontwarn com.facebook.react.**
+
+# okio
+
+-keep class sun.misc.Unsafe { *; }
+-dontwarn java.nio.file.*
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+-dontwarn okio.**
+
+# stetho
+
+-dontwarn com.facebook.stetho.**

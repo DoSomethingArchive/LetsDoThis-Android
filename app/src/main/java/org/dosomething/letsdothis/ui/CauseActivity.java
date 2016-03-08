@@ -131,9 +131,11 @@ public class CauseActivity extends BaseActivity {
     public void onEventMainThread(GetCampaignsByCauseTask task) {
         mProgressBar.setVisibility(View.GONE);
 
-        ResponseCampaignList response = task.getResults();
-        mAdapter.setCampaigns(response.getCampaigns(true));
-        mAdapter.notifyDataSetChanged();
+        ArrayList<Campaign> campaigns = task.getResults();
+        if (campaigns != null) {
+            mAdapter.setCampaigns(campaigns);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     /**
@@ -177,9 +179,9 @@ public class CauseActivity extends BaseActivity {
                 int red = (color >> 16) & 0xff;
                 int green = (color >> 8) & 0xff;
                 int blue = color & 0xff;
-                int alpha = 0x77;
+                int alpha = 0xff;
 
-                holder.mBackground.setColorFilter(Color.argb(alpha, red, green, blue));
+                holder.mBackground.setBackgroundColor(Color.argb(alpha, red, green, blue));
                 holder.mTitle.setText(mCauseName.toUpperCase());
                 holder.mDescription.setText(Causes.getDescriptionRes(mCauseName));
 

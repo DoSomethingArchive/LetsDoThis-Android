@@ -23,6 +23,7 @@ import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.CampaignActions;
+import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.models.ResponseProfileCampaign;
 import org.dosomething.letsdothis.network.models.ResponseProfileSignups;
 import org.dosomething.letsdothis.tasks.GetProfileSignupsTask;
@@ -122,7 +123,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
             EventBusExt.getDefault().register(this);
         }
 
-        mTitleListener.setTitle(getResources().getString(R.string.hub));
+        mTitleListener.setTitle("");
 
         String trackerIdentifier;
         String publicId = getArguments().getString(EXTRA_ID, null);
@@ -282,6 +283,7 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         mProgressDialog.show();
     }
 
+
     /**
      * Check if tasks are in progress. If they're done, then dismiss the ProgressDialog.
      */
@@ -326,7 +328,18 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     public void onEventMainThread(GetProfileTask task) {
         dismissProgressDialogIfDone();
 
-        mAdapter.setUser(task.getResult());
+        User user = task.getResult();
+        if (user != null) {
+            String first = user.first_name != null ? user.first_name : "";
+            String last = "";
+            if (user.last_initial != null && ! user.last_initial.isEmpty()) {
+                last = user.last_initial + ".";
+            }
+
+            mTitleListener.setTitle(String.format("%s %s", first, last).trim());
+        }
+
+        mAdapter.setUser(user);
     }
 
     @SuppressWarnings("UnusedDeclaration")
