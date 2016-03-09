@@ -204,8 +204,9 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         File externalFile = new File(Environment.getExternalStorageDirectory(), "DoSomething");
         externalFile.mkdirs();
         File file = new File(externalFile, "reportBack" + System.currentTimeMillis() + ".jpg");
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-        mImageUri = Uri.parse(file.getAbsolutePath());
+        mImageUri = Uri.fromFile(file);
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+
         if (BuildConfig.DEBUG) {
             Log.d("photo location", mImageUri.toString());
         }
