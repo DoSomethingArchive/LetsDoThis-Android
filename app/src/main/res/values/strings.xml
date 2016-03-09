@@ -170,5 +170,6 @@
     <string name="reportback_success">Reportback uploaded</string>
     <string name="drawer_desc_open">Drawer Open</string>
     <string name="drawer_desc_closed">Drawer Closed</string>
+    <string name="user_default_fname">Doer</string>
 
 </resources>

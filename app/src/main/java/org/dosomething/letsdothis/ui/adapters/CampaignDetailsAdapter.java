@@ -15,7 +15,7 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.Kudos;
 import org.dosomething.letsdothis.data.ReportBack;
-import org.dosomething.letsdothis.ui.views.SlantedBackgroundDrawable;
+import org.dosomething.letsdothis.utils.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +30,6 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public static final int VIEW_TYPE_CAMPAIGN        = 0;
     public static final int VIEW_TYPE_CAMPAIGN_FOOTER = 1;
     public static final int VIEW_TYPE_REPORT_BACK     = 2;
-
-    private final int webOrange;
-    private final int shadowColor;
-    private final int slantHeight;
-    private final int widthOvershoot;
-    private final int heightShadowOvershoot;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
     private ArrayList<Object> dataSet = new ArrayList<>();
@@ -53,11 +47,6 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                                   Resources resources, boolean isSignedUp) {
         super();
         this.detailsAdapterClickListener = detailsAdapterClickListener;
-        webOrange = resources.getColor(R.color.web_orange);
-        shadowColor = resources.getColor(R.color.black_10);
-        slantHeight = resources.getDimensionPixelSize(R.dimen.height_xtiny);
-        widthOvershoot = resources.getDimensionPixelSize(R.dimen.space_50);
-        heightShadowOvershoot = resources.getDimensionPixelSize(R.dimen.padding_tiny);
         mUserIsSignedUp = isSignedUp;
         mSignupInProgress = false;
     }
@@ -242,11 +231,9 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     load(reportBack.getImagePath()).into(reportBackViewHolder.imageView);
 
             // User name
-            String reportbackName = reportBack.user.first_name;
-            if (reportBack.user.last_name != null && !reportBack.user.last_name.isEmpty()) {
-                reportbackName += " " + reportBack.user.last_name.charAt(0) + ".";
-            }
-            reportBackViewHolder.name.setText(reportbackName);
+            String name = ViewUtils.formatUserDisplayName(context, reportBack.user.first_name,
+                    reportBack.user.last_initial);
+            reportBackViewHolder.name.setText(name);
 
             // User country location
             if (reportBack.user.country != null && !reportBack.user.country.isEmpty()) {

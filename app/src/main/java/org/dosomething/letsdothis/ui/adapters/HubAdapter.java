@@ -15,6 +15,7 @@ import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.models.ResponseProfileCampaign;
 import org.dosomething.letsdothis.network.models.ResponseProfileSignups;
+import org.dosomething.letsdothis.utils.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -159,7 +160,8 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             // Use previously received User info
             if (mUser != null) {
-                rbViewHolder.name.setText(formatUserDisplayName(mUser.first_name, mUser.last_initial));
+                String name = ViewUtils.formatUserDisplayName(context, mUser.first_name, mUser.last_initial);
+                rbViewHolder.name.setText(name);
                 rbViewHolder.location.setText(formatUserLocation(mUser.country));
 
                 if (mUser.avatarPath != null) {
@@ -250,22 +252,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         return "";
-    }
-
-    /**
-     * Helper function to format the displayed username.
-     *
-     * @param first User first name
-     * @param lastInitial User last initial, if any
-     * @return String
-     */
-    private String formatUserDisplayName(String first, String lastInitial) {
-        String last = "";
-        if (lastInitial != null && ! lastInitial.isEmpty()) {
-            last = lastInitial + ".";
-        }
-
-        return String.format("%s %s", first, last).trim();
     }
 
     /**

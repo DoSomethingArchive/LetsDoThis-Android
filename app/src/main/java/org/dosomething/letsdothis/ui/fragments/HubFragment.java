@@ -36,6 +36,7 @@ import org.dosomething.letsdothis.ui.PhotoCropActivity;
 import org.dosomething.letsdothis.ui.ReportBackUploadActivity;
 import org.dosomething.letsdothis.ui.adapters.HubAdapter;
 import org.dosomething.letsdothis.utils.AnalyticsUtils;
+import org.dosomething.letsdothis.utils.ViewUtils;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -330,13 +331,8 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
         User user = task.getResult();
         if (user != null) {
-            String first = user.first_name != null ? user.first_name : "";
-            String last = "";
-            if (user.last_initial != null && ! user.last_initial.isEmpty()) {
-                last = user.last_initial + ".";
-            }
-
-            mTitleListener.setTitle(String.format("%s %s", first, last).trim());
+            String name = ViewUtils.formatUserDisplayName(getActivity(), user.first_name, user.last_initial);
+            mTitleListener.setTitle(name);
         }
 
         mAdapter.setUser(user);
