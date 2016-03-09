@@ -30,9 +30,9 @@ public class ConfigModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void getNewsUrl(Callback callback) {
-        final String production = "https://live-ltd-news.pantheon.io/?json=1";
-        final String internal = "https://live-ltd-news.pantheon.io/?json=1";
-        final String dev = "https://dev-ltd-news.pantheon.io/?json=1";
+        final String production = "https://live-ltd-news.pantheon.io/api/get_posts?count=50";
+        final String internal = "https://live-ltd-news.pantheon.io/api/get_posts?count=50";
+        final String dev = "https://dev-ltd-news.pantheon.io/api/get_posts?count=50";
 
         if (BuildConfig.BUILD_TYPE.equals("release")) {
             callback.invoke(production);
