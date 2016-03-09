@@ -112,6 +112,8 @@
                   android:theme="@android:style/Theme.Translucent.NoTitleBar"
                   android:screenOrientation="portrait"/>
 
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
 
         <!-- Crashlytics -->
