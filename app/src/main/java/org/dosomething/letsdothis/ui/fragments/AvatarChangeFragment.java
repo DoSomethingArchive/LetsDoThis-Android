@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.soundcloud.android.crop.Crop;
 import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.R;
@@ -47,10 +48,10 @@ public class AvatarChangeFragment extends Fragment implements View.OnClickListen
     private Button saveButton;
 
     // Uri for the photo if taken from the camera
-    private Uri cameraPhotoUri;
+    private Uri mPhotoUri;
 
-    // File path for photo after being cropped
-    private String croppedPhotoPath;
+    // File path for photo
+    private File mPhotoFile;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -139,21 +140,18 @@ public class AvatarChangeFragment extends Fragment implements View.OnClickListen
 
                 Uri selectedImageUri;
                 if (isCamera) {
-                    selectedImageUri = cameraPhotoUri;
+                    selectedImageUri = mPhotoUri;
                 } else {
                     selectedImageUri = data.getData();
                 }
 
-                startActivityForResult(PhotoCropActivity.getResultIntent(getActivity(),
-                                selectedImageUri.toString(),
-                                getResources().getString(R.string.change_photo)),
-                        PhotoCropActivity.RESULT_CODE);
+                Crop.of(selectedImageUri, mPhotoUri).asSquare().start(getActivity(), AvatarChangeFragment.this);
             }
-            else if (requestCode == PhotoCropActivity.RESULT_CODE) {
-                croppedPhotoPath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
+            else if (requestCode == Crop.REQUEST_CROP) {
+                String filePath = mPhotoFile.getAbsolutePath();
 
                 // Display cropped photo to screen
-                displayPicture(croppedPhotoPath);
+                displayPicture(filePath);
             }
         }
     }
@@ -167,11 +165,11 @@ public class AvatarChangeFragment extends Fragment implements View.OnClickListen
         pickIntent.setType("image/*");
 
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File externalFile = new File(
+        mPhotoFile = new File(
                 getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
                 "user_profile" + ".jpg");
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(externalFile));
-        cameraPhotoUri = Uri.parse(externalFile.getAbsolutePath());
+        mPhotoUri = Uri.fromFile(mPhotoFile);
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mPhotoUri);
 
         String pickTitle = getString(R.string.select_picture);
         Intent chooserIntent = Intent.createChooser(takePhotoIntent, pickTitle);
@@ -185,12 +183,12 @@ public class AvatarChangeFragment extends Fragment implements View.OnClickListen
      */
     private void savePicture() {
         // Save to AppPrefs
-        AppPrefs.getInstance(getActivity()).setAvatarPath(croppedPhotoPath);
+        AppPrefs.getInstance(getActivity()).setAvatarPath(mPhotoFile.getAbsolutePath());
 
         // Upload to Northstar
         String id = AppPrefs.getInstance(getActivity()).getCurrentUserId();
         TaskQueue.loadQueueDefault(getActivity())
-                .execute(new UploadAvatarTask(id, croppedPhotoPath));
+                .execute(new UploadAvatarTask(id, mPhotoFile.getAbsolutePath()));
 
         progressBar.setVisibility(View.VISIBLE);
     }

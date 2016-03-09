@@ -132,6 +132,7 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.7.0'
     compile 'com.facebook.react:react-native:+' // From node_modules
     compile 'com.newrelic.agent.android:android-agent:5.+'
+    compile 'com.soundcloud.android:android-crop:1.0.1@aar'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }

@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.Tracker;
+import com.soundcloud.android.crop.Crop;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
@@ -32,7 +33,6 @@ import org.dosomething.letsdothis.tasks.ProfileReportbackShareTask;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
 import org.dosomething.letsdothis.tasks.UploadAvatarTask;
 import org.dosomething.letsdothis.ui.CampaignDetailsActivity;
-import org.dosomething.letsdothis.ui.PhotoCropActivity;
 import org.dosomething.letsdothis.ui.ReportBackUploadActivity;
 import org.dosomething.letsdothis.ui.adapters.HubAdapter;
 import org.dosomething.letsdothis.utils.AnalyticsUtils;
@@ -73,6 +73,9 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     private String mRbCampaignTitle;
     private String mRbCampaignNoun;
     private String mRbCampaignVerb;
+
+    // File destination for a reportback photo submission
+    private File mReportbackDestination;
 
     public static HubFragment newInstance(String id) {
         Bundle bundle = new Bundle();
@@ -202,8 +205,9 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         File externalFile = new File(Environment.getExternalStorageDirectory(), "DoSomething");
         externalFile.mkdirs();
         File file = new File(externalFile, "reportBack" + System.currentTimeMillis() + ".jpg");
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-        mImageUri = Uri.parse(file.getAbsolutePath());
+        mImageUri = Uri.fromFile(file);
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+
         if (BuildConfig.DEBUG) {
             Log.d("photo location", mImageUri.toString());
         }
@@ -255,12 +259,15 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
                 selectedImageUri = data.getData();
             }
 
-            Intent photoCropIntent = PhotoCropActivity.getResultIntent(getActivity(),
-                    selectedImageUri.toString(), getString(R.string.share_photo));
-            startActivityForResult(photoCropIntent, PhotoCropActivity.RESULT_CODE);
+            File filesDir = new File(Environment.getExternalStorageDirectory(), "DoSomething");
+            filesDir.mkdirs();
+            mReportbackDestination = new File(filesDir, "rb" + System.currentTimeMillis() + ".jpg");
+            Uri destination = Uri.fromFile(mReportbackDestination);
+
+            Crop.of(selectedImageUri, destination).asSquare().start(getActivity(), HubFragment.this);
         }
-        else if (requestCode == PhotoCropActivity.RESULT_CODE) {
-            String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
+        else if (requestCode == Crop.REQUEST_CROP) {
+            String filePath = mReportbackDestination.getAbsolutePath();
             String format = String.format(getString(R.string.reportback_upload_hint),
                     mRbCampaignNoun, mRbCampaignVerb);
 
