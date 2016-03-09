@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.Tracker;
+import com.soundcloud.android.crop.Crop;
 
 import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
@@ -54,7 +55,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
     public static final int    SELECT_PICTURE    = 23123;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
-    private Uri                    imageUri;
+    private Uri                    mImageUri;
     private CampaignDetailsAdapter adapter;
     private int                    totalPages;
     private int currentPage = 1;
@@ -62,6 +63,9 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
 
     // Progress dialog to display while signup is in progress
     private ProgressDialog mProgressDialog;
+
+    // File destination for a reportback photo submission
+    private File mReportbackDestination;
 
     // Google Analytics tracker
     private Tracker mTracker;
@@ -267,26 +271,21 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
 
             Uri selectedImageUri = null;
             if (isCamera) {
-                selectedImageUri = imageUri;
+                selectedImageUri = mImageUri;
             }
             else if (data != null) {
                 selectedImageUri = data.getData();
             }
 
-            Campaign clickedCampaign = adapter.getCampaign();
-            if (selectedImageUri != null) {
-                Intent cropIntent = PhotoCropActivity.getResultIntent(
-                        this,
-                        selectedImageUri.toString(),
-                        clickedCampaign.title);
-                startActivityForResult(cropIntent, PhotoCropActivity.RESULT_CODE);
-            }
-            else {
-                Toast.makeText(CampaignDetailsActivity.this, R.string.error_photo_select, Toast.LENGTH_SHORT).show();
-            }
+            File filesDir = new File(Environment.getExternalStorageDirectory(), "DoSomething");
+            filesDir.mkdirs();
+            mReportbackDestination = new File(filesDir, "rb" + System.currentTimeMillis() + ".jpg");
+            Uri destination = Uri.fromFile(mReportbackDestination);
+
+            Crop.of(selectedImageUri, destination).asSquare().start(CampaignDetailsActivity.this);
         }
-        else if (requestCode == PhotoCropActivity.RESULT_CODE) {
-            String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
+        else if (requestCode == Crop.REQUEST_CROP) {
+            String filePath = mReportbackDestination.getAbsolutePath();
             Campaign clickedCampaign = adapter.getCampaign();
             String format = String.format(getString(R.string.reportback_upload_hint), clickedCampaign.noun,
                             clickedCampaign.verb);
@@ -305,10 +304,11 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         File externalFile = new File(Environment.getExternalStorageDirectory(), "DoSomething");
         externalFile.mkdirs();
         File file = new File(externalFile, "reportBack" + System.currentTimeMillis() + ".jpg");
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-        imageUri = Uri.parse(file.getAbsolutePath());
+        mImageUri = Uri.fromFile(file);
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+
         if (BuildConfig.DEBUG) {
-            Log.d("photo location", imageUri.toString());
+            Log.d("photo location", mImageUri.toString());
         }
 
         String pickTitle = getString(R.string.select_picture);
