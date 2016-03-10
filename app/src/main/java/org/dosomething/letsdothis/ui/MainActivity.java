@@ -139,12 +139,6 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
                 drawerLayout.closeDrawer(drawer);
             }
         });
-
-        if(AppPrefs.getInstance(this).isFirstDrawer())
-        {
-            AppPrefs.getInstance(this).setFirstDrawer();
-            drawerLayout.openDrawer(drawer);
-        }
     }
 
     private void replaceCurrentFragment(Fragment fragment, String tag) {

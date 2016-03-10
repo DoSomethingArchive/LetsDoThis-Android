@@ -16,7 +16,6 @@ public class AppPrefs
     public static final String CURRENT_DRUPAL_ID  = "CURRENT_DRUPAL_ID";
     public static final String USER_SESSION_TOKEN = "CURRENT_SESSION_TOKEN";
     public static final String FIRST_INTRO        = "FIRST_INTRO";
-    public static final String FIRST_DRAWER       = "FIRST_DRAWER";
     public static final String AVATAR_PATH        = "AVATAR_PATH";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
@@ -144,16 +143,6 @@ public class AppPrefs
     public boolean isFirstIntro()
     {
         return getBoolean(FIRST_INTRO, true);
-    }
-
-    public void setFirstDrawer()
-    {
-        setBoolean(FIRST_DRAWER, false);
-    }
-
-    public boolean isFirstDrawer()
-    {
-        return getBoolean(FIRST_DRAWER, true);
     }
 
     public void setAvatarPath(String path)
