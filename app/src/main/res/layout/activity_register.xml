@@ -101,14 +101,18 @@
                 android:layout_marginLeft="@dimen/padding_small"
                 android:layout_marginRight="@dimen/padding_small"
                 android:layout_marginTop="@dimen/padding_small"
-                android:hint="@string/email"/>
+                android:hint="@string/email"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"/>
 
             <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
                 android:id="@+id/phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/padding_small"
-                android:hint="@string/phone"/>
+                android:hint="@string/phone"
+                android:imeOptions="actionNext"
+                android:inputType="phone"/>
 
             <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
                 android:id="@+id/password"
@@ -117,7 +121,7 @@
                 android:layout_marginLeft="@dimen/padding_small"
                 android:layout_marginRight="@dimen/padding_small"
                 android:hint="@string/password_hint"
-                android:imeOptions="actionNext"
+                android:imeOptions="actionDone"
                 android:inputType="textPassword"/>
 
             <org.dosomething.letsdothis.ui.views.typeface.CustomButton

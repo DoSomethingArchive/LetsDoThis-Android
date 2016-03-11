@@ -91,6 +91,9 @@ public class ReportBackUploadActivity extends AppCompatActivity
         Picasso.with(this).load(new File(croppedImage)).into(imageHero);
 
         final EditText caption = (EditText) findViewById(R.id.caption);
+        caption.setHorizontallyScrolling(false);
+        caption.setLines(2);
+
         final EditText number = (EditText) findViewById(R.id.number);
         number.setHint(getIntent().getStringExtra(EXTRA_COPY));
 
