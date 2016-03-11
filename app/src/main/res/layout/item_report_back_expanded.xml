@@ -42,7 +42,7 @@
             android:textAllCaps="true"
             android:paddingLeft="@dimen/padding_tiny"
             android:gravity="bottom"
-            android:textColor="@color/cerulean_1"
+            android:textColor="@color/theme_primary"
             android:layout_toRightOf="@+id/avatar"
             android:id="@+id/name"/>
 
@@ -67,29 +67,41 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/padding_small">
 
+        <LinearLayout
+            android:id="@+id/impact_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:singleLine="true"
+                android:textColor="@color/theme_primary"
+                app:typeface="brandon_bold"
+                tools:text="Campaign Title"/>
+
+            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                android:id="@+id/impact"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:singleLine="true"
+                android:textColor="@color/gray"
+                app:typeface="brandon_bold"
+                tools:text="# of Nouns Verbed"/>
+
+        </LinearLayout>
+
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            tools:text="Campaign Title"
-            android:textColor="@color/cerulean_1"
-            app:typeface="brandon_bold"
-            android:id="@+id/title"/>
-
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:id="@+id/impact"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            tools:text="# of Nouns Verbed"
-            android:textColor="@color/gray"
-            app:typeface="brandon_bold"/>
-
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/title"
+            android:layout_below="@id/impact_container"
             tools:text="Caption"
             android:textColor="@android:color/black"
             android:id="@+id/caption"/>

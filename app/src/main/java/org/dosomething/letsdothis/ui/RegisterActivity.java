@@ -14,6 +14,7 @@ import android.widget.ImageView;
 
 import com.facebook.login.LoginManager;
 import com.google.android.gms.analytics.Tracker;
+import com.soundcloud.android.crop.Crop;
 import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.BuildConfig;
@@ -50,13 +51,13 @@ public class RegisterActivity extends BaseActivity
     private ImageView avatar;
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
-    private Uri imageUri;
+    private Uri mImageUri;
 
     // Google Analytics tracker
     private Tracker mTracker;
 
     // Progress dialog while login is in progress
-    private ProgressDialog mProgressDialog;
+        private ProgressDialog mProgressDialog;
 
     public static Intent getLaunchIntent(Context context, FbUser user)
     {
@@ -126,19 +127,17 @@ public class RegisterActivity extends BaseActivity
         AnalyticsUtils.sendScreen(mTracker, AnalyticsUtils.SCREEN_USER_REGISTER);
     }
 
-    public void choosePicture()
-    {
+    public void choosePicture() {
         Intent pickIntent = new Intent(Intent.ACTION_PICK,
-                                       android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         pickIntent.setType("image/*");
 
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File externalFile = ViewUtils.getAvatarFile(this);
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(externalFile));
-        imageUri = Uri.parse(externalFile.getAbsolutePath());
-        if(BuildConfig.DEBUG)
-        {
-            Log.d("photo location", imageUri.toString());
+        mImageUri = Uri.fromFile(externalFile);
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+        if (BuildConfig.DEBUG) {
+            Log.d("photo location", mImageUri.toString());
         }
 
         String pickTitle = getString(R.string.select_picture);
@@ -185,50 +184,38 @@ public class RegisterActivity extends BaseActivity
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if(resultCode == RESULT_OK)
-        {
-            if(requestCode == SELECT_PICTURE)
-            {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECT_PICTURE) {
                 final boolean isCamera;
-                if(data.getData() == null)
-                {
+                if (data == null || data.getData() == null) {
                     isCamera = true;
                 }
-                else
-                {
+                else {
                     final String action = data.getAction();
-                    if(action == null)
-                    {
+                    if (action == null) {
                         isCamera = false;
                     }
-                    else
-                    {
+                    else {
                         isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                     }
                 }
 
                 Uri selectedImageUri;
-                if(isCamera)
-                {
-                    selectedImageUri = imageUri;
+                if (isCamera) {
+                    selectedImageUri = mImageUri;
                 }
-                else
-                {
+                else {
                     selectedImageUri = data.getData();
                 }
-                if(BuildConfig.DEBUG)
-                {
+                if (BuildConfig.DEBUG) {
                     Log.d("drawer_text-----------", selectedImageUri.toString());
                 }
 
-                startActivityForResult(PhotoCropActivity.getResultIntent(this,
-                        selectedImageUri.toString(), "User Photo"), PhotoCropActivity.RESULT_CODE);
+                Crop.of(selectedImageUri, mImageUri).asSquare().start(RegisterActivity.this);
             }
-            else if(requestCode == PhotoCropActivity.RESULT_CODE)
-            {
-                String filePath = data.getStringExtra(PhotoCropActivity.RESULT_FILE_PATH);
+            else if (requestCode == Crop.REQUEST_CROP) {
+                String filePath = ViewUtils.getAvatarFile(RegisterActivity.this).getAbsolutePath();
                 Picasso.with(this).load("file://" + filePath)
                         .resize(avatar.getWidth(), avatar.getHeight()).into(avatar);
                 AppPrefs.getInstance(this).setAvatarPath(filePath);

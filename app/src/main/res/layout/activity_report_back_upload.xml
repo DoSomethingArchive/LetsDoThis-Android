@@ -59,8 +59,8 @@
             android:focusableInTouchMode="true"
             android:gravity="top|left"
             android:hint="@string/report_back_caption"
-            android:inputType="textCapSentences|textMultiLine"
-            android:lines="2"
+            android:imeOptions="actionNext"
+            android:inputType="textCapSentences|textImeMultiLine"
             android:maxLength="60"/>
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomEditText
