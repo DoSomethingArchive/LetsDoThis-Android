@@ -15,26 +15,35 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
  */
 public class CampaignDetailsTask extends BaseNetworkErrorHandlerTask
 {
-    private final int                             campaignId;
-    public        Campaign                        campaign;
+    private boolean mHasError;
+    private final int campaignId;
+    public Campaign campaign;
 
-    public CampaignDetailsTask(int campaignId)
-    {
+    public CampaignDetailsTask(int campaignId) {
         this.campaignId = campaignId;
+        this.mHasError = true;
+    }
+
+    public boolean hasError() {
+        return mHasError;
     }
 
     @Override
-    protected void run(Context context) throws Throwable
-    {
+    protected void run(Context context) throws Throwable {
         ResponseCampaignWrapper response = NetworkHelper.getPhoenixAPIService()
                 .campaign(campaignId);
         campaign = ResponseCampaign.getCampaign(response.data);
     }
 
     @Override
-    protected void onComplete(Context context)
-    {
+    protected void onComplete(Context context) {
         EventBusExt.getDefault().post(this);
         super.onComplete(context);
+    }
+
+    @Override
+    protected boolean handleError(Context context, Throwable throwable) {
+        mHasError = true;
+        return true;
     }
 }
