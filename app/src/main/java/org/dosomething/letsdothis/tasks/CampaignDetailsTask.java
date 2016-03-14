@@ -21,7 +21,7 @@ public class CampaignDetailsTask extends BaseNetworkErrorHandlerTask
 
     public CampaignDetailsTask(int campaignId) {
         this.campaignId = campaignId;
-        this.mHasError = true;
+        this.mHasError = false;
     }
 
     public boolean hasError() {
