@@ -81,6 +81,7 @@
     <string name="error_action_closed_campaign">Sorry! This campaign is now closed.</string>
     <string name="error_action_sms_game">This action is only available on web or SMS</string>
     <string name="error_avatar_upload">There was an error uploading your photo</string>
+    <string name="error_campaign_data">There was an error loading the campaign data</string>
     <string name="error_hub_sync">There was an error syncing your profile</string>
     <string name="error_interest_group_titles">There was an error getting campaign info</string>
     <string name="error_login_phone_email">Must not be empty</string>
