@@ -97,21 +97,25 @@ public interface NorthstarAPI {
     /**
      * Get the current user's reportbacks.
      *
+     * The API will only return the first 25 unless we specify a `count`.
+     *
      * @param sessionToken Token for the currently logged in user
      * @return ResponseProfileReportbacks
      * @throws NetworkException
      */
-    @GET("/profile/reportbacks")
+    @GET("/profile/reportbacks?count=100")
     ResponseProfileReportbacks userProfileReportbacks(@Header("Session") String sessionToken) throws NetworkException;
 
     /**
      * Get the current user's signups.
      *
+     * The API will only return the first 25 unless we specify a `count`.
+     *
      * @param sessionToken Token for the currently logged in user
      * @return ResponseProfileSignups
      * @throws NetworkException
      */
-    @GET("/profile/signups")
+    @GET("/profile/signups?count=100")
     ResponseProfileSignups userProfileSignups(@Header("Session") String sessionToken) throws NetworkException;
 
     /**
@@ -223,12 +227,14 @@ public interface NorthstarAPI {
     /**
      * Get signup info for a user by their id.
      *
+     * The API will only return the first 25 unless we specify a `count`.
+     *
      * @param sessionToken Token for the currently logged in user
      * @param id A user's Northstar ID
      * @return ResponseProfileSignups
      * @throws NetworkException
      */
-    @GET("/signups")
+    @GET("/signups?count=100")
     ResponseProfileSignups getSignupsById(@Header("Session") String sessionToken,
                                           @Query("user") String id) throws NetworkException;
 }

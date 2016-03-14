@@ -372,6 +372,14 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(CampaignDetailsTask task) {
+        // If there's an error, finish this activity and go back to the previous screen
+        // @todo Display an error view instead
+        if (task.hasError()) {
+            Toast.makeText(this, getString(R.string.error_campaign_data), Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
         int campaignId = -1;
         boolean isComplete = false;
         boolean isSignedUp = false;
@@ -390,13 +398,15 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
                 isComplete = false;
                 isSignedUp = false;
             }
+
+            // Determines the look and behavior of the call-to-action button
+            task.campaign.showShare = isComplete ? Campaign.UploadShare.SHARE : Campaign.UploadShare.SHOW_OFF;
         }
         else {
-            Toast.makeText(this, "campaign data failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.error_campaign_data), Toast.LENGTH_SHORT).show();
         }
 
         // Update the view in the adapter
-        task.campaign.showShare = isComplete ? Campaign.UploadShare.SHARE : Campaign.UploadShare.SHOW_OFF;
         adapter.updateCampaign(task.campaign);
 
         sendScreenViewToAnalytics(campaignId, isSignedUp, isComplete);

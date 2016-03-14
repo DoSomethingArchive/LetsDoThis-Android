@@ -262,7 +262,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void setUser(User user) {
         mUser = user;
 
-        if (! mHubList.isEmpty() && mHubList.get(0) instanceof User) {
+        if (! mHubList.isEmpty() && (mHubList.get(0) == null || mHubList.get(0) instanceof User)) {
             mHubList.set(0, user);
         }
         else {
