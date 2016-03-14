@@ -4,7 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -69,8 +70,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/padding_small"
-        android:paddingRight="@dimen/padding_small"
         android:layout_below="@+id/call_to_action">
 
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
@@ -84,30 +83,40 @@
             app:typeface="brandon_bold"
             style="@style/SectionTitle"/>
 
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:id="@+id/solutionCopy"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/padding_medium"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/text_33"
-            tool:text="solution copy"/>
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/padding_small"
+            android:paddingRight="@dimen/padding_small">
 
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:id="@+id/solutionSupport"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/padding_medium"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/text_33"
-            tool:text="solution support"/>
+            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                android:id="@+id/solutionCopy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/padding_medium"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_33"
+                tool:text="solution copy"/>
 
-        <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/campaign_reportback_prompt"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/text_33"/>
+            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                android:id="@+id/solutionSupport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/padding_medium"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_33"
+                tool:text="solution support"/>
+
+            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/campaign_reportback_prompt"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_33"/>
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomButton
