@@ -203,7 +203,11 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
 
     @Override
     public void onUserClicked(String id) {
-        startActivity(PublicProfileActivity.getLaunchIntent(this, id));
+        if (id == null || id.isEmpty()) {
+            Toast.makeText(CampaignDetailsActivity.this, R.string.error_public_profile_load, Toast.LENGTH_SHORT).show();
+        } else {
+            startActivity(PublicProfileActivity.getLaunchIntent(this, id));
+        }
     }
 
     @Override

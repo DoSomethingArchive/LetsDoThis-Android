@@ -90,7 +90,8 @@
     <string name="error_network_main_body">Either we can\'t connect to the internet or there are no
         actions available right now.</string>
     <string name="error_network_main_button">Try Again</string>
-    <string name="error_photo_select">Error loading the photo</string>
+    <string name="error_photo_save">There was an error saving the photo. Please try selecting your photo again.</string>
+    <string name="error_public_profile_load">Unable to load this person\'s profile</string>
     <string name="error_registration_email">We need a valid email</string>
     <string name="error_registration_first_name">We need your first name</string>
     <string name="error_registration_password">Your password must be 6+ characters</string>
