@@ -205,7 +205,11 @@ public class AvatarChangeFragment extends Fragment implements View.OnClickListen
      * @param path Photo's local file path
      */
     private void displayPicture(String path) {
-        Picasso.with(getActivity()).load("file://" + path)
+        String filePath = "file://" + path;
+
+        // First invalidate in order to clear any picture that's already loaded
+        Picasso.with(getActivity()).invalidate(filePath);
+        Picasso.with(getActivity()).load(filePath)
                 .resize(photoView.getWidth(), photoView.getHeight()).into(photoView);
     }
 
