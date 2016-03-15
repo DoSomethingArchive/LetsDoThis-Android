@@ -54,6 +54,45 @@ public class Causes {
     private static final int VIOLENCE_ID = 17;
 
     /**
+     * Returns the drawable resource id for a given cause name.
+     *
+     * @param causeName
+     * @return int drawable resource id
+     */
+    public static int getBackgroundRes(final String causeName) {
+        switch (causeName) {
+            case ANIMALS:
+                return R.drawable.bg_animals;
+            case BULLYING:
+                return R.drawable.bg_bullying;
+            case DISASTERS:
+                return R.drawable.bg_disasters;
+            case DISCRIMINATION:
+                return R.drawable.bg_discrimination;
+            case EDUCATION:
+                return R.drawable.bg_education;
+            case ENVIRONMENT:
+                return R.drawable.bg_environment;
+            case HOMELESSNESS:
+                return R.drawable.bg_homelessness;
+            case MENTAL_HEALTH:
+                return R.drawable.bg_health;
+            case PHYSICAL_HEALTH:
+                return R.drawable.bg_health;
+            case POVERTY:
+                return R.drawable.bg_poverty;
+            case RELATIONSHIPS:
+                return R.drawable.bg_relationships;
+            case SEX:
+                return R.drawable.bg_sex;
+            case VIOLENCE:
+                return R.drawable.bg_violence;
+            default:
+                return R.drawable.bg_onboarding;
+        }
+    }
+
+    /**
      * Returns the color resource id for a given cause name.
      * Example usage: Causes.getColor(Causes.ANIMALS);
      *
