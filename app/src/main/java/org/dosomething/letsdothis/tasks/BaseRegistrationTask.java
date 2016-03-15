@@ -81,13 +81,16 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
         if (throwable instanceof RetrofitError) {
             RetrofitError retrofitError = (RetrofitError) throwable;
             RegistrationError regError = (RegistrationError) retrofitError.getBodyAs(RegistrationError.class);
-            mErrorMessage = regError.message;
-            if (regError.errors != null) {
-                if (regError.errors.email.length > 0) {
-                    mErrorMessage = regError.errors.email[0];
+            mErrorMessage = regError.error.message;
+            if (regError.error.fields != null) {
+                if (regError.error.fields.email != null && regError.error.fields.email.length > 0) {
+                    mErrorMessage = regError.error.fields.email[0];
                 }
-                else if (regError.errors.password.length > 0) {
-                    mErrorMessage = regError.errors.password[0];
+                else if (regError.error.fields.mobile != null && regError.error.fields.mobile.length > 0) {
+                    mErrorMessage = regError.error.fields.mobile[0];
+                }
+                else if (regError.error.fields.password != null && regError.error.fields.password.length > 0) {
+                    mErrorMessage = regError.error.fields.password[0];
                 }
             }
 
@@ -111,12 +114,17 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
      * Data structure of error returned from a registration attempt.
      */
     class RegistrationError {
-        public int code;
-        public String message;
-        public RegistrationErrorBody errors;
+        public RegistrationErrorBody error;
 
         class RegistrationErrorBody {
+            public int code;
+            public String message;
+            public RegistrationErrorFields fields;
+        }
+
+        class RegistrationErrorFields {
             public String email[];
+            public String mobile[];
             public String password[];
         }
     }
