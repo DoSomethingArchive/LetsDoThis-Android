@@ -15,6 +15,7 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.soundcloud.android.crop.Crop;
 import com.squareup.picasso.Picasso;
@@ -182,6 +183,11 @@ public class AvatarChangeFragment extends Fragment implements View.OnClickListen
      * Save the picture path locally and to Northstar.
      */
     private void savePicture() {
+        if (mPhotoFile == null) {
+            Toast.makeText(getActivity(), getString(R.string.error_photo_save), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // Save to AppPrefs
         AppPrefs.getInstance(getActivity()).setAvatarPath(mPhotoFile.getAbsolutePath());
 
