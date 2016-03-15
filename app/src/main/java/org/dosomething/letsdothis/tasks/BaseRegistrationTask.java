@@ -4,6 +4,7 @@ import android.util.Patterns;
 
 import com.parse.ParseInstallation;
 
+import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.DatabaseHelper;
 import org.dosomething.letsdothis.data.User;
 import org.dosomething.letsdothis.network.NetworkHelper;
@@ -81,16 +82,17 @@ public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask
         if (throwable instanceof RetrofitError) {
             RetrofitError retrofitError = (RetrofitError) throwable;
             RegistrationError regError = (RegistrationError) retrofitError.getBodyAs(RegistrationError.class);
-            mErrorMessage = regError.error.message;
-            if (regError.error.fields != null) {
-                if (regError.error.fields.email != null && regError.error.fields.email.length > 0) {
-                    mErrorMessage = regError.error.fields.email[0];
-                }
-                else if (regError.error.fields.mobile != null && regError.error.fields.mobile.length > 0) {
-                    mErrorMessage = regError.error.fields.mobile[0];
-                }
-                else if (regError.error.fields.password != null && regError.error.fields.password.length > 0) {
-                    mErrorMessage = regError.error.fields.password[0];
+            mErrorMessage = context.getString(R.string.fail_register);
+            if (regError.error != null) {
+                mErrorMessage = regError.error.message;
+                if (regError.error.fields != null) {
+                    if (regError.error.fields.email != null && regError.error.fields.email.length > 0) {
+                        mErrorMessage = regError.error.fields.email[0];
+                    } else if (regError.error.fields.mobile != null && regError.error.fields.mobile.length > 0) {
+                        mErrorMessage = regError.error.fields.mobile[0];
+                    } else if (regError.error.fields.password != null && regError.error.fields.password.length > 0) {
+                        mErrorMessage = regError.error.fields.password[0];
+                    }
                 }
             }
 
