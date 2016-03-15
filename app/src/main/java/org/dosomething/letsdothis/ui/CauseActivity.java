@@ -175,13 +175,7 @@ public class CauseActivity extends BaseActivity {
             if (viewHolder.getItemViewType() == VIEW_TYPE_HEADER) {
                 HeaderViewHolder holder = (HeaderViewHolder) viewHolder;
 
-                int color = getResources().getColor(Causes.getColorRes(mCauseName));
-                int red = (color >> 16) & 0xff;
-                int green = (color >> 8) & 0xff;
-                int blue = color & 0xff;
-                int alpha = 0xff;
-
-                holder.mBackground.setBackgroundColor(Color.argb(alpha, red, green, blue));
+                holder.mBackground.setImageResource(Causes.getBackgroundRes(mCauseName));
                 holder.mTitle.setText(mCauseName.toUpperCase());
                 holder.mDescription.setText(Causes.getDescriptionRes(mCauseName));
 
