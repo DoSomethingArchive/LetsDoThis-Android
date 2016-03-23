@@ -174,9 +174,18 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             // Report back photo
             int lastImageIndex = action.reportback.reportback_items.total - 1;
-            ReportBack rbItem = action.reportback.reportback_items.data[lastImageIndex];
-            Picasso.with(context).load(rbItem.getImagePath()).into(rbViewHolder.image);
-            rbViewHolder.caption.setText(rbItem.caption);
+            String caption = "";
+            if (lastImageIndex >= 0) {
+                ReportBack rbItem = action.reportback.reportback_items.data[lastImageIndex];
+                caption = rbItem.caption;
+
+                Picasso.with(context).load(rbItem.getImagePath()).into(rbViewHolder.image);
+            }
+            else {
+                Picasso.with(context).load(R.drawable.image_error).into(rbViewHolder.image);
+            }
+
+            rbViewHolder.caption.setText(caption);
 
             // Report back campaign name and details
             if (action.reportback != null && action.campaign != null && action.campaign.reportback_info != null) {

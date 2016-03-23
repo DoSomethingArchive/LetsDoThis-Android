@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.widget.Toast;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -34,6 +35,15 @@ public class ProfileReportbackShareTask extends BaseNetworkErrorHandlerTask {
     // Context
     private Context mContext;
 
+    // True if there was an error while executing this task
+    private boolean mHasError;
+
+    // Signup action (and reportback) data
+    private ResponseProfileSignups.Signup mAction;
+
+    // Reportback item index of photo to share
+    private int mRbItemIndex;
+
     // Data to extra from a ResponseProfileSignups.Signup
     private String mImageUrl;
     private String mNoun;
@@ -46,19 +56,29 @@ public class ProfileReportbackShareTask extends BaseNetworkErrorHandlerTask {
     private File mFile;
 
     public ProfileReportbackShareTask(ResponseProfileSignups.Signup action, int rbItemIndex) {
-        mNoun = action.campaign.reportback_info.noun;
-        mVerb = action.campaign.reportback_info.verb;
-        mQuantity = action.reportback.quantity;
-        mReportbackId = action.reportback.id;
-
-        ReportBack rbItem = action.reportback.reportback_items.data[rbItemIndex];
-        mReportbackItemId = rbItem.id;
-        mImageUrl = rbItem.getImagePath();
+        mAction = action;
+        mRbItemIndex = rbItemIndex;
+        mHasError = false;
     }
 
     @Override
     protected void run(Context context) throws Throwable {
         mContext = context;
+
+        if (mAction == null || mAction.campaign == null || mAction.campaign.reportback_info == null
+                || mAction.reportback == null || mAction.reportback.reportback_items == null
+                || mRbItemIndex < 0 || mRbItemIndex >= mAction.reportback.reportback_items.data.length) {
+            throw new ReportbackShareError();
+        }
+
+        mNoun = mAction.campaign.reportback_info.noun;
+        mVerb = mAction.campaign.reportback_info.verb;
+        mQuantity = mAction.reportback.quantity;
+        mReportbackId = mAction.reportback.id;
+
+        ReportBack rbItem = mAction.reportback.reportback_items.data[mRbItemIndex];
+        mReportbackItemId = rbItem.id;
+        mImageUrl = rbItem.getImagePath();
 
         String filename = "rb_" + mReportbackId + "item_" + mReportbackItemId + ".jpg";
         mFile = getFile(filename);
@@ -155,5 +175,28 @@ public class ProfileReportbackShareTask extends BaseNetworkErrorHandlerTask {
     protected void onComplete(Context context) {
         EventBusExt.getDefault().post(this);
         super.onComplete(context);
+    }
+
+    @Override
+    protected boolean handleError(Context context, Throwable throwable) {
+        mHasError = true;
+
+        if (throwable instanceof ReportbackShareError) {
+            Toast.makeText(context, context.getString(R.string.error_photo_share), Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        else {
+            return super.handleError(context, throwable);
+        }
+    }
+
+    public boolean hasError() {
+        return mHasError;
+    }
+
+    /**
+     * Error to throw if there's some data validation error in setting up the share.
+     */
+    class ReportbackShareError extends RuntimeException {
     }
 }
