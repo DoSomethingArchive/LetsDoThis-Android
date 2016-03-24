@@ -191,10 +191,6 @@ public interface NorthstarAPI {
                                         @Body RequestCampaignSignup requestCampaignSignup) throws NetworkException;
 
     @Headers("Content-Type: application/json")
-    @GET("/users/_id/{id}/campaigns")
-    ResponseUserCampaign getUserCampaigns(@Path("id") String id) throws NetworkException;
-
-    @Headers("Content-Type: application/json")
     @POST("/kudos")
     ResponseReportBack submitKudos(@Body RequestKudo requestKudo,
                                    @Header("Session") String sessionToken) throws NetworkException;
