@@ -22,7 +22,6 @@ import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.tasks.UploadAvatarTask;
-import org.dosomething.letsdothis.ui.PhotoCropActivity;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.io.File;

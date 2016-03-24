@@ -50,10 +50,6 @@
                   android:configChanges="orientation|keyboardHidden"/>
 
 
-        <activity android:name=".ui.PhotoCropActivity"
-                  android:screenOrientation="portrait"
-                  android:configChanges="orientation|keyboardHidden"/>
-
         <activity android:name=".ui.ReportBackUploadActivity"
                   android:screenOrientation="portrait"
                   android:configChanges="orientation|keyboardHidden"/>
