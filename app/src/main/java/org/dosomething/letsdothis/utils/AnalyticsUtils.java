@@ -29,9 +29,6 @@ public class AnalyticsUtils {
     public static final String ACTION_SUBMIT_REPORTBACK = "submit reportback";
 
     // Behavior category actions
-    public static final String ACTION_LOAD_MORE_PHOTOS = "load more photos";
-    public static final String ACTION_EXPAND_CAMPAIGN_CELL = "expand campaign cell";
-    public static final String ACTION_COLLAPSE_CAMPAIGN_CELL = "collapse campaign cell";
     public static final String ACTION_SHARE_PHOTO = "share photo";
     public static final String ACTION_LOG_OUT = "log out";
     public static final String ACTION_TAP_FEEDBACK_FORM = "tap on feedback form";
@@ -48,7 +45,6 @@ public class AnalyticsUtils {
     public static final String SCREEN_CAMPAIGN = "campaign/%1$d/%2$s";
     public static final String SCREEN_CAUSE_LIST = "causes";
     public static final String SCREEN_CAUSE = "causes/%1$s";
-    public static final String SCREEN_INTEREST_GROUP = "taxonomy_term/%1$d";
     public static final String SCREEN_NEWS = "news";
     public static final String SCREEN_ONBOARDING_1 = "onboarding-first";
     public static final String SCREEN_ONBOARDING_2 = "onboarding-second";
