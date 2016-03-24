@@ -79,7 +79,7 @@
     </string>
     <string name="done">Done</string>
     <string name="error_action_closed_campaign">Sorry! This campaign is now closed.</string>
-    <string name="error_action_sms_game">This action is only available on web or SMS</string>
+    <string name="error_action_sms_game">This experience can only be done through text messaging. Text APP to 38383 to get started!</string>
     <string name="error_avatar_upload">There was an error uploading your photo</string>
     <string name="error_campaign_data">There was an error loading the campaign data</string>
     <string name="error_hub_sync">There was an error syncing your profile</string>
