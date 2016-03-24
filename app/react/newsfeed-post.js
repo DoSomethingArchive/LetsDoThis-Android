@@ -69,7 +69,7 @@ var NewsFeedPost = React.createClass({
           <Text
             onPress={this._onPressFullArticleButton}
             style={[Theme.styles.textBodyBold, Theme.styles.textColorCtaBlue]}>
-              Read the full article
+              View original story
           </Text>
           <TouchableHighlight
             activeOpacity={0.75}
