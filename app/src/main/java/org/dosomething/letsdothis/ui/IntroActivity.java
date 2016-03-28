@@ -20,6 +20,8 @@ import org.dosomething.letsdothis.ui.fragments.RegisterLoginFragment;
 import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 /**
+ * Activity for displaying intro information to first time users.
+ *
  * Created by toidiu on 4/15/15.
  */
 public class IntroActivity extends BaseActivity

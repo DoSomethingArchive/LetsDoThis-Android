@@ -12,6 +12,10 @@ import retrofit.http.Path;
 import retrofit.http.Query;
 
 /**
+ * Phoenix API interface.
+ *
+ * For more details, see: https://github.com/DoSomething/phoenix/wiki/API
+ *
  * Created by izzyoji :) on 4/20/15.
  */
 public interface PhoenixAPI {

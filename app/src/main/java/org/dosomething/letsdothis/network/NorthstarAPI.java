@@ -34,6 +34,10 @@ import retrofit.mime.TypedFile;
 import retrofit.mime.TypedInput;
 
 /**
+ * Northstar API interface.
+ *
+ * For more info, see: https://github.com/DoSomething/northstar/tree/dev/documentation
+ *
  * Created by izzyoji :) on 4/14/15.
  */
 public interface NorthstarAPI {

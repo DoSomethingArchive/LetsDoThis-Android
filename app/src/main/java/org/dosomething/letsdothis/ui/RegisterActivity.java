@@ -34,6 +34,8 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 
 
 /**
+ * Activity to display and handle the registration for a new user.
+ *
  * Created by toidiu on 4/15/15.
  */
 public class RegisterActivity extends BaseActivity

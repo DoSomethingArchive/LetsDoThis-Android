@@ -11,6 +11,10 @@ import org.dosomething.letsdothis.ui.fragments.RegisterLoginFragment;
 import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 /**
+ * Activity wrapper for the RegisterLoginFragment. Displays the screen that gives the user the
+ * option to either register or login. This should be shown upon opening up the app when the user
+ * is not logged in and has opened the app before.
+ *
  * Created by toidiu on 4/15/15.
  */
 public class RegisterLoginActivity extends BaseActivity {

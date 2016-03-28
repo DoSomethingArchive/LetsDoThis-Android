@@ -22,6 +22,8 @@ import org.dosomething.letsdothis.utils.AppPrefs;
 import co.touchlab.android.threading.tasks.TaskQueue;
 
 /**
+ * Activity to display and handle the login for an existing user.
+ *
  * Created by toidiu on 4/15/15.
  */
 public class LoginActivity extends BaseActivity
