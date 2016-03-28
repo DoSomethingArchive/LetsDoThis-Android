@@ -15,6 +15,8 @@ import java.util.List;
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
 /**
+ * Task to logout the current user.
+ *
  * Created by izzyoji :) on 4/30/15.
  */
 public class LogoutTask extends BaseNetworkErrorHandlerTask {

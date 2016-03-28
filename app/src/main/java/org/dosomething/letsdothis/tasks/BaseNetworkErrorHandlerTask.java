@@ -10,6 +10,10 @@ import co.touchlab.android.threading.tasks.Task;
 import retrofit.RetrofitError;
 
 /**
+ * Tasks that make a Retrofit network request should subclass from this one. It offers a base
+ * functionality for error handling of any network request. For more specific error handling,
+ * subclasses should override the handleError() method themselves.
+ *
  * Created by toidiu on 4/16/15.
  */
 public abstract class BaseNetworkErrorHandlerTask extends Task {

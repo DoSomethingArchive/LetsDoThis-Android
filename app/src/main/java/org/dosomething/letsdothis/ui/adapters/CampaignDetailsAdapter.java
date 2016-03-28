@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Locale;
 
 /**
+ * Adapter to display and interface with data on the campaign details screen.
+ *
  * Created by izzyoji :) on 4/30/15.
  */
 public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>

@@ -11,6 +11,8 @@ import org.dosomething.letsdothis.utils.AppPrefs;
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
 /**
+ * Task to get a user's profile details.
+ *
  * Created by toidiu on 4/16/15.
  */
 public class GetProfileTask extends BaseNetworkErrorHandlerTask {

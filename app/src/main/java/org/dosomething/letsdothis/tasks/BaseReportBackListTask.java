@@ -8,6 +8,9 @@ import org.dosomething.letsdothis.network.models.ResponseReportBackList;
 import java.util.List;
 
 /**
+ * Base class for providing functionality that would be common to tasks that pull a list of
+ * reportback data. Only known subclass right now is IndividualCampaignReportBackList.
+ *
  * Created by izzyoji :) on 4/23/15.
  */
 public abstract class BaseReportBackListTask extends BaseNetworkErrorHandlerTask {

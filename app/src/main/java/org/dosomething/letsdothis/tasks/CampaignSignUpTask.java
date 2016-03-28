@@ -14,6 +14,8 @@ import co.touchlab.android.threading.tasks.Task;
 import co.touchlab.android.threading.tasks.utils.NetworkUtils;
 
 /**
+ * Task to submit a campaign signup for the logged in user.
+ *
  * Created by izzyoji :) on 6/26/15.
  */
 public class CampaignSignUpTask extends Task {

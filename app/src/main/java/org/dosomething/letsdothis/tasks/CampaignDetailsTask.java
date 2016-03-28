@@ -11,6 +11,8 @@ import org.dosomething.letsdothis.utils.AppPrefs;
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
 /**
+ * Task to retrieve the details of a single campaign.
+ *
  * Created by izzyoji :) on 4/17/15.
  */
 public class CampaignDetailsTask extends BaseNetworkErrorHandlerTask
