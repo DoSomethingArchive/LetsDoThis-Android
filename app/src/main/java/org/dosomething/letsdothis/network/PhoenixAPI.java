@@ -3,7 +3,6 @@ import org.dosomething.letsdothis.network.models.ResponseCampaignList;
 import org.dosomething.letsdothis.network.models.ResponseCampaignWrapper;
 import org.dosomething.letsdothis.network.models.ResponseReportBack;
 import org.dosomething.letsdothis.network.models.ResponseReportBackList;
-import org.dosomething.letsdothis.network.models.ResponseTaxonomyTerm;
 
 import co.touchlab.android.threading.errorcontrol.NetworkException;
 import retrofit.http.GET;

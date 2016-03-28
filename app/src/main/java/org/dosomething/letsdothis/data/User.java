@@ -36,10 +36,10 @@ public class User
     public String password;
     public String source;
 
-    // @TODO Sometimes this User class is used to receive responses from the server. The
-    // ReportBackDetailsTask is one example. In those cases, the profile photo actually is returned
-    // in the "photo" parameter. A future refactor could be to consolidate the use of this and
-    // the "avatarPath" variable that also saves to the database.
+    // @TODO Sometimes this User class is used to receive responses from the server. A since-deleted
+    // ReportBackDetailsTask class is one example. We'll want to re-evaluate and see if there are
+    // any other cases where `photo` is getting used. A future refactor could be to consolidate the
+    // use of this and the "avatarPath" variable that also saves to the database.
     public String photo;
 
     public User()
