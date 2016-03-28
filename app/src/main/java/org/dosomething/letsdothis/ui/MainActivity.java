@@ -30,6 +30,10 @@ import java.sql.SQLException;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
+/**
+ * This is the main starting activity for logged-in users. Most other main areas of the app should
+ * be made available here as fragments and reachable by the user through the navigation drawer.
+ */
 public class MainActivity extends BaseActivity implements SetTitleListener, ReplaceFragmentListener {
     private static final String EXTRA_SHOW_FRAGMENT = "EXTRA_SHOW_FRAGMENT";
 
@@ -102,6 +106,9 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
         mDrawerToggle.syncState();
     }
 
+    /**
+     * Sets up the navigation drawer with its adapter and its behavior if an item is clicked.
+     */
     private void initDrawer() {
         final String[] list = getResources().getStringArray(R.array.drawer_list);
         final View drawer = findViewById(R.id.drawer);

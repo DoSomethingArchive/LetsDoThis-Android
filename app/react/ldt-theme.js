@@ -1,3 +1,8 @@
+/**
+ * This is a helper module for defining common values used throughout React Native views to help
+ * maintain the same style and theme.
+ */
+
 'use strict';
 
 var React = require('react-native');

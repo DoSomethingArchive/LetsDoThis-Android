@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 /**
+ * Adapter used in the HubFragment. This class defines the behavior of what's displayed in profile
+ * and how user interactions are handled.
+ *
  * Created by toidiu on 4/17/15.
  */
 public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

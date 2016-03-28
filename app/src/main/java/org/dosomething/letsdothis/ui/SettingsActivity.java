@@ -20,6 +20,8 @@ import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
 import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 /**
+ * Activity to display and change the app settings.
+ *
  * Created by izzyoji :) on 4/29/15.
  */
 public class SettingsActivity extends BaseActivity implements SetTitleListener,

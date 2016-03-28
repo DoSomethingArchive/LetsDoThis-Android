@@ -1,3 +1,7 @@
+/**
+ * This defines a single news feed posting that is displayed into the containing news feed view.
+ */
+
 'use strict';
 
 import React, {

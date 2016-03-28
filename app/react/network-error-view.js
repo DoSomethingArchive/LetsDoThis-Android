@@ -1,3 +1,7 @@
+/**
+ * This is the view to display when there is a network error detected while loading the news feed.
+ */
+
 'use strict';
 
 import React, {

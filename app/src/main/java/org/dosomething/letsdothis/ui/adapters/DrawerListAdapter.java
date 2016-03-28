@@ -12,6 +12,8 @@ import android.widget.TextView;
 import org.dosomething.letsdothis.R;
 
 /**
+ * Adapter for the navigation drawer available from the MainActivity.
+ *
  * Created by toidiu on 6/25/15.
  */
 public class DrawerListAdapter extends ArrayAdapter<String> {

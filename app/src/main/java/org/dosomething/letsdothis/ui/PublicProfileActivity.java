@@ -10,6 +10,8 @@ import org.dosomething.letsdothis.ui.fragments.SetTitleListener;
 import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
 
 /**
+ * Activity wrapper for displaying the Hub for a user other than the one who is logged in.
+ *
  * Created by toidiu on 5/13/15.
  */
 public class PublicProfileActivity extends BaseActivity implements SetTitleListener
