@@ -30,6 +30,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * This is an intermediary fragment displayed to users before they go on to either login to their
+ * account or register for a new one. Users will see this screen in 3 scenarios:
+ *   1. after swiping through all onboarding images on first-load
+ *   2. upon opening the app after they've previously opened it and are not signed in
+ *   3. logging out of their account in the app
+ *
  * Created by toidiu on 4/21/15.
  */
 public class RegisterLoginFragment extends Fragment

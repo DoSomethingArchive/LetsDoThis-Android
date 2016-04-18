@@ -47,6 +47,10 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 import co.touchlab.android.threading.tasks.utils.TaskQueueHelper;
 
 /**
+ * The fragment displays the profile view for both the logged-in user and for other user profiles
+ * that are being viewed. If an EXTRA_ID value is found in the Bundle, then we assume its a public
+ * user profile. If it is not found, then assume we're displaying the profile for the logged-in user.
+ *
  * Created by izzyoji :) on 4/15/15.
  */
 public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickListener {

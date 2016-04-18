@@ -1,3 +1,7 @@
+/**
+ * Main container view for the news feed.
+ */
+
 'use strict';
 
 import React, {

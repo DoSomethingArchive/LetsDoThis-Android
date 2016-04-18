@@ -44,6 +44,9 @@ import co.touchlab.android.threading.tasks.TaskQueue;
 import co.touchlab.android.threading.tasks.utils.TaskQueueHelper;
 
 /**
+ * Activity displaying the details for a single campaign including a call-to-action and a
+ * reportback gallery.
+ *
  * Created by izzyoji :) on 4/17/15.
  */
 public class CampaignDetailsActivity extends AppCompatActivity implements CampaignDetailsAdapter.DetailsAdapterClickListener

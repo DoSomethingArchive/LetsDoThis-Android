@@ -4,6 +4,8 @@ import android.content.Context;
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
 /**
+ * Task to retrieve reportbacks for a single campaign.
+ *
  * Created by izzyoji :) on 4/30/15.
  */
 public class IndividualCampaignReportBackList extends BaseReportBackListTask {

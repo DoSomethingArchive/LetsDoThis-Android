@@ -16,6 +16,8 @@ import co.touchlab.android.threading.tasks.Task;
 import retrofit.mime.TypedFile;
 
 /**
+ * Task to upload a new avatar photo for the logged in user.
+ *
  * Created by toidiu on 4/16/15.
  */
 public class UploadAvatarTask extends Task {

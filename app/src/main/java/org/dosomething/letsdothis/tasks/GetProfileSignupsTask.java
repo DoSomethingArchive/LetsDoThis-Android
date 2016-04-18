@@ -10,6 +10,9 @@ import org.dosomething.letsdothis.utils.AppPrefs;
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
 /**
+ * Task to get the campaigns a user has signed up for. Where applicable, this also contains
+ * reportback info for campaigns a user has signed up and reported back for.
+ *
  * Created by juy on 2/16/16.
  */
 public class GetProfileSignupsTask extends BaseNetworkErrorHandlerTask {

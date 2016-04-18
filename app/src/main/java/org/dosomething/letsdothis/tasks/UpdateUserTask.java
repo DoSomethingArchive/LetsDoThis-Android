@@ -14,6 +14,8 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
 import retrofit.mime.TypedInput;
 
 /**
+ * Task to update a user's data on both the service and local storage.
+ *
  * Created by toidiu on 4/17/15.
  */
 public class UpdateUserTask extends BaseNetworkErrorHandlerTask {

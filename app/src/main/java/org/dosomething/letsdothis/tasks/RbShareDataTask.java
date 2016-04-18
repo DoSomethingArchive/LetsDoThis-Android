@@ -25,6 +25,8 @@ import java.util.concurrent.TimeUnit;
 import co.touchlab.android.threading.eventbus.EventBusExt;
 
 /**
+ * Task used to prep the reportback file before sharing it.
+ *
  * Created by toidiu on 4/16/15.
  */
 public class RbShareDataTask extends BaseNetworkErrorHandlerTask {

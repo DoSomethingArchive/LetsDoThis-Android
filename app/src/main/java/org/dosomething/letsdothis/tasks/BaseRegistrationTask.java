@@ -14,6 +14,9 @@ import org.dosomething.letsdothis.utils.AppPrefs;
 import retrofit.RetrofitError;
 
 /**
+ * Base class for login and registration tasks. Known subclasses: LoginTask and RegisterTask.
+ * Provides functionality common to the two tasks.
+ *
  * Created by toidiu on 4/16/15.
  */
 public abstract class BaseRegistrationTask extends BaseNetworkErrorHandlerTask

@@ -15,6 +15,8 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
 
 /**
+ * Task for the actual submission of a reportback.
+ *
  * Created by izzyoji :) on 5/15/15.
  */
 public class ReportbackUploadTask extends BaseNetworkErrorHandlerTask {

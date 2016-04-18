@@ -2,7 +2,6 @@ package org.dosomething.letsdothis.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +21,6 @@ import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.data.Causes;
-import org.dosomething.letsdothis.network.models.ResponseCampaignList;
 import org.dosomething.letsdothis.tasks.GetCampaignsByCauseTask;
 import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
 import org.dosomething.letsdothis.utils.AnalyticsUtils;

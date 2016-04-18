@@ -7,6 +7,8 @@ import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 /**
+ * Launcher Activity. Decides what the first screen the user should see will be.
+ *
  * Created by toidiu on 4/15/15.
  */
 public class StartActivity extends BaseActivity {

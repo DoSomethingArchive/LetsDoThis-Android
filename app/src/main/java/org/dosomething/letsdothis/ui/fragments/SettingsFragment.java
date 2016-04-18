@@ -18,6 +18,8 @@ import org.dosomething.letsdothis.utils.AnalyticsUtils;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
 /**
+ * This fragment defines the behavior of the items on the settings screen.
+ *
  * Created by izzyoji :) on 4/29/15.
  */
 public class SettingsFragment extends PreferenceFragment implements ConfirmDialog.ConfirmListener

@@ -1,3 +1,7 @@
+/**
+ * Starting React Native file for the news feed.
+ */
+
 'use strict';
 
 import React, {

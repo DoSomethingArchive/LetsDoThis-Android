@@ -11,6 +11,9 @@ import android.widget.TextView;
 import org.dosomething.letsdothis.R;
 
 /**
+ * Used in the IntroActivity, this fragment displays the images a user can swipe through in the
+ * onboarding flow.
+ *
  * Created by toidiu on 4/21/15.
  */
 public class IntroFragment extends Fragment

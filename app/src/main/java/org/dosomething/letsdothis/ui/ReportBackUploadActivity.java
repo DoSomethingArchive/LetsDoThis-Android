@@ -24,6 +24,8 @@ import org.dosomething.letsdothis.utils.AnalyticsUtils;
 import java.io.File;
 
 /**
+ * Activity with the form to fill out and submit a report back.
+ *
  * Created by toidiu on 5/8/15.
  */
 public class ReportBackUploadActivity extends AppCompatActivity
