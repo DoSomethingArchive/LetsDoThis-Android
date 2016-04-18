@@ -38,20 +38,7 @@ public interface PhoenixAPI {
 
     @Headers("Content-Type: application/json")
     @GET("/campaigns.json")
-    ResponseCampaignList campaignList(
-            @Query("term_ids") int interestGroupId,
-            @Query("mobile_app_date") String currentDate) throws NetworkException;
-
-    @Headers("Content-Type: application/json")
-    @GET("/campaigns.json")
     ResponseCampaignList campaignListByCause(
             @Query("term_ids") int causeId,
             @Query("page") int page) throws NetworkException;
-
-    @Headers("Content-Type: application/json")
-    @GET("/campaigns.json?mobile_app=1")
-    ResponseCampaignList campaignListByIds(@Query("ids") String ids) throws NetworkException;
-
-    @GET("/taxonomy_term/{id}.json")
-    ResponseTaxonomyTerm taxonomyTerm(@Path("id") int id) throws NetworkException;
 }

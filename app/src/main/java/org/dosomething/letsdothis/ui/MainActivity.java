@@ -162,7 +162,7 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
     }
 
     /**
-     * Replace the current fragment with an ActionsFragment.
+     * Replace the current fragment with the Actions fragment.
      *
      * Implements ReplaceFragmentListener
      */

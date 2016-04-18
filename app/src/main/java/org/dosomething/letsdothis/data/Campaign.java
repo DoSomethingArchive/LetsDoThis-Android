@@ -7,7 +7,6 @@ import com.j256.ormlite.field.DatabaseField;
 public class Campaign
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
-    public static final String INTEREST_GROUP = "interest_group";
 
     @DatabaseField(id = true)
     public int         id;
@@ -35,16 +34,12 @@ public class Campaign
     public String noun;
     @DatabaseField
     public String verb;
-    @DatabaseField(columnName = INTEREST_GROUP)
-    public int    interestGroup;
 
     public String status;
 
     public String type;
 
     public boolean userIsSignedUp = false;
-
-    public UserReportBack userReportBack;
 
     public enum UploadShare {
         UPLOADING,

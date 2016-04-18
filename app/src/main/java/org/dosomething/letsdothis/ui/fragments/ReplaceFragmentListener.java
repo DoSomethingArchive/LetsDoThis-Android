@@ -5,7 +5,7 @@ package org.dosomething.letsdothis.ui.fragments;
  */
 public interface ReplaceFragmentListener {
     /**
-     * Replace the current fragment with an ActionsFragment.
+     * Replace the current fragment with the Actions fragment.
      */
     void replaceWithActionsFragment();
 }
