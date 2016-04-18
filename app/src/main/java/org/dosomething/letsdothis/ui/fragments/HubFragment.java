@@ -313,7 +313,9 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     public void onEventMainThread(ProfileReportbackShareTask task) {
         dismissProgressDialogIfDone();
 
-        startActivity(task.getShareIntent());
+        if (! task.hasError()) {
+            startActivity(task.getShareIntent());
+        }
     }
 
     @SuppressWarnings("UnusedDeclaration")
