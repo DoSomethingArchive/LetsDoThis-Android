@@ -16,6 +16,13 @@
         android:layout_height="150dp"
         android:background="@color/active_blue">
 
+        <ImageView
+            android:id="@+id/title_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="center"
+            android:src="@drawable/bg_onboarding"/>
+
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
