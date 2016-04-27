@@ -183,6 +183,17 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 campaignViewHolder.signupProgress.setVisibility(View.GONE);
             }
 
+            // Sponsor section
+            if (campaign.sponsorLogo != null) {
+                campaignViewHolder.sponsor.setVisibility(View.VISIBLE);
+                Picasso.with(campaignViewHolder.sponsorLogo.getContext())
+                        .load(campaign.sponsorLogo)
+                        .into(campaignViewHolder.sponsorLogo);
+            }
+            else {
+                campaignViewHolder.sponsor.setVisibility(View.GONE);
+            }
+
             // Solution section
             if (!mUserIsSignedUp) {
                 campaignViewHolder.solutionWrapper.setVisibility(View.GONE);
@@ -318,6 +329,8 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         protected Button    actionButton;
         protected View      signupProgress;
         public    View      solutionWrapper;
+        protected View      sponsor;
+        protected ImageView sponsorLogo;
 
         public CampaignViewHolder(View itemView)
         {
@@ -330,6 +343,8 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.solutionSupport = (TextView) itemView.findViewById(R.id.solutionSupport);
             this.actionButton = (Button) itemView.findViewById(R.id.action_button);
             this.signupProgress = itemView.findViewById(R.id.progress);
+            this.sponsor = itemView.findViewById(R.id.sponsor);
+            this.sponsorLogo = (ImageView) itemView.findViewById(R.id.sponsor_logo);
         }
     }
 

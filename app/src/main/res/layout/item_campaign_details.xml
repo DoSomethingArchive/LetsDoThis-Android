@@ -58,7 +58,9 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_small"
         android:layout_below="@id/image_container"
-        android:layout_marginTop="@dimen/padding_small">
+        android:layout_marginTop="@dimen/padding_small"
+        android:visibility="gone"
+        tool:visibility="visible">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -79,12 +81,13 @@
                 app:typeface="brandon_bold"/>
 
             <ImageView
+                android:id="@+id/sponsor_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:gravity="center"
                 android:scaleType="fitCenter"
-                android:src="@drawable/default_profile_photo"/>
+                tool:src="@drawable/default_profile_photo"/>
 
         </LinearLayout>
 

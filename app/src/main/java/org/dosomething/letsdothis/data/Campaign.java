@@ -35,6 +35,8 @@ public class Campaign
     @DatabaseField
     public String verb;
 
+    public String sponsorLogo;
+
     public String status;
 
     public String type;
