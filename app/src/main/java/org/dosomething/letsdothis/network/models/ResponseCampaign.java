@@ -24,6 +24,7 @@ public class ResponseCampaign
     public ResponseFacts    facts;
     public ReportBackInfo   reportback_info;
     public MobileAppTiming  mobile_app;
+    public ResponseAffiliates affiliates;
 
     public static Campaign getCampaign(ResponseCampaign response)
     {
@@ -44,6 +45,7 @@ public class ResponseCampaign
         campaign.showShare = Campaign.UploadShare.SHOW_OFF;
         campaign.noun = response.reportback_info.noun;
         campaign.verb = response.reportback_info.verb;
+        campaign.sponsorLogo = response.affiliates.getLogo();
         return campaign;
     }
 
@@ -210,6 +212,28 @@ public class ResponseCampaign
         private class MobileAppDates {
             public String start;
             public String end;
+        }
+    }
+
+    private class ResponseAffiliates {
+        public Partner[] partners;
+
+        public String getLogo() {
+            // Just defaulting to using the first sponsor
+            if (partners.length > 0 && partners[0].media != null) {
+                return partners[0].media.uri;
+            }
+            else {
+                return null;
+            }
+        }
+
+        private class Partner {
+            public Media media;
+
+            private class Media {
+                public String uri;
+            }
         }
     }
 }
