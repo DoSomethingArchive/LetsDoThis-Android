@@ -46,6 +46,11 @@ public class ResponseCampaign
         campaign.noun = response.reportback_info.noun;
         campaign.verb = response.reportback_info.verb;
         campaign.sponsorLogo = response.affiliates.getLogo();
+        // Hardcode the sponsor image for campaign 5769
+        // @see https://github.com/DoSomething/LetsDoThis-iOS/issues/998
+        if (campaign.id == 5769) {
+            campaign.sponsorLogo = "https://www.dosomething.org/sites/default/files/SponsorLogo%20NewsCorp.png";
+        }
         return campaign;
     }
 
