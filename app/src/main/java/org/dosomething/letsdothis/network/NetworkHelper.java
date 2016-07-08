@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.network;
+
 import android.content.Context;
 
 import com.google.gson.Gson;
@@ -9,7 +10,9 @@ import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.network.deserializers.ResponseCampaignDeserializer;
+import org.dosomething.letsdothis.network.deserializers.ResponseReportBackListDeserializer;
 import org.dosomething.letsdothis.network.models.ResponseCampaign;
+import org.dosomething.letsdothis.network.models.ResponseReportBackList;
 
 import java.util.concurrent.TimeUnit;
 
@@ -91,6 +94,7 @@ public class NetworkHelper
 
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(ResponseCampaign.class, new ResponseCampaignDeserializer<ResponseCampaign>())
+				.registerTypeAdapter(ResponseReportBackList.class, new ResponseReportBackListDeserializer<ResponseReportBackList>())
                 .setDateFormat(JSON_DATE_FORMAT_PHOENIX).create();
         GsonConverter gsonConverter = new GsonConverter(gson);
         return getRequestAdapterBuilder().setConverter(gsonConverter)
