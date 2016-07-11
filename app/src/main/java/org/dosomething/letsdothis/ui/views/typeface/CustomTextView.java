@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.TextView;
 
 import org.dosomething.letsdothis.R;
@@ -72,7 +73,11 @@ public class CustomTextView extends TextView
 
     public void setTypeface(int typefaceResId)
     {
-        Typeface typeface = TypefaceManager.obtainTypeface(getContext(), typefaceResId);
-        setTypeface(typeface);
+		try {
+			Typeface typeface = TypefaceManager.obtainTypeface(getContext(), typefaceResId);
+			setTypeface(typeface);
+		} catch (Exception excAny) {
+			Log.wtf("CustomTextView", "Failed to set default type face", excAny);
+		}
     }
 }
