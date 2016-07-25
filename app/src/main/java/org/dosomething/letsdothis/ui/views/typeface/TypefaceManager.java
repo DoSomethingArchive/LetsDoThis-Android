@@ -38,7 +38,7 @@ public class TypefaceManager
                 break;
             case BRANDON_REGULAR:
             default:
-                typeface = Typeface.createFromAsset(context.getAssets(), "fonts/brandon_reg.otf");
+                typeface = Typeface.createFromAsset(context.getAssets(), "fonts/brandon_regular.otf");
                 break;
         }
         return typeface;

@@ -45,8 +45,8 @@ android {
         applicationId "org.dosomething.letsdothis"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 4
-        versionName "1.1.2"
+        versionCode 6
+        versionName "1.2.6"
         resValue "string", "fabric_api_key", FABRIC_API_KEY
         resValue "string", "facebook_app_id", FACEBOOK_APP_ID_PROD
         resValue "string", "parse_app_id", PARSE_APP_ID
