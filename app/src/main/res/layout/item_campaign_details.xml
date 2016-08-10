@@ -14,6 +14,7 @@
 
         <ImageView
             android:id="@+id/image"
+            android:contentDescription="@string/campaign_heading"
             android:layout_width="match_parent"
             android:layout_height="@dimen/campaign_height_expanded"
             android:scaleType="centerCrop"
@@ -74,6 +75,9 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:paddingRight="@dimen/padding_medium"
+                android:paddingLeft="0dp"
+                android:paddingEnd="@dimen/padding_medium"
+                android:paddingStart="0dp"
                 android:text="@string/campaign_sponsor"
                 android:textAllCaps="true"
                 android:textColor="@color/hint"
@@ -82,6 +86,7 @@
 
             <ImageView
                 android:id="@+id/sponsor_logo"
+                android:contentDescription="@string/campaign_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
@@ -115,7 +120,6 @@
         <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/image_container"
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/padding_small"
             android:background="@color/desertStorm"
@@ -129,7 +133,6 @@
             android:orientation="vertical"
             android:paddingLeft="@dimen/padding_small"
             android:paddingRight="@dimen/padding_small">
-
             <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
                 android:id="@+id/solutionCopy"
                 android:layout_width="wrap_content"
@@ -138,7 +141,6 @@
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/text_33"
                 tool:text="solution copy"/>
-
             <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
                 android:id="@+id/solutionSupport"
                 android:layout_width="wrap_content"
@@ -147,16 +149,32 @@
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/text_33"
                 tool:text="solution support"/>
-
             <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/campaign_reportback_prompt"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/text_33"/>
-
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/campaignResources"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/padding_large"
+            android:paddingLeft="@dimen/padding_small"
+            android:paddingRight="@dimen/padding_small">
+            <TextView
+                android:text="@string/campaign_resources_title"
+                android:textAllCaps="true"
+                android:textColor="#9c9c9c"
+                android:textStyle="bold"
+                android:background="@drawable/bg_campaign_attach"
+                android:paddingBottom="@dimen/padding_small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
     </LinearLayout>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomButton
@@ -170,7 +188,6 @@
         android:layout_marginLeft="@dimen/padding_tiny"
         android:layout_marginRight="@dimen/padding_tiny"
         android:layout_marginTop="@dimen/padding_medium"
-        android:layout_weight="1"
         android:textAllCaps="true"
         android:textSize="@dimen/text_36"
         android:text="@string/show_off"/>

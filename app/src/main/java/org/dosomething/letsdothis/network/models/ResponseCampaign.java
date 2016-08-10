@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.network.models;
+
 import android.text.TextUtils;
 
 import com.google.gson.annotations.SerializedName;
@@ -7,10 +8,13 @@ import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.utils.ISO8601;
 
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.util.List;
+
 
 /**
- * Created by izzyoji :) on 4/17/15.
+ * Receives a campaign response from a web service.
+ * @author izzyoji
+ * @author NearChaos
  */
 public class ResponseCampaign
 {
@@ -25,6 +29,7 @@ public class ResponseCampaign
     public ReportBackInfo   reportback_info;
     public MobileAppTiming  mobile_app;
     public ResponseAffiliates affiliates;
+	public List<ResponseAttachment> attachments;
 
     public static Campaign getCampaign(ResponseCampaign response)
     {
@@ -51,6 +56,13 @@ public class ResponseCampaign
         if (campaign.id == 5769) {
             campaign.sponsorLogo = "https://www.dosomething.org/sites/default/files/SponsorLogo%20NewsCorp.png";
         }
+		if (response.attachments != null) {
+			// Add the attachments to the campaign model
+			for (ResponseAttachment attachment : response.attachments) {
+				campaign.addAttachment((attachment.title == null) ? attachment.description : attachment.title, attachment.uri);
+			}
+		}
+		// TODO: Get/transfer action guides
         return campaign;
     }
 
@@ -158,11 +170,6 @@ public class ResponseCampaign
         }
     }
 
-    private static class Stats
-    {
-        public int signups;
-    }
-
     private class ResponseSolution
     {
         public ResponseSolutionObject copy;
@@ -185,7 +192,7 @@ public class ResponseCampaign
 
         private class ResponseSolutionObject
         {
-            public String formatted;
+            // TODO Use later? public String formatted;
             public String raw;
         }
     }
@@ -193,11 +200,12 @@ public class ResponseCampaign
     public static class ReportBackInfo
     {
         public String copy;
-        public String confirmation_message;
+        // TODO Use later? public String confirmation_message;
         public String noun;
         public String verb;
     }
 
+	@SuppressWarnings("unused")
     public ReportBackInfo getReportbackInfo()
     {
         return reportback_info == null
@@ -241,4 +249,17 @@ public class ResponseCampaign
             }
         }
     }
+
+
+	/**
+	 * Receives an attachment associated with a campaign.
+	 */
+	private class ResponseAttachment {
+		public String title;
+		public String description;
+		public String uri;
+// Note: the following fields are available in the response but not currently used
+//		public String id;
+//		public String type;
+	}
 }

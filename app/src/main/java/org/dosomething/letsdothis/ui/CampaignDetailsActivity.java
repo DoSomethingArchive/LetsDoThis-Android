@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.ui;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -34,6 +35,7 @@ import org.dosomething.letsdothis.tasks.RbShareDataTask;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
 import org.dosomething.letsdothis.ui.adapters.CampaignDetailsAdapter;
+import org.dosomething.letsdothis.ui.views.CampaignResourceActivity;
 import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 import java.io.File;
@@ -43,11 +45,13 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
 import co.touchlab.android.threading.tasks.utils.TaskQueueHelper;
 
+
 /**
  * Activity displaying the details for a single campaign including a call-to-action and a
  * reportback gallery.
  *
- * Created by izzyoji :) on 4/17/15.
+ * @author izzyoji
+ * @author NearChaos
  */
 public class CampaignDetailsActivity extends AppCompatActivity implements CampaignDetailsAdapter.DetailsAdapterClickListener
 {
@@ -249,7 +253,18 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         snackbar.show();
     }
 
-    @Override
+
+	/**
+	 * Shows an attachment.
+	 * @param uri URI of attachment to show.
+	 */
+	@Override
+	public void showAttachment(String title, String uri) {
+		startActivity(CampaignResourceActivity.getLaunchIntent(this, title, uri));
+	}
+
+
+	@Override
     protected void onDestroy() {
         EventBusExt.getDefault().unregister(this);
         super.onDestroy();

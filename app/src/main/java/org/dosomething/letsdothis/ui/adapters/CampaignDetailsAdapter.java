@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.ui.adapters;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +21,7 @@ import org.dosomething.letsdothis.utils.ViewUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
 
 /**
  * Adapter to display and interface with data on the campaign details screen.
@@ -124,6 +126,8 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         void onSignupClicked(int campaignId);
 
         void showError(int resourceId);
+
+		void showAttachment(String title, String uri);
     }
 
     @Override
@@ -215,6 +219,32 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     campaignViewHolder.solutionSupport.setVisibility(View.GONE);
                 }
             }
+
+			// Resources section
+			if (!campaign.isAnyAttachments() && !campaign.isAnyActionGuides()) {
+				// Hide attachments
+				campaignViewHolder.resourcesGroup.setVisibility(View.GONE);
+			} else {
+				// Populate attachments
+				for (Campaign.Attachment attachment : campaign.getAttachments()) {
+					// Add the current attachment
+					ViewGroup rowGroup = (ViewGroup) LayoutInflater.from(campaignViewHolder.resourcesGroup.getContext()).
+							inflate(R.layout.item_campaign_attachment, campaignViewHolder.resourcesGroup, false);
+					((TextView) rowGroup.findViewById(R.id.attachmentTitle)).setText(attachment.getTitle());
+					rowGroup.setTag(attachment.getUri());
+					rowGroup.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							// Show this attachment
+							String title = ((TextView) v.findViewById(R.id.attachmentTitle)).getText().toString();
+							String uri = (String) v.getTag();
+							detailsAdapterClickListener.showAttachment(title, uri);
+						}
+					});
+					campaignViewHolder.resourcesGroup.addView(rowGroup);
+				}
+				// TODO Add action guide row if any
+			}
 
             // Action button
             campaignViewHolder.actionButton.setVisibility(View.VISIBLE);
@@ -331,6 +361,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         public    View      solutionWrapper;
         protected View      sponsor;
         protected ImageView sponsorLogo;
+		protected ViewGroup resourcesGroup;
 
         public CampaignViewHolder(View itemView)
         {
@@ -345,6 +376,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.signupProgress = itemView.findViewById(R.id.progress);
             this.sponsor = itemView.findViewById(R.id.sponsor);
             this.sponsorLogo = (ImageView) itemView.findViewById(R.id.sponsor_logo);
+			this.resourcesGroup = (ViewGroup) itemView.findViewById(R.id.campaignResources);
         }
     }
 
@@ -420,5 +452,4 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             }
         }
     }
-
 }
