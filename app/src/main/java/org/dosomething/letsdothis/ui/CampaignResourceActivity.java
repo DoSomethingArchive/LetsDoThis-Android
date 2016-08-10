@@ -1,4 +1,4 @@
-package org.dosomething.letsdothis.ui.views;
+package org.dosomething.letsdothis.ui;
 
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
@@ -18,6 +18,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ProgressBar;
+
+import com.github.barteksc.pdfviewer.PDFView;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
@@ -88,55 +90,34 @@ public class CampaignResourceActivity extends AppCompatActivity {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// Get our contents
-		// TODO Consider internal PDF viewer
-		// https://github.com/barteksc/AndroidPdfViewer
 		Button openInButton = (Button) findViewById(R.id.openInButton);
 		String uriExtra = getIntent().getStringExtra(EXTRA_RESOURCE_URI);
 		if (uriExtra == null) {
 			// Missing resource URI
 			Log.e(TAG, "Missing Resource URI");
 			openInButton.setEnabled(false);
-		} else {
-			// Load our contents
-			WebView webview = (WebView) findViewById(R.id.webview);
-			webview.getSettings().setJavaScriptEnabled(true);
-			webview.setWebViewClient(new WebViewClient() {
-				@Override
-				public boolean shouldOverrideUrlLoading(
-						WebView view, String url) {
-					return false;
-				}
-			});
-			webview.loadUrl("http://docs.google.com/gview?embedded=true&url=" + uriExtra);
+			openInButton.setVisibility(View.VISIBLE);
+			return;
 		}
 
-		// Determine if we can open this file in an external reader
+		// Have we already downloaded the file?
 		String dir;
 		if (Build.VERSION.SDK_INT >= 19) {
 			dir = Environment.DIRECTORY_DOCUMENTS;
 		} else {
 			dir = Environment.DIRECTORY_DOWNLOADS;
 		}
-		final Uri uri = Uri.parse(uriExtra);
-		final File localFile = new File(
+		Uri uri = Uri.parse(uriExtra);
+		File localFile = new File(
 				Environment.getExternalStoragePublicDirectory(dir),
 				uri.getLastPathSegment());
-
-		// Create an external app chooser for the resource
-		final Intent intentOpen = new Intent(Intent.ACTION_VIEW);
-		intentOpen.setDataAndType(Uri.fromFile(localFile), "application/pdf");
-		intentOpen.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		if (getPackageManager().queryIntentActivities(intentOpen, 0).size() == 0) {
-			// No external app can handle this intent
-			openInButton.setVisibility(View.GONE);
+		if (localFile.exists()) {
+			// Show embedded PDF
+			showLocal(localFile);
 		} else {
-			// Attach the open in button
-			openInButton.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					openResourceExternally(uri, localFile, intentOpen);
-				}
-			});
+			// Start download
+			downloader = new Downloader();
+			downloader.execute(uri, Uri.fromFile(localFile));
 		}
 	}
 
@@ -154,7 +135,7 @@ public class CampaignResourceActivity extends AppCompatActivity {
 			case android.R.id.home:
 				if (downloader != null) {
 					// Cancel the download in progress
-					downloader.cancel(true);
+					downloader.userRequestCancel();
 				} else {
 					// We can leave now
 					onBackPressed();
@@ -167,25 +148,22 @@ public class CampaignResourceActivity extends AppCompatActivity {
 
 
 	/**
+	 * If there is a download in progress, stop it.
+	 */
+	@Override
+	protected void onStop() {
+		super.onStop();
+		if (downloader != null) {
+			downloader.cancel(true);
+		}
+	}
+
+
+	/**
 	 * Opens a selector that allows the user to pick an external application for the resource.
-	 * @param remote Remote location of resource
-	 * @param local Local location of resource
 	 * @param intentOpen intent needed to open the resource
 	 */
-	private void openResourceExternally(Uri remote, File local, Intent intentOpen) {
-		// Does the file already exist locally
-		if (!local.exists()) {
-			// We need to download the file now
-			if (downloader != null) {
-				// Already downloading
-				return;
-			}
-
-			// Download now
-			downloader = new Downloader();
-			downloader.execute(remote, Uri.fromFile(local));
-			return;
-		}
+	private void openResourceExternally(Intent intentOpen) {
 		try {
 			// Launch the activity chooser
 			startActivity(Intent.createChooser(intentOpen, null));
@@ -199,10 +177,49 @@ public class CampaignResourceActivity extends AppCompatActivity {
 
 
 	/**
+	 * Shows the local attachment embedded in our application.  Also sets up the open button
+	 * to show the local file in an external viewer.
+	 * @param local Location of attachment locally (on the phone)
+	 */
+	private void showLocal(File local) {
+		// Show the file in the PDF viewer
+		PDFView pdfView = (PDFView) findViewById(R.id.pdfView);
+		pdfView.setVisibility(View.VISIBLE);
+		pdfView.fromFile(local)
+				.enableSwipe(true)
+				.enableDoubletap(true)
+				.swipeVertical(false)
+				.defaultPage(1)
+				.showMinimap(false)
+				.enableAnnotationRendering(false)
+				.password(null)
+				.showPageWithAnimation(true)
+				.load();
+
+		// Determine if we can open this file in an external reader
+		// Create an external app chooser for the resource
+		final Intent intentOpen = new Intent(Intent.ACTION_VIEW);
+		Button openInButton = (Button) findViewById(R.id.openInButton);
+		intentOpen.setDataAndType(Uri.fromFile(local), "application/pdf");
+		intentOpen.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		if (getPackageManager().queryIntentActivities(intentOpen, 0).size() > 0) {
+			// Attach the open in button
+			openInButton.setVisibility(View.VISIBLE);
+			openInButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					openResourceExternally(intentOpen);
+				}
+			});
+		}
+	}
+
+
+	/**
 	 * Shows a popup error message.
 	 * @param errorMsg Message to show
 	 */
-	public void showError(String errorMsg) {
+	private void showError(String errorMsg) {
 		int backgroundColor;
 		if (Build.VERSION.SDK_INT >= 23) {
 			backgroundColor = getResources().getColor(R.color.snack_error, null);
@@ -225,18 +242,36 @@ public class CampaignResourceActivity extends AppCompatActivity {
 	}
 
 
-	// TODO: Mind lifecycle events vs download
+	/**
+	 * Downloads an attachment on a worker thread, with event integration back to the UI.
+	 */
 	private class Downloader extends AsyncTask<Uri, Integer, String> {
 
 		private ProgressBar progressBar;
+		private File localFile;
+		private boolean userCancel;
 
+		/**
+		 * Cancels the download based on user action, which ends this activity (since we can't
+		 * do much without the download).
+		 */
+		public void userRequestCancel() {
+			userCancel = true;
+			cancel(true);
+		}
+
+		/**
+		 * Downloads the attachment in the background.
+		 * @param params Remote and local locations for the download
+		 * @return Error message or null on success
+		 */
 		@Override
 		protected String doInBackground(Uri... params) {
 			String errorMsg = null;
 			InputStream inps = null;
 			OutputStream outs = null;
-			File localFile = new File(params[1].getPath());
 			int lengthOfFile;
+			localFile = new File(params[1].getPath());
 			try {
 				try {
 					// Start fetching the file from the remote source
@@ -254,6 +289,7 @@ public class CampaignResourceActivity extends AppCompatActivity {
 				}
 				try {
 					// Start writing the file locally
+					//noinspection ResultOfMethodCallIgnored
 					localFile.getParentFile().mkdirs();
 					outs = new FileOutputStream(localFile);
 				} catch (IOException exc) {
@@ -266,7 +302,7 @@ public class CampaignResourceActivity extends AppCompatActivity {
 				int count;
 				int total = 0;
 				byte data[] = new byte[1024];
-				while (true) {
+				while (!isCancelled()) {
 					try {
 						// Read a buffer's worth of data
 						if ((count = inps.read(data)) < 0) {
@@ -297,6 +333,11 @@ public class CampaignResourceActivity extends AppCompatActivity {
 					// Failed to complete the write
 					errorMsg = getString(R.string.campaign_error_dl_write_local);
 					throw exc;
+				}
+				if (isCancelled()) {
+					// Make sure we don't keep an incomplete file
+					//noinspection ResultOfMethodCallIgnored
+					localFile.delete();
 				}
 			} catch (Exception excAny) {
 				// Log the exception for debugging
@@ -329,27 +370,43 @@ public class CampaignResourceActivity extends AppCompatActivity {
 			return errorMsg;
 		}
 
+		/**
+		 * Cleans up after the download was canceled.
+		 * @param s Thread cancel result ignored
+		 */
 		@Override
 		protected void onCancelled(String s) {
 			super.onCancelled(s);
-			onBackPressed();
-		}
-
-		@Override
-		protected void onPostExecute(String s) {
-			// Cleanup download
-			super.onPostExecute(s);
-			progressBar.setVisibility(View.GONE);
-			downloader = null;
-			if (s != null) {
-				// Show the error message
-				showError(s);
-			} else {
-				// Show the downloaded file
-				findViewById(R.id.openInButton).performClick();
+			//noinspection ResultOfMethodCallIgnored
+			localFile.delete();
+			if (userCancel) {
+				// Only back press if the user requested the cancel
+				onBackPressed();
 			}
 		}
 
+		/**
+		 * Updates the UI for the completed (or failed) download.
+		 * @param errorMsg Error message or null on success
+		 */
+		@Override
+		protected void onPostExecute(String errorMsg) {
+			// Cleanup download
+			super.onPostExecute(errorMsg);
+			progressBar.setVisibility(View.GONE);
+			downloader = null;
+			if (errorMsg != null) {
+				// Show the error message
+				showError(errorMsg);
+			} else {
+				// Show the downloaded file
+				showLocal(localFile);
+			}
+		}
+
+		/**
+		 * Initializes the progress bar for display.
+		 */
 		@Override
 		protected void onPreExecute() {
 			// Show the progress bar in a reasonable initial state
@@ -360,6 +417,10 @@ public class CampaignResourceActivity extends AppCompatActivity {
 			progressBar.setMax(100);
 		}
 
+		/**
+		 * Updates the progress bar in the user interface.
+		 * @param values Current progress state
+		 */
 		@Override
 		protected void onProgressUpdate(Integer... values) {
 			super.onProgressUpdate(values);

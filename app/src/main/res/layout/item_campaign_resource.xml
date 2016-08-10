@@ -7,13 +7,14 @@
 		layout="@layout/toolbar" />
 	<LinearLayout
 		android:orientation="vertical"
-		android:background="@color/gray"
+		android:background="@color/divider_gray"
 		android:layout_below="@id/toolbar"
 		android:layout_alignParentBottom="true"
 		android:layout_width="match_parent"
 		android:layout_height="0dp">
-		<WebView
-			android:id="@+id/webview"
+		<com.github.barteksc.pdfviewer.PDFView
+			android:id="@+id/pdfView"
+			android:visibility="gone"
 			android:layout_margin="@dimen/padding_small"
 			android:layout_weight="1"
 			android:layout_width="match_parent"
@@ -22,6 +23,7 @@
 			android:id="@+id/openInButton"
 			android:text="@string/campaign_resource_open_in"
 			android:textAllCaps="false"
+			android:visibility="gone"
 			android:textColor="@color/active_blue"
 			android:background="@color/white"
 			android:layout_width="match_parent"

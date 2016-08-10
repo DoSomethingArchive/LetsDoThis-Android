@@ -35,7 +35,6 @@ import org.dosomething.letsdothis.tasks.RbShareDataTask;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
 import org.dosomething.letsdothis.ui.adapters.CampaignDetailsAdapter;
-import org.dosomething.letsdothis.ui.views.CampaignResourceActivity;
 import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 import java.io.File;
