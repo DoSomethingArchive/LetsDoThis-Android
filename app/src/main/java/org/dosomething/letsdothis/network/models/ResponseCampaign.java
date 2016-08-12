@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.network.models;
+
 import android.text.TextUtils;
 
 import com.google.gson.annotations.SerializedName;
@@ -7,10 +8,13 @@ import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.utils.ISO8601;
 
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.util.List;
+
 
 /**
- * Created by izzyoji :) on 4/17/15.
+ * Receives a campaign response from a web service.
+ * @author izzyoji
+ * @author NearChaos
  */
 public class ResponseCampaign
 {
@@ -25,6 +29,8 @@ public class ResponseCampaign
     public ReportBackInfo   reportback_info;
     public MobileAppTiming  mobile_app;
     public ResponseAffiliates affiliates;
+	public List<ResponseAttachment> attachments;
+	public List<ResponseActionGuide> action_guides;
 
     public static Campaign getCampaign(ResponseCampaign response)
     {
@@ -51,6 +57,20 @@ public class ResponseCampaign
         if (campaign.id == 5769) {
             campaign.sponsorLogo = "https://www.dosomething.org/sites/default/files/SponsorLogo%20NewsCorp.png";
         }
+		if (response.attachments != null) {
+			// Add the attachments to the campaign model
+			for (ResponseAttachment attachment : response.attachments) {
+				campaign.addAttachment(attachment.getTitle(), attachment.uri);
+			}
+		}
+		if (response.action_guides != null) {
+			// Add the action guides to the campaign model
+			for (ResponseActionGuide guide : response.action_guides) {
+				campaign.addActionGuide(guide.title, guide.subtitle,
+						guide.getIntroTitle(), guide.getIntroCopy(),
+						guide.getAdditionalTitle(), guide.getAdditionalCopy());
+			}
+		}
         return campaign;
     }
 
@@ -158,46 +178,46 @@ public class ResponseCampaign
         }
     }
 
-    private static class Stats
-    {
-        public int signups;
-    }
-
     private class ResponseSolution
     {
-        public ResponseSolutionObject copy;
-        public ResponseSolutionObject support_copy;
+        public ResponseCopy copy;
+        public ResponseCopy support_copy;
 
-        public ResponseSolutionObject getCopy()
+        public ResponseCopy getCopy()
         {
             return copy == null
-                    ? new ResponseSolutionObject()
+                    ? new ResponseCopy()
                     : copy;
         }
 
-        public ResponseSolutionObject getSupportCopy()
+        public ResponseCopy getSupportCopy()
         {
             return support_copy == null
-                    ? new ResponseSolutionObject()
+                    ? new ResponseCopy()
                     : support_copy;
         }
 
 
-        private class ResponseSolutionObject
-        {
-            public String formatted;
-            public String raw;
-        }
     }
+
+	private class ResponseCopy {
+		public String formatted;
+		public String raw;
+
+		public String getCopy() {
+			return (formatted == null) ? raw : formatted;
+		}
+	}
 
     public static class ReportBackInfo
     {
         public String copy;
-        public String confirmation_message;
+        // TODO Use later? public String confirmation_message;
         public String noun;
         public String verb;
     }
 
+	@SuppressWarnings("unused")
     public ReportBackInfo getReportbackInfo()
     {
         return reportback_info == null
@@ -241,4 +261,61 @@ public class ResponseCampaign
             }
         }
     }
+
+
+	/**
+	 * Receives an attachment associated with a campaign.
+	 */
+	private class ResponseAttachment {
+		public String title;
+		public String description;
+		public String uri;
+
+		public String getTitle() {
+			return (title == null) ? description : title;
+		}
+// Note: the following fields are available in the response but not currently used
+//		public String id;
+//		public String type;
+	}
+
+
+	/**
+	 * Receives additional details for an action guide.
+	 * Note that these fields can be HTML formatted.
+	 */
+	private class ResponseActionGuideMore {
+		/** Provides title for detail. */
+		public String title;
+
+		/** Provides copy for detail. */
+		public ResponseCopy copy;
+	}
+
+
+	/**
+	 * Receives the details for an action guide.
+	 */
+	private class ResponseActionGuide {
+		public String title;
+		public String subtitle;
+		public ResponseActionGuideMore intro;
+		public ResponseActionGuideMore additional_text;
+
+		public String getIntroTitle() {
+			return (intro == null) ? null : intro.title;
+		}
+
+		public String getIntroCopy() {
+			return (intro == null) ? null : intro.copy.getCopy();
+		}
+
+		public String getAdditionalTitle() {
+			return (additional_text == null) ? null : additional_text.title;
+		}
+
+		public String getAdditionalCopy() {
+			return (additional_text == null) ? null : additional_text.copy.getCopy();
+		}
+	}
 }

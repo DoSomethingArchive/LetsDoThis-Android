@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.ui;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.data.CampaignActionGuide;
 import org.dosomething.letsdothis.data.CampaignActions;
 import org.dosomething.letsdothis.data.Kudos;
 import org.dosomething.letsdothis.data.ReportBack;
@@ -37,17 +39,20 @@ import org.dosomething.letsdothis.ui.adapters.CampaignDetailsAdapter;
 import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
 import co.touchlab.android.threading.tasks.utils.TaskQueueHelper;
 
+
 /**
  * Activity displaying the details for a single campaign including a call-to-action and a
  * reportback gallery.
  *
- * Created by izzyoji :) on 4/17/15.
+ * @author izzyoji
+ * @author NearChaos
  */
 public class CampaignDetailsActivity extends AppCompatActivity implements CampaignDetailsAdapter.DetailsAdapterClickListener
 {
@@ -249,7 +254,25 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         snackbar.show();
     }
 
-    @Override
+	/**
+	 * Shows an attachment.
+	 * @param uri URI of attachment to show.
+	 */
+	@Override
+	public void showAttachment(String title, String uri) {
+		startActivity(CampaignResourceActivity.getIntentForAttachment(this, title, uri));
+	}
+
+	/**
+	 * Shows the action guides.
+	 * @param actionGuides Action guides to show
+	 */
+	@Override
+	public void showActionGuides(ArrayList<CampaignActionGuide> actionGuides) {
+		startActivity(CampaignResourceActivity.getIntentForActionGuides(this, actionGuides));
+	}
+
+	@Override
     protected void onDestroy() {
         EventBusExt.getDefault().unregister(this);
         super.onDestroy();

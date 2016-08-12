@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.data;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -13,9 +14,12 @@ import java.sql.SQLException;
 
 import co.touchlab.android.threading.tasks.TaskQueue;
 
+
 /**
- * Created by toidiu on 1/18/15.
+ * Provides convenience methods for our local database.
+ * @author toidiu
  */
+// TODO Refactor out?  Looks like Campaign, CampaignActions are not used; user might be better in private shared prefs
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper
 {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants

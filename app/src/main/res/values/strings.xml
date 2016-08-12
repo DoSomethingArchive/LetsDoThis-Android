@@ -175,4 +175,15 @@
     <string name="drawer_desc_closed">Drawer Closed</string>
     <string name="user_default_fname">Doer</string>
 
+	<string name="campaign_resources_title">Campaign Resources</string>
+	<string name="campaign_download">Download</string>
+	<string name="campaign_logo">Sponsor Logo</string>
+	<string name="campaign_heading">Heading</string>
+	<string name="campaign_resource_open_in">Open in...</string>
+	<string name="campaign_error_resource_no_activity">You don\'t have an application installed that can open this kind of file.</string>
+	<string name="campaign_error_dl_connect_remote">Unable to access the attachment to download.</string>
+	<string name="campaign_error_dl_read_remote">Failed to download attachment.  Please try again later.</string>
+	<string name="campaign_error_dl_create_local">Unable to create the attachment file on your phone, if you have a memory card slot make sure a card is in it, and make sure your phone has space left for downloads.</string>
+	<string name="campaign_error_dl_write_local">Unable to write the attachment file on your phone, make sure you have enough memory space.</string>
+	<string name="action_guides">Action Guides</string>
 </resources>
