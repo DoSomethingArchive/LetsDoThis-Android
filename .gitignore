@@ -49,6 +49,8 @@ gen/
 secrets.xml
 brandon_bold.otf
 brandon_reg.otf
+brandon_med.otf
+brandon_regular.otf
 
 # Google Services
 app/google-services.json
