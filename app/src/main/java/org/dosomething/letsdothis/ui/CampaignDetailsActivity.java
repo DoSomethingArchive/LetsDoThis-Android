@@ -24,6 +24,7 @@ import org.dosomething.letsdothis.BuildConfig;
 import org.dosomething.letsdothis.LDTApplication;
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.data.CampaignActionGuide;
 import org.dosomething.letsdothis.data.CampaignActions;
 import org.dosomething.letsdothis.data.Kudos;
 import org.dosomething.letsdothis.data.ReportBack;
@@ -38,6 +39,7 @@ import org.dosomething.letsdothis.ui.adapters.CampaignDetailsAdapter;
 import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
@@ -252,16 +254,23 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         snackbar.show();
     }
 
-
 	/**
 	 * Shows an attachment.
 	 * @param uri URI of attachment to show.
 	 */
 	@Override
 	public void showAttachment(String title, String uri) {
-		startActivity(CampaignResourceActivity.getLaunchIntent(this, title, uri));
+		startActivity(CampaignResourceActivity.getIntentForAttachment(this, title, uri));
 	}
 
+	/**
+	 * Shows the action guides.
+	 * @param actionGuides Action guides to show
+	 */
+	@Override
+	public void showActionGuides(ArrayList<CampaignActionGuide> actionGuides) {
+		startActivity(CampaignResourceActivity.getIntentForActionGuides(this, actionGuides));
+	}
 
 	@Override
     protected void onDestroy() {

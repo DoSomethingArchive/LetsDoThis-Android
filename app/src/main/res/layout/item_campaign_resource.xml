@@ -19,6 +19,13 @@
 			android:layout_weight="1"
 			android:layout_width="match_parent"
 			android:layout_height="0dp" />
+		<WebView
+			android:id="@+id/webview"
+			android:visibility="gone"
+			android:layout_margin="@dimen/padding_small"
+			android:layout_weight="1"
+			android:layout_width="match_parent"
+			android:layout_height="0dp" />
 		<Button
 			android:id="@+id/openInButton"
 			android:text="@string/campaign_resource_open_in"

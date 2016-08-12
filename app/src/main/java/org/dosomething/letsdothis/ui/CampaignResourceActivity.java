@@ -1,6 +1,5 @@
 package org.dosomething.letsdothis.ui;
 
-import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -15,13 +14,13 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.github.barteksc.pdfviewer.PDFView;
 
 import org.dosomething.letsdothis.R;
+import org.dosomething.letsdothis.data.CampaignActionGuide;
 import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
 
 import java.io.BufferedInputStream;
@@ -32,6 +31,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 
 
 /**
@@ -48,30 +48,43 @@ public class CampaignResourceActivity extends AppCompatActivity {
 	/** Identifies the resource URI in our intent. */
 	private static final String EXTRA_RESOURCE_URI = "rscuri";
 
+	/** Identifies the action guide parcel in our intent. */
+	private static final String EXTRA_ACTION_GUIDES = "rscactionguide";
+
 	/** Current downloader or null if not downloading. */
 	private Downloader downloader;
 
 
 	/**
-	 * Gets an intent to launch this activity with a remote resource.
+	 * Gets an intent to launch this activity with a remote resource attachment.
 	 * @param context Application context
-	 * @param name Name of the resource to display
+	 * @param name Name of the attachment to display
 	 * @param uri Location of resource to show
 	 * @return Intent to launch activity
 	 */
-	public static Intent getLaunchIntent(Context context, String name, String uri) {
+	public static Intent getIntentForAttachment(Context context, String name, String uri) {
 		Intent intent = new Intent(context, CampaignResourceActivity.class);
 		intent.putExtra(EXTRA_RESOURCE_NAME, name);
 		intent.putExtra(EXTRA_RESOURCE_URI, uri);
 		return intent;
 	}
 
+	/**
+	 * Gets an intent to launch this activity to display an action guide.
+	 * @param context Application context
+	 * @param actionGuides Action guides to show
+	 * @return Intent to launch activity
+	 */
+	public static Intent getIntentForActionGuides(Context context, ArrayList<CampaignActionGuide> actionGuides) {
+		Intent intent = new Intent(context, CampaignResourceActivity.class);
+		intent.putExtra(EXTRA_ACTION_GUIDES, actionGuides);
+		return intent;
+	}
 
 	/**
 	 * Initializes the activity's vew on creation.
 	 * @param savedInstanceState Instance state to restore, if any
 	 */
-	@SuppressLint("SetJavaScriptEnabled")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// Initialize with our layout
@@ -79,48 +92,28 @@ public class CampaignResourceActivity extends AppCompatActivity {
 		setContentView(R.layout.item_campaign_resource);
 
 		// Set the title
+		ArrayList<CampaignActionGuide> actionGuides = null;
 		CustomToolbar toolbar = (CustomToolbar) findViewById(R.id.toolbar);
 		String name = getIntent().getStringExtra(EXTRA_RESOURCE_NAME);
 		if (name == null) {
-			name = getString(R.string.done);
+			// Are we showing an action guides instead?
+			actionGuides = getIntent().getParcelableArrayListExtra(EXTRA_ACTION_GUIDES);
+			name = getString((actionGuides != null) ? R.string.action_guides : R.string.done);
 		}
 		toolbar.setTitle(name);
 		setSupportActionBar(toolbar);
 		//noinspection ConstantConditions
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		// Get our contents
-		Button openInButton = (Button) findViewById(R.id.openInButton);
-		String uriExtra = getIntent().getStringExtra(EXTRA_RESOURCE_URI);
-		if (uriExtra == null) {
-			// Missing resource URI
-			Log.e(TAG, "Missing Resource URI");
-			openInButton.setEnabled(false);
-			openInButton.setVisibility(View.VISIBLE);
-			return;
-		}
-
-		// Have we already downloaded the file?
-		String dir;
-		if (Build.VERSION.SDK_INT >= 19) {
-			dir = Environment.DIRECTORY_DOCUMENTS;
+		// Which contents are we displaying?
+		if (actionGuides == null) {
+			// Display an attachments
+			createAttachment();
 		} else {
-			dir = Environment.DIRECTORY_DOWNLOADS;
-		}
-		Uri uri = Uri.parse(uriExtra);
-		File localFile = new File(
-				Environment.getExternalStoragePublicDirectory(dir),
-				uri.getLastPathSegment());
-		if (localFile.exists()) {
-			// Show embedded PDF
-			showLocal(localFile);
-		} else {
-			// Start download
-			downloader = new Downloader();
-			downloader.execute(uri, Uri.fromFile(localFile));
+			// Show the action guides
+			createActionGuides(actionGuides);
 		}
 	}
-
 
 	/**
 	 * Handles toolbar interaction.
@@ -146,7 +139,6 @@ public class CampaignResourceActivity extends AppCompatActivity {
 		}
 	}
 
-
 	/**
 	 * If there is a download in progress, stop it.
 	 */
@@ -157,7 +149,6 @@ public class CampaignResourceActivity extends AppCompatActivity {
 			downloader.cancel(true);
 		}
 	}
-
 
 	/**
 	 * Opens a selector that allows the user to pick an external application for the resource.
@@ -174,7 +165,6 @@ public class CampaignResourceActivity extends AppCompatActivity {
 			showError(R.string.campaign_error_resource_no_activity);
 		}
 	}
-
 
 	/**
 	 * Shows the local attachment embedded in our application.  Also sets up the open button
@@ -214,7 +204,6 @@ public class CampaignResourceActivity extends AppCompatActivity {
 		}
 	}
 
-
 	/**
 	 * Shows a popup error message.
 	 * @param errorMsg Message to show
@@ -232,13 +221,111 @@ public class CampaignResourceActivity extends AppCompatActivity {
 		snackbar.show();
 	}
 
-
 	/**
 	 * Shows a popup error message from the resources.
 	 * @param resourceId String resource id
 	 */
 	public void showError(int resourceId) {
 		showError(getString(resourceId));
+	}
+
+	/**
+	 * Initializes the created view with the attachment to display.
+	 */
+	private void createAttachment() {
+		// Get our contents
+		Button openInButton = (Button) findViewById(R.id.openInButton);
+		String uriExtra = getIntent().getStringExtra(EXTRA_RESOURCE_URI);
+		if (uriExtra == null) {
+			// Missing resource URI
+			Log.e(TAG, "Missing Resource URI");
+			openInButton.setEnabled(false);
+			openInButton.setVisibility(View.VISIBLE);
+			return;
+		}
+
+		// Have we already downloaded the file?
+		String dir;
+		if (Build.VERSION.SDK_INT >= 19) {
+			dir = Environment.DIRECTORY_DOCUMENTS;
+		} else {
+			dir = Environment.DIRECTORY_DOWNLOADS;
+		}
+		Uri uri = Uri.parse(uriExtra);
+		File localFile = new File(
+				Environment.getExternalStoragePublicDirectory(dir),
+				uri.getLastPathSegment());
+		if (localFile.exists()) {
+			// Show embedded PDF
+			showLocal(localFile);
+		} else {
+			// Start download
+			downloader = new Downloader();
+			downloader.execute(uri, Uri.fromFile(localFile));
+		}
+	}
+
+	/**
+	 * Initializes the created view with the passed action guides.
+	 * @param actionGuides Action guides to show
+	 */
+	private void createActionGuides(ArrayList<CampaignActionGuide> actionGuides) {
+		// Render the action guides as HTML
+		StringBuilder doc = new StringBuilder("<html><body style='color:#4A4A4A;font-size:10pt;'>");
+		for(CampaignActionGuide guide : actionGuides) {
+			// Render the current guide
+			if (guide.hasTitle()) {
+				doc.append(renderActionGuideTitle(guide.getTitle()));
+			}
+			if (guide.hasSubtitle()) {
+				doc.append(renderActionGuideCopy(guide.getSubtitle()));
+			}
+			if (guide.hasIntroTitle()) {
+				doc.append(renderActionGuideHeading(guide.getIntroTitle()));
+			}
+			if (guide.hasIntroCopy()) {
+				doc.append(renderActionGuideCopy(guide.getIntroCopy()));
+			}
+			if (guide.hasAdditionalTitle()) {
+				doc.append(renderActionGuideHeading(guide.getAdditionalTitle()));
+			}
+			if (guide.hasAdditionalCopy()) {
+				doc.append(renderActionGuideCopy(guide.getAdditionalCopy()));
+			}
+		}
+		doc.append("</body></html>");
+
+		// Display the action guides
+		WebView webview = (WebView) findViewById(R.id.webview);
+		webview.setVisibility(View.VISIBLE);
+		webview.loadData(doc.toString(), "text/html", null);
+	}
+
+	/**
+	 * Renders copy inside of an action guide.
+	 * @param copy Copy to render
+	 * @return HTML rendered copy
+	 */
+	private String renderActionGuideCopy(String copy) {
+		return "<div style='font-family:BrandonGrotesque-Regular;font-size:11pt;padding:4pt 8pt'>" + copy + "</div>";
+	}
+
+	/**
+	 * Renders a heading inside of an action guide.
+	 * @param heading Heading to render
+	 * @return HTML rendered header
+	 */
+	private String renderActionGuideHeading(String heading) {
+		return "<div style='color:#9C9C9C;font-family:BrandonGrotesque-Bold;font-size:9pt;padding:8pt 8pt 0 8pt;'>" + heading.toUpperCase() + "</div>";
+	}
+
+	/**
+	 * Renders a title inside of an action guide.
+	 * @param title Title to render
+	 * @return HTML rendered title
+	 */
+	private String renderActionGuideTitle(String title) {
+		return "<div align='center' style='background:#EEEEEE;font-family:BrandonGrotesque-Bold;font-size:12pt;padding:8pt'>" + title.toUpperCase() + "</div>";
 	}
 
 

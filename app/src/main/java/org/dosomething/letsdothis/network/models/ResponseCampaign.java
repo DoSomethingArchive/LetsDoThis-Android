@@ -30,6 +30,7 @@ public class ResponseCampaign
     public MobileAppTiming  mobile_app;
     public ResponseAffiliates affiliates;
 	public List<ResponseAttachment> attachments;
+	public List<ResponseActionGuide> action_guides;
 
     public static Campaign getCampaign(ResponseCampaign response)
     {
@@ -59,10 +60,17 @@ public class ResponseCampaign
 		if (response.attachments != null) {
 			// Add the attachments to the campaign model
 			for (ResponseAttachment attachment : response.attachments) {
-				campaign.addAttachment((attachment.title == null) ? attachment.description : attachment.title, attachment.uri);
+				campaign.addAttachment(attachment.getTitle(), attachment.uri);
 			}
 		}
-		// TODO: Get/transfer action guides
+		if (response.action_guides != null) {
+			// Add the action guides to the campaign model
+			for (ResponseActionGuide guide : response.action_guides) {
+				campaign.addActionGuide(guide.title, guide.subtitle,
+						guide.getIntroTitle(), guide.getIntroCopy(),
+						guide.getAdditionalTitle(), guide.getAdditionalCopy());
+			}
+		}
         return campaign;
     }
 
@@ -172,30 +180,34 @@ public class ResponseCampaign
 
     private class ResponseSolution
     {
-        public ResponseSolutionObject copy;
-        public ResponseSolutionObject support_copy;
+        public ResponseCopy copy;
+        public ResponseCopy support_copy;
 
-        public ResponseSolutionObject getCopy()
+        public ResponseCopy getCopy()
         {
             return copy == null
-                    ? new ResponseSolutionObject()
+                    ? new ResponseCopy()
                     : copy;
         }
 
-        public ResponseSolutionObject getSupportCopy()
+        public ResponseCopy getSupportCopy()
         {
             return support_copy == null
-                    ? new ResponseSolutionObject()
+                    ? new ResponseCopy()
                     : support_copy;
         }
 
 
-        private class ResponseSolutionObject
-        {
-            // TODO Use later? public String formatted;
-            public String raw;
-        }
     }
+
+	private class ResponseCopy {
+		public String formatted;
+		public String raw;
+
+		public String getCopy() {
+			return (formatted == null) ? raw : formatted;
+		}
+	}
 
     public static class ReportBackInfo
     {
@@ -258,8 +270,52 @@ public class ResponseCampaign
 		public String title;
 		public String description;
 		public String uri;
+
+		public String getTitle() {
+			return (title == null) ? description : title;
+		}
 // Note: the following fields are available in the response but not currently used
 //		public String id;
 //		public String type;
+	}
+
+
+	/**
+	 * Receives additional details for an action guide.
+	 * Note that these fields can be HTML formatted.
+	 */
+	private class ResponseActionGuideMore {
+		/** Provides title for detail. */
+		public String title;
+
+		/** Provides copy for detail. */
+		public ResponseCopy copy;
+	}
+
+
+	/**
+	 * Receives the details for an action guide.
+	 */
+	private class ResponseActionGuide {
+		public String title;
+		public String subtitle;
+		public ResponseActionGuideMore intro;
+		public ResponseActionGuideMore additional_text;
+
+		public String getIntroTitle() {
+			return (intro == null) ? null : intro.title;
+		}
+
+		public String getIntroCopy() {
+			return (intro == null) ? null : intro.copy.getCopy();
+		}
+
+		public String getAdditionalTitle() {
+			return (additional_text == null) ? null : additional_text.title;
+		}
+
+		public String getAdditionalCopy() {
+			return (additional_text == null) ? null : additional_text.copy.getCopy();
+		}
 	}
 }

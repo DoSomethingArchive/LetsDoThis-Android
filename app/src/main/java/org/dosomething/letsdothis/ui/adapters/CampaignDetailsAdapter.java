@@ -14,6 +14,8 @@ import com.squareup.picasso.Picasso;
 
 import org.dosomething.letsdothis.R;
 import org.dosomething.letsdothis.data.Campaign;
+import org.dosomething.letsdothis.data.CampaignActionGuide;
+import org.dosomething.letsdothis.data.CampaignAttachment;
 import org.dosomething.letsdothis.data.Kudos;
 import org.dosomething.letsdothis.data.ReportBack;
 import org.dosomething.letsdothis.utils.ViewUtils;
@@ -128,6 +130,8 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         void showError(int resourceId);
 
 		void showAttachment(String title, String uri);
+
+		void showActionGuides(ArrayList<CampaignActionGuide> actionGuides);
     }
 
     @Override
@@ -221,12 +225,12 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             }
 
 			// Resources section
-			if (!campaign.isAnyAttachments() && !campaign.isAnyActionGuides()) {
+			if (!campaign.hasAnyAttachments() && !campaign.hasAnyActionGuides()) {
 				// Hide attachments
 				campaignViewHolder.resourcesGroup.setVisibility(View.GONE);
 			} else {
 				// Populate attachments
-				for (Campaign.Attachment attachment : campaign.getAttachments()) {
+				for (CampaignAttachment attachment : campaign.getAttachments()) {
 					// Add the current attachment
 					ViewGroup rowGroup = (ViewGroup) LayoutInflater.from(campaignViewHolder.resourcesGroup.getContext()).
 							inflate(R.layout.item_campaign_attachment, campaignViewHolder.resourcesGroup, false);
@@ -243,7 +247,27 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 					});
 					campaignViewHolder.resourcesGroup.addView(rowGroup);
 				}
-				// TODO Add action guide row if any
+				if (campaign.hasAnyActionGuides()) {
+					// Setup row to offer the Action Guides
+					final ArrayList<CampaignActionGuide> actionGuides = new ArrayList<CampaignActionGuide>();
+					for(CampaignActionGuide guide : campaign.getActionGuides()) {
+						actionGuides.add(guide);
+					}
+
+					// Show the Action Guides row
+					ViewGroup rowGroup = (ViewGroup) LayoutInflater.from(campaignViewHolder.resourcesGroup.getContext()).
+							inflate(R.layout.item_campaign_attachment, campaignViewHolder.resourcesGroup, false);
+					((TextView) rowGroup.findViewById(R.id.attachmentTitle)).setText(
+							campaignViewHolder.resourcesGroup.getContext().getString(R.string.action_guides));
+					rowGroup.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							// Show the action guides
+							detailsAdapterClickListener.showActionGuides(actionGuides);
+						}
+					});
+					campaignViewHolder.resourcesGroup.addView(rowGroup);
+				}
 			}
 
             // Action button

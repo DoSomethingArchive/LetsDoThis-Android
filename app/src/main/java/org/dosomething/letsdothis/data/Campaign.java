@@ -57,7 +57,11 @@ public class Campaign
         SHARE
     }
 
-	private List<Attachment> attachments;
+	/** Attachments associated with this campaign, may be null if none. */
+	private List<CampaignAttachment> attachments;
+
+	/** Action guides associated with this campaign, may be null if none. */
+	private List<CampaignActionGuide> actionGuides;
 
 
 	/**
@@ -69,75 +73,57 @@ public class Campaign
 		if (attachments == null) {
 			attachments = new ArrayList<>();
 		}
-		attachments.add(new Attachment(title, uri));
+		attachments.add(new CampaignAttachment(title, uri));
 	}
-
 
 	/**
 	 * Indicates if we have any attachments.
 	 * @return Attachments present flag
 	 */
-	public boolean isAnyAttachments() {
+	public boolean hasAnyAttachments() {
 		return attachments != null;
 	}
 
-
 	/**
 	 * Gets the attachments associated with this campaign.
-	 * @return Iterable attachments list, may be empty but never null
+	 * @return Iterable of attachments, may be empty but never null
 	 */
-	public Iterable<Attachment> getAttachments() {
-		return (attachments == null) ? new ArrayList<Attachment>() : attachments;
+	public Iterable<CampaignAttachment> getAttachments() {
+		return (attachments == null) ? new ArrayList<CampaignAttachment>() : attachments;
 	}
 
+	/**
+	 * Adds an action guide to this campaign.  Any of the fields may be null, or may contain HTML
+	 * formatting.
+	 * @param title Guide title
+	 * @param subtitle Guide subtitle
+	 * @param introTitle Title for introduction section
+	 * @param introCopy Copy for introduction section
+	 * @param additionalTitle Title for additional contents
+	 * @param additionalCopy Copy for additional contents
+	 */
+	public void addActionGuide(String title, String subtitle, String introTitle, String introCopy,
+   			String additionalTitle, String additionalCopy) {
+		if (actionGuides == null) {
+			actionGuides = new ArrayList<>();
+		}
+		actionGuides.add(new CampaignActionGuide(title, subtitle, introTitle, introCopy,
+				additionalTitle, additionalCopy));
+	}
 
 	/**
 	 * Indicates if we have any action guides.
-	 * @return
+	 * @return Action guides present flag
 	 */
-	public boolean isAnyActionGuides() {
-		// TODO Real implementation
-		return false;
+	public boolean hasAnyActionGuides() {
+		return actionGuides != null;
 	}
 
-
 	/**
-	 * Models an attachment associated with this campaign.
+	 * Gets the action guides associated with this campaign.
+	 * @return Iterable of action guides, may be empty but not null
 	 */
-	public class Attachment {
-		/** Provides title to display in attachment row. */
-		private String title;
-
-		/** Provides URI to access remote attachment. */
-		private String uri;
-
-
-		/**
-		 * Instantiates a new attachment.
-		 * @param title Row display title
-		 * @param uri Remote access location
-		 */
-		Attachment(String title, String uri) {
-			this.title = title;
-			this.uri = uri;
-		}
-
-
-		/**
-		 * Gets the title to display for the attachment.
-		 * @return Attachment title
-		 */
-		public String getTitle() {
-			return title;
-		}
-
-
-		/**
-		 * Gets the URI to access the remote attachment.
-		 * @return Remote URI
-		 */
-		public String getUri() {
-			return uri;
-		}
+	public Iterable<CampaignActionGuide> getActionGuides() {
+		return (actionGuides == null) ? new ArrayList<CampaignActionGuide>() : actionGuides;
 	}
 }

@@ -19,8 +19,20 @@
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"/>
 	<ImageView
+		android:id="@+id/attachmentIcon"
 		android:src="@drawable/download_icon"
 		android:contentDescription="@string/campaign_download"
+		android:paddingStart="@dimen/padding_small"
+		android:paddingLeft="@dimen/padding_small"
+		android:paddingEnd="0dp"
+		android:paddingRight="0dp"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" />
+	<ImageView
+		android:id="@+id/actionGuideIcon"
+		android:src="@drawable/download_arrow"
+		android:contentDescription="@string/action_guides"
+		android:visibility="gone"
 		android:paddingStart="@dimen/padding_small"
 		android:paddingLeft="@dimen/padding_small"
 		android:paddingEnd="0dp"
