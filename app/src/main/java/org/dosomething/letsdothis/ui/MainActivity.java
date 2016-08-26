@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -24,11 +25,11 @@ import org.dosomething.letsdothis.ui.fragments.NewsFragment;
 import org.dosomething.letsdothis.ui.fragments.ReplaceFragmentListener;
 import org.dosomething.letsdothis.ui.fragments.SetTitleListener;
 import org.dosomething.letsdothis.ui.views.typeface.CustomToolbar;
-import org.dosomething.letsdothis.utils.AppPrefs;
 
 import java.sql.SQLException;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
+
 
 /**
  * This is the main starting activity for logged-in users. Most other main areas of the app should
@@ -46,8 +47,7 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
 
 
     public static Intent getLaunchIntent(Context context) {
-        Intent intent = new Intent(context, MainActivity.class);
-        return intent;
+        return new Intent(context, MainActivity.class);
     }
 
     public static Intent getLaunchIntentHubTop(Context context) {
@@ -101,8 +101,11 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
                                                                         R.string.drawer_desc_open,
                                                                         R.string.drawer_desc_closed);
         drawerLayout.setDrawerListener(mDrawerToggle);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+		ActionBar bar = getSupportActionBar();
+		if (bar != null) {
+			bar.setDisplayHomeAsUpEnabled(true);
+			bar.setHomeButtonEnabled(true);
+		}
         mDrawerToggle.syncState();
     }
 
@@ -188,14 +191,15 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
     /**
      * Capture the onKeyUp event specifically for use by the React Native NewsFragment.
      *
-     * @param keyCode
-     * @param event
-     * @return boolean
+     * @param keyCode Identifies key to which event applies
+     * @param event Event details
+     * @return boolean Handled flag
      */
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         boolean handled = false;
-        if (mCurrentFragment != null && mCurrentFragment.getTag() == NewsFragment.TAG) {
+        if ((mCurrentFragment != null) && (mCurrentFragment.getTag() != null) &&
+				mCurrentFragment.getTag().equals(NewsFragment.TAG)) {
             handled = ((NewsFragment)mCurrentFragment).onKeyUp(keyCode);
         }
 

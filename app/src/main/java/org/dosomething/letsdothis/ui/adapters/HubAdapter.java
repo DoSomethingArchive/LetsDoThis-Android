@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.ui.adapters;
+
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,11 +21,13 @@ import org.dosomething.letsdothis.utils.ViewUtils;
 import java.util.ArrayList;
 import java.util.Locale;
 
+
 /**
  * Adapter used in the HubFragment. This class defines the behavior of what's displayed in profile
  * and how user interactions are handled.
  *
- * Created by toidiu on 4/17/15.
+ * @author toidiu
+ * @author NearChaos
  */
 public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     //~=~=~=~=~=~=~=~=~=~=~=~=Constants
@@ -49,7 +52,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private int mActionsCount = 0;
     private int mPhotosCount = 0;
 
-    public HubAdapter(Context context, HubAdapterClickListener hubAdapterClickListener, boolean isPublic) {
+    public HubAdapter(HubAdapterClickListener hubAdapterClickListener, boolean isPublic) {
         super();
 
         this.mHubAdapterClickListener = hubAdapterClickListener;
@@ -122,19 +125,28 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
         }
         else if (getItemViewType(position) == VIEW_TYPE_PROFILE) {
+			// Get the user for the profile
             User user = (User) mHubList.get(position);
             if (user == null) {
+				// No user
                 return;
             }
 
+			// Update the profile with the current user
             ProfileViewHolder profileViewHolder = (ProfileViewHolder) holder;
-
-            if (user != null && user.avatarPath != null) {
-                Picasso.with(((ProfileViewHolder) holder).userImage.getContext())
+            if (user.avatarPath != null) {
+				// Apply the user avatar
+                Picasso.with(profileViewHolder.userImage.getContext())
                         .load(user.avatarPath).placeholder(R.drawable.ic_action_user)
                         .resizeDimen(R.dimen.hub_avatar_height, R.dimen.hub_avatar_height)
                         .into(profileViewHolder.userImage);
             }
+			profileViewHolder.userImage.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					mHubAdapterClickListener.onAvatarClicked();
+				}
+			});
 
             profileViewHolder.userCountry.setText(formatUserLocation(user.country));
             profileViewHolder.userCountry.setAlpha(0.26f);
@@ -268,8 +280,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     /**
      * Sets the user to display.
-     *
-     * @param user
+     * @param user User to display
      */
     public void setUser(User user) {
         mUser = user;
@@ -533,5 +544,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void onProveClicked(int campaignId, String campaignTitle, String noun, String verb);
 
         void onActionsButtonClicked();
+
+		void onAvatarClicked();
     }
 }
