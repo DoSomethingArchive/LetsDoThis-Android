@@ -185,5 +185,6 @@
 	<string name="campaign_error_dl_read_remote">Failed to download attachment.  Please try again later.</string>
 	<string name="campaign_error_dl_create_local">Unable to create the attachment file on your phone, if you have a memory card slot make sure a card is in it, and make sure your phone has space left for downloads.</string>
 	<string name="campaign_error_dl_write_local">Unable to write the attachment file on your phone, make sure you have enough memory space.</string>
+	<string name="user_avatar_error">Failed to set your avatar, please try again.</string>
 	<string name="action_guides">Action Guides</string>
 </resources>

@@ -39,16 +39,9 @@ public class AvatarChangeFragment extends Fragment implements View.OnClickListen
     // Activity request code
     public static final int SELECT_PHOTO = 47539;
 
-    // Listener that we can use to set screen title
-    private SetTitleListener setTitleListener;
-
     // UI references
     private ImageView photoView;
     private ProgressBar progressBar;
-    private Button saveButton;
-
-    // Uri for the photo if taken from the camera
-    private Uri mPhotoUri;
 
     // File path for photo
     private File mPhotoFile;
@@ -64,7 +57,7 @@ public class AvatarChangeFragment extends Fragment implements View.OnClickListen
 
         photoView = (ImageView)view.findViewById(R.id.avatar);
         progressBar = (ProgressBar)view.findViewById(R.id.progress);
-        saveButton = (Button)view.findViewById(R.id.save);
+		Button saveButton = (Button) view.findViewById(R.id.save);
 
         photoView.setOnClickListener(this);
         saveButton.setOnClickListener(this);
@@ -86,13 +79,6 @@ public class AvatarChangeFragment extends Fragment implements View.OnClickListen
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        setTitleListener = (SetTitleListener)activity;
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
 
@@ -100,7 +86,7 @@ public class AvatarChangeFragment extends Fragment implements View.OnClickListen
             EventBusExt.getDefault().register(this);
         }
 
-        setTitleListener.setTitle(getResources().getString(R.string.change_photo));
+		((SetTitleListener) getActivity()).setTitle(getResources().getString(R.string.change_photo));
     }
 
     @Override
@@ -129,23 +115,19 @@ public class AvatarChangeFragment extends Fragment implements View.OnClickListen
                 if (data == null || data.getData() == null) {
                     isCamera = true;
                 } else {
-                    final String action = data.getAction();
-                    if (action == null) {
-                        isCamera = false;
-                    }
-                    else {
-                        isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    }
-                }
+					String action = data.getAction();
+					isCamera = (action != null) && action.equals(MediaStore.ACTION_IMAGE_CAPTURE);
+				}
 
                 Uri selectedImageUri;
+				Uri targetUri = Uri.fromFile(mPhotoFile);
                 if (isCamera) {
-                    selectedImageUri = mPhotoUri;
+                    selectedImageUri = targetUri;
                 } else {
                     selectedImageUri = data.getData();
                 }
 
-                Crop.of(selectedImageUri, mPhotoUri).asSquare().start(getActivity(), AvatarChangeFragment.this);
+                Crop.of(selectedImageUri, targetUri).asSquare().start(getActivity(), AvatarChangeFragment.this);
             }
             else if (requestCode == Crop.REQUEST_CROP) {
                 String filePath = mPhotoFile.getAbsolutePath();
@@ -167,9 +149,8 @@ public class AvatarChangeFragment extends Fragment implements View.OnClickListen
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         mPhotoFile = new File(
                 getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                "user_profile" + ".jpg");
-        mPhotoUri = Uri.fromFile(mPhotoFile);
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mPhotoUri);
+                "user_profile.jpg");
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mPhotoFile));
 
         String pickTitle = getString(R.string.select_picture);
         Intent chooserIntent = Intent.createChooser(takePhotoIntent, pickTitle);
