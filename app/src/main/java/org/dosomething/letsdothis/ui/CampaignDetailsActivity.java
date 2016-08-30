@@ -35,12 +35,14 @@ import org.dosomething.letsdothis.tasks.IndividualCampaignReportBackList;
 import org.dosomething.letsdothis.tasks.RbShareDataTask;
 import org.dosomething.letsdothis.tasks.ReportbackUploadTask;
 import org.dosomething.letsdothis.tasks.SubmitKudosTask;
+import org.dosomething.letsdothis.tasks.WebSessionTask;
 import org.dosomething.letsdothis.ui.adapters.CampaignDetailsAdapter;
 import org.dosomething.letsdothis.utils.AnalyticsUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import co.touchlab.android.threading.eventbus.EventBusExt;
 import co.touchlab.android.threading.tasks.TaskQueue;
@@ -228,7 +230,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
      *
      * Implements CampaignDetailsAdapter.DetailsAdapterClickListener
      *
-     * @param campaignId
+     * @param campaignId Identifies campaign for which the user is signing up.
      */
     @Override
     public void onSignupClicked(int campaignId) {
@@ -244,7 +246,7 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
      *
      * Implements CampaignDetailsAdapter.DetailsAdapterClickListener
      *
-     * @param resourceId
+     * @param resourceId Identifies the string resource to display.
      */
     @Override
     public void showError(int resourceId) {
@@ -270,6 +272,15 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
 	@Override
 	public void showActionGuides(ArrayList<CampaignActionGuide> actionGuides) {
 		startActivity(CampaignResourceActivity.getIntentForActionGuides(this, actionGuides));
+	}
+
+	/**
+	 * Shows the current campaign in the web browser (external).
+	 */
+	@Override
+	public void showCampaignInWeb() {
+		findViewById(R.id.waitProgress).setVisibility(View.VISIBLE);
+		TaskQueue.loadQueueDefault(this).execute(new WebSessionTask());
 	}
 
 	@Override
@@ -299,11 +310,10 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
                 }
             }
 
-            Uri selectedImageUri = null;
+            Uri selectedImageUri;
             if (isCamera) {
                 selectedImageUri = mImageUri;
-            }
-            else if (data != null) {
+            } else {
                 selectedImageUri = data.getData();
             }
 
@@ -387,7 +397,8 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
             state = "pitch";
         }
 
-        String screenName = String.format(AnalyticsUtils.SCREEN_CAMPAIGN, campaignId, state);
+        String screenName = String.format(Locale.getDefault(),
+				AnalyticsUtils.SCREEN_CAMPAIGN, campaignId, state);
         AnalyticsUtils.sendScreen(mTracker, screenName);
     }
 
@@ -498,4 +509,31 @@ public class CampaignDetailsActivity extends AppCompatActivity implements Campai
         AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_CAMPAIGN,
                 AnalyticsUtils.ACTION_SUBMIT_SIGNUP, Integer.toString(task.getCampaignId()));
     }
+
+	/**
+	 * Handles web session result by launching the session.
+	 * Toasts the error on failure.
+	 * @param task Web session task results
+	 */
+	@SuppressWarnings("UnusedDeclaration")
+	public void onEventMainThread(WebSessionTask task) {
+		// Clear the wait progress bar spinner thing
+		findViewById(R.id.waitProgress).setVisibility(View.GONE);
+
+		// Did we succeed?
+		if (task.hasError()) {
+			// Failed, report via toast
+			Log.e("CampaignActions", "Failed to create web session for user: " + task.getResult());
+			Toast.makeText(this, getString(R.string.campaign_error_websession), Toast.LENGTH_SHORT).show();
+			return;
+		}
+
+		// Launch the web browser with the new session
+		int campaignId = getIntent().getIntExtra(EXTRA_CAMPAIGN_ID, -1);
+		String campaignUrl = String.format(Locale.getDefault(),
+				"%s?redirect=node/%d", task.getResult(), campaignId);
+		Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+		browserIntent.setData(Uri.parse(campaignUrl));
+		startActivity(browserIntent);
+	}
 }

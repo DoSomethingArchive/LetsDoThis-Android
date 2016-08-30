@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.dosomething.letsdothis.data.Campaign;
 import org.dosomething.letsdothis.utils.ISO8601;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.util.List;
@@ -23,6 +24,7 @@ public class ResponseCampaign
     public String           tagline;
     public String           status;
     public String           type;
+	public String           magic_link_copy;
     public ResponseImage    cover_image;
     public ResponseSolution solutions;
     public ResponseFacts    facts;
@@ -52,11 +54,7 @@ public class ResponseCampaign
         campaign.noun = response.reportback_info.noun;
         campaign.verb = response.reportback_info.verb;
         campaign.sponsorLogo = response.affiliates.getLogo();
-        // Hardcode the sponsor image for campaign 5769
-        // @see https://github.com/DoSomething/LetsDoThis-iOS/issues/998
-        if (campaign.id == 5769) {
-            campaign.sponsorLogo = "https://www.dosomething.org/sites/default/files/SponsorLogo%20NewsCorp.png";
-        }
+		campaign.magicLinkCopy = response.magic_link_copy;
 		if (response.attachments != null) {
 			// Add the attachments to the campaign model
 			for (ResponseAttachment attachment : response.attachments) {
@@ -307,7 +305,7 @@ public class ResponseCampaign
 		}
 
 		public String getIntroCopy() {
-			return (intro == null) ? null : intro.copy.getCopy();
+			return ((intro != null) && (intro.copy != null)) ? intro.copy.getCopy() : null;
 		}
 
 		public String getAdditionalTitle() {
@@ -315,7 +313,7 @@ public class ResponseCampaign
 		}
 
 		public String getAdditionalCopy() {
-			return (additional_text == null) ? null : additional_text.copy.getCopy();
+			return ((additional_text != null) && (additional_text.copy != null)) ? additional_text.copy.getCopy() : null;
 		}
 	}
 }
