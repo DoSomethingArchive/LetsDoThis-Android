@@ -440,7 +440,17 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
                         CampaignActions.save(getActivity(), actions);
                     } catch (SQLException e) {
                         Toast.makeText(getActivity(), R.string.error_hub_sync, Toast.LENGTH_SHORT).show();
-                    }
+					} catch (Exception e) {
+						// Failed to process the incoming data, skip this one
+						ResponseProfileSignups.Signup failed = signups.data[i];
+						if (failed == null) {
+							Log.e("HubFragment", String.format("Signup[%d] is null, skipping", i));
+						} else if (failed.campaign == null) {
+							Log.e("HubFragment", String.format("Signup[%d].campaign is null, id is \"%s\", skipping", i, failed.id));
+						} else {
+							Log.e("HubFragment", String.format("Signup[%d].id is \"%s\", campaign id \"%s\" invalid, skipping", i, failed.id, failed.campaign.id));
+						}
+					}
                 }
             }
         }

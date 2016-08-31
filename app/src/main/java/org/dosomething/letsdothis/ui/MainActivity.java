@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -219,8 +220,8 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
 
         ResponseProfileSignups signups = task.getResult();
         for (int i = 0; i < signups.data.length; i++) {
-            // Update local cache of actions
             try {
+				// Update local cache of actions
                 CampaignActions actions = new CampaignActions();
                 actions.campaignId = Integer.parseInt(signups.data[i].campaign.id);
                 actions.signUpId = Integer.parseInt(signups.data[i].id);
@@ -228,10 +229,20 @@ public class MainActivity extends BaseActivity implements SetTitleListener, Repl
                     actions.reportBackId = Integer.parseInt(signups.data[i].reportback.id);
                 }
                 CampaignActions.save(MainActivity.this, actions);
-            }
-            catch (SQLException e) {
+            } catch (SQLException e) {
+				// Failed to update cache
                 Toast.makeText(MainActivity.this, R.string.error_hub_sync, Toast.LENGTH_SHORT).show();
-            }
+            } catch (Exception e) {
+				// Failed to process the incoming data, skip this one
+				ResponseProfileSignups.Signup failed = signups.data[i];
+				if (failed == null) {
+					Log.e("MainActivity", String.format("Signup[%d] is null, skipping", i));
+				} else if (failed.campaign == null) {
+					Log.e("MainActivity", String.format("Signup[%d].campaign is null, id is \"%s\", skipping", i, failed.id));
+				} else {
+					Log.e("MainActivity", String.format("Signup[%d].id is \"%s\", campaign id \"%s\" invalid, skipping", i, failed.id, failed.campaign.id));
+				}
+			}
         }
     }
 }
