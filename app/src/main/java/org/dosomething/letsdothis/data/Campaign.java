@@ -57,6 +57,9 @@ public class Campaign
         SHARE
     }
 
+	/** Provides text to view campaign in web browser using app login. */
+	public String magicLinkCopy;
+
 	/** Attachments associated with this campaign, may be null if none. */
 	private List<CampaignAttachment> attachments;
 

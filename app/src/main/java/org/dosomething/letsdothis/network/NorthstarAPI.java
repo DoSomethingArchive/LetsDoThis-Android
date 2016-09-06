@@ -16,6 +16,7 @@ import org.dosomething.letsdothis.network.models.ResponseSubmitReportBack;
 import org.dosomething.letsdothis.network.models.ResponseUser;
 import org.dosomething.letsdothis.network.models.ResponseUserCampaign;
 import org.dosomething.letsdothis.network.models.ResponseUserUpdate;
+import org.dosomething.letsdothis.network.models.ResponseWebSession;
 
 import co.touchlab.android.threading.errorcontrol.NetworkException;
 import retrofit.client.Response;
@@ -237,5 +238,18 @@ public interface NorthstarAPI {
     @GET("/signups?count=100")
     ResponseProfileSignups getSignupsById(@Header("Session") String sessionToken,
                                           @Query("user") String id) throws NetworkException;
+
+	/**
+	 * Gets a magic link for the passed session.  This allows us to open a web browser already
+	 * logged into the same user as the mobile session.
+	 * @param sessionToken User's token
+	 * @param hackEmptyBody Stupid hack required to POST with an empty body
+	 * @return Response with magic link
+	 * @throws NetworkException
+	 */
+	@Headers("Content-Type: application/json")
+	@POST("/auth/phoenix")
+	ResponseWebSession createAuthenticatedWebSession(@Header("Session") String sessionToken,
+													 @Body String hackEmptyBody) throws NetworkException;
 }
 

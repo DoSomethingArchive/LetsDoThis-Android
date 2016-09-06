@@ -54,49 +54,40 @@
         android:paddingRight="@dimen/padding_medium"
         tool:text="title"/>
 
-    <RelativeLayout
-        android:id="@+id/sponsor"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_campaign_sponsor"
-        android:layout_below="@id/image_container"
-        android:layout_marginTop="@dimen/padding_small"
-        android:visibility="gone"
-        tool:visibility="visible">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:orientation="horizontal">
-
-            <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:paddingRight="@dimen/padding_medium"
-                android:paddingLeft="0dp"
-                android:paddingEnd="@dimen/padding_medium"
-                android:paddingStart="0dp"
-                android:text="@string/campaign_sponsor"
-                android:textAllCaps="true"
-                android:textColor="@color/hint"
-                android:textSize="@dimen/text_medium"
-                app:typeface="brandon_bold"/>
-
-            <ImageView
-                android:id="@+id/sponsor_logo"
-                android:contentDescription="@string/campaign_logo"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                android:gravity="center"
-                android:scaleType="fitCenter"
-                tool:src="@drawable/default_profile_photo"/>
-
-        </LinearLayout>
-
-    </RelativeLayout>
+    <LinearLayout
+			android:id="@+id/sponsor"
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/image_container"
+			android:padding="8dp"
+			android:gravity="center"
+			android:background="@color/theme_primary"
+			android:visibility="gone"
+			tool:visibility="visible">
+		<org.dosomething.letsdothis.ui.views.typeface.CustomTextView
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:gravity="center"
+			android:paddingRight="@dimen/padding_medium"
+			android:paddingLeft="0dp"
+			android:paddingEnd="@dimen/padding_medium"
+			android:paddingStart="0dp"
+			android:text="@string/campaign_sponsor"
+			android:textAllCaps="true"
+			android:textColor="@color/white"
+			android:textSize="@dimen/text_medium"
+			app:typeface="brandon_bold"/>
+		<ImageView
+			android:id="@+id/sponsor_logo"
+			android:contentDescription="@string/campaign_logo"
+			android:layout_width="wrap_content"
+			android:layout_height="@dimen/height_campaign_sponsor"
+			android:adjustViewBounds="true"
+			android:gravity="center"
+			android:scaleType="fitCenter"
+			tool:src="@drawable/default_profile_photo"/>
+    </LinearLayout>
 
     <org.dosomething.letsdothis.ui.views.typeface.CustomTextView
         android:id="@+id/call_to_action"
@@ -156,6 +147,17 @@
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/text_33"/>
         </LinearLayout>
+		<TextView
+			android:id="@+id/magicLink"
+			android:text="Magic Link Placeholder"
+			tool:ignore="HardcodedText"
+			android:textColor="@color/theme_primary"
+			android:textStyle="bold"
+			android:paddingTop="@dimen/padding_large"
+			android:layout_marginLeft="@dimen/padding_small"
+			android:layout_marginRight="@dimen/padding_small"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"/>
 
         <LinearLayout
             android:id="@+id/campaignResources"

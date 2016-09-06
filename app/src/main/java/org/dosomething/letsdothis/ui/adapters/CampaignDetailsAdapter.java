@@ -132,6 +132,8 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 		void showAttachment(String title, String uri);
 
 		void showActionGuides(ArrayList<CampaignActionGuide> actionGuides);
+
+		void showCampaignInWeb();
     }
 
     @Override
@@ -223,6 +225,21 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     campaignViewHolder.solutionSupport.setVisibility(View.GONE);
                 }
             }
+
+			// Magic link section
+			if (campaign.magicLinkCopy == null) {
+				// No magic link
+				campaignViewHolder.magicLinkButton.setVisibility(View.GONE);
+			} else {
+				// Setup magic link
+				campaignViewHolder.magicLinkButton.setText(campaign.magicLinkCopy);
+				campaignViewHolder.magicLinkButton.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						detailsAdapterClickListener.showCampaignInWeb();
+					}
+				});
+			}
 
 			// Resources section
 			if (!campaign.hasAnyAttachments() && !campaign.hasAnyActionGuides()) {
@@ -385,6 +402,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         public    View      solutionWrapper;
         protected View      sponsor;
         protected ImageView sponsorLogo;
+		protected TextView  magicLinkButton;
 		protected ViewGroup resourcesGroup;
 
         public CampaignViewHolder(View itemView)
@@ -400,6 +418,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.signupProgress = itemView.findViewById(R.id.progress);
             this.sponsor = itemView.findViewById(R.id.sponsor);
             this.sponsorLogo = (ImageView) itemView.findViewById(R.id.sponsor_logo);
+			this.magicLinkButton = (TextView) itemView.findViewById(R.id.magicLink);
 			this.resourcesGroup = (ViewGroup) itemView.findViewById(R.id.campaignResources);
         }
     }
