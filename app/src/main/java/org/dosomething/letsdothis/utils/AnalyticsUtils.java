@@ -35,6 +35,7 @@ public class AnalyticsUtils {
     public static final String ACTION_TAP_IDEAS_FORM = "tap on ideas form";
     public static final String ACTION_TAP_PRIVACY_POLICY = "tap on privacy policy";
     public static final String ACTION_TAP_REVIEW_APP_BUTTON = "tap on review app button";
+	public static final String ACTION_TAP_FAQ_LINK = "tap on FAQ link";
 
     // News category actions
     public static final String ACTION_READ_NEWS = "read";

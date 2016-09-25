@@ -1,4 +1,5 @@
 package org.dosomething.letsdothis.ui.fragments;
+
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -17,10 +18,12 @@ import org.dosomething.letsdothis.ui.BaseActivity;
 import org.dosomething.letsdothis.utils.AnalyticsUtils;
 import org.dosomething.letsdothis.utils.AppPrefs;
 
+
 /**
  * This fragment defines the behavior of the items on the settings screen.
  *
- * Created by izzyoji :) on 4/29/15.
+ * @author izzyoji
+ * @author NearChaos
  */
 public class SettingsFragment extends PreferenceFragment implements ConfirmDialog.ConfirmListener
 {
@@ -49,6 +52,7 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
         initAccount();
         initFeedback();
         initSuggestionLink();
+		initFAQ();
         displayVersionName();
 
         mTracker = ((LDTApplication)getActivity().getApplication()).getDefaultTracker();
@@ -162,6 +166,21 @@ public class SettingsFragment extends PreferenceFragment implements ConfirmDialo
                     }
                 });
     }
+
+	private void initFAQ() {
+		findPreference(getString(R.string.pref_faq))
+				.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+					@Override
+					public boolean onPreferenceClick(Preference preference) {
+						Intent intent = new Intent(Intent.ACTION_VIEW);
+						intent.setData(Uri.parse("https://app.dosomething.org/#faq"));
+						startActivity(intent);
+						AnalyticsUtils.sendEvent(mTracker, AnalyticsUtils.CATEGORY_BEHAVIOR,
+								AnalyticsUtils.ACTION_TAP_FAQ_LINK);
+						return true;
+					}
+				});
+	}
 
     private void displayVersionName() {
         String packageName = getActivity().getPackageName();
