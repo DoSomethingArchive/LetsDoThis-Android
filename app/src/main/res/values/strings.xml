@@ -31,6 +31,8 @@
     <string name="hub_empty_public">Hm, we aren\'t able to find any activity for this user.</string>
     <string name="hub_empty_text1">You haven\'t started any actions yet.</string>
     <string name="hub_empty_text2">And you totally should! Shit is happening in the world -- find out how to do something about it.</string>
+	<string name="hub_error_text_title">Having bad Internet karma today?</string>
+	<string name="hub_error_text_detail">Check the Internet connection on your phone to make sure it\'s working, then click the button below.</string>
     <string name="hub_done_label">Actions I\'ve Done</string>
     <string name="hub_done_label_public">Actions They\'ve Done</string>
     <string name="hub_photos_label">Photos</string>

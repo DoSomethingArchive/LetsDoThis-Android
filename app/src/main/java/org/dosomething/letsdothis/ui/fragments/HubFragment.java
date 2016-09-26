@@ -128,24 +128,8 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
 		((SetTitleListener) getActivity()).setTitle("");
 
-        String trackerIdentifier;
-        String publicId = getArguments().getString(EXTRA_ID, null);
-        TaskQueue taskQueue = TaskQueue.loadQueueDefault(getActivity());
-
-        if (publicId != null) {
-            // Get other user's profile info and campaign activity
-            taskQueue.execute(new GetProfileTask(publicId));
-            taskQueue.execute(new GetProfileSignupsTask(publicId));
-
-            trackerIdentifier = publicId;
-        }
-        else {
-            // Get logged-in user's profile info and campaign activity
-            taskQueue.execute(new GetProfileTask());
-            taskQueue.execute(new GetProfileSignupsTask());
-
-            trackerIdentifier = "self";
-        }
+		// Start fetch of profile details
+        String trackerIdentifier = enqueueGetProfileTasks();
 
         // If a reportback upload is in progress, notify adapter that the upload is processing
         TaskQueue rbQueue = ReportbackUploadTask.getQueue(getActivity());
@@ -158,6 +142,22 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
         String screenName = String.format(AnalyticsUtils.SCREEN_USER_PROFILE, trackerIdentifier);
         AnalyticsUtils.sendScreen(mTracker, screenName);
     }
+
+	private String enqueueGetProfileTasks() {
+		String publicId = getArguments().getString(EXTRA_ID, null);
+		TaskQueue taskQueue = TaskQueue.loadQueueDefault(getActivity());
+		if (publicId != null) {
+			// Get other user's profile info and campaign activity
+			taskQueue.execute(new GetProfileTask(publicId));
+			taskQueue.execute(new GetProfileSignupsTask(publicId));
+			return publicId;
+		}
+
+		// Get logged-in user's profile info and campaign activity
+		taskQueue.execute(new GetProfileTask());
+		taskQueue.execute(new GetProfileSignupsTask());
+		return "self";
+	}
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -261,9 +261,21 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
     @Override
     public void onActionsButtonClicked() {
 		if (getActivity() instanceof ReplaceFragmentListener) {
-			((ReplaceFragmentListener) getActivity()).replaceWithActionsFragment();;
+			((ReplaceFragmentListener) getActivity()).replaceWithActionsFragment();
 		}
     }
+
+	/**
+	 * Reloads profile and signups.
+	 */
+	@Override
+	public void onErrorRetryClicked() {
+		// Display a progress dialog while the profile is getting synced
+		showProgressDialog(R.string.progress_dialog_hub);
+
+		// Start syncing
+		enqueueGetProfileTasks();
+	}
 
 	@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -409,55 +421,63 @@ public class HubFragment extends Fragment implements HubAdapter.HubAdapterClickL
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(GetProfileSignupsTask task) {
-        dismissProgressDialogIfDone();
+		dismissProgressDialogIfDone();
 
-        ArrayList<ResponseProfileCampaign> currentSignups = new ArrayList<>();
-        ArrayList<ResponseProfileSignups.Signup> completedActions = new ArrayList<>();
-        if (task.getResult() != null) {
-            ResponseProfileSignups signups = task.getResult();
-            for (int i = 0; i < signups.data.length; i++) {
-                // Campaigns that the user has signed up for and reported back on
-                if (signups.data[i].reportback != null) {
-                    completedActions.add(signups.data[i]);
-                }
-                // Campaigns that the user has signed up for but has no reportback yet
-                // Campaign must be current. All should have a run, but if not, let's just default
-                // to showing it in the list.
-                else if (signups.data[i].campaign_run == null || signups.data[i].campaign_run.current) {
-                    currentSignups.add(signups.data[i].campaign);
-                }
+		// Did we succeed?
+		ResponseProfileSignups signups = task.getResult();
+		if (signups == null) {
+			// Report failure
+			mAdapter.setCurrentSignups(null);
+			mAdapter.setCompletedActions(null);
+			return;
+		}
 
-                // Update local cache of actions. Skip if displaying a public user profile.
-                // If an EXTRA_ID string arg exists, then this is for a public profile.
-                if (getArguments().getString(EXTRA_ID, null) == null) {
-                    try {
-                        CampaignActions actions = new CampaignActions();
-                        actions.campaignId = Integer.parseInt(signups.data[i].campaign.id);
-                        actions.signUpId = Integer.parseInt(signups.data[i].id);
-                        if (signups.data[i].reportback != null) {
-                            actions.reportBackId = Integer.parseInt(signups.data[i].reportback.id);
-                        }
-                        CampaignActions.save(getActivity(), actions);
-                    } catch (SQLException e) {
-                        Toast.makeText(getActivity(), R.string.error_hub_sync, Toast.LENGTH_SHORT).show();
-					} catch (Exception e) {
-						// Failed to process the incoming data, skip this one
-						ResponseProfileSignups.Signup failed = signups.data[i];
-						if (failed == null) {
-							Log.e("HubFragment", String.format("Signup[%d] is null, skipping", i));
-						} else if (failed.campaign == null) {
-							Log.e("HubFragment", String.format("Signup[%d].campaign is null, id is \"%s\", skipping", i, failed.id));
-						} else {
-							Log.e("HubFragment", String.format("Signup[%d].id is \"%s\", campaign id \"%s\" invalid, skipping", i, failed.id, failed.campaign.id));
-						}
+		// Parse out the web service response to local data
+		ArrayList<ResponseProfileCampaign> currentSignups = new ArrayList<>();
+		ArrayList<ResponseProfileSignups.Signup> completedActions = new ArrayList<>();
+		for (int i = 0; i < signups.data.length; i++) {
+			// Campaigns that the user has signed up for and reported back on
+			if (signups.data[i].reportback != null) {
+				completedActions.add(signups.data[i]);
+			}
+			// Campaigns that the user has signed up for but has no reportback yet
+			// Campaign must be current. All should have a run, but if not, let's just default
+			// to showing it in the list.
+			else if (signups.data[i].campaign_run == null || signups.data[i].campaign_run.current) {
+				currentSignups.add(signups.data[i].campaign);
+			}
+
+			// Update local cache of actions. Skip if displaying a public user profile.
+			// If an EXTRA_ID string arg exists, then this is for a public profile.
+			if (getArguments().getString(EXTRA_ID, null) == null) {
+				try {
+					CampaignActions actions = new CampaignActions();
+					actions.campaignId = Integer.parseInt(signups.data[i].campaign.id);
+					actions.signUpId = Integer.parseInt(signups.data[i].id);
+					if (signups.data[i].reportback != null) {
+						actions.reportBackId = Integer.parseInt(signups.data[i].reportback.id);
 					}
-                }
-            }
-        }
+					CampaignActions.save(getActivity(), actions);
+				} catch (SQLException e) {
+					Toast.makeText(getActivity(), R.string.error_hub_sync, Toast.LENGTH_SHORT).show();
+				} catch (Exception e) {
+					// Failed to process the incoming data, skip this one
+					ResponseProfileSignups.Signup failed = signups.data[i];
+					if (failed == null) {
+						Log.e("HubFragment", String.format("Signup[%d] is null, skipping", i));
+					} else if (failed.campaign == null) {
+						Log.e("HubFragment", String.format("Signup[%d].campaign is null, id is \"%s\", skipping", i, failed.id));
+					} else {
+						Log.e("HubFragment", String.format("Signup[%d].id is \"%s\", campaign id \"%s\" invalid, skipping", i, failed.id, failed.campaign.id));
+					}
+				}
+			}
+		}
 
-        mAdapter.setCurrentSignups(currentSignups);
-        mAdapter.setCompletedActions(completedActions);
-    }
+		// Update user interface for web service response
+		mAdapter.setCurrentSignups(currentSignups);
+		mAdapter.setCompletedActions(completedActions);
+	}
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(UploadAvatarTask task) {
