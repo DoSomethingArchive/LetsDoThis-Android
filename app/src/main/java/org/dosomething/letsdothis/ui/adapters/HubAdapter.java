@@ -37,9 +37,11 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int    VIEW_TYPE_PUBLIC_EMPTY     = 3;
     private static final int    VIEW_TYPE_CURRENT_SIGNUPS  = 4;
     private static final int    VIEW_TYPE_REPORTBACKS      = 5;
+	private static final int    VIEW_TYPE_CURRENT_ERROR    = 6;
 
     private static final String CURRENT_SIGNUPS_LABEL_STUB = "PLACEHOLDER: CURRENT_SIGNUPS_LABEL_STUB";
     private static final String CURRENT_CAMPAIGNS_EMPTY_STUB = "PLACEHOLDER: CURRENT_CAMPAIGNS_EMPTY_STUB";
+	private static final String CURRENT_CAMPAIGNS_ERROR_STUB = "PLACEHOLDER: CURRENT_CAMPAIGNS_ERROR_STUB";
     private static final String REPORTBACKS_LABEL_STUB = "PLACEHOLDER: REPORTBACKS_LABEL_STUB";
 
     //~=~=~=~=~=~=~=~=~=~=~=~=Fields
@@ -79,9 +81,11 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         .inflate(R.layout.item_hub_profile, parent, false);
                 return new ProfileViewHolder(v);
             case VIEW_TYPE_CURRENT_EMPTY:
-                v = LayoutInflater.from(parent.getContext())
-                            .inflate(R.layout.item_hub_current_empty, parent, false);
-                return new EmptyViewHolder(v);
+                return new EmptyViewHolder(LayoutInflater.from(parent.getContext())
+                            .inflate(R.layout.item_hub_current_empty, parent, false));
+			case VIEW_TYPE_CURRENT_ERROR:
+				return new EmptyViewHolder(LayoutInflater.from(parent.getContext())
+						.inflate(R.layout.item_hub_current_error, parent, false));
             case VIEW_TYPE_PUBLIC_EMPTY:
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_hub_public_empty, parent, false);
@@ -223,7 +227,6 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
         else if (getItemViewType(position) == VIEW_TYPE_CURRENT_EMPTY) {
             EmptyViewHolder viewHolder = (EmptyViewHolder) holder;
-
             viewHolder.actions.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -231,6 +234,15 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 }
             });
         }
+		else if (getItemViewType(position) == VIEW_TYPE_CURRENT_ERROR) {
+			EmptyViewHolder viewHolder = (EmptyViewHolder) holder;
+			viewHolder.actions.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					mHubAdapterClickListener.onErrorRetryClicked();
+				}
+			});
+		}
     }
 
     @Override
@@ -239,16 +251,13 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         if (currentObject instanceof String) {
             if (CURRENT_CAMPAIGNS_EMPTY_STUB.equals(currentObject)) {
-                if (mIsPublic) {
-                    return VIEW_TYPE_PUBLIC_EMPTY;
-                }
-                else {
-                    return VIEW_TYPE_CURRENT_EMPTY;
-                }
+				return mIsPublic ? VIEW_TYPE_PUBLIC_EMPTY: VIEW_TYPE_CURRENT_EMPTY;
             }
-            else {
-                return VIEW_TYPE_SECTION_TITLE;
-            }
+			if (CURRENT_CAMPAIGNS_ERROR_STUB.equals(currentObject)) {
+				return VIEW_TYPE_CURRENT_ERROR;
+			}
+
+            return VIEW_TYPE_SECTION_TITLE;
         }
         else if (currentObject instanceof User) {
             return VIEW_TYPE_PROFILE;
@@ -317,12 +326,15 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
         }
 
-        if (! mIsPublic && (campaigns == null || campaigns.isEmpty())) {
+		if (campaigns == null) {
+			// Show error
+			mHubList.add(CURRENT_CAMPAIGNS_ERROR_STUB);
+			mActionsCount = 0;
+		} else if (!mIsPublic && campaigns.isEmpty()) {
             // Adds the empty view
             mHubList.add(CURRENT_CAMPAIGNS_EMPTY_STUB);
             mActionsCount = 0;
-        }
-        else {
+        } else {
             // Adds signups to the list displayed to the Hub
             mHubList.addAll(campaigns);
             mActionsCount = campaigns.size();
@@ -496,14 +508,15 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     /**
-     * ViewHolder for the empty view shown for the logged in user.
+     * ViewHolder for the empty and error views shown for the logged in user.
      */
     public static class EmptyViewHolder extends RecyclerView.ViewHolder {
+		/** References the action button in the view holder. */
         public Button actions;
 
+		/** Initializes the action button reference on instantiation. */
         public EmptyViewHolder(View itemView) {
             super(itemView);
-
             actions = (Button) itemView.findViewById(R.id.actions);
         }
     }
@@ -546,5 +559,7 @@ public class HubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void onActionsButtonClicked();
 
 		void onAvatarClicked();
+
+		void onErrorRetryClicked();
     }
 }

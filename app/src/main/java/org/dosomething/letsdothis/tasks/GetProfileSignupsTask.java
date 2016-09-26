@@ -17,10 +17,10 @@ import co.touchlab.android.threading.eventbus.EventBusExt;
  */
 public class GetProfileSignupsTask extends BaseNetworkErrorHandlerTask {
 
-    // User's Northstar ID, if any
+    /** User's Northstar ID, if any. */
     private String mPublicId;
 
-    // Result from network response
+    /** Result from network response. */
     private ResponseProfileSignups mResult;
 
     public GetProfileSignupsTask() {
